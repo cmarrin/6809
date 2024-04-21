@@ -32,6 +32,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		49065CFD2BD5D3E400E27819 /* assist09.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = assist09.asm; path = ../test/assist09.asm; sourceTree = "<group>"; };
+		49065CFE2BD5D3E400E27819 /* forth9.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = forth9.asm; path = ../test/forth9.asm; sourceTree = "<group>"; };
+		49065CFF2BD5DADA00E27819 /* HelloWorld.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = HelloWorld.asm; path = ../test/HelloWorld.asm; sourceTree = "<group>"; };
 		495775542BD5BE4400755E8A /* as9n.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = as9n.c; path = ../as9/as9n.c; sourceTree = "<group>"; };
 		495775552BD5BE4400755E8A /* output.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = output.c; path = ../as9/output.c; sourceTree = "<group>"; };
 		495775562BD5BE4400755E8A /* pseudo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pseudo.c; path = ../as9/pseudo.c; sourceTree = "<group>"; };
@@ -68,9 +71,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		49065CFC2BD5D3C300E27819 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				49065CFD2BD5D3E400E27819 /* assist09.asm */,
+				49065CFE2BD5D3E400E27819 /* forth9.asm */,
+				49065CFF2BD5DADA00E27819 /* HelloWorld.asm */,
+			);
+			name = test;
+			sourceTree = "<group>";
+		};
 		4957753B2BD5BBC900755E8A = {
 			isa = PBXGroup;
 			children = (
+				49065CFC2BD5D3C300E27819 /* test */,
 				495775522BD5BE1A00755E8A /* as9 */,
 				495775532BD5BE2500755E8A /* sim */,
 				495775452BD5BBC900755E8A /* Products */,

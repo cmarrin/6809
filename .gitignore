@@ -1,3 +1,9 @@
 UserInterfaceState.xcuserstate
 xcschememanagement.plist
 mac/DerivedData
+Breakpoints_v2.xcbkptlist
+*.bin
+*.crf
+*.lst
+*.s19
+*.sym
