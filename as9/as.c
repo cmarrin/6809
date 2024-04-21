@@ -35,7 +35,6 @@ int main(int argc, char** argv)
 {
         char    **np;
         char    *pc;
-        //FILE    *fopen();
         int     j = 0;
 
         if(argc < 2){
@@ -124,7 +123,7 @@ void initialize(void)
 {
         int     i = 0;
 
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("Initializing\n");
 #endif
         Err_count = 0;
@@ -164,7 +163,7 @@ void initialize(void)
 
 void re_init(void)
 {
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("Reinitializing\n");
 #endif
         Pc      = 0;
@@ -211,7 +210,7 @@ void open_files(void)
 void make_pass(void)
 {
         char *pc;
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("Pass %d\n",Pass);
 #endif
         while( fgets(Line,MAXBUF,Fd) ){
@@ -266,7 +265,7 @@ int parse_line(void)
         }
         *pcto = EOS;
 
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("Label-%s-\n",Label);
         printf("Op----%s-\n",Op);
         printf("Operand-%s-\n",Operand);

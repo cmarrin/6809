@@ -36,7 +36,7 @@ void fwdreinit(void)
 	lseek(Forward,0L,ABS);   /* rewind forward refs */
 	read(Forward,&Ffn,sizeof(Ffn));
 	read(Forward,&F_ref,sizeof(F_ref)); /* read first forward ref into mem */
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
 	printf("First fwd ref: %d,%d\n",Ffn,F_ref);
 #endif
 }
@@ -56,17 +56,17 @@ void fwdmark(void)
 void fwdnext(void)
 {
 	ssize_t stat = read(Forward,&Ffn,sizeof(Ffn));
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
 	printf("Ffn stat=%ld ",stat);
 #endif
 	stat = read(Forward,&F_ref,sizeof(F_ref));
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
 	printf("F_ref stat=%ld  ", stat);
 #endif
 	if( stat < 2 ){
 		F_ref=0;Ffn=0;
 		}
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
 	printf("Next Fwd ref: %d,%d\n",Ffn,F_ref);
 #endif
 }

@@ -85,7 +85,7 @@ void eword(int wd)
  */
 int emit(int byte)
 {
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("%2x @ %4x\n",byte,Pc);
 #endif
         if(Pass==1){

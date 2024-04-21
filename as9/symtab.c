@@ -24,7 +24,7 @@ int install(char* str, int val)
                 return(NO);
                 }
         /* enter new symbol */
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("Installing %s as %d\n",str,val);
 #endif
         np = (struct nlist *) alloc(sizeof(struct nlist));

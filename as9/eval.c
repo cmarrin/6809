@@ -48,7 +48,7 @@ int eval(void)
         int     left,right;     /* left and right terms for expression */
         char    o;              /* operator character */
 
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("Evaluating %s\n",Optr);
 #endif
         Force_byte = NO;
@@ -79,7 +79,7 @@ int eval(void)
                 }
 
         Result= left;
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("Result=%x\n",Result);
         printf("Force_byte=%d  Force_word=%d\n",Force_byte,Force_word);
 #endif
@@ -199,7 +199,7 @@ int get_term(void)
                 val = 0;
 
         if(minus)  val=-val;
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
         printf("Term=%x\n",val);
 
 #endif
