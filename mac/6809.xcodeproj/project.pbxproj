@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49065D022BD6C70400E27819 /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49065D002BD6C70400E27819 /* MC6809.cpp */; };
 		495775792BD5BF5E00755E8A /* as9.c in Sources */ = {isa = PBXBuildFile; fileRef = 495775592BD5BE4400755E8A /* as9.c */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,8 @@
 		49065CFD2BD5D3E400E27819 /* assist09.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = assist09.asm; path = ../test/assist09.asm; sourceTree = "<group>"; };
 		49065CFE2BD5D3E400E27819 /* forth9.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = forth9.asm; path = ../test/forth9.asm; sourceTree = "<group>"; };
 		49065CFF2BD5DADA00E27819 /* HelloWorld.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = HelloWorld.asm; path = ../test/HelloWorld.asm; sourceTree = "<group>"; };
+		49065D002BD6C70400E27819 /* MC6809.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MC6809.cpp; path = ../sim/MC6809.cpp; sourceTree = "<group>"; };
+		49065D012BD6C70400E27819 /* MC6809.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MC6809.h; path = ../sim/MC6809.h; sourceTree = "<group>"; };
 		495775542BD5BE4400755E8A /* as9n.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = as9n.c; path = ../as9/as9n.c; sourceTree = "<group>"; };
 		495775552BD5BE4400755E8A /* output.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = output.c; path = ../as9/output.c; sourceTree = "<group>"; };
 		495775562BD5BE4400755E8A /* pseudo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pseudo.c; path = ../as9/pseudo.c; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 		495775532BD5BE2500755E8A /* sim */ = {
 			isa = PBXGroup;
 			children = (
+				49065D002BD6C70400E27819 /* MC6809.cpp */,
+				49065D012BD6C70400E27819 /* MC6809.h */,
 			);
 			name = sim;
 			sourceTree = "<group>";
@@ -214,6 +219,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49065D022BD6C70400E27819 /* MC6809.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
