@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		49065D022BD6C70400E27819 /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49065D002BD6C70400E27819 /* MC6809.cpp */; };
 		495775792BD5BF5E00755E8A /* as9.c in Sources */ = {isa = PBXBuildFile; fileRef = 495775592BD5BE4400755E8A /* as9.c */; };
+		49E11A992BD84324004BC747 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A982BD84324004BC747 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,6 +55,7 @@
 		495775612BD5BE4400755E8A /* ffwd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = ffwd.c; path = ../as9/ffwd.c; sourceTree = "<group>"; };
 		495775662BD5BEFF00755E8A /* as9 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = as9; sourceTree = BUILT_PRODUCTS_DIR; };
 		495775712BD5BF1600755E8A /* sim */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sim; sourceTree = BUILT_PRODUCTS_DIR; };
+		49E11A982BD84324004BC747 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				49065CFC2BD5D3C300E27819 /* test */,
 				495775522BD5BE1A00755E8A /* as9 */,
 				495775532BD5BE2500755E8A /* sim */,
+				49E11A972BD84304004BC747 /* mac */,
 				495775452BD5BBC900755E8A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,6 +134,14 @@
 				49065D012BD6C70400E27819 /* MC6809.h */,
 			);
 			name = sim;
+			sourceTree = "<group>";
+		};
+		49E11A972BD84304004BC747 /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				49E11A982BD84324004BC747 /* main.cpp */,
+			);
+			name = mac;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49E11A992BD84324004BC747 /* main.cpp in Sources */,
 				49065D022BD6C70400E27819 /* MC6809.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,6 +373,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -369,6 +382,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
