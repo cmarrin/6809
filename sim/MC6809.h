@@ -54,6 +54,18 @@ struct Opcode
     uint8_t bytes : 2;
 };
 
+struct CC
+{
+    bool E : 1; // Entire       : All registers stacked from last interrupt
+    bool F : 1; // FIRQ Mask    : Disable fast interrupt request (FIRQ)
+    bool H : 1; // Half Carry   : Carry from bit 3 (for decimal arith)
+    bool I : 1; // IRQ Mask     : Disable interrupt request (IRQ)
+    bool N : 1; // Negative     : MSB of previous operation was set
+    bool Z : 1; // Zero         : Result of previous operation was zero
+    bool V : 1; // Overflow     : Previous operation caused signed arith overflow
+    bool C : 1; // Carry        : Carry or borrow from bit 7 of previous operation
+};
+
 class sim
 {
 public:
@@ -67,15 +79,44 @@ public:
     bool execute(uint16_t addr);
     
 private:
+    // Update the HNZVC condition codes
+    void updateCC8(uint8_t a, uint8_t b, uint16_t r, bool updateH)
+    {
+        if (updateH) {
+            cc.H = ((a ^ b ^ r) & 0x10) != 0;
+        }
+        cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x80) != 0;
+        cc.C = (r & 0x100) != 0;
+        cc.Z = uint8_t(r) == 0;
+        cc.N = (r & 0x80) != 0;
+    }
+    
+    void updateCC16(uint16_t a, uint16_t b, uint32_t r)
+    {
+        cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x8000) != 0;
+        cc.C = (r & 0x10000) != 0;
+        cc.Z = uint8_t(r) == 0;
+        cc.N = (r & 0x8000) != 0;
+    }
+    
     uint8_t* ram = nullptr;
     
     union {
         struct { uint8_t a; uint8_t b; };
-        uint16_t d;
+        uint16_t d = 0;
     };
     
-    uint16_t x, y, u, s, pc;
-    uint8_t dp;
+    uint16_t x = 0;
+    uint16_t y = 0;
+    uint16_t u = 0;
+    uint16_t s = 0;
+    uint16_t pc = 0;
+    uint8_t dp = 0;
+    
+    union {
+        CC cc;
+        uint8_t ccByte = 0;
+    };
 };
 
 }

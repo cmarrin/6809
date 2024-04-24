@@ -289,14 +289,16 @@ bool sim::execute(uint16_t addr)
 {
     pc = addr;
     Op prevOp = Op::NOP;
+    uint16_t ea = 0;
+    uint32_t left = 0;
+    uint32_t right = 0;
+    uint32_t result = 0;
     
     while(true) {
         uint8_t opIndex = ram[pc];
         
         const Opcode* opcode = &(opcodeTable[opIndex]);
-        
-        uint16_t ea, left, right;
-        
+                
         // Handle address modes
         // If this is an addressing mode that produces a 16 bit effective address
         // it will be placed in ea. If it's immediate or branch relative then the
@@ -358,8 +360,17 @@ bool sim::execute(uint16_t addr)
                 x = x + uint16_t(b);
                 break;
             case Op::ADC:
+                result = left + right + (cc.C ? 1 : 0);
+                updateCC8(left, right, result, true);
+                break;
             case Op::ADD8:
+                result = left + right;
+                updateCC8(left, right, result, true);
+                break;
             case Op::ADD16:
+                result = left + right;
+                updateCC16(left, right, result);
+                break;
             case Op::AND:
             case Op::ANDCC:
             case Op::ASR:
