@@ -27,11 +27,11 @@ namespace mc6809 {
 
 enum class Op : uint8_t {
     ILL, Page2, Page3, ABX, ADC, ADD8, ADD16, AND,
-    ANDCC, ASR, BCC, BCS, BEQ, BGE, BGT, BHI,
-    BHS, BIT, BLE, BLO, BLS, BLT, BMI, BNE,
-    BPL, BRA, BRN, BSR, BVC, BVS, CLR, CMP8,
-    CMP16, COM, CWAI, DAA, DEC, EOR, EXG, INC,
-    JMP, JSR, LD8, LD16, LEA, LSL, LSR, MUL,
+    ANDCC, ASL, ASR, BCC, BCS, BEQ, BGE, BGT,
+    BHI, BHS, BIT, BLE, BLO, BLS, BLT, BMI,
+    BNE, BPL, BRA, BRN, BSR, BVC, BVS, CLR,
+    CMP8, CMP16, COM, CWAI, DAA, DEC, EOR, EXG,
+    INC, JMP, JSR, LD8, LD16, LEA, LSR, MUL,
     NEG, NOP, OR, ORCC, PSH, PUL, ROL, ROR,
     RTI, RTS, SBC, SEX, ST8, ST16, SUB8, SUB16,
     SWI, SWI2, SWI3, SYNC, TFR, TST, FIRQ, IRQ,
@@ -44,12 +44,15 @@ enum class Op : uint8_t {
 enum class Adr : uint8_t { None, Direct, Inherent, Rel, RelL, Immed8, Immed16, Special, Indexed, Extended };
 enum class Reg : uint8_t { None, A, B, D, X, Y, U, S, PC, DP, CC };
 
+enum class CCOp : uint8_t { None, HNZVC };
+
 struct Opcode
 {
     Op op : 7;
     bool loadLeft : 1;
     Adr adr : 4;
     Reg reg : 4;
+    CCOp c : 3;
     uint8_t cycles : 5;
     uint8_t bytes : 2;
 };
@@ -79,24 +82,53 @@ public:
     bool execute(uint16_t addr);
     
 private:
-    // Update the HNZVC condition codes
-    void updateCC8(uint8_t a, uint8_t b, uint16_t r, bool updateH)
+    void push8(uint16_t& s, uint8_t v)
     {
-        if (updateH) {
-            cc.H = ((a ^ b ^ r) & 0x10) != 0;
-        }
-        cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x80) != 0;
-        cc.C = (r & 0x100) != 0;
+        ram[--s] = v;
+    }
+    
+    void push16(uint16_t& s, uint16_t v)
+    {
+        ram[--s] = v;
+        ram[--s] = v >> 8;
+    }
+    
+    // Update the HNZVC condition codes
+    void updateH(uint8_t a, uint8_t b, uint16_t r)
+    {
+        cc.H = ((a ^ b ^ r) & 0x10) != 0;
+    }
+    
+    void updateNZ8(uint16_t r)
+    {
         cc.Z = uint8_t(r) == 0;
         cc.N = (r & 0x80) != 0;
     }
     
-    void updateCC16(uint16_t a, uint16_t b, uint32_t r)
+    void updateNZ16(uint32_t r)
+    {
+        cc.Z = uint16_t(r) == 0;
+        cc.N = (r & 0x8000) != 0;
+    }
+    
+    void updateC8(uint16_t r)
+    {
+        cc.C = (r & 0x100) != 0;
+    }
+    
+    void updateC16(uint32_t r)
+    {
+        cc.C = (r & 0x10000) != 0;
+    }
+    
+    void updateV8(uint8_t a, uint8_t b, uint16_t r)
+    {
+        cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x80) != 0;
+    }
+    
+    void updateV16(uint16_t a, uint16_t b, uint32_t r)
     {
         cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x8000) != 0;
-        cc.C = (r & 0x10000) != 0;
-        cc.Z = uint8_t(r) == 0;
-        cc.N = (r & 0x8000) != 0;
     }
     
     uint8_t* ram = nullptr;
