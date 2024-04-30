@@ -297,7 +297,7 @@ bool sim::execute(uint16_t addr)
     uint32_t result = 0;
     
     while(true) {
-        uint8_t opIndex = ram[pc];
+        uint8_t opIndex = next8();
         
         const Opcode* opcode = &(opcodeTable[opIndex]);
                 
@@ -310,39 +310,74 @@ bool sim::execute(uint16_t addr)
             case Adr::Inherent:
                 break;
             case Adr::Direct:
-                ea = concat(dp, ram[pc++]);
+                ea = concat(dp, next8());
                 break;
             case Adr::Extended:
-                ea = load16(pc);
-                pc += 2;
+                ea = next16();
                 break;
             case Adr::Immed8:
-                right = ram[pc++];
+                right = next8();
                 break;
             case Adr::Immed16:
             case Adr::RelL:
-                right = concat(ram[pc], ram[pc + 1]);
-                pc += 2;
+                right = next16();
                 break;
             case Adr::Rel:
-                right = ram[pc++];
+                right = next8();
                 break;
           case Adr::RelP:
                 if (prevOp == Op::Page2) {
-                    right = concat(ram[pc], ram[pc + 1]);
+                    right = next16();
                     pc += 2;
                 } else {
-                    right = ram[pc++];
+                    right = next8();
                 }
                 break;
-            case Adr::Indexed:
-                // Post byte 
-                // RR value
-                //      00 - x
-                //      01 - y
-                //      10 - u
-                //      11 - s
+            case Adr::Indexed: {
+                uint8_t postbyte = next8();
+                uint16_t* reg = nullptr;
+                
+                // Load value of RR reg in ea
+                switch (RR(postbyte & 0b01100000)) {
+                    case RR::X: reg = &x; break;
+                    case RR::Y: reg = &y; break;
+                    case RR::U: reg = &u; break;
+                    case RR::S: reg = &s; break;
+                }
+                
+                if ((postbyte & 0x80) == 0) {
+                    // Constant offset direct (5 bit signed)
+                    int8_t offset = postbyte & 0x1f;
+                    if (offset & 0x10) {
+                        offset |= 0xe0;
+                    }
+                    
+                    ea = *reg + offset;
+                } else {
+                    switch(IdxMode(postbyte & IdxModeMask)) {
+                        case IdxMode::ConstRegNoOff   : break;
+                        case IdxMode::ConstReg8Off    : ea = *reg + int8_t(load8(pc)); pc += 1; break;
+                        case IdxMode::ConstReg16Off   : ea = *reg + int16_t(load16(pc)); pc += 2; break;
+                        case IdxMode::AccAOffReg      : ea = *reg + int8_t(a); break;
+                        case IdxMode::AccBOffReg      : ea = *reg + int8_t(b); break;
+                        case IdxMode::AccDOffReg      : ea = *reg + int16_t(d); break;
+                        case IdxMode::Inc1Reg         : ea = *reg; (*reg) += 1; break;
+                        case IdxMode::Inc2Reg         : ea = *reg; (*reg) += 2; break;
+                        case IdxMode::Dec1Reg         : (*reg) += 1; ea = *reg; break;
+                        case IdxMode::Dec2Reg         : (*reg) += 2; ea = *reg; break;
+                        case IdxMode::ConstPC8Off     : ea = pc + int8_t(load8(pc)); pc += 1; break;
+                        case IdxMode::ConstPC16Off    : ea = pc + int16_t(load16(pc)); pc += 2; break;
+                        case IdxMode::Extended        : ea = next16();
+                    }
+                    
+                    if (postbyte & IndexedIndMask) {
+                        // indirect from ea
+                        ea = load16(ea);
+                    }
+                }
+                    
                 break;
+            }
         }
         
         // Get left operand
@@ -476,7 +511,7 @@ bool sim::execute(uint16_t addr)
                 pc = ea;
                 break;
             case Op::LD8:
-                result = ram[ea];
+                result = load8(ea);
                 break;
             case Op::LD16:
                 result = load16(ea);
@@ -537,7 +572,7 @@ bool sim::execute(uint16_t addr)
                 a = (b & 0x80) ? 0xff : 0;
                 break;
             case Op::ST8:
-                ram[ea] = left;
+                store8(ea, left);
                 break;
             case Op::ST16:
                 store16(ea, left);

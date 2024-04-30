@@ -38,9 +38,39 @@ enum class Op : uint8_t {
     NMI, RESTART
 };
 
-// The Special mode has info in the next byte which is not data. for instance
-// the PSH opcode has bits for which registers to push and tbe EXG and TFR
-// opcodes have the from and to registers
+// Indexed mode
+//
+// See doc/m6809pm/sections.htm#sec2 for info about indexed mode
+//
+
+enum class RR { X = 0, Y = 0b00100000, U = 0b01000000, S = 0b01100000 };
+enum class IdxMode {
+    ConstRegNoOff       = 0b00000100,
+    ConstReg8Off        = 0b00001000,
+    ConstReg16Off       = 0b00001001,
+    AccAOffReg          = 0b00000110,
+    AccBOffReg          = 0b00000101,
+    AccDOffReg          = 0b00001011,
+    Inc1Reg             = 0b00000000,
+    Inc2Reg             = 0b00000001,
+    Dec1Reg             = 0b00000010,
+    Dec2Reg             = 0b00000011,
+    ConstPC8Off         = 0b00001100,
+    ConstPC16Off        = 0b00001101,
+    Extended            = 0b00001111,
+};
+
+static constexpr uint8_t IdxModeMask = 0b00001111;
+static constexpr uint8_t IndexedIndMask = 0b00010000;
+//
+// postbyte determines which indexed mode is used. If the MSB is 0
+// then this is the 5 bit constant offset direct mode. Bits 6 and 5
+// are the register number and bits 4-0 are the signed 5 bit offset
+
+
+
+
+
 enum class Adr : uint8_t { None, Direct, Inherent, Rel, RelL, RelP, Immed8, Immed16, Indexed, Extended };
 
 // Register enums match the register numbers used by EXG and TFR
@@ -153,6 +183,20 @@ private:
         r <<= 8;
         r |= ram[s++];
         return r;
+    }
+    
+    uint8_t next8()
+    {
+        uint8_t v = ram[pc];
+        pc += 1;
+        return v;
+    }
+    
+    uint16_t next16()
+    {
+        uint16_t v = (uint16_t(ram[pc]) << 8) | uint16_t(ram[pc + 1]);
+        pc += 2;
+        return v;
     }
     
     uint8_t load8(uint16_t ea)
