@@ -20,262 +20,264 @@ using namespace mc6809;
 static_assert (sizeof(Opcode) == 4, "Opcode is wrong size");
 
 static constexpr Opcode opcodeTable[ ] = {
-    /*00*/  	{ Op::NEG	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6     , 2 },
-    /*01*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*02*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*03*/  	{ Op::COM	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*04*/  	{ Op::LSR	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*05*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*06*/  	{ Op::ROR	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*07*/  	{ Op::ASR	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*08*/  	{ Op::ASL	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*09*/  	{ Op::ROL	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*0A*/  	{ Op::DEC	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*0B*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*0C*/  	{ Op::INC	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*0D*/  	{ Op::TST	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*0E*/  	{ Op::JMP	  , false   , Adr::Direct	, Reg::None , CCOp::None, 3	    , 2 },
-    /*0F*/  	{ Op::CLR	  , false   , Adr::Direct	, Reg::None , CCOp::None, 6	    , 2 },
-    /*10*/  	{ Op::Page2	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*11*/  	{ Op::Page3	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*12*/  	{ Op::NOP	  , false   , Adr::Inherent , Reg::None , CCOp::None, 2	    , 1 },
-    /*13*/  	{ Op::SYNC	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 4	    , 1 },
-    /*14*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*15*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*16*/  	{ Op::BRA	  , false   , Adr::RelL	    , Reg::None , CCOp::None, 5	    , 3 },
-    /*17*/  	{ Op::BSR	  , false   , Adr::RelL	    , Reg::None , CCOp::None, 9	    , 3 },
-    /*18*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*19*/  	{ Op::DAA	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 2	    , 1 },
-    /*1A*/  	{ Op::ORCC	  , false   , Adr::Immed8	, Reg::None , CCOp::None, 3	    , 2 },
-    /*1B*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*1C*/  	{ Op::ANDCC	  , false   , Adr::Immed8	, Reg::CC   , CCOp::None, 3	    , 2 },
-    /*1D*/  	{ Op::SEX	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 2	    , 1 },
-    /*1E*/  	{ Op::EXG	  , false   , Adr::Immed8	, Reg::None , CCOp::None, 8	    , 2 },
-    /*1F*/  	{ Op::TFR	  , false   , Adr::Immed8	, Reg::None , CCOp::None, 6	    , 2 },
-    /*20*/  	{ Op::BRA	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*21*/  	{ Op::BRN	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*22*/  	{ Op::BHI	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*23*/  	{ Op::BLS	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*24*/  	{ Op::BHS	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*25*/  	{ Op::BLO	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*26*/  	{ Op::BNE	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*27*/  	{ Op::BEQ	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*28*/  	{ Op::BVC	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*29*/  	{ Op::BVS	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*2A*/  	{ Op::BPL	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*2B*/  	{ Op::BMI	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*2C*/  	{ Op::BGE	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*2D*/  	{ Op::BLT	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*2E*/  	{ Op::BGT	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*2F*/  	{ Op::BLE	  , false   , Adr::Rel	    , Reg::None , CCOp::None, 3	    , 2 },
-    /*30*/  	{ Op::LEA	  , false   , Adr::Indexed	, Reg::X    , CCOp::None, 4	    , 2 },
-    /*31*/  	{ Op::LEA	  , false   , Adr::Indexed	, Reg::Y    , CCOp::None, 4	    , 2 },
-    /*32*/  	{ Op::LEA	  , false   , Adr::Indexed	, Reg::S    , CCOp::None, 4	    , 2 },
-    /*33*/  	{ Op::LEA	  , false   , Adr::Indexed	, Reg::U    , CCOp::None, 4	    , 2 },
-    /*34*/  	{ Op::PSH	  , false   , Adr::Immed8	, Reg::S    , CCOp::None, 5	    , 2 },
-    /*35*/  	{ Op::PUL	  , false   , Adr::Immed8	, Reg::S    , CCOp::None, 5	    , 2 },
-    /*36*/  	{ Op::PSH	  , false   , Adr::Immed8	, Reg::U    , CCOp::None, 5	    , 2 },
-    /*37*/  	{ Op::PUL	  , false   , Adr::Immed8	, Reg::U    , CCOp::None, 5	    , 2 },
-    /*38*/  	{ Op::ILL	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*39*/  	{ Op::RTS	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 5	    , 1 },
-    /*3A*/  	{ Op::ABX	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 3	    , 1 },
-    /*3B*/  	{ Op::RTI	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 6	    , 1 },          // 6 if FIRQ, 15 if IRQ
-    /*3C*/  	{ Op::CWAI	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 20	, 2 },
-    /*3D*/  	{ Op::MUL	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 11	, 1 },
-    /*3E*/  	{ Op::ILL	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*3F*/  	{ Op::SWI	  , false   , Adr::Inherent	, Reg::None , CCOp::None, 19	, 1 },
-    /*40*/  	{ Op::NEG	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*41*/  	{ Op::ILL	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*42*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*43*/  	{ Op::COM	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*44*/  	{ Op::LSR	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*45*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*46*/  	{ Op::ROR	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*47*/  	{ Op::ASR	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*48*/  	{ Op::ASL	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*49*/  	{ Op::ROL	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*4A*/  	{ Op::DEC	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*4B*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*4C*/  	{ Op::INC	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*4D*/  	{ Op::TST	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*4E*/  	{ Op::ILL	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*4F*/  	{ Op::CLR	  , false   , Adr::Inherent	, Reg::A    , CCOp::None, 2	    , 1 },
-    /*50*/  	{ Op::NEG	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*51*/  	{ Op::ILL	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*52*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*53*/  	{ Op::COM	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*54*/  	{ Op::LSR	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*55*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*56*/  	{ Op::ROR	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*57*/  	{ Op::ASR	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*58*/  	{ Op::ASL	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*59*/  	{ Op::ROL	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*5A*/  	{ Op::DEC	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*5B*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*5C*/  	{ Op::INC	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*5D*/  	{ Op::TST	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*5E*/  	{ Op::ILL	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*5F*/  	{ Op::CLR	  , false   , Adr::Inherent	, Reg::B    , CCOp::None, 2	    , 1 },
-    /*60*/  	{ Op::NEG	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*61*/  	{ Op::ILL	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*62*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*63*/  	{ Op::COM	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*64*/  	{ Op::LSR	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*65*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*66*/  	{ Op::ROR	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*67*/  	{ Op::ASR	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*68*/  	{ Op::ASL	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*69*/  	{ Op::ROL	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*6A*/  	{ Op::DEC	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*6B*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*6C*/  	{ Op::INC	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*6D*/  	{ Op::TST	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*6E*/  	{ Op::JMP	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 3	    , 2 },
-    /*6F*/  	{ Op::CLR	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 6	    , 2 },
-    /*70*/  	{ Op::NEG	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*71*/  	{ Op::ILL	  , false   , Adr::None	    , Reg::None , CCOp::None, 0	    , 0 },
-    /*72*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*73*/  	{ Op::COM	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*74*/  	{ Op::LSR	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*75*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*76*/  	{ Op::ROR	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*77*/  	{ Op::ASR	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*78*/  	{ Op::ASL	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*79*/  	{ Op::ROL	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*7A*/  	{ Op::DEC	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*7B*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*7C*/  	{ Op::INC	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*7D*/  	{ Op::TST	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*7E*/  	{ Op::JMP	  , false   , Adr::Extended	, Reg::None , CCOp::None, 4	    , 3 },
-    /*7F*/  	{ Op::CLR	  , false   , Adr::Extended	, Reg::None , CCOp::None, 7	    , 3 },
-    /*80*/  	{ Op::SUB8	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*81*/  	{ Op::CMP8	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*82*/  	{ Op::SBC	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*83*/  	{ Op::SUB16	  , false   , Adr::Immed16	, Reg::D    , CCOp::None, 4	    , 3 },
-    /*84*/  	{ Op::AND	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*85*/  	{ Op::BIT	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*86*/  	{ Op::LD8	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*87*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0      , 0 },
-    /*88*/  	{ Op::EOR	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*89*/  	{ Op::ADC	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*8A*/  	{ Op::OR	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*8B*/  	{ Op::ADD8	  , false   , Adr::Immed8	, Reg::A    , CCOp::None, 2	    , 2 },
-    /*8C*/  	{ Op::CMP16	  , false   , Adr::Immed16	, Reg::X    , CCOp::None, 4	    , 3 },
-    /*8D*/  	{ Op::BSR	  , false   , Adr::Rel      , Reg::None , CCOp::None, 7	    , 2 },
-    /*8E*/  	{ Op::LD16	  , false   , Adr::Immed16	, Reg::X    , CCOp::None, 3	    , 3 },
-    /*8F*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0      , 0 },
-    /*90*/  	{ Op::SUB8	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*91*/  	{ Op::CMP8	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*92*/  	{ Op::SBC	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*93*/  	{ Op::SUB16	  , false   , Adr::Direct	, Reg::D    , CCOp::None, 6	    , 2 },
-    /*94*/  	{ Op::AND	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*95*/  	{ Op::BIT	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*96*/  	{ Op::LD8	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*97*/  	{ Op::ST8	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*98*/  	{ Op::EOR	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*99*/  	{ Op::ADC	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*9A*/  	{ Op::OR	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*9B*/  	{ Op::ADD8	  , false   , Adr::Direct	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*9C*/  	{ Op::CMP16	  , false   , Adr::Direct	, Reg::X    , CCOp::None, 6	    , 2 },
-    /*9D*/  	{ Op::JSR	  , false   , Adr::Direct	, Reg::None , CCOp::None, 7	    , 2 },
-    /*9E*/  	{ Op::LD16	  , false   , Adr::Direct	, Reg::X    , CCOp::None, 5	    , 2 },
-    /*9F*/  	{ Op::ST16	  , false   , Adr::Direct	, Reg::X    , CCOp::None, 5	    , 2 },
-    /*A0*/  	{ Op::SUB8	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*A1*/  	{ Op::CMP8	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*A2*/  	{ Op::SBC	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*A3*/  	{ Op::SUB16	  , false   , Adr::Indexed	, Reg::D    , CCOp::None, 6	    , 2 },
-    /*A4*/  	{ Op::AND	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*A5*/  	{ Op::BIT	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*A6*/  	{ Op::LD8	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*A7*/  	{ Op::ST8	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*A8*/  	{ Op::EOR	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*A9*/  	{ Op::ADC	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*AA*/  	{ Op::OR	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*AB*/  	{ Op::ADD8	  , false   , Adr::Indexed	, Reg::A    , CCOp::None, 4	    , 2 },
-    /*AC*/  	{ Op::CMP16	  , false   , Adr::Indexed	, Reg::X    , CCOp::None, 6	    , 2 },
-    /*AD*/  	{ Op::JSR	  , false   , Adr::Indexed	, Reg::None , CCOp::None, 7	    , 2 },
-    /*AE*/  	{ Op::LD16	  , false   , Adr::Indexed	, Reg::X    , CCOp::None, 5	    , 2 },
-    /*AF*/  	{ Op::ST16	  , false   , Adr::Indexed	, Reg::X    , CCOp::None, 5	    , 2 },
-    /*B0*/  	{ Op::SUB8	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*B1*/  	{ Op::CMP8	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*B2*/  	{ Op::SBC	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*B3*/  	{ Op::SUB16	  , false   , Adr::Extended	, Reg::D    , CCOp::None, 7	    , 3 },
-    /*B4*/  	{ Op::AND	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*B5*/  	{ Op::BIT	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*B6*/  	{ Op::LD8	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*B7*/  	{ Op::ST8	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*B8*/  	{ Op::EOR	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*B9*/  	{ Op::ADC	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*BA*/  	{ Op::OR	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*BB*/  	{ Op::ADD8	  , false   , Adr::Extended	, Reg::A    , CCOp::None, 5	    , 3 },
-    /*BC*/  	{ Op::CMP16	  , false   , Adr::Extended	, Reg::X    , CCOp::None, 7	    , 3 },
-    /*BD*/  	{ Op::JSR	  , false   , Adr::Extended	, Reg::None , CCOp::None, 8	    , 3 },
-    /*BE*/  	{ Op::LD16	  , false   , Adr::Extended	, Reg::X    , CCOp::None, 6	    , 3 },
-    /*BF*/  	{ Op::ST16	  , false   , Adr::Extended	, Reg::X    , CCOp::None, 6	    , 3 },
-    /*C0*/  	{ Op::SUB8	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*C1*/  	{ Op::CMP8	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*C2*/  	{ Op::SBC	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*C3*/  	{ Op::ADD16	  , false   , Adr::Immed16	, Reg::D    , CCOp::None, 4	    , 3 },
-    /*C4*/  	{ Op::AND	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*C5*/  	{ Op::BIT	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*C6*/  	{ Op::LD8	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*C7*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*C8*/  	{ Op::EOR	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*C9*/  	{ Op::ADC	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*CA*/  	{ Op::OR	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*CB*/  	{ Op::ADD8	  , false   , Adr::Immed8	, Reg::B    , CCOp::None, 2	    , 2 },
-    /*CC*/  	{ Op::LD16	  , false   , Adr::Immed16	, Reg::D    , CCOp::None, 3	    , 3 },
-    /*CD*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*CE*/  	{ Op::LD16	  , false   , Adr::Immed16	, Reg::U    , CCOp::None, 3	    , 3 },
-    /*CF*/  	{ Op::ILL	  , false   , Adr::None     , Reg::None , CCOp::None, 0     , 0 },
-    /*D0*/  	{ Op::SUB8	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*D1*/  	{ Op::CMP8	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*D2*/  	{ Op::SBC	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*D3*/  	{ Op::ADD16	  , false   , Adr::Direct	, Reg::D    , CCOp::None, 6	    , 2 },
-    /*D4*/  	{ Op::AND	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*D5*/  	{ Op::BIT	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*D6*/  	{ Op::LD8	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*D7*/  	{ Op::ST8	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*D8*/  	{ Op::EOR	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*D9*/  	{ Op::ADC	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*DA*/  	{ Op::OR	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*DB*/  	{ Op::ADD8	  , false   , Adr::Direct	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*DC*/  	{ Op::LD16	  , false   , Adr::Direct	, Reg::D    , CCOp::None, 5	    , 2 },
-    /*DD*/  	{ Op::ST16	  , false   , Adr::Direct	, Reg::D    , CCOp::None, 5	    , 2 },
-    /*DE*/  	{ Op::LD16	  , false   , Adr::Direct	, Reg::U    , CCOp::None, 5	    , 2 },
-    /*DF*/  	{ Op::ST16	  , false   , Adr::Direct	, Reg::U    , CCOp::None, 5	    , 2 },
-    /*E0*/  	{ Op::SUB8	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*E1*/  	{ Op::CMP8	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*E2*/  	{ Op::SBC	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*E3*/  	{ Op::ADD16	  , false   , Adr::Indexed	, Reg::D    , CCOp::None, 6	    , 2 },
-    /*E4*/  	{ Op::AND	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*E5*/  	{ Op::BIT	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*E6*/  	{ Op::LD8	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*E7*/  	{ Op::ST8	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*E8*/  	{ Op::EOR	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*E9*/  	{ Op::ADC	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*EA*/  	{ Op::OR	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*EB*/  	{ Op::ADD8	  , false   , Adr::Indexed	, Reg::B    , CCOp::None, 4	    , 2 },
-    /*EC*/  	{ Op::LD16	  , false   , Adr::Indexed	, Reg::D    , CCOp::None, 5	    , 2 },
-    /*ED*/  	{ Op::ST16	  , false   , Adr::Indexed	, Reg::D    , CCOp::None, 5	    , 2 },
-    /*EE*/  	{ Op::LD16	  , false   , Adr::Indexed	, Reg::U    , CCOp::None, 5	    , 2 },
-    /*EF*/  	{ Op::ST16	  , false   , Adr::Indexed	, Reg::U    , CCOp::None, 5	    , 2 },
-    /*F0*/  	{ Op::SUB8	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*F1*/  	{ Op::CMP8	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*F2*/  	{ Op::SBC	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*F3*/  	{ Op::ADD16	  , false   , Adr::Extended , Reg::D    , CCOp::None, 7	    , 3 },
-    /*F4*/  	{ Op::AND	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*F5*/  	{ Op::BIT	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*F6*/  	{ Op::LD8	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*F7*/  	{ Op::ST8	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*F8*/  	{ Op::EOR	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*F9*/  	{ Op::ADC	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*FA*/  	{ Op::OR	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*FB*/  	{ Op::ADD8	  , false   , Adr::Extended , Reg::B    , CCOp::None, 5	    , 3 },
-    /*FC*/  	{ Op::LD16	  , false   , Adr::Extended , Reg::D    , CCOp::None, 6	    , 3 },
-    /*FD*/  	{ Op::ST16	  , false   , Adr::Extended , Reg::D    , CCOp::None, 6	    , 3 },
-    /*FE*/  	{ Op::LD16	  , false   , Adr::Extended , Reg::U    , CCOp::None, 6	    , 3 },
-    /*FF*/  	{ Op::ST16	  , false   , Adr::Extended , Reg::U    , CCOp::None, 6	    , 3 },
+    /*00*/  	{ Op::NEG	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6  },
+    /*01*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*02*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*03*/  	{ Op::COM	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*04*/  	{ Op::LSR	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*05*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*06*/  	{ Op::ROR	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*07*/  	{ Op::ASR	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*08*/  	{ Op::ASL	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*09*/  	{ Op::ROL	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*0A*/  	{ Op::DEC	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*0B*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*0C*/  	{ Op::INC	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*0D*/  	{ Op::TST	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*0E*/  	{ Op::JMP	  , false   , false , Adr::Direct	, Reg::None , CCOp::None, 3	 },
+    /*0F*/  	{ Op::CLR	  , true    , false , Adr::Direct	, Reg::M8   , CCOp::None, 6	 },
+    /*10*/  	{ Op::Page2	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*11*/  	{ Op::Page3	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*12*/  	{ Op::NOP	  , false   , false , Adr::Inherent , Reg::None , CCOp::None, 2	 },
+    /*13*/  	{ Op::SYNC	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 4	 },
+    /*14*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*15*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*16*/  	{ Op::BRA	  , false   , false , Adr::RelL	    , Reg::None , CCOp::None, 5	 },
+    /*17*/  	{ Op::BSR	  , false   , false , Adr::RelL	    , Reg::None , CCOp::None, 9	 },
+    /*18*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*19*/  	{ Op::DAA	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 2	 },
+    /*1A*/  	{ Op::ORCC	  , false   , false , Adr::Immed8	, Reg::None , CCOp::None, 3	 },
+    /*1B*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*1C*/  	{ Op::ANDCC	  , false   , false , Adr::Immed8	, Reg::None , CCOp::None, 3	 },
+    /*1D*/  	{ Op::SEX	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 2	 },
+    /*1E*/  	{ Op::EXG	  , false   , false , Adr::Immed8	, Reg::None , CCOp::None, 8	 },
+    /*1F*/  	{ Op::TFR	  , false   , false , Adr::Immed8	, Reg::None , CCOp::None, 6	 },
+    /*20*/  	{ Op::BRA	  , false   , false , Adr::Rel	    , Reg::None , CCOp::None, 3	 },
+    /*21*/  	{ Op::BRN	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*22*/  	{ Op::BHI	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*23*/  	{ Op::BLS	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*24*/  	{ Op::BHS	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*25*/  	{ Op::BLO	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*26*/  	{ Op::BNE	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*27*/  	{ Op::BEQ	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*28*/  	{ Op::BVC	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*29*/  	{ Op::BVS	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*2A*/  	{ Op::BPL	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*2B*/  	{ Op::BMI	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*2C*/  	{ Op::BGE	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*2D*/  	{ Op::BLT	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*2E*/  	{ Op::BGT	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    /*2F*/  	{ Op::BLE	  , false   , false , Adr::RelP	    , Reg::None , CCOp::None, 3	 },
+    
+    
+    /*30*/  	{ Op::LEA	  , false   , false , Adr::Indexed	, Reg::X    , CCOp::None, 4	 },
+    /*31*/  	{ Op::LEA	  , false   , false , Adr::Indexed	, Reg::Y    , CCOp::None, 4	 },
+    /*32*/  	{ Op::LEA	  , false   , false , Adr::Indexed	, Reg::S    , CCOp::None, 4	 },
+    /*33*/  	{ Op::LEA	  , false   , false , Adr::Indexed	, Reg::U    , CCOp::None, 4	 },
+    /*34*/  	{ Op::PSH	  , false   , false , Adr::Immed8	, Reg::S    , CCOp::None, 5	 },
+    /*35*/  	{ Op::PUL	  , false   , false , Adr::Immed8	, Reg::S    , CCOp::None, 5	 },
+    /*36*/  	{ Op::PSH	  , false   , false , Adr::Immed8	, Reg::U    , CCOp::None, 5	 },
+    /*37*/  	{ Op::PUL	  , false   , false , Adr::Immed8	, Reg::U    , CCOp::None, 5	 },
+    /*38*/  	{ Op::ILL	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*39*/  	{ Op::RTS	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 5	 },
+    /*3A*/  	{ Op::ABX	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 3	 },
+    /*3B*/  	{ Op::RTI	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 6	 },          // 6 if FIRQ, 15 if IRQ
+    /*3C*/  	{ Op::CWAI	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 20 },
+    /*3D*/  	{ Op::MUL	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 11 },
+    /*3E*/  	{ Op::ILL	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*3F*/  	{ Op::SWI	  , false   , false , Adr::Inherent	, Reg::None , CCOp::None, 19 },
+    /*40*/  	{ Op::NEG	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*41*/  	{ Op::ILL	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*42*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*43*/  	{ Op::COM	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*44*/  	{ Op::LSR	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*45*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*46*/  	{ Op::ROR	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*47*/  	{ Op::ASR	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*48*/  	{ Op::ASL	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*49*/  	{ Op::ROL	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*4A*/  	{ Op::DEC	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*4B*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*4C*/  	{ Op::INC	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*4D*/  	{ Op::TST	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*4E*/  	{ Op::ILL	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*4F*/  	{ Op::CLR	  , false   , false , Adr::Inherent	, Reg::A    , CCOp::None, 2	 },
+    /*50*/  	{ Op::NEG	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*51*/  	{ Op::ILL	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*52*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*53*/  	{ Op::COM	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*54*/  	{ Op::LSR	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*55*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*56*/  	{ Op::ROR	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*57*/  	{ Op::ASR	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*58*/  	{ Op::ASL	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*59*/  	{ Op::ROL	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*5A*/  	{ Op::DEC	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*5B*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*5C*/  	{ Op::INC	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*5D*/  	{ Op::TST	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*5E*/  	{ Op::ILL	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*5F*/  	{ Op::CLR	  , false   , false , Adr::Inherent	, Reg::B    , CCOp::None, 2	 },
+    /*60*/  	{ Op::NEG	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*61*/  	{ Op::ILL	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*62*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*63*/  	{ Op::COM	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*64*/  	{ Op::LSR	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*65*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*66*/  	{ Op::ROR	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*67*/  	{ Op::ASR	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*68*/  	{ Op::ASL	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*69*/  	{ Op::ROL	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*6A*/  	{ Op::DEC	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*6B*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*6C*/  	{ Op::INC	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*6D*/  	{ Op::TST	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*6E*/  	{ Op::JMP	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 3	 },
+    /*6F*/  	{ Op::CLR	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 6	 },
+    /*70*/  	{ Op::NEG	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*71*/  	{ Op::ILL	  , false   , false , Adr::None	    , Reg::None , CCOp::None, 0	 },
+    /*72*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*73*/  	{ Op::COM	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*74*/  	{ Op::LSR	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*75*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*76*/  	{ Op::ROR	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*77*/  	{ Op::ASR	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*78*/  	{ Op::ASL	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*79*/  	{ Op::ROL	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*7A*/  	{ Op::DEC	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*7B*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*7C*/  	{ Op::INC	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*7D*/  	{ Op::TST	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*7E*/  	{ Op::JMP	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 4	 },
+    /*7F*/  	{ Op::CLR	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 7	 },
+    /*80*/  	{ Op::SUB8	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*81*/  	{ Op::CMP8	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*82*/  	{ Op::SBC	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*83*/  	{ Op::SUB16	  , false   , false , Adr::Immed16	, Reg::D    , CCOp::None, 4	 },
+    /*84*/  	{ Op::AND	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*85*/  	{ Op::BIT	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*86*/  	{ Op::LD8	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*87*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*88*/  	{ Op::EOR	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*89*/  	{ Op::ADC	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*8A*/  	{ Op::OR	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*8B*/  	{ Op::ADD8	  , false   , false , Adr::Immed8	, Reg::A    , CCOp::None, 2	 },
+    /*8C*/  	{ Op::CMP16	  , false   , false , Adr::Immed16	, Reg::X    , CCOp::None, 4	 },
+    /*8D*/  	{ Op::BSR	  , false   , false , Adr::Rel      , Reg::None , CCOp::None, 7	 },
+    /*8E*/  	{ Op::LD16	  , false   , false , Adr::Immed16	, Reg::X    , CCOp::None, 3	 },
+    /*8F*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*90*/  	{ Op::SUB8	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*91*/  	{ Op::CMP8	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*92*/  	{ Op::SBC	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*93*/  	{ Op::SUB16	  , false   , false , Adr::Direct	, Reg::D    , CCOp::None, 6	 },
+    /*94*/  	{ Op::AND	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*95*/  	{ Op::BIT	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*96*/  	{ Op::LD8	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*97*/  	{ Op::ST8	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*98*/  	{ Op::EOR	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*99*/  	{ Op::ADC	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*9A*/  	{ Op::OR	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*9B*/  	{ Op::ADD8	  , false   , false , Adr::Direct	, Reg::A    , CCOp::None, 4	 },
+    /*9C*/  	{ Op::CMP16	  , false   , false , Adr::Direct	, Reg::X    , CCOp::None, 6	 },
+    /*9D*/  	{ Op::JSR	  , false   , false , Adr::Direct	, Reg::None , CCOp::None, 7	 },
+    /*9E*/  	{ Op::LD16	  , false   , false , Adr::Direct	, Reg::X    , CCOp::None, 5	 },
+    /*9F*/  	{ Op::ST16	  , false   , false , Adr::Direct	, Reg::X    , CCOp::None, 5	 },
+    /*A0*/  	{ Op::SUB8	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*A1*/  	{ Op::CMP8	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*A2*/  	{ Op::SBC	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*A3*/  	{ Op::SUB16	  , false   , false , Adr::Indexed	, Reg::D    , CCOp::None, 6	 },
+    /*A4*/  	{ Op::AND	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*A5*/  	{ Op::BIT	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*A6*/  	{ Op::LD8	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*A7*/  	{ Op::ST8	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*A8*/  	{ Op::EOR	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*A9*/  	{ Op::ADC	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*AA*/  	{ Op::OR	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*AB*/  	{ Op::ADD8	  , false   , false , Adr::Indexed	, Reg::A    , CCOp::None, 4	 },
+    /*AC*/  	{ Op::CMP16	  , false   , false , Adr::Indexed	, Reg::X    , CCOp::None, 6	 },
+    /*AD*/  	{ Op::JSR	  , false   , false , Adr::Indexed	, Reg::None , CCOp::None, 7	 },
+    /*AE*/  	{ Op::LD16	  , false   , false , Adr::Indexed	, Reg::X    , CCOp::None, 5	 },
+    /*AF*/  	{ Op::ST16	  , false   , false , Adr::Indexed	, Reg::X    , CCOp::None, 5	 },
+    /*B0*/  	{ Op::SUB8	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*B1*/  	{ Op::CMP8	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*B2*/  	{ Op::SBC	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*B3*/  	{ Op::SUB16	  , false   , false , Adr::Extended	, Reg::D    , CCOp::None, 7	 },
+    /*B4*/  	{ Op::AND	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*B5*/  	{ Op::BIT	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*B6*/  	{ Op::LD8	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*B7*/  	{ Op::ST8	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*B8*/  	{ Op::EOR	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*B9*/  	{ Op::ADC	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*BA*/  	{ Op::OR	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*BB*/  	{ Op::ADD8	  , false   , false , Adr::Extended	, Reg::A    , CCOp::None, 5	 },
+    /*BC*/  	{ Op::CMP16	  , false   , false , Adr::Extended	, Reg::X    , CCOp::None, 7	 },
+    /*BD*/  	{ Op::JSR	  , false   , false , Adr::Extended	, Reg::None , CCOp::None, 8	 },
+    /*BE*/  	{ Op::LD16	  , false   , false , Adr::Extended	, Reg::X    , CCOp::None, 6	 },
+    /*BF*/  	{ Op::ST16	  , false   , false , Adr::Extended	, Reg::X    , CCOp::None, 6	 },
+    /*C0*/  	{ Op::SUB8	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*C1*/  	{ Op::CMP8	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*C2*/  	{ Op::SBC	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*C3*/  	{ Op::ADD16	  , false   , false , Adr::Immed16	, Reg::D    , CCOp::None, 4	 },
+    /*C4*/  	{ Op::AND	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*C5*/  	{ Op::BIT	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*C6*/  	{ Op::LD8	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*C7*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*C8*/  	{ Op::EOR	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*C9*/  	{ Op::ADC	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*CA*/  	{ Op::OR	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*CB*/  	{ Op::ADD8	  , false   , false , Adr::Immed8	, Reg::B    , CCOp::None, 2	 },
+    /*CC*/  	{ Op::LD16	  , false   , false , Adr::Immed16	, Reg::D    , CCOp::None, 3	 },
+    /*CD*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*CE*/  	{ Op::LD16	  , false   , false , Adr::Immed16	, Reg::U    , CCOp::None, 3	 },
+    /*CF*/  	{ Op::ILL	  , false   , false , Adr::None     , Reg::None , CCOp::None, 0  },
+    /*D0*/  	{ Op::SUB8	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*D1*/  	{ Op::CMP8	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*D2*/  	{ Op::SBC	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*D3*/  	{ Op::ADD16	  , false   , false , Adr::Direct	, Reg::D    , CCOp::None, 6	 },
+    /*D4*/  	{ Op::AND	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*D5*/  	{ Op::BIT	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*D6*/  	{ Op::LD8	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*D7*/  	{ Op::ST8	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*D8*/  	{ Op::EOR	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*D9*/  	{ Op::ADC	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*DA*/  	{ Op::OR	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*DB*/  	{ Op::ADD8	  , false   , false , Adr::Direct	, Reg::B    , CCOp::None, 4	 },
+    /*DC*/  	{ Op::LD16	  , false   , false , Adr::Direct	, Reg::D    , CCOp::None, 5	 },
+    /*DD*/  	{ Op::ST16	  , false   , false , Adr::Direct	, Reg::D    , CCOp::None, 5	 },
+    /*DE*/  	{ Op::LD16	  , false   , false , Adr::Direct	, Reg::U    , CCOp::None, 5	 },
+    /*DF*/  	{ Op::ST16	  , false   , false , Adr::Direct	, Reg::U    , CCOp::None, 5	 },
+    /*E0*/  	{ Op::SUB8	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*E1*/  	{ Op::CMP8	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*E2*/  	{ Op::SBC	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*E3*/  	{ Op::ADD16	  , false   , false , Adr::Indexed	, Reg::D    , CCOp::None, 6	 },
+    /*E4*/  	{ Op::AND	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*E5*/  	{ Op::BIT	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*E6*/  	{ Op::LD8	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*E7*/  	{ Op::ST8	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*E8*/  	{ Op::EOR	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*E9*/  	{ Op::ADC	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*EA*/  	{ Op::OR	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*EB*/  	{ Op::ADD8	  , false   , false , Adr::Indexed	, Reg::B    , CCOp::None, 4	 },
+    /*EC*/  	{ Op::LD16	  , false   , false , Adr::Indexed	, Reg::D    , CCOp::None, 5	 },
+    /*ED*/  	{ Op::ST16	  , false   , false , Adr::Indexed	, Reg::D    , CCOp::None, 5	 },
+    /*EE*/  	{ Op::LD16	  , false   , false , Adr::Indexed	, Reg::U    , CCOp::None, 5	 },
+    /*EF*/  	{ Op::ST16	  , false   , false , Adr::Indexed	, Reg::U    , CCOp::None, 5	 },
+    /*F0*/  	{ Op::SUB8	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*F1*/  	{ Op::CMP8	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*F2*/  	{ Op::SBC	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*F3*/  	{ Op::ADD16	  , false   , false , Adr::Extended , Reg::D    , CCOp::None, 7	 },
+    /*F4*/  	{ Op::AND	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*F5*/  	{ Op::BIT	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*F6*/  	{ Op::LD8	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*F7*/  	{ Op::ST8	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*F8*/  	{ Op::EOR	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*F9*/  	{ Op::ADC	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*FA*/  	{ Op::OR	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*FB*/  	{ Op::ADD8	  , false   , false , Adr::Extended , Reg::B    , CCOp::None, 5	 },
+    /*FC*/  	{ Op::LD16	  , false   , false , Adr::Extended , Reg::D    , CCOp::None, 6	 },
+    /*FD*/  	{ Op::ST16	  , false   , false , Adr::Extended , Reg::D    , CCOp::None, 6	 },
+    /*FE*/  	{ Op::LD16	  , false   , false , Adr::Extended , Reg::U    , CCOp::None, 6	 },
+    /*FF*/  	{ Op::ST16	  , false   , false , Adr::Extended , Reg::U    , CCOp::None, 6	 },
 };
 
 static_assert (sizeof(opcodeTable) == 256 * sizeof(Opcode), "Opcode table is wrong size");
@@ -305,9 +307,14 @@ bool sim::execute(uint16_t addr)
         // 8 or 16 bit value is placed in right
         switch(opcode->adr) {
             case Adr::None:
+            case Adr::Inherent:
                 break;
             case Adr::Direct:
                 ea = concat(dp, ram[pc++]);
+                break;
+            case Adr::Extended:
+                ea = load16(pc);
+                pc += 2;
                 break;
             case Adr::Immed8:
                 right = ram[pc++];
@@ -318,6 +325,9 @@ bool sim::execute(uint16_t addr)
                 pc += 2;
                 break;
             case Adr::Rel:
+                right = ram[pc++];
+                break;
+          case Adr::RelP:
                 if (prevOp == Op::Page2) {
                     right = concat(ram[pc], ram[pc + 1]);
                     pc += 2;
@@ -326,26 +336,23 @@ bool sim::execute(uint16_t addr)
                 }
                 break;
             case Adr::Indexed:
-            case Adr::Extended:
-            case Adr::Special:
-            case Adr::Inherent:
+                // Post byte 
+                // RR value
+                //      00 - x
+                //      01 - y
+                //      10 - u
+                //      11 - s
                 break;
         }
         
         // Get left operand
         if (opcode->loadLeft) {
-            switch(opcode->reg) {
-                case Reg::None: break;
-                case Reg::A:    left = a; break;
-                case Reg::B:    left = b; break;
-                case Reg::D:    left = d; break;
-                case Reg::X:    left = x; break;
-                case Reg::Y:    left = y; break;
-                case Reg::U:    left = u; break;
-                case Reg::S:    left = s; break;
-                case Reg::CC:   left = ccByte; break;
-                case Reg::PC:
-                case Reg::DP:   break;
+            if (opcode->reg == Reg::M8) {
+                left = load8(ea);
+            } else if (opcode->reg == Reg::M16) {
+                left = load16(ea);
+            } else {
+                left = getReg(opcode->reg);
             }
         }
                 
@@ -358,26 +365,26 @@ bool sim::execute(uint16_t addr)
                 break;
 
             case Op::BHS:
-            case Op::BCC: if (!cc.C) pc += ea; break;
+            case Op::BCC: if (!cc.C) pc += right; break;
             case Op::BLO:
-            case Op::BCS: if (cc.C) pc += ea; break;
-            case Op::BEQ: if (cc.Z) pc += ea; break;
-            case Op::BGE: if ((cc.N ^ cc.V) == 0) pc += ea; break;
-            case Op::BGT: if ((cc.Z & (cc.N ^ cc.V)) == 0) pc += ea; break;
-            case Op::BHI: if ((cc.C | cc.Z) == 0) pc += ea; break;
-            case Op::BLE: if ((cc.Z | (cc.N ^ cc.V)) == 0) pc += ea; break;
-            case Op::BLS: if (cc.C || cc.Z) pc += ea; break;
-            case Op::BLT: if ((cc.N ^ cc.V) != 0) pc += ea; break;
-            case Op::BMI: if (cc.N) pc += ea; break;
-            case Op::BNE: if (!cc.Z) pc += ea; break;
-            case Op::BPL: if (!cc.N) pc += ea; break;
-            case Op::BRA: pc += ea; break;
+            case Op::BCS: if (cc.C) pc += right; break;
+            case Op::BEQ: if (cc.Z) pc += right; break;
+            case Op::BGE: if ((cc.N ^ cc.V) == 0) pc += right; break;
+            case Op::BGT: if ((cc.Z & (cc.N ^ cc.V)) == 0) pc += right; break;
+            case Op::BHI: if ((cc.C | cc.Z) == 0) pc += right; break;
+            case Op::BLE: if ((cc.Z | (cc.N ^ cc.V)) == 0) pc += right; break;
+            case Op::BLS: if (cc.C || cc.Z) pc += right; break;
+            case Op::BLT: if ((cc.N ^ cc.V) != 0) pc += right; break;
+            case Op::BMI: if (cc.N) pc += right; break;
+            case Op::BNE: if (!cc.Z) pc += right; break;
+            case Op::BPL: if (!cc.N) pc += right; break;
+            case Op::BRA: pc += right; break;
             case Op::BRN: break;
-            case Op::BVC: if (!cc.V) pc += ea; break;
-            case Op::BVS: if (cc.V) pc += ea; break;
+            case Op::BVC: if (!cc.V) pc += right; break;
+            case Op::BVS: if (cc.V) pc += right; break;
             case Op::BSR:
                 push16(s, pc);
-                pc += ea;
+                pc += right;
                 break;
 
             case Op::ABX:
@@ -394,26 +401,21 @@ bool sim::execute(uint16_t addr)
                 break;
             case Op::AND:
                 result = left & right;
-                cc.V = false;
                 break;
             case Op::ANDCC:
-                result = left & right;
+                ccByte &= right;
                 break;
             case Op::ASL:
                 result = right << 1;
                 break;
             case Op::ASR:
-                cc.C = right & 0x01;
                 result = int16_t(right) >> 1;
                 break;
             case Op::BIT:
                 result = left ^ right;
-                cc.V = false;
                 break;
             case Op::CLR:
                 result = 0;
-                cc.C = false;
-                cc.V = false;
                 break;
             case Op::CMP8:
             case Op::SUB8:
@@ -424,45 +426,156 @@ bool sim::execute(uint16_t addr)
                 result = left - right;
                 break;
             case Op::COM:
+                result = ~right;
+                break;
             case Op::CWAI:
+                ccByte ^= right;
+                cc.E = true;
+                push16(s, pc);
+                push16(s, u);
+                push16(s, y);
+                push16(s, x);
+                push8(s, dp);
+                push8(s, b);
+                push8(s, a);
+                
+                // Now what?
+                break;
             case Op::DAA:
+                // LSN
+                if (cc.H || (a & 0x0f) > 9) {
+                    a += 6;
+                }
+                
+                // MSN
+                if (cc.C || (a & 0xf0) > 0x90) {
+                    a += 0x60;
+                }
+                break;
             case Op::DEC:
+                result = left - 1;
+                break;
             case Op::EOR:
-            case Op::EXG:
+                result = left ^ right;
+                break;
+            case Op::EXG: {
+                uint16_t r1 = getReg(Reg(right & 0xf));
+                uint16_t r2 = getReg(Reg(right >> 4));
+                setReg(Reg(right & 0xf), r2);
+                setReg(Reg(right >> 4), r1);
+                break;
+            }
             case Op::INC:
+                result = left + 1;
+                break;
             case Op::JMP:
+                pc = ea;
+                break;
             case Op::JSR:
+                push16(s, pc);
+                pc = ea;
+                break;
             case Op::LD8:
+                result = ram[ea];
+                break;
             case Op::LD16:
+                result = load16(ea);
+                break;
             case Op::LEA:
+                result = ea;
+                break;
             case Op::LSR:
+                result = left >> 1;
+                break;
             case Op::MUL:
+                result = left * right;
+                break;
             case Op::NEG:
+                result = -left;
+                break;
             case Op::NOP:
+                break;
             case Op::OR:
+                result = left | right;
+                break;
             case Op::ORCC:
+                ccByte |= right;
+                break;
             case Op::PSH:
             case Op::PUL:
+                break; // How do we deal with the postbyte bits and which stack?
             case Op::ROL:
+                result = left << 1;
+                if (cc.C) {
+                    result |= 0x01;
+                }
+                break;
             case Op::ROR:
+                result = left >> 1;
+                if (cc.C) {
+                    result |= 0x80;
+                }
+                break;
             case Op::RTI:
+                if (cc.E) {
+                    a = pop8(s);
+                    b = pop8(s);
+                    dp = pop8(s);
+                    x = pop16(s);
+                    y = pop16(s);
+                    u = pop16(s);
+                }
+                pc = pop16(s);
+                break;
             case Op::RTS:
+                pc = pop16(s);
+                break;
             case Op::SBC:
+                result = left - right - (cc.C ? 1 : 0);
+                break;
             case Op::SEX:
+                a = (b & 0x80) ? 0xff : 0;
+                break;
             case Op::ST8:
+                ram[ea] = left;
+                break;
             case Op::ST16:
+                store16(ea, left);
+                break;
             case Op::SWI:
             case Op::SWI2:
             case Op::SWI3:
+                cc.E = true;
+                push16(s, pc);
+                push16(s, u);
+                push16(s, y);
+                push16(s, x);
+                push8(s, dp);
+                push8(s, b);
+                push8(s, a);
+                cc.I = true;
+                cc.F = true;
+                switch(opcode->op) {
+                    case Op::SWI: pc = load16(0xfffa); break;
+                    case Op::SWI2: pc = load16(0xfff4); break;
+                    case Op::SWI3: pc = load16(0xfff2); break;
+                    default: break;
+                }
+                break;
             case Op::SYNC:
+                // Now what?
+                break;
             case Op::TFR:
+                setReg(Reg(right >> 4), getReg(Reg(right & 0xf)));
+                break;
             case Op::TST:
-            
-            
+                result = left - 0;
+                break;
             case Op::FIRQ:
             case Op::IRQ:
             case Op::NMI:
             case Op::RESTART:
+                // Now what?
                 break;
         }
         
@@ -473,3 +586,13 @@ bool sim::execute(uint16_t addr)
     
     return true;
 }
+
+// TODO:
+//
+// - Handle SYNC and CWAI waiting for interrupt
+// - Handle firing of IRQ, FIRQ, NMI and RESTART
+// - Handle CC. Have a post op deal with most of it, based on value in Opcode
+// - Op handling has zero or more of left, right and ea set in addr handling and reg pre op sections.
+//      Do proper setting of these in all cases. Need more than op.reg to do this. Need leftReg, rightReg, etc.
+// - Add a Reg.M which uses ea to load data at ea (8 and 16 bit version)
+// - Add store Reg value to opcode to store value in post op

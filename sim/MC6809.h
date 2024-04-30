@@ -41,8 +41,23 @@ enum class Op : uint8_t {
 // The Special mode has info in the next byte which is not data. for instance
 // the PSH opcode has bits for which registers to push and tbe EXG and TFR
 // opcodes have the from and to registers
-enum class Adr : uint8_t { None, Direct, Inherent, Rel, RelL, Immed8, Immed16, Special, Indexed, Extended };
-enum class Reg : uint8_t { None, A, B, D, X, Y, U, S, PC, DP, CC };
+enum class Adr : uint8_t { None, Direct, Inherent, Rel, RelL, RelP, Immed8, Immed16, Indexed, Extended };
+
+// Register enums match the register numbers used by EXG and TFR
+// These are used to load and store of regs. The Reg::M enum is
+// used to load or store the mem at ea
+enum class Reg : uint8_t {
+    D = 0x0, X = 0x1, Y = 0x2, U = 0x3, S = 0x4, PC = 0X5,
+    A = 0x8, B = 0x9, CC = 0xa, DP = 0xb,
+    M8 = 0xd, M16 = 0xe, None = 0xf
+};
+
+// Determines what type of load and/or store is done with reg
+enum class LS : uint8_t {
+    None,
+    LrSr,       // Unary: Load Reg into left before and store result into Reg after
+    LmSm,       // Unary: Load mem at ea into left before and store result into mem at ea after
+};
 
 enum class CCOp : uint8_t { None, HNZVC };
 
@@ -50,11 +65,11 @@ struct Opcode
 {
     Op op : 7;
     bool loadLeft : 1;
+    bool loadRight : 1;
     Adr adr : 4;
     Reg reg : 4;
     CCOp c : 3;
     uint8_t cycles : 5;
-    uint8_t bytes : 2;
 };
 
 struct CC
@@ -82,6 +97,40 @@ public:
     bool execute(uint16_t addr);
     
 private:
+    uint16_t getReg(Reg r)
+    {
+        switch(r) {
+            default: return 0;
+            case Reg::A:    return a;
+            case Reg::B:    return b;
+            case Reg::D:    return d;
+            case Reg::X:    return x;
+            case Reg::Y:    return y;
+            case Reg::U:    return u;
+            case Reg::S:    return s;
+            case Reg::CC:   return ccByte;
+            case Reg::PC:   return pc;
+            case Reg::DP:   return dp;
+        }
+    }
+
+    void setReg(Reg r, uint16_t v)
+    {
+        switch(r) {
+            default: break;
+            case Reg::A:    a = v; break;
+            case Reg::B:    b = v; break;
+            case Reg::D:    d = v; break;
+            case Reg::X:    x = v; break;
+            case Reg::Y:    y = v; break;
+            case Reg::U:    u = v; break;
+            case Reg::S:    s = v; break;
+            case Reg::CC:   ccByte = v; break;
+            case Reg::PC:   pc = v; break;
+            case Reg::DP:   dp = v; break;
+        }
+    }
+
     void push8(uint16_t& s, uint8_t v)
     {
         ram[--s] = v;
@@ -91,6 +140,40 @@ private:
     {
         ram[--s] = v;
         ram[--s] = v >> 8;
+    }
+    
+    uint8_t pop8(uint16_t& s)
+    {
+        return ram[s++];
+    }
+    
+    uint16_t pop16(uint16_t& s)
+    {
+        uint16_t r = ram[s++];
+        r <<= 8;
+        r |= ram[s++];
+        return r;
+    }
+    
+    uint8_t load8(uint16_t ea)
+    {
+        return ram[ea];
+    }
+    
+    uint16_t load16(uint16_t ea)
+    {
+        return (uint16_t(ram[ea]) << 8) | uint16_t(ram[ea + 1]);
+    }
+    
+    void store8(uint16_t ea, uint8_t v)
+    {
+        ram[ea] = v;
+    }
+    
+    void store16(uint16_t ea, uint16_t v)
+    {
+        ram[ea] = v >> 8;
+        ram[ea + 1] = v;
     }
     
     // Update the HNZVC condition codes
