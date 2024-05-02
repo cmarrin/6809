@@ -311,7 +311,7 @@ PFIN4   PULS  Y              ; Restore IP
         LDX   ,Y++           ; NEXT
         JMP   [,X++]
 PFIN5   LEAX  1,X            ; Skip character count
-PFIN6   TST   0,X+           ; Test sign bit
+PFIN6   TST   ,X+            ; Test sign bit
         BPL   PFIN6          ; Keep looking - sign bit is not set
 PFIN7   LDX   0,X            ; Get LFA
         CMPX  #0             ; If zero we're at the end of the dictionary
