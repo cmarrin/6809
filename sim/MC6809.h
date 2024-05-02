@@ -60,16 +60,12 @@ enum class IdxMode {
     Extended            = 0b00001111,
 };
 
-static constexpr uint8_t IdxModeMask = 0b00001111;
-static constexpr uint8_t IndexedIndMask = 0b00010000;
-//
 // postbyte determines which indexed mode is used. If the MSB is 0
 // then this is the 5 bit constant offset direct mode. Bits 6 and 5
 // are the register number and bits 4-0 are the signed 5 bit offset
 
-
-
-
+static constexpr uint8_t IdxModeMask = 0b00001111;
+static constexpr uint8_t IndexedIndMask = 0b00010000;
 
 enum class Adr : uint8_t { None, Direct, Inherent, Rel, RelL, RelP, Immed8, Immed16, Indexed, Extended };
 
@@ -83,20 +79,16 @@ enum class Reg : uint8_t {
 };
 
 // Determines what type of load and/or store is done with reg
-enum class LS : uint8_t {
-    None,
-    LrSr,       // Unary: Load Reg into left before and store result into Reg after
-    LmSm,       // Unary: Load mem at ea into left before and store result into mem at ea after
-};
+enum class Left : uint8_t { None, Ld, St, LdSt };
+enum class Right : uint8_t { None, Ld8, Ld16 };
 
 enum class CCOp : uint8_t { None, HNZVC };
 
 struct Opcode
 {
     Op op : 7;
-    bool loadLeft : 1;
-    bool loadRight : 1;
-    bool store : 1;
+    Left left : 1;
+    Right right : 1;
     Adr adr : 4;
     Reg reg : 4;
     CCOp c : 3;
