@@ -96,6 +96,7 @@ struct Opcode
     Op op : 7;
     bool loadLeft : 1;
     bool loadRight : 1;
+    bool store : 1;
     Adr adr : 4;
     Reg reg : 4;
     CCOp c : 3;
