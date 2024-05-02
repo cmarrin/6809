@@ -287,7 +287,7 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
     return (uint16_t(a) << 8) | uint16_t(b);
 }
 
-bool sim::execute(uint16_t addr)
+bool Emulator::execute(uint16_t addr)
 {
     pc = addr;
     Op prevOp = Op::NOP;

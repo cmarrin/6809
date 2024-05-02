@@ -114,15 +114,15 @@ struct CC
     bool C : 1; // Carry        : Carry or borrow from bit 7 of previous operation
 };
 
-class sim
+class Emulator
 {
 public:
-    sim(uint32_t size)
+    Emulator(uint32_t size)
     {
         ram = new uint8_t[size];
     }
     
-    ~sim() { delete [ ] ram; }
+    ~Emulator() { delete [ ] ram; }
     
     bool execute(uint16_t addr);
     
