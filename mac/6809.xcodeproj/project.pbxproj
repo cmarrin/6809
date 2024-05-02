@@ -10,6 +10,9 @@
 		49065D022BD6C70400E27819 /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49065D002BD6C70400E27819 /* MC6809.cpp */; };
 		495775792BD5BF5E00755E8A /* as9.c in Sources */ = {isa = PBXBuildFile; fileRef = 495775592BD5BE4400755E8A /* as9.c */; };
 		49E11A992BD84324004BC747 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A982BD84324004BC747 /* main.cpp */; };
+		49E11A9D2BE1CD8F004BC747 /* basic.asm in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A9A2BE1CD8F004BC747 /* basic.asm */; };
+		49E11A9E2BE1CD8F004BC747 /* asmtest.asm in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A9B2BE1CD8F004BC747 /* asmtest.asm */; };
+		49E11A9F2BE1CD8F004BC747 /* test09.asm in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A9C2BE1CD8F004BC747 /* test09.asm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,6 +26,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		4957756F2BD5BF1600755E8A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		49750B0A2BE30D0600B7C3CF /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -55,7 +67,11 @@
 		495775612BD5BE4400755E8A /* ffwd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = ffwd.c; path = ../as9/ffwd.c; sourceTree = "<group>"; };
 		495775662BD5BEFF00755E8A /* as9 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = as9; sourceTree = BUILT_PRODUCTS_DIR; };
 		495775712BD5BF1600755E8A /* sim */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sim; sourceTree = BUILT_PRODUCTS_DIR; };
+		49750B0C2BE30D0600B7C3CF /* lwasm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lwasm; sourceTree = BUILT_PRODUCTS_DIR; };
 		49E11A982BD84324004BC747 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		49E11A9A2BE1CD8F004BC747 /* basic.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = basic.asm; path = ../test/basic.asm; sourceTree = "<group>"; };
+		49E11A9B2BE1CD8F004BC747 /* asmtest.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = asmtest.asm; path = ../test/asmtest.asm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.asm.i386; };
+		49E11A9C2BE1CD8F004BC747 /* test09.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = test09.asm; path = ../test/test09.asm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,12 +89,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		49750B092BE30D0600B7C3CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		49065CFC2BD5D3C300E27819 /* test */ = {
 			isa = PBXGroup;
 			children = (
+				49E11A9B2BE1CD8F004BC747 /* asmtest.asm */,
+				49E11A9A2BE1CD8F004BC747 /* basic.asm */,
+				49E11A9C2BE1CD8F004BC747 /* test09.asm */,
 				49065CFD2BD5D3E400E27819 /* assist09.asm */,
 				49065CFE2BD5D3E400E27819 /* forth9.asm */,
 				49065CFF2BD5DADA00E27819 /* HelloWorld.asm */,
@@ -102,6 +128,7 @@
 			children = (
 				495775662BD5BEFF00755E8A /* as9 */,
 				495775712BD5BF1600755E8A /* sim */,
+				49750B0C2BE30D0600B7C3CF /* lwasm */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,6 +208,24 @@
 			productReference = 495775712BD5BF1600755E8A /* sim */;
 			productType = "com.apple.product-type.tool";
 		};
+		49750B0B2BE30D0600B7C3CF /* lwasm */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49750B102BE30D0600B7C3CF /* Build configuration list for PBXNativeTarget "lwasm" */;
+			buildPhases = (
+				49750B082BE30D0600B7C3CF /* Sources */,
+				49750B092BE30D0600B7C3CF /* Frameworks */,
+				49750B0A2BE30D0600B7C3CF /* CopyFiles */,
+				49750B132BE30E3000B7C3CF /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = lwasm;
+			productName = lwasm;
+			productReference = 49750B0C2BE30D0600B7C3CF /* lwasm */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -195,6 +240,9 @@
 					};
 					495775702BD5BF1600755E8A = {
 						CreatedOnToolsVersion = 15.2;
+					};
+					49750B0B2BE30D0600B7C3CF = {
+						CreatedOnToolsVersion = 13.4;
 					};
 				};
 			};
@@ -213,9 +261,30 @@
 			targets = (
 				495775652BD5BEFF00755E8A /* as9 */,
 				495775702BD5BF1600755E8A /* sim */,
+				49750B0B2BE30D0600B7C3CF /* lwasm */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		49750B132BE30E3000B7C3CF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		495775622BD5BEFF00755E8A /* Sources */ = {
@@ -230,8 +299,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49E11A9D2BE1CD8F004BC747 /* basic.asm in Sources */,
 				49E11A992BD84324004BC747 /* main.cpp in Sources */,
 				49065D022BD6C70400E27819 /* MC6809.cpp in Sources */,
+				49E11A9F2BE1CD8F004BC747 /* test09.asm in Sources */,
+				49E11A9E2BE1CD8F004BC747 /* asmtest.asm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49750B082BE30D0600B7C3CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,7 +355,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = c89;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -337,7 +416,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = c89;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -356,7 +435,10 @@
 		4957756B2BD5BEFF00755E8A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = c89;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -364,7 +446,10 @@
 		4957756C2BD5BEFF00755E8A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = c89;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -382,6 +467,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		49750B112BE30D0600B7C3CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		49750B122BE30D0600B7C3CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -413,6 +520,15 @@
 			buildConfigurations = (
 				495775762BD5BF1600755E8A /* Debug */,
 				495775772BD5BF1600755E8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49750B102BE30D0600B7C3CF /* Build configuration list for PBXNativeTarget "lwasm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49750B112BE30D0600B7C3CF /* Debug */,
+				49750B122BE30D0600B7C3CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
