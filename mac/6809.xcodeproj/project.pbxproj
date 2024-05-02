@@ -117,7 +117,7 @@
 			children = (
 				49065CFC2BD5D3C300E27819 /* test */,
 				495775522BD5BE1A00755E8A /* as9 */,
-				495775532BD5BE2500755E8A /* sim */,
+				495775532BD5BE2500755E8A /* emulator */,
 				49E11A972BD84304004BC747 /* mac */,
 				495775452BD5BBC900755E8A /* Products */,
 			);
@@ -154,13 +154,13 @@
 			name = as9;
 			sourceTree = "<group>";
 		};
-		495775532BD5BE2500755E8A /* sim */ = {
+		495775532BD5BE2500755E8A /* emulator */ = {
 			isa = PBXGroup;
 			children = (
 				49065D002BD6C70400E27819 /* MC6809.cpp */,
 				49065D012BD6C70400E27819 /* MC6809.h */,
 			);
-			name = sim;
+			name = emulator;
 			sourceTree = "<group>";
 		};
 		49E11A972BD84304004BC747 /* mac */ = {
