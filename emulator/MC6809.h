@@ -113,13 +113,13 @@ class Emulator
 public:
     Emulator(uint32_t size)
     {
-        ram = new uint8_t[size];
+        _ram = new uint8_t[size];
     }
     
     // Assumes data is in s19 format
     void load(std::istream& stream);
     
-    ~Emulator() { delete [ ] ram; }
+    ~Emulator() { delete [ ] _ram; }
     
     bool execute(uint16_t addr);
     
@@ -160,61 +160,61 @@ private:
 
     void push8(uint16_t& s, uint8_t v)
     {
-        ram[--s] = v;
+        _ram[--s] = v;
     }
     
     void push16(uint16_t& s, uint16_t v)
     {
-        ram[--s] = v;
-        ram[--s] = v >> 8;
+        _ram[--s] = v;
+        _ram[--s] = v >> 8;
     }
     
     uint8_t pop8(uint16_t& s)
     {
-        return ram[s++];
+        return _ram[s++];
     }
     
     uint16_t pop16(uint16_t& s)
     {
-        uint16_t r = ram[s++];
+        uint16_t r = _ram[s++];
         r <<= 8;
-        r |= ram[s++];
+        r |= _ram[s++];
         return r;
     }
     
     uint8_t next8()
     {
-        uint8_t v = ram[pc];
+        uint8_t v = _ram[pc];
         pc += 1;
         return v;
     }
     
     uint16_t next16()
     {
-        uint16_t v = (uint16_t(ram[pc]) << 8) | uint16_t(ram[pc + 1]);
+        uint16_t v = (uint16_t(_ram[pc]) << 8) | uint16_t(_ram[pc + 1]);
         pc += 2;
         return v;
     }
     
     uint8_t load8(uint16_t ea)
     {
-        return ram[ea];
+        return _ram[ea];
     }
     
     uint16_t load16(uint16_t ea)
     {
-        return (uint16_t(ram[ea]) << 8) | uint16_t(ram[ea + 1]);
+        return (uint16_t(_ram[ea]) << 8) | uint16_t(_ram[ea + 1]);
     }
     
     void store8(uint16_t ea, uint8_t v)
     {
-        ram[ea] = v;
+        _ram[ea] = v;
     }
     
     void store16(uint16_t ea, uint16_t v)
     {
-        ram[ea] = v >> 8;
-        ram[ea + 1] = v;
+        _ram[ea] = v >> 8;
+        _ram[ea + 1] = v;
     }
     
     // Update the HNZVC condition codes
@@ -255,7 +255,7 @@ private:
         cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x8000) != 0;
     }
     
-    uint8_t* ram = nullptr;
+    uint8_t* _ram = nullptr;
     
     union {
         struct { uint8_t a; uint8_t b; };

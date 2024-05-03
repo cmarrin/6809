@@ -25,56 +25,31 @@ using namespace mc6809;
 class SRecordInfo : public SRecordParser
 {
   public:
+    SRecordInfo(uint8_t* ram) : _ram(ram) { }
     virtual  ~SRecordInfo() { }
 
   protected:
-    virtual  bool  FinishSegment( unsigned addr, unsigned len );
-    virtual  bool  Header( const SRecordHeader *sRecHdr );
-    virtual  bool  StartAddress( const SRecordData *sRecData );
+    virtual bool Header(const SRecordHeader *sRecHdr)
+    {
+        return true;
+    }
+    
+    virtual bool FinishSegment(unsigned addr, unsigned len) { return true; }
+    virtual bool StartAddress(const SRecordData *sRecData)
+    {
+        return true;
+    }
+    
+    virtual bool Data(const SRecordData *sRecData)
+    {
+        // FIXME: Need to handle ranges, which means we need to pass in the ram size
+        memcpy(_ram + sRecData->m_addr, sRecData->m_data, sRecData->m_dataLen);
+        return true;
+    }
+    
+  private:
+    uint8_t* _ram = nullptr;
 };
-
-bool SRecordInfo::Header( const SRecordHeader *sRecHdr )
-{
-   std::cout << "Module: '" << sRecHdr->m_module  << "', ";
-   std::cout << "Ver: '"    << sRecHdr->m_ver     << "', ";
-   std::cout << "Rev: '"    << sRecHdr->m_rev     << "', ";
-   std::cout << "Descr: '"  << sRecHdr->m_comment << "'" << std::endl;
-
-   return true;
-}
-
-bool SRecordInfo::FinishSegment( unsigned addr, unsigned len )
-{
-   std::ios_base::fmtflags  svFlags = std::cout.flags();
-   char                     svFill  = std::cout.fill();
-
-   std::cout << "Segment Address: 0x"
-             << std::setbase( 16 ) << std::setw( 6 ) << std::setfill( '0' ) << addr
-             << " Len: 0x" 
-             << std::setbase( 16 ) << std::setw( 6 ) << std::setfill( '0' ) << len
-             << std::endl;
-
-   std::cout.flags( svFlags );
-   std::cout.fill( svFill );
-
-   return true;
-}
-
-bool SRecordInfo::StartAddress( const SRecordData *sRecData )
-{
-   std::ios_base::fmtflags  svFlags = std::cout.flags();
-   char                     svFill  = std::cout.fill();
-
-   std::cout << "  Start Address: 0x"
-             << std::setbase( 16 ) << std::setw( 6 ) << std::setfill( '0' ) << sRecData->m_addr
-             << std::endl;
-
-   std::cout.flags( svFlags );
-   std::cout.fill( svFill );
-
-   return true;
-}
-
 
 static_assert (sizeof(Opcode) == 4, "Opcode is wrong size");
 
@@ -346,7 +321,7 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
 
 void Emulator::load(std::istream& stream)
 {
-    SRecordInfo sRecInfo;
+    SRecordInfo sRecInfo(_ram);
     std::string line;
     unsigned lineNum = 0;
     

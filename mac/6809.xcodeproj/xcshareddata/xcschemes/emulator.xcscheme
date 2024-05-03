@@ -53,7 +53,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "basic.s19"
+            argument = "HelloWorld.s19"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
