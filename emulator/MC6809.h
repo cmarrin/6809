@@ -116,10 +116,13 @@ public:
         _ram = new uint8_t[size];
     }
     
-    // Assumes data is in s19 format
-    void load(std::istream& stream);
-    
     ~Emulator() { delete [ ] _ram; }
+    
+    // Assumes data is in s19 format
+    // Returns the start addr of the program
+    uint16_t load(std::istream& stream);
+    
+    void setStack(uint16_t stack) { s = stack; }
     
     bool execute(uint16_t addr);
     

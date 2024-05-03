@@ -27,6 +27,8 @@ class SRecordInfo : public SRecordParser
   public:
     SRecordInfo(uint8_t* ram) : _ram(ram) { }
     virtual  ~SRecordInfo() { }
+    
+    uint16_t startAddr() const { return _startAddr; }
 
   protected:
     virtual bool Header(const SRecordHeader *sRecHdr)
@@ -34,21 +36,29 @@ class SRecordInfo : public SRecordParser
         return true;
     }
     
-    virtual bool FinishSegment(unsigned addr, unsigned len) { return true; }
     virtual bool StartAddress(const SRecordData *sRecData)
     {
+        _startAddr = sRecData->m_addr;
         return true;
     }
     
     virtual bool Data(const SRecordData *sRecData)
     {
         // FIXME: Need to handle ranges, which means we need to pass in the ram size
+        
+        // If the start addr has not been set, set it to the start of the first record.
+        // The StartAddress function can change this at the end
+        if (!_startAddrSet) {
+            _startAddr = sRecData->m_addr;
+        }
         memcpy(_ram + sRecData->m_addr, sRecData->m_data, sRecData->m_dataLen);
         return true;
     }
     
   private:
     uint8_t* _ram = nullptr;
+    uint16_t _startAddr = 0;
+    bool _startAddrSet = false;
 };
 
 static_assert (sizeof(Opcode) == 4, "Opcode is wrong size");
@@ -319,7 +329,7 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
     return (uint16_t(a) << 8) | uint16_t(b);
 }
 
-void Emulator::load(std::istream& stream)
+uint16_t Emulator::load(std::istream& stream)
 {
     SRecordInfo sRecInfo(_ram);
     std::string line;
@@ -330,6 +340,7 @@ void Emulator::load(std::istream& stream)
         sRecInfo.ParseLine(lineNum, line.c_str());
     }
     sRecInfo.Flush();
+    return sRecInfo.startAddr();
 }
 
 bool Emulator::execute(uint16_t addr)
@@ -364,18 +375,22 @@ bool Emulator::execute(uint16_t addr)
                 right = next8();
                 break;
             case Adr::Immed16:
-            case Adr::RelL:
                 right = next16();
                 break;
+                
+            // All the relative addressing modes need to be sign extended to 32 bits
+            case Adr::RelL:
+                right = int16_t(next16());
+                break;
             case Adr::Rel:
-                right = next8();
+                right = int8_t(next8());
                 break;
           case Adr::RelP:
                 if (prevOp == Op::Page2) {
-                    right = next16();
+                    right = int16_t(next16());
                     pc += 2;
                 } else {
-                    right = next8();
+                    right = int8_t(next8());
                 }
                 break;
             case Adr::Indexed: {
@@ -564,7 +579,7 @@ bool Emulator::execute(uint16_t addr)
                 break;
             case Op::LD8:
             case Op::LD16:
-                result = left;
+                result = right;
                 break;
             case Op::LEA:
                 result = ea;

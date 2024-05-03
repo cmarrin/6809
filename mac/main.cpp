@@ -22,16 +22,26 @@ char simpleTest[ ] =    "S01C00005B6C77746F6F6C7320342E32325D2073696D706C652E617
 
 int main(int argc, char * const argv[])
 {
+    // For now we're going to assume 64KB of RAM and that there will
+    // Be some sort of system functions at $E000, which is where the
+    // ACIA is located in some SBC systems. So we'll out the stack
+    // at $E000
+    //
+    // We'll figure out the rest later.
+    
     mc6809::Emulator emu(65536);
+    emu.setStack(0xe000);
+    
+    uint16_t startAddr = 0;
         
     if (argc < 2) {
         // use sample
         std::stringstream stream(simpleTest);
-        emu.load(stream);
+        startAddr = emu.load(stream);
     } else {
         std::ifstream f(argv[1]);
         if (f.is_open()) {
-            emu.load(f);
+            startAddr = emu.load(f);
             f.close();
         } else {
             std::cout << "Unable to open file";
@@ -39,6 +49,6 @@ int main(int argc, char * const argv[])
         }
     }
     
-    emu.execute(0x200);
+    emu.execute(startAddr);
     return 0;
 }
