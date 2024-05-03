@@ -19,8 +19,6 @@ using namespace mc6809;
 
 static_assert (sizeof(Opcode) == 4, "Opcode is wrong size");
 
-
-
 static constexpr Opcode opcodeTable[ ] = {
     /*00*/  	{ Op::NEG	  , Left::LdSt, Right::None , Adr::Direct	, Reg::M8   , CCOp::None, 6  },
     /*01*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None     , Reg::None , CCOp::None, 0  },
@@ -278,13 +276,18 @@ static constexpr Opcode opcodeTable[ ] = {
     /*FD*/  	{ Op::ST16	  , Left::Ld  , Right::None , Adr::Extended , Reg::D    , CCOp::None, 6	 },
     /*FE*/  	{ Op::LD16	  , Left::St  , Right::Ld16 , Adr::Extended , Reg::U    , CCOp::None, 6	 },
     /*FF*/  	{ Op::ST16	  , Left::Ld  , Right::None , Adr::Extended , Reg::U    , CCOp::None, 6	 },
-};false ,
+};
 
 static_assert (sizeof(opcodeTable) == 256 * sizeof(Opcode), "Opcode table is wrong size");
 
 static inline uint16_t concat(uint8_t a, uint8_t b)
 {
     return (uint16_t(a) << 8) | uint16_t(b);
+}
+
+void load(const char* data)
+{
+    
 }
 
 bool Emulator::execute(uint16_t addr)
@@ -541,30 +544,37 @@ bool Emulator::execute(uint16_t addr)
             case Op::ORCC:
                 ccByte |= right;
                 break;
-            case Op::PSH: {
-            case Op::PUL:
+            case Op::PSH:
+            case Op::PUL: {
                 // bit pattern to push or pull are in right
-                uint8_t* stack = (opcode->reg == Reg::U) ? &u : &s;
+                uint16_t& stack = (opcode->reg == Reg::U) ? u : s;
                 if (opcode->op == Op::PSH) {
-                    if (right & 0x80) push16(pc);
-                    if (right & 0x40) push16(u);
-                    if (right & 0x20) push16(y);
-                    if (right & 0x10) push16(x);
-                    if (right & 0x08) push8(dp);
-                    if (right & 0x04) push8(b);
-                    if (right & 0x02) push8(a);
-                    if (right & 0x01) push8(ccByte);
+                    if (right & 0x80) push16(stack, pc);
+                    if (right & 0x40) push16(stack, (opcode->reg == Reg::U) ? s : u);
+                    if (right & 0x20) push16(stack, y);
+                    if (right & 0x10) push16(stack, x);
+                    if (right & 0x08) push8(stack, dp);
+                    if (right & 0x04) push8(stack, b);
+                    if (right & 0x02) push8(stack, a);
+                    if (right & 0x01) push8(stack, ccByte);
                 } else {
-                    if (right & 0x01) pop8(ccByte);
-                    if (right & 0x02) pop8(a);
-                    if (right & 0x04) pop8(b);
-                    if (right & 0x08) pop8(dp);
-                    if (right & 0x10) pop16(x);
-                    if (right & 0x20) pop16(y);
-                    if (right & 0x40) pop16(u);
-                    if (right & 0x80) pop16(pc);
+                    if (right & 0x01) ccByte = pop8(stack);
+                    if (right & 0x02) a = pop8(stack);
+                    if (right & 0x04) b = pop8(stack);
+                    if (right & 0x08) dp = pop8(stack);
+                    if (right & 0x10) x = pop16(stack);
+                    if (right & 0x20) y = pop16(stack);
+                    if (right & 0x40) {
+                        if (opcode->reg == Reg::U) {
+                            s = pop16(stack);
+                        } else {
+                            u = pop16(stack);
+                        }
+                    }
+                    if (right & 0x80) pc = pop16(stack);
                 }
                 break;
+            }
             case Op::ROL:
                 result = left << 1;
                 if (cc.C) {
@@ -643,9 +653,9 @@ bool Emulator::execute(uint16_t addr)
         // Store result
         if (opcode->left == Left::St || opcode->left == Left::LdSt) {
             if (opcode->reg == Reg::M8) {
-                left = store8(ea, result);
+                store8(ea, result);
             } else if (opcode->reg == Reg::M16) {
-                left = store16(ea, v);
+                store16(ea, result);
             } else {
                 setReg(opcode->reg, result);
             }

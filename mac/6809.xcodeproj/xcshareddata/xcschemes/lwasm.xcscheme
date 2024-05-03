@@ -73,6 +73,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-f srec -o forth9.s19 -l forth9.asm"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-f srec -o simple.s19 -l simple.asm"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

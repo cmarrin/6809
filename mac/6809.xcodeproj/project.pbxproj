@@ -7,12 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		49065D022BD6C70400E27819 /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49065D002BD6C70400E27819 /* MC6809.cpp */; };
 		495775792BD5BF5E00755E8A /* as9.c in Sources */ = {isa = PBXBuildFile; fileRef = 495775592BD5BE4400755E8A /* as9.c */; };
+		49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B142BE410C600B7C3CF /* MC6809.cpp */; };
 		49E11A992BD84324004BC747 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A982BD84324004BC747 /* main.cpp */; };
-		49E11A9D2BE1CD8F004BC747 /* basic.asm in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A9A2BE1CD8F004BC747 /* basic.asm */; };
-		49E11A9E2BE1CD8F004BC747 /* asmtest.asm in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A9B2BE1CD8F004BC747 /* asmtest.asm */; };
-		49E11A9F2BE1CD8F004BC747 /* test09.asm in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A9C2BE1CD8F004BC747 /* test09.asm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,8 +46,7 @@
 		49065CFD2BD5D3E400E27819 /* assist09.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = assist09.asm; path = ../test/assist09.asm; sourceTree = "<group>"; };
 		49065CFE2BD5D3E400E27819 /* forth9.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = forth9.asm; path = ../test/forth9.asm; sourceTree = "<group>"; };
 		49065CFF2BD5DADA00E27819 /* HelloWorld.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = HelloWorld.asm; path = ../test/HelloWorld.asm; sourceTree = "<group>"; };
-		49065D002BD6C70400E27819 /* MC6809.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MC6809.cpp; path = ../sim/MC6809.cpp; sourceTree = "<group>"; };
-		49065D012BD6C70400E27819 /* MC6809.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MC6809.h; path = ../sim/MC6809.h; sourceTree = "<group>"; };
+		49065D012BD6C70400E27819 /* MC6809.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MC6809.h; path = ../emulator/MC6809.h; sourceTree = "<group>"; };
 		495775542BD5BE4400755E8A /* as9n.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = as9n.c; path = ../as9/as9n.c; sourceTree = "<group>"; };
 		495775552BD5BE4400755E8A /* output.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = output.c; path = ../as9/output.c; sourceTree = "<group>"; };
 		495775562BD5BE4400755E8A /* pseudo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pseudo.c; path = ../as9/pseudo.c; sourceTree = "<group>"; };
@@ -66,8 +62,10 @@
 		495775602BD5BE4400755E8A /* as.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = as.c; path = ../as9/as.c; sourceTree = "<group>"; };
 		495775612BD5BE4400755E8A /* ffwd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = ffwd.c; path = ../as9/ffwd.c; sourceTree = "<group>"; };
 		495775662BD5BEFF00755E8A /* as9 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = as9; sourceTree = BUILT_PRODUCTS_DIR; };
-		495775712BD5BF1600755E8A /* sim */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sim; sourceTree = BUILT_PRODUCTS_DIR; };
+		495775712BD5BF1600755E8A /* emulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = emulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		49750B0C2BE30D0600B7C3CF /* lwasm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lwasm; sourceTree = BUILT_PRODUCTS_DIR; };
+		49750B142BE410C600B7C3CF /* MC6809.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MC6809.cpp; path = ../emulator/MC6809.cpp; sourceTree = "<group>"; };
+		49750B162BE419D400B7C3CF /* simple.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = simple.asm; path = ../test/simple.asm; sourceTree = "<group>"; };
 		49E11A982BD84324004BC747 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		49E11A9A2BE1CD8F004BC747 /* basic.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = basic.asm; path = ../test/basic.asm; sourceTree = "<group>"; };
 		49E11A9B2BE1CD8F004BC747 /* asmtest.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = asmtest.asm; path = ../test/asmtest.asm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.asm.i386; };
@@ -108,6 +106,7 @@
 				49065CFD2BD5D3E400E27819 /* assist09.asm */,
 				49065CFE2BD5D3E400E27819 /* forth9.asm */,
 				49065CFF2BD5DADA00E27819 /* HelloWorld.asm */,
+				49750B162BE419D400B7C3CF /* simple.asm */,
 			);
 			name = test;
 			sourceTree = "<group>";
@@ -127,7 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				495775662BD5BEFF00755E8A /* as9 */,
-				495775712BD5BF1600755E8A /* sim */,
+				495775712BD5BF1600755E8A /* emulator */,
 				49750B0C2BE30D0600B7C3CF /* lwasm */,
 			);
 			name = Products;
@@ -157,7 +156,7 @@
 		495775532BD5BE2500755E8A /* emulator */ = {
 			isa = PBXGroup;
 			children = (
-				49065D002BD6C70400E27819 /* MC6809.cpp */,
+				49750B142BE410C600B7C3CF /* MC6809.cpp */,
 				49065D012BD6C70400E27819 /* MC6809.h */,
 			);
 			name = emulator;
@@ -191,9 +190,9 @@
 			productReference = 495775662BD5BEFF00755E8A /* as9 */;
 			productType = "com.apple.product-type.tool";
 		};
-		495775702BD5BF1600755E8A /* sim */ = {
+		495775702BD5BF1600755E8A /* emulator */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 495775752BD5BF1600755E8A /* Build configuration list for PBXNativeTarget "sim" */;
+			buildConfigurationList = 495775752BD5BF1600755E8A /* Build configuration list for PBXNativeTarget "emulator" */;
 			buildPhases = (
 				4957756D2BD5BF1600755E8A /* Sources */,
 				4957756E2BD5BF1600755E8A /* Frameworks */,
@@ -203,9 +202,9 @@
 			);
 			dependencies = (
 			);
-			name = sim;
+			name = emulator;
 			productName = sim;
-			productReference = 495775712BD5BF1600755E8A /* sim */;
+			productReference = 495775712BD5BF1600755E8A /* emulator */;
 			productType = "com.apple.product-type.tool";
 		};
 		49750B0B2BE30D0600B7C3CF /* lwasm */ = {
@@ -260,7 +259,7 @@
 			projectRoot = "";
 			targets = (
 				495775652BD5BEFF00755E8A /* as9 */,
-				495775702BD5BF1600755E8A /* sim */,
+				495775702BD5BF1600755E8A /* emulator */,
 				49750B0B2BE30D0600B7C3CF /* lwasm */,
 			);
 		};
@@ -299,11 +298,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49E11A9D2BE1CD8F004BC747 /* basic.asm in Sources */,
+				49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */,
 				49E11A992BD84324004BC747 /* main.cpp in Sources */,
-				49065D022BD6C70400E27819 /* MC6809.cpp in Sources */,
-				49E11A9F2BE1CD8F004BC747 /* test09.asm in Sources */,
-				49E11A9E2BE1CD8F004BC747 /* asmtest.asm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,7 +511,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		495775752BD5BF1600755E8A /* Build configuration list for PBXNativeTarget "sim" */ = {
+		495775752BD5BF1600755E8A /* Build configuration list for PBXNativeTarget "emulator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				495775762BD5BF1600755E8A /* Debug */,
