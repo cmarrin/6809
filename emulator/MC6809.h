@@ -16,6 +16,7 @@
 #pragma once
 
 #include <cstdint>
+#include <iostream>
 
 namespace mc6809 {
 
@@ -116,7 +117,7 @@ public:
     }
     
     // Assumes data is in s19 format
-    void load(const char* data);
+    void load(std::istream& stream);
     
     ~Emulator() { delete [ ] ram; }
     

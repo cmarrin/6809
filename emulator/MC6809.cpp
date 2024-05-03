@@ -13,9 +13,68 @@
 //  Created by Chris Marrin on 4/22/24.
 //
 
+#include <string>
+#include <iostream>
+#include <iomanip>
+
 #include "MC6809.h"
+#include "srec.h"
 
 using namespace mc6809;
+
+class SRecordInfo : public SRecordParser
+{
+  public:
+    virtual  ~SRecordInfo() { }
+
+  protected:
+    virtual  bool  FinishSegment( unsigned addr, unsigned len );
+    virtual  bool  Header( const SRecordHeader *sRecHdr );
+    virtual  bool  StartAddress( const SRecordData *sRecData );
+};
+
+bool SRecordInfo::Header( const SRecordHeader *sRecHdr )
+{
+   std::cout << "Module: '" << sRecHdr->m_module  << "', ";
+   std::cout << "Ver: '"    << sRecHdr->m_ver     << "', ";
+   std::cout << "Rev: '"    << sRecHdr->m_rev     << "', ";
+   std::cout << "Descr: '"  << sRecHdr->m_comment << "'" << std::endl;
+
+   return true;
+}
+
+bool SRecordInfo::FinishSegment( unsigned addr, unsigned len )
+{
+   std::ios_base::fmtflags  svFlags = std::cout.flags();
+   char                     svFill  = std::cout.fill();
+
+   std::cout << "Segment Address: 0x"
+             << std::setbase( 16 ) << std::setw( 6 ) << std::setfill( '0' ) << addr
+             << " Len: 0x" 
+             << std::setbase( 16 ) << std::setw( 6 ) << std::setfill( '0' ) << len
+             << std::endl;
+
+   std::cout.flags( svFlags );
+   std::cout.fill( svFill );
+
+   return true;
+}
+
+bool SRecordInfo::StartAddress( const SRecordData *sRecData )
+{
+   std::ios_base::fmtflags  svFlags = std::cout.flags();
+   char                     svFill  = std::cout.fill();
+
+   std::cout << "  Start Address: 0x"
+             << std::setbase( 16 ) << std::setw( 6 ) << std::setfill( '0' ) << sRecData->m_addr
+             << std::endl;
+
+   std::cout.flags( svFlags );
+   std::cout.fill( svFill );
+
+   return true;
+}
+
 
 static_assert (sizeof(Opcode) == 4, "Opcode is wrong size");
 
@@ -285,9 +344,17 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
     return (uint16_t(a) << 8) | uint16_t(b);
 }
 
-void Emulator::load(const char* data)
+void Emulator::load(std::istream& stream)
 {
+    SRecordInfo sRecInfo;
+    std::string line;
+    unsigned lineNum = 0;
     
+    while (std::getline(stream, line)) {
+        lineNum++;
+        sRecInfo.ParseLine(lineNum, line.c_str());
+    }
+    sRecInfo.Flush();
 }
 
 bool Emulator::execute(uint16_t addr)
