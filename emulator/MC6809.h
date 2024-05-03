@@ -87,8 +87,8 @@ enum class CCOp : uint8_t { None, HNZVC };
 struct Opcode
 {
     Op op : 7;
-    Left left : 1;
-    Right right : 1;
+    Left left : 2;
+    Right right : 2;
     Adr adr : 4;
     Reg reg : 4;
     CCOp c : 3;
@@ -114,6 +114,9 @@ public:
     {
         ram = new uint8_t[size];
     }
+    
+    // Assumes data is in s19 format
+    void load(const char* data);
     
     ~Emulator() { delete [ ] ram; }
     
