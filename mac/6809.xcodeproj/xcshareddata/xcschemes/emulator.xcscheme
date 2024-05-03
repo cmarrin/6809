@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "495775702BD5BF1600755E8A"
-               BuildableName = "sim"
+               BuildableName = "emulator"
                BlueprintName = "emulator"
                ReferencedContainer = "container:6809.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "495775702BD5BF1600755E8A"
-            BuildableName = "sim"
+            BuildableName = "emulator"
             BlueprintName = "emulator"
             ReferencedContainer = "container:6809.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "495775702BD5BF1600755E8A"
-            BuildableName = "sim"
+            BuildableName = "emulator"
             BlueprintName = "emulator"
             ReferencedContainer = "container:6809.xcodeproj">
          </BuildableReference>
