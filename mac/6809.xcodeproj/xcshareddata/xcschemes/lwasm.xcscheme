@@ -61,7 +61,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-f srec -o asmtest.s19 -l asmtest.asm"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-f srec -o assist09.s19 -l assist09.asm"
@@ -77,7 +77,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-f srec -o simple.s19 -l simple.asm"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

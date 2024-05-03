@@ -285,7 +285,7 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
     return (uint16_t(a) << 8) | uint16_t(b);
 }
 
-void load(const char* data)
+void Emulator::load(const char* data)
 {
     
 }

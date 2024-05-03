@@ -10,6 +10,7 @@
 		495775792BD5BF5E00755E8A /* as9.c in Sources */ = {isa = PBXBuildFile; fileRef = 495775592BD5BE4400755E8A /* as9.c */; };
 		49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B142BE410C600B7C3CF /* MC6809.cpp */; };
 		49E11A992BD84324004BC747 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A982BD84324004BC747 /* main.cpp */; };
+		49EA27A02BE52FE400620B26 /* srec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EA279E2BE52FE400620B26 /* srec.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -70,6 +71,8 @@
 		49E11A9A2BE1CD8F004BC747 /* basic.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = basic.asm; path = ../test/basic.asm; sourceTree = "<group>"; };
 		49E11A9B2BE1CD8F004BC747 /* asmtest.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = asmtest.asm; path = ../test/asmtest.asm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.asm.i386; };
 		49E11A9C2BE1CD8F004BC747 /* test09.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = test09.asm; path = ../test/test09.asm; sourceTree = "<group>"; };
+		49EA279E2BE52FE400620B26 /* srec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = srec.cpp; path = ../emulator/srec.cpp; sourceTree = "<group>"; };
+		49EA279F2BE52FE400620B26 /* srec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = srec.h; path = ../emulator/srec.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +159,8 @@
 		495775532BD5BE2500755E8A /* emulator */ = {
 			isa = PBXGroup;
 			children = (
+				49EA279E2BE52FE400620B26 /* srec.cpp */,
+				49EA279F2BE52FE400620B26 /* srec.h */,
 				49750B142BE410C600B7C3CF /* MC6809.cpp */,
 				49065D012BD6C70400E27819 /* MC6809.h */,
 			);
@@ -300,6 +305,7 @@
 			files = (
 				49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */,
 				49E11A992BD84324004BC747 /* main.cpp in Sources */,
+				49EA27A02BE52FE400620B26 /* srec.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
