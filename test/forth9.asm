@@ -3277,3 +3277,5 @@ TASKE   EQU   *              ; The end of the ROMable dictionary
 RFORTH  EQU   RAMS+FORTH-FORTHS        ; Location of FORTH in RAM
 RTASK   EQU   RAMS+TASK-FORTHS         ; Location of TASK in RAM
 INITDP  EQU   RAMS+TASKE-FORTHS        ; Initial DP in RAM
+
+        END   $E000

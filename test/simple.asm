@@ -10,5 +10,5 @@ loop
 text3   fcc "Hello\n"
 store	rmb	2
 
-	end
+	end $200
 

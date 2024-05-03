@@ -461,7 +461,7 @@ td1	fdb testdat+2
 next1   
 
         swi
-        end 
+        end $400
 
 
 

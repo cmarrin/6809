@@ -25,5 +25,5 @@ loop
 text3   fcc "Hello from 6809 kit"
         fcb 0
 
-	end
+	end $200
 

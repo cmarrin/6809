@@ -1741,3 +1741,5 @@ NMI     JMP     [VECTAB+.NMI,PCR]       ; NMI VECTOR
         FDB     SWI             ; SOFTWARE INTERRUPT
         FDB     NMI             ; NON-MASKABLE INTERRUPT
         FDB     RESET           ; RESTART
+
+    END ROMBEG

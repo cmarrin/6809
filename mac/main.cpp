@@ -16,7 +16,8 @@
 char simpleTest[ ] =    "S01C00005B6C77746F6F6C7320342E32325D2073696D706C652E61736D18\n"
                         "S1120200CC0208FD020F20F848656C6C6F5C6E31\n"
                         "S5030001FB\n"
-                        "S9030000FC\n"
+                        "S9030200FA\n"
+
 ;
 
 int main(int argc, char * const argv[])
