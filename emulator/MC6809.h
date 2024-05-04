@@ -18,7 +18,11 @@
 #include <cstdint>
 #include <iostream>
 
+#include "core.h"
+
 namespace mc6809 {
+
+static constexpr uint16_t SystemAddrStart = 0xFC00;
 
 // Opcode table
 

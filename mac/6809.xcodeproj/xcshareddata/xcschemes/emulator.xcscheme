@@ -54,7 +54,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "HelloWorld.s19"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
