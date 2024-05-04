@@ -80,16 +80,19 @@ enum class Reg : uint8_t {
 };
 
 // Determines what type of load and/or store is done with reg
+// Right::St8 and Right::St16 are used for Store operations.
+// In the post process if these enums are present the value
+// in left will be stored at ea.
 enum class Left : uint8_t { None, Ld, St, LdSt };
-enum class Right : uint8_t { None, Ld8, Ld16 };
+enum class Right : uint8_t { None, Ld8, Ld16, St8, St16 };
 
 enum class CCOp : uint8_t { None, HNZVC };
 
 struct Opcode
 {
     Op op : 7;
-    Left left : 2;
-    Right right : 2;
+    Left left : 3;
+    Right right : 3;
     Adr adr : 4;
     Reg reg : 4;
     CCOp c : 3;
