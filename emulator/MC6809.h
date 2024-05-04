@@ -122,25 +122,37 @@ public:
     // Returns the start addr of the program
     uint16_t load(std::istream& stream);
     
-    void setStack(uint16_t stack) { s = stack; }
+    void setStack(uint16_t stack) { _s = stack; }
     
     bool execute(uint16_t addr);
+    
+    uint8_t getA() const { return _a; }
+    uint8_t getB() const { return _b; }
+    uint8_t getDP() const { return _dp; }
+    uint8_t getCC() const { return _ccByte; }
+    uint16_t getX() const { return _x; }
+    uint16_t getY() const { return _y; }
+    uint16_t getU() const { return _u; }
+    uint16_t getS() const { return _s; }
+    uint16_t getPC() const { return _pc; }
+    
+    uint8_t* getAddr(uint16_t ea) { return _ram + ea; }
     
 private:
     uint16_t getReg(Reg r)
     {
         switch(r) {
             default: return 0;
-            case Reg::A:    return a;
-            case Reg::B:    return b;
-            case Reg::D:    return d;
-            case Reg::X:    return x;
-            case Reg::Y:    return y;
-            case Reg::U:    return u;
-            case Reg::S:    return s;
-            case Reg::CC:   return ccByte;
-            case Reg::PC:   return pc;
-            case Reg::DP:   return dp;
+            case Reg::A:    return _a;
+            case Reg::B:    return _b;
+            case Reg::D:    return _d;
+            case Reg::X:    return _x;
+            case Reg::Y:    return _y;
+            case Reg::U:    return _u;
+            case Reg::S:    return _s;
+            case Reg::CC:   return _ccByte;
+            case Reg::PC:   return _pc;
+            case Reg::DP:   return _dp;
         }
     }
 
@@ -148,16 +160,16 @@ private:
     {
         switch(r) {
             default: break;
-            case Reg::A:    a = v; break;
-            case Reg::B:    b = v; break;
-            case Reg::D:    d = v; break;
-            case Reg::X:    x = v; break;
-            case Reg::Y:    y = v; break;
-            case Reg::U:    u = v; break;
-            case Reg::S:    s = v; break;
-            case Reg::CC:   ccByte = v; break;
-            case Reg::PC:   pc = v; break;
-            case Reg::DP:   dp = v; break;
+            case Reg::A:    _a = v; break;
+            case Reg::B:    _b = v; break;
+            case Reg::D:    _d = v; break;
+            case Reg::X:    _x = v; break;
+            case Reg::Y:    _y = v; break;
+            case Reg::U:    _u = v; break;
+            case Reg::S:    _s = v; break;
+            case Reg::CC:   _ccByte = v; break;
+            case Reg::PC:   _pc = v; break;
+            case Reg::DP:   _dp = v; break;
         }
     }
 
@@ -187,15 +199,15 @@ private:
     
     uint8_t next8()
     {
-        uint8_t v = _ram[pc];
-        pc += 1;
+        uint8_t v = _ram[_pc];
+        _pc += 1;
         return v;
     }
     
     uint16_t next16()
     {
-        uint16_t v = (uint16_t(_ram[pc]) << 8) | uint16_t(_ram[pc + 1]);
-        pc += 2;
+        uint16_t v = (uint16_t(_ram[_pc]) << 8) | uint16_t(_ram[_pc + 1]);
+        _pc += 2;
         return v;
     }
     
@@ -211,71 +223,81 @@ private:
     
     void store8(uint16_t ea, uint8_t v)
     {
-        _ram[ea] = v;
+        if (ea >= SystemAddrStart) {
+            printf("Address %0x4 is read-only\n", ea);
+        } else {
+            _ram[ea] = v;
+        }
     }
     
     void store16(uint16_t ea, uint16_t v)
     {
-        _ram[ea] = v >> 8;
-        _ram[ea + 1] = v;
+        if (ea >= SystemAddrStart) {
+            printf("Address %0x4 is read-only\n", ea);
+        } else {
+            _ram[ea] = v >> 8;
+            _ram[ea + 1] = v;
+        }
     }
     
     // Update the HNZVC condition codes
     void updateH(uint8_t a, uint8_t b, uint16_t r)
     {
-        cc.H = ((a ^ b ^ r) & 0x10) != 0;
+        _cc.H = ((a ^ b ^ r) & 0x10) != 0;
     }
     
     void updateNZ8(uint16_t r)
     {
-        cc.Z = uint8_t(r) == 0;
-        cc.N = (r & 0x80) != 0;
+        _cc.Z = uint8_t(r) == 0;
+        _cc.N = (r & 0x80) != 0;
     }
     
     void updateNZ16(uint32_t r)
     {
-        cc.Z = uint16_t(r) == 0;
-        cc.N = (r & 0x8000) != 0;
+        _cc.Z = uint16_t(r) == 0;
+        _cc.N = (r & 0x8000) != 0;
     }
     
     void updateC8(uint16_t r)
     {
-        cc.C = (r & 0x100) != 0;
+        _cc.C = (r & 0x100) != 0;
     }
     
     void updateC16(uint32_t r)
     {
-        cc.C = (r & 0x10000) != 0;
+        _cc.C = (r & 0x10000) != 0;
     }
     
     void updateV8(uint8_t a, uint8_t b, uint16_t r)
     {
-        cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x80) != 0;
+        _cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x80) != 0;
     }
     
     void updateV16(uint16_t a, uint16_t b, uint32_t r)
     {
-        cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x8000) != 0;
+        _cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x8000) != 0;
     }
     
     uint8_t* _ram = nullptr;
     
     union {
-        struct { uint8_t a; uint8_t b; };
-        uint16_t d = 0;
+        struct { uint8_t _a; uint8_t _b; };
+        uint16_t _d = 0;
     };
     
-    uint16_t x = 0;
-    uint16_t y = 0;
-    uint16_t u = 0;
-    uint16_t s = 0;
-    uint16_t pc = 0;
-    uint8_t dp = 0;
+    uint16_t _x = 0;
+    uint16_t _y = 0;
+    uint16_t _u = 0;
+    uint16_t _s = 0;
+    uint16_t _pc = 0;
+    uint8_t _dp = 0;
     
     union {
-        CC cc;
-        uint8_t ccByte = 0;
+        CC _cc;
+        uint8_t _ccByte = 0;
     };
+    
+    BOSSCore _core;
 };
 
 }

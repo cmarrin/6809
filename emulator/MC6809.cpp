@@ -345,7 +345,7 @@ uint16_t Emulator::load(std::istream& stream)
 
 bool Emulator::execute(uint16_t addr)
 {
-    pc = addr;
+    _pc = addr;
     Op prevOp = Op::NOP;
     uint16_t ea = 0;
     uint32_t left = 0;
@@ -366,7 +366,7 @@ bool Emulator::execute(uint16_t addr)
             case Adr::Inherent:
                 break;
             case Adr::Direct:
-                ea = concat(dp, next8());
+                ea = concat(_dp, next8());
                 break;
             case Adr::Extended:
                 ea = next16();
@@ -388,7 +388,7 @@ bool Emulator::execute(uint16_t addr)
           case Adr::RelP:
                 if (prevOp == Op::Page2) {
                     right = int16_t(next16());
-                    pc += 2;
+                    _pc += 2;
                 } else {
                     right = int8_t(next8());
                 }
@@ -399,10 +399,10 @@ bool Emulator::execute(uint16_t addr)
                 
                 // Load value of RR reg in ea
                 switch (RR(postbyte & 0b01100000)) {
-                    case RR::X: reg = &x; break;
-                    case RR::Y: reg = &y; break;
-                    case RR::U: reg = &u; break;
-                    case RR::S: reg = &s; break;
+                    case RR::X: reg = &_x; break;
+                    case RR::Y: reg = &_y; break;
+                    case RR::U: reg = &_u; break;
+                    case RR::S: reg = &_s; break;
                 }
                 
                 if ((postbyte & 0x80) == 0) {
@@ -416,17 +416,17 @@ bool Emulator::execute(uint16_t addr)
                 } else {
                     switch(IdxMode(postbyte & IdxModeMask)) {
                         case IdxMode::ConstRegNoOff   : break;
-                        case IdxMode::ConstReg8Off    : ea = *reg + int8_t(load8(pc)); pc += 1; break;
-                        case IdxMode::ConstReg16Off   : ea = *reg + int16_t(load16(pc)); pc += 2; break;
-                        case IdxMode::AccAOffReg      : ea = *reg + int8_t(a); break;
-                        case IdxMode::AccBOffReg      : ea = *reg + int8_t(b); break;
-                        case IdxMode::AccDOffReg      : ea = *reg + int16_t(d); break;
+                        case IdxMode::ConstReg8Off    : ea = *reg + int8_t(load8(_pc)); _pc += 1; break;
+                        case IdxMode::ConstReg16Off   : ea = *reg + int16_t(load16(_pc)); _pc += 2; break;
+                        case IdxMode::AccAOffReg      : ea = *reg + int8_t(_a); break;
+                        case IdxMode::AccBOffReg      : ea = *reg + int8_t(_b); break;
+                        case IdxMode::AccDOffReg      : ea = *reg + int16_t(_d); break;
                         case IdxMode::Inc1Reg         : ea = *reg; (*reg) += 1; break;
                         case IdxMode::Inc2Reg         : ea = *reg; (*reg) += 2; break;
                         case IdxMode::Dec1Reg         : (*reg) += 1; ea = *reg; break;
                         case IdxMode::Dec2Reg         : (*reg) += 2; ea = *reg; break;
-                        case IdxMode::ConstPC8Off     : ea = pc + int8_t(load8(pc)); pc += 1; break;
-                        case IdxMode::ConstPC16Off    : ea = pc + int16_t(load16(pc)); pc += 2; break;
+                        case IdxMode::ConstPC8Off     : ea = _pc + int8_t(load8(_pc)); _pc += 1; break;
+                        case IdxMode::ConstPC16Off    : ea = _pc + int16_t(load16(_pc)); _pc += 2; break;
                         case IdxMode::Extended        : ea = next16();
                     }
                     
@@ -467,33 +467,33 @@ bool Emulator::execute(uint16_t addr)
                 break;
 
             case Op::BHS:
-            case Op::BCC: if (!cc.C) pc += right; break;
+            case Op::BCC: if (!_cc.C) _pc += right; break;
             case Op::BLO:
-            case Op::BCS: if (cc.C) pc += right; break;
-            case Op::BEQ: if (cc.Z) pc += right; break;
-            case Op::BGE: if ((cc.N ^ cc.V) == 0) pc += right; break;
-            case Op::BGT: if ((cc.Z & (cc.N ^ cc.V)) == 0) pc += right; break;
-            case Op::BHI: if ((cc.C | cc.Z) == 0) pc += right; break;
-            case Op::BLE: if ((cc.Z | (cc.N ^ cc.V)) == 0) pc += right; break;
-            case Op::BLS: if (cc.C || cc.Z) pc += right; break;
-            case Op::BLT: if ((cc.N ^ cc.V) != 0) pc += right; break;
-            case Op::BMI: if (cc.N) pc += right; break;
-            case Op::BNE: if (!cc.Z) pc += right; break;
-            case Op::BPL: if (!cc.N) pc += right; break;
-            case Op::BRA: pc += right; break;
+            case Op::BCS: if (_cc.C) _pc += right; break;
+            case Op::BEQ: if (_cc.Z) _pc += right; break;
+            case Op::BGE: if ((_cc.N ^ _cc.V) == 0) _pc += right; break;
+            case Op::BGT: if ((_cc.Z & (_cc.N ^ _cc.V)) == 0) _pc += right; break;
+            case Op::BHI: if ((_cc.C | _cc.Z) == 0) _pc += right; break;
+            case Op::BLE: if ((_cc.Z | (_cc.N ^ _cc.V)) == 0) _pc += right; break;
+            case Op::BLS: if (_cc.C || _cc.Z) _pc += right; break;
+            case Op::BLT: if ((_cc.N ^ _cc.V) != 0) _pc += right; break;
+            case Op::BMI: if (_cc.N) _pc += right; break;
+            case Op::BNE: if (!_cc.Z) _pc += right; break;
+            case Op::BPL: if (!_cc.N) _pc += right; break;
+            case Op::BRA: _pc += right; break;
             case Op::BRN: break;
-            case Op::BVC: if (!cc.V) pc += right; break;
-            case Op::BVS: if (cc.V) pc += right; break;
+            case Op::BVC: if (!_cc.V) _pc += right; break;
+            case Op::BVS: if (_cc.V) _pc += right; break;
             case Op::BSR:
-                push16(s, pc);
-                pc += right;
+                push16(_s, _pc);
+                _pc += right;
                 break;
 
             case Op::ABX:
-                x = x + uint16_t(b);
+                _x = _x + uint16_t(_b);
                 break;
             case Op::ADC:
-                result = left + right + (cc.C ? 1 : 0);
+                result = left + right + (_cc.C ? 1 : 0);
                 break;
             case Op::ADD8:
                 result = left + right;
@@ -505,7 +505,7 @@ bool Emulator::execute(uint16_t addr)
                 result = left & right;
                 break;
             case Op::ANDCC:
-                ccByte &= right;
+                _ccByte &= right;
                 break;
             case Op::ASL:
                 result = right << 1;
@@ -531,27 +531,27 @@ bool Emulator::execute(uint16_t addr)
                 result = ~right;
                 break;
             case Op::CWAI:
-                ccByte ^= right;
-                cc.E = true;
-                push16(s, pc);
-                push16(s, u);
-                push16(s, y);
-                push16(s, x);
-                push8(s, dp);
-                push8(s, b);
-                push8(s, a);
+                _ccByte ^= right;
+                _cc.E = true;
+                push16(_s, _pc);
+                push16(_s, _u);
+                push16(_s, _y);
+                push16(_s, _x);
+                push8(_s, _dp);
+                push8(_s, _b);
+                push8(_s, _a);
                 
                 // Now what?
                 break;
             case Op::DAA:
                 // LSN
-                if (cc.H || (a & 0x0f) > 9) {
-                    a += 6;
+                if (_cc.H || (_a & 0x0f) > 9) {
+                    _a += 6;
                 }
                 
                 // MSN
-                if (cc.C || (a & 0xf0) > 0x90) {
-                    a += 0x60;
+                if (_cc.C || (_a & 0xf0) > 0x90) {
+                    _a += 0x60;
                 }
                 break;
             case Op::DEC:
@@ -571,11 +571,16 @@ bool Emulator::execute(uint16_t addr)
                 result = left + 1;
                 break;
             case Op::JMP:
-                pc = ea;
+                _pc = ea;
                 break;
             case Op::JSR:
-                push16(s, pc);
-                pc = ea;
+                if (ea >= SystemAddrStart) {
+                    // This is possibly a system call
+                    _core.call(this, ea);
+                } else {
+                    push16(_s, _pc);
+                    _pc = ea;
+                }
                 break;
             case Op::LD8:
             case Op::LD16:
@@ -588,7 +593,7 @@ bool Emulator::execute(uint16_t addr)
                 result = left >> 1;
                 break;
             case Op::MUL:
-                d = a * b;
+                _d = _a * _b;
                 break;
             case Op::NEG:
                 result = -left;
@@ -599,94 +604,91 @@ bool Emulator::execute(uint16_t addr)
                 result = left | right;
                 break;
             case Op::ORCC:
-                ccByte |= right;
+                _ccByte |= right;
                 break;
             case Op::PSH:
             case Op::PUL: {
                 // bit pattern to push or pull are in right
-                uint16_t& stack = (opcode->reg == Reg::U) ? u : s;
+                uint16_t& stack = (opcode->reg == Reg::U) ? _u : _s;
                 if (opcode->op == Op::PSH) {
-                    if (right & 0x80) push16(stack, pc);
-                    if (right & 0x40) push16(stack, (opcode->reg == Reg::U) ? s : u);
-                    if (right & 0x20) push16(stack, y);
-                    if (right & 0x10) push16(stack, x);
-                    if (right & 0x08) push8(stack, dp);
-                    if (right & 0x04) push8(stack, b);
-                    if (right & 0x02) push8(stack, a);
-                    if (right & 0x01) push8(stack, ccByte);
+                    if (right & 0x80) push16(stack, _pc);
+                    if (right & 0x40) push16(stack, (opcode->reg == Reg::U) ? _s : _u);
+                    if (right & 0x20) push16(stack, _y);
+                    if (right & 0x10) push16(stack, _x);
+                    if (right & 0x08) push8(stack, _dp);
+                    if (right & 0x04) push8(stack, _b);
+                    if (right & 0x02) push8(stack, _a);
+                    if (right & 0x01) push8(stack, _ccByte);
                 } else {
-                    if (right & 0x01) ccByte = pop8(stack);
-                    if (right & 0x02) a = pop8(stack);
-                    if (right & 0x04) b = pop8(stack);
-                    if (right & 0x08) dp = pop8(stack);
-                    if (right & 0x10) x = pop16(stack);
-                    if (right & 0x20) y = pop16(stack);
+                    if (right & 0x01) _ccByte = pop8(stack);
+                    if (right & 0x02) _a = pop8(stack);
+                    if (right & 0x04) _b = pop8(stack);
+                    if (right & 0x08) _dp = pop8(stack);
+                    if (right & 0x10) _x = pop16(stack);
+                    if (right & 0x20) _y = pop16(stack);
                     if (right & 0x40) {
                         if (opcode->reg == Reg::U) {
-                            s = pop16(stack);
+                            _s = pop16(stack);
                         } else {
-                            u = pop16(stack);
+                            _u = pop16(stack);
                         }
                     }
-                    if (right & 0x80) pc = pop16(stack);
+                    if (right & 0x80) _pc = pop16(stack);
                 }
                 break;
             }
             case Op::ROL:
                 result = left << 1;
-                if (cc.C) {
+                if (_cc.C) {
                     result |= 0x01;
                 }
                 break;
             case Op::ROR:
                 result = left >> 1;
-                if (cc.C) {
+                if (_cc.C) {
                     result |= 0x80;
                 }
                 break;
             case Op::RTI:
-                if (cc.E) {
-                    a = pop8(s);
-                    b = pop8(s);
-                    dp = pop8(s);
-                    x = pop16(s);
-                    y = pop16(s);
-                    u = pop16(s);
+                if (_cc.E) {
+                    _a = pop8(_s);
+                    _b = pop8(_s);
+                    _dp = pop8(_s);
+                    _x = pop16(_s);
+                    _y = pop16(_s);
+                    _u = pop16(_s);
                 }
-                pc = pop16(s);
+                _pc = pop16(_s);
                 break;
             case Op::RTS:
-                pc = pop16(s);
+                _pc = pop16(_s);
                 break;
             case Op::SBC:
-                result = left - right - (cc.C ? 1 : 0);
+                result = left - right - (_cc.C ? 1 : 0);
                 break;
             case Op::SEX:
-                a = (b & 0x80) ? 0xff : 0;
+                _a = (_b & 0x80) ? 0xff : 0;
                 break;
             case Op::ST8:
-                store8(ea, left);
-                break;
-            case Op::ST16:
-                store16(ea, left);
+            case Op::ST16: // All done in pre and post processing
                 break;
             case Op::SWI:
             case Op::SWI2:
             case Op::SWI3:
-                cc.E = true;
-                push16(s, pc);
-                push16(s, u);
-                push16(s, y);
-                push16(s, x);
-                push8(s, dp);
-                push8(s, b);
-                push8(s, a);
-                cc.I = true;
-                cc.F = true;
+                _cc.E = true;
+                push16(_s, _pc);
+                push16(_s, _u);
+                push16(_s, _y);
+                push16(_s, _x);
+                push8(_s, _dp);
+                push8(_s, _b);
+                push8(_s, _a);
+                _cc.I = true;
+                _cc.F = true;
                 switch(opcode->op) {
-                    case Op::SWI: pc = load16(0xfffa); break;
-                    case Op::SWI2: pc = load16(0xfff4); break;
-                    case Op::SWI3: pc = load16(0xfff2); break;
+                    case Op::SWI: _pc = load16(0xfffa); break;
+                    case Op::SWI2: _pc = load16(0xfff4); break;
+                    case Op::SWI3: _pc = load16(0xfff2); break;
                     default: break;
                 }
                 break;
@@ -708,10 +710,14 @@ bool Emulator::execute(uint16_t addr)
         }
         
         // Store result
-        if (opcode->left == Left::St || opcode->left == Left::LdSt) {
-            if (opcode->reg == Reg::M8) {
+        if (opcode->right == Right::St8) {
+            store8(ea, left);
+        } else if (opcode->right == Right::St16) {
+            store16(ea, left);
+        } else if (opcode->left == Left::St || opcode->left == Left::LdSt) {
+            if (opcode->right == Right::St8 || opcode->reg == Reg::M8) {
                 store8(ea, result);
-            } else if (opcode->reg == Reg::M16) {
+            } else if (opcode->right == Right::St16 || opcode->reg == Reg::M16) {
                 store16(ea, result);
             } else {
                 setReg(opcode->reg, result);
