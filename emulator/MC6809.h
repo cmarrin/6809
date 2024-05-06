@@ -257,6 +257,7 @@ private:
     void xNZxC8()  { updateNZ8(); updateC8(); }
     void xNZxx8()  { updateNZ8(); }
     
+    bool NxorV() { return (_cc.N ^ _cc.V) != 0; }
     
     void updateH()
     {

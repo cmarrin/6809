@@ -468,12 +468,12 @@ bool Emulator::execute(uint16_t addr)
             case Op::BLO:
             case Op::BCS: if (_cc.C) _pc += _right; break;
             case Op::BEQ: if (_cc.Z) _pc += _right; break;
-            case Op::BGE: if ((_cc.N ^ _cc.V) == 0) _pc += _right; break;
-            case Op::BGT: if ((_cc.Z & (_cc.N ^ _cc.V)) == 0) _pc += _right; break;
-            case Op::BHI: if ((_cc.C | _cc.Z) == 0) _pc += _right; break;
-            case Op::BLE: if ((_cc.Z | (_cc.N ^ _cc.V)) != 0) _pc += _right; break;
+            case Op::BGE: if (!NxorV()) _pc += _right; break;
+            case Op::BGT: if (!(NxorV() || _cc.Z)) _pc += _right; break;
+            case Op::BHI: if (!_cc.C && !_cc.Z) _pc += _right; break;
+            case Op::BLE: if (NxorV() || _cc.Z) _pc += _right; break;
             case Op::BLS: if (_cc.C || _cc.Z) _pc += _right; break;
-            case Op::BLT: if ((_cc.N ^ _cc.V) != 0) _pc += _right; break;
+            case Op::BLT: if (NxorV()) _pc += _right; break;
             case Op::BMI: if (_cc.N) _pc += _right; break;
             case Op::BNE: if (!_cc.Z) _pc += _right; break;
             case Op::BPL: if (!_cc.N) _pc += _right; break;
