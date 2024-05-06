@@ -90,8 +90,6 @@ enum class Reg : uint8_t {
 enum class Left : uint8_t { None, Ld, St, LdSt };
 enum class Right : uint8_t { None, Ld8, Ld16, St8, St16 };
 
-enum class CCOp : uint8_t { None, HNZVC };
-
 struct Opcode
 {
     Op op : 7;
@@ -99,7 +97,6 @@ struct Opcode
     Right right : 3;
     Adr adr : 4;
     Reg reg : 4;
-    CCOp c : 3;
     uint8_t cycles : 5;
 };
 
@@ -248,41 +245,54 @@ private:
     }
     
     // Update the HNZVC condition codes
-    void updateH(uint8_t a, uint8_t b, uint16_t r)
+    void HNZVC8()  { updateH(); xNZVC8(); }
+    void xNZVC8()  { updateNZ8(); updateV8(); updateC8(); }
+    void xNZVC16() { updateNZ16(); updateV16(); updateC16(); }
+    void xNZ018()  { updateNZ8(); _cc.V = false; _cc.C = true; }
+    void x0ZxC8()  { updateNZ8(); _cc.N = false; updateC8(); }
+    void xNZVx8()  { updateNZ8(); updateV8(); }
+    void xNZ0x8()  { updateNZ8(); _cc.V = false; }
+    void xNZ0x16() { updateNZ16(); _cc.V = false; }
+    void xNZ0C8()  { updateNZ8(); _cc.V = false; updateC8(); }
+    void xNZxC8()  { updateNZ8(); updateC8(); }
+    void xNZxx8()  { updateNZ8(); }
+    
+    
+    void updateH()
     {
-        _cc.H = ((a ^ b ^ r) & 0x10) != 0;
+        _cc.H = ((_left ^ _right ^ _result) & 0x10) != 0;
     }
     
-    void updateNZ8(uint16_t r)
+    void updateNZ8()
     {
-        _cc.Z = uint8_t(r) == 0;
-        _cc.N = (r & 0x80) != 0;
+        _cc.Z = uint8_t(_result) == 0;
+        _cc.N = (_result & 0x80) != 0;
     }
     
-    void updateNZ16(uint32_t r)
+    void updateNZ16()
     {
-        _cc.Z = uint16_t(r) == 0;
-        _cc.N = (r & 0x8000) != 0;
+        _cc.Z = uint16_t(_result) == 0;
+        _cc.N = (_result & 0x8000) != 0;
     }
     
-    void updateC8(uint16_t r)
+    void updateC8()
     {
-        _cc.C = (r & 0x100) != 0;
+        _cc.C = (_result & 0x100) != 0;
     }
     
-    void updateC16(uint32_t r)
+    void updateC16()
     {
-        _cc.C = (r & 0x10000) != 0;
+        _cc.C = (_result & 0x10000) != 0;
     }
     
-    void updateV8(uint8_t a, uint8_t b, uint16_t r)
+    void updateV8()
     {
-        _cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x80) != 0;
+        _cc.V = ((_left ^ _right ^ _result ^ (_result >> 1)) & 0x80) != 0;
     }
     
-    void updateV16(uint16_t a, uint16_t b, uint32_t r)
+    void updateV16()
     {
-        _cc.V = ((a ^ b ^ r ^ (r >> 1)) & 0x8000) != 0;
+        _cc.V = ((_left ^ _right ^ _result ^ (_result >> 1)) & 0x8000) != 0;
     }
     
     uint8_t* _ram = nullptr;
@@ -303,6 +313,12 @@ private:
         CC _cc;
         uint8_t _ccByte = 0;
     };
+    
+    // Used by opcodes. Made members for CC calcs
+    uint32_t _left = 0;
+    uint32_t _right = 0;
+    uint32_t _result = 0;
+ 
     
     BOSSCore _core;
 };
