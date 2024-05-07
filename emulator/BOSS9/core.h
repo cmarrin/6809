@@ -66,11 +66,13 @@ class BOSSCore
         print(String::vformat(fmt, args).c_str());
     }
     
+    void setStartInMonitor(bool b) { _startInMonitor = b; }
+    
   protected:
     
   private:
       ConsoleCB _consoleCB;
-
+      bool _startInMonitor = false;
 };
 
 }

@@ -128,7 +128,7 @@ public:
     
     void setStack(uint16_t stack) { _s = stack; }
     
-    bool execute(uint16_t addr);
+    bool execute(uint16_t addr, bool startInMonitor = false);
     
     uint8_t getA() const { return _a; }
     uint8_t getB() const { return _b; }

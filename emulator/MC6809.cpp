@@ -343,8 +343,9 @@ uint16_t Emulator::load(std::istream& stream)
     return sRecInfo.startAddr();
 }
 
-bool Emulator::execute(uint16_t addr)
+bool Emulator::execute(uint16_t addr, bool startInMonitor)
 {
+    _core.setStartInMonitor(startInMonitor);
     _pc = addr;
     Op prevOp = Op::NOP;
     uint16_t ea = 0;
