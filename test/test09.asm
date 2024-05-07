@@ -1,48 +1,58 @@
         ; 6809 Test program.
 
+        include BOSS9.inc
+
 testnr  equ 128
 
         org $400
         jmp entry
-error  ldx #errmsg
-        bsr outs
+
+; Output an error message: 'ERROR xx' where xx is test number in hex
+;
+error   ldx #errmsg
+        jsr puts
         lda testnr
-        bsr outa
-        ldx #newline
-        bsr outs
+        bsr outhex
+        lda #newline
+        jsr putc
         swi
 
-errmsg fcc "ERROR \n"
-newline fcb 13,10,0
-outs    ldb ,x+
-        beq done1
-        jsr 3
-        bra outs
-done1   rts
-outdig  addb #48
-        cmpb #57
+errmsg  fcn "ERROR "
+
+; Output value in the lower 4 bits of a as a hex digit
+;
+outdig  adda #48
+        cmpa #57
         bls  od2
-        addb #7
-od2     jsr 3
+        adda #7
+        tfr b,a
+od2     jsr putc
         rts
-outa    tfr a,b
-        lsrb
-        lsrb
-        lsrb
-        lsrb
+
+; Output a as 2 hex digits
+;
+outhex  pshs a
+        lsra
+        lsra
+        lsra
+        lsra
         bsr outdig
-        tfr a,b
-        andb #15
+        puls a
+        anda #$0f
         bra outdig
-passmsg  fcc "PASSED \n"
+
+; Output an passed message: 'PASSED xx' where xx is test number in hex
+;
 good    ldx #passmsg
-        jsr outs
+        jsr puts
         lda testnr
-        jsr outa
-        ldx #newline
-        jsr outs
+        jsr outhex
+        lda #newline
+        jsr putc
         inc testnr
         rts
+
+passmsg  fcn "PASSED "
 
 entry   clr testnr
         jsr good          ;test #0, does it print msg?
@@ -456,6 +466,7 @@ here    cmpx #here
 	lbne error
 	jsr good			
 	bra next1
+    
 testdat	fcb 1,2,3,4,5,6,7,8,9,10
 td1	fdb testdat+2
 next1   
