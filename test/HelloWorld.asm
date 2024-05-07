@@ -22,8 +22,7 @@ loop
         
 done    bra done
 	
-text3   fcc "Hello from 6809 kit"
-        fcb 0
+text3   fcn "Hello from 6809 kit"
 
 count   rmb 1
 
