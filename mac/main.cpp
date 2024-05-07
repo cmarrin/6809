@@ -57,7 +57,7 @@ int main(int argc, char * const argv[])
     bool startInMonitor = false;
     int c;
         
-    while ((c = getopt(argc, argv, "m:")) != -1) {
+    while ((c = getopt(argc, argv, "m")) != -1) {
         switch (c) {
             case 'm':
                 startInMonitor = true;
@@ -73,7 +73,8 @@ int main(int argc, char * const argv[])
         std::stringstream stream(simpleTest);
         startAddr = emu.load(stream);
     } else {
-        std::ifstream f(argv[optind]);
+        const char* filename = argv[optind];
+        std::ifstream f(filename);
         if (f.is_open()) {
             startAddr = emu.load(f);
             f.close();
