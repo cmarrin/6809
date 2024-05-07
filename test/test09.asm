@@ -15,9 +15,9 @@ error   ldx #errmsg
         bsr outhex
         lda #newline
         jsr putc
-        swi
+eloop   bra eloop
 
-errmsg  fcn "ERROR "
+errmsg  fcn "ERROR  "
 
 ; Output value in the lower 4 bits of a as a hex digit
 ;
@@ -56,7 +56,8 @@ passmsg  fcn "PASSED "
 
 entry   clr testnr
         jsr good          ;test #0, does it print msg?
-        andcc #0          ;test #1, conditional (long) branches
+        
+        andcc #0          ;test #1, conditional (long) branches, expect no branch
         lbvs error        ;         andcc, orcc
         lbcs error
         lbeq error
@@ -65,7 +66,9 @@ entry   clr testnr
         lblt error
         lble error
         lbrn error
-        bvs errt1
+        jsr good
+
+        bvs errt1           ;test #2, conditional (long) branches, expect no branch, with jump
         bcs errt1
         beq errt1
         bmi errt1
@@ -75,7 +78,10 @@ entry   clr testnr
         brn errt1
         lbvc goot1
 errt1   jmp error
-goot1   lbcc goot2
+
+goot1   jsr good
+
+        lbcc goot2          ;test #3, conditional (long) branches, expect branch
         jmp error
 goot2   lbne goot3
         jmp error
@@ -105,7 +111,10 @@ goot14  bgt goot15
         jmp error
 goot15  bra goot16
         jmp error
-goot16  tfr cc,a
+        
+goot16  jsr good
+
+        tfr cc,a            ;test #4, test cc codes. expect no branch
         tsta
         lbne error
         andcc #0
@@ -138,7 +147,7 @@ goot16  tfr cc,a
         lbne error
         jsr good
 
-        lds #$8000       ; test #2: registers and their values, tfr, exg
+        lds #$8000       ; test #5: registers and their values, tfr, exg
         lda #$28
         ldb #$7f
         ldu #3417
@@ -206,7 +215,7 @@ here    cmpx #here
         lbne error
         jsr good
 
-        lda #128       ;Arithmetic and their status.
+        lda #128       ;Test 6: Arithmetic and their status.
         adda #255
         lbcc error
         lbvc error
@@ -228,10 +237,6 @@ here    cmpx #here
         lbcc error
         lda #216
         adda #40
-
-
-
-
         lbne error
         lda #80
         adda #40
@@ -293,7 +298,7 @@ here    cmpx #here
         lbne error
         jsr good
 
-        lda #$23      ;Test #4 decimal arithmetic.
+        lda #$23      ;Test #7: decimal arithmetic.
         adda #$34
         daa
         lbcs error
@@ -313,7 +318,7 @@ here    cmpx #here
         cmpa #$00
         jsr good
 
-        lda #128       ;Test#5  MUL and SEX
+        lda #128       ;Test#8:  MUL and SEX
         ldb #2
         mul
         lbeq error
@@ -352,7 +357,7 @@ here    cmpx #here
         lbne error
         jsr good
 
-        lda #$55    ; Test #6 Shifts and rotates.
+        lda #$55    ; Test #9: Shifts and rotates.
         asla
         lbcs error
         cmpa #$aa
@@ -388,7 +393,7 @@ here    cmpx #here
         lbne error
         jsr good
 
-        orcc #15          ; Test #7 INC, DEC and NEG
+        orcc #15          ; Test #10: INC, DEC and NEG
         lda #33
         inca
         lbeq error
@@ -425,53 +430,53 @@ here    cmpx #here
         lbne error
         jsr good
 
-	;test #8 Addessing modes.	
-	ldx #testdat+4
-	lda ,x
-	cmpa #5
-        lbne error 
-	lda ,x+
-	cmpa #5
- 	lbne error
-	cmpx #testdat+5
-	lbne error
-	ldd ,x++
-	cmpd #6*256+7
-	lbne error
-	cmpx #testdat+7
-	lbne error
-	ldx #testdat+4
-	lda ,-x
-	cmpa #4
-	lbne error
-	cmpx #testdat+3
-	lbne error
-	ldd ,--x
-	cmpd #2*256+3
-	lbne error
+	
+        ldx #testdat+4          ;test #11 Addessing modes.
+        lda ,x
+        cmpa #5
+        lbne error
+        lda ,x+
+        cmpa #5
+        lbne error
+        cmpx #testdat+5
+        lbne error
+        ldd ,x++
+        cmpd #6*256+7
+        lbne error
+        cmpx #testdat+7
+        lbne error
+        ldx #testdat+4
+        lda ,-x
+        cmpa #4
+        lbne error
+        cmpx #testdat+3
+        lbne error
+        ldd ,--x
+        cmpd #2*256+3
+        lbne error
         cmpx #testdat+1
-	lbne error
-	ldx #testdat+4
-	lda -2,x
-	cmpa #3
-	lbne error
-	lda 2,x
-	cmpa #7
-	lbne error
-	ldx #td1
-	ldd [,x]
-	cmpd #3*256+4
-	lbne error
-	cmpx #td1
-	lbne error
-	jsr good			
-	bra next1
+        lbne error
+        ldx #testdat+4
+        lda -2,x
+        cmpa #3
+        lbne error
+        lda 2,x
+        cmpa #7
+        lbne error
+        ldx #td1
+        ldd [,x]
+        cmpd #3*256+4
+        lbne error
+        cmpx #td1
+        lbne error
+        jsr good
+        bra next1
     
 testdat	fcb 1,2,3,4,5,6,7,8,9,10
 td1	fdb testdat+2
 next1   
 
-        swi
+gloop   bra gloop
         end $400
 
 
