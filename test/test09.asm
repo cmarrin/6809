@@ -43,13 +43,15 @@ outhex  pshs a
 
 ; Output an passed message: 'PASSED xx' where xx is test number in hex
 ;
-good    ldx #passmsg
+good    pshs cc
+        ldx #passmsg
         jsr puts
         lda testnr
         jsr outhex
         lda #newline
         jsr putc
         inc testnr
+        puls cc
         rts
 
 passmsg  fcn "PASSED "
