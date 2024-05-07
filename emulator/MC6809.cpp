@@ -77,7 +77,7 @@ static constexpr Opcode opcodeTable[ ] = {
     /*0A*/  	{ Op::DEC	  , Left::LdSt, Right::None , Adr::Direct	, Reg::M8   , 6	 },
     /*0B*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None     , Reg::None , 0  },
     /*0C*/  	{ Op::INC	  , Left::LdSt, Right::None , Adr::Direct	, Reg::M8   , 6	 },
-    /*0D*/  	{ Op::TST	  , Left::LdSt, Right::None , Adr::Direct	, Reg::M8   , 6	 },
+    /*0D*/  	{ Op::TST	  , Left::Ld  , Right::None , Adr::Direct	, Reg::M8   , 6	 },
     /*0E*/  	{ Op::JMP	  , Left::None, Right::None , Adr::Direct	, Reg::None , 3	 },
     /*0F*/  	{ Op::CLR	  , Left::St  , Right::None  , Adr::Direct	, Reg::M8   , 6	 },
     /*10*/  	{ Op::Page2	  , Left::None, Right::None , Adr::None	    , Reg::None , 0	 },
@@ -141,7 +141,7 @@ static constexpr Opcode opcodeTable[ ] = {
     /*4A*/  	{ Op::DEC	  , Left::LdSt, Right::None , Adr::Inherent	, Reg::A    , 2	 },
     /*4B*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None     , Reg::None , 0  },
     /*4C*/  	{ Op::INC	  , Left::LdSt, Right::None , Adr::Inherent	, Reg::A    , 2	 },
-    /*4D*/  	{ Op::TST	  , Left::LdSt, Right::None , Adr::Inherent	, Reg::A    , 2	 },
+    /*4D*/  	{ Op::TST	  , Left::Ld  , Right::None , Adr::Inherent	, Reg::A    , 2	 },
     /*4E*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None	    , Reg::None , 0	 },
     /*4F*/  	{ Op::CLR	  , Left::None, Right::None , Adr::Inherent	, Reg::A    , 2	 },
     /*50*/  	{ Op::NEG	  , Left::LdSt, Right::None , Adr::Inherent	, Reg::B    , 2	 },
@@ -157,7 +157,7 @@ static constexpr Opcode opcodeTable[ ] = {
     /*5A*/  	{ Op::DEC	  , Left::LdSt, Right::None , Adr::Inherent	, Reg::B    , 2	 },
     /*5B*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None     , Reg::None , 0  },
     /*5C*/  	{ Op::INC	  , Left::LdSt, Right::None , Adr::Inherent	, Reg::B    , 2	 },
-    /*5D*/  	{ Op::TST	  , Left::LdSt, Right::None , Adr::Inherent	, Reg::B    , 2	 },
+    /*5D*/  	{ Op::TST	  , Left::Ld  , Right::None , Adr::Inherent	, Reg::B    , 2	 },
     /*5E*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None	    , Reg::None , 0	 },
     /*5F*/  	{ Op::CLR	  , Left::None, Right::None , Adr::Inherent	, Reg::B    , 2	 },
     /*60*/  	{ Op::NEG	  , Left::LdSt, Right::None , Adr::Indexed	, Reg::M8   , 6	 },
@@ -173,7 +173,7 @@ static constexpr Opcode opcodeTable[ ] = {
     /*6A*/  	{ Op::DEC	  , Left::LdSt, Right::None , Adr::Indexed	, Reg::M8   , 6	 },
     /*6B*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None     , Reg::None , 0  },
     /*6C*/  	{ Op::INC	  , Left::LdSt, Right::None , Adr::Indexed	, Reg::M8   , 6	 },
-    /*6D*/  	{ Op::TST	  , Left::LdSt, Right::None , Adr::Indexed	, Reg::M8   , 6	 },
+    /*6D*/  	{ Op::TST	  , Left::Ld  , Right::None , Adr::Indexed	, Reg::M8   , 6	 },
     /*6E*/  	{ Op::JMP	  , Left::None, Right::None , Adr::Indexed	, Reg::None , 3	 },
     /*6F*/  	{ Op::CLR	  , Left::None, Right::None , Adr::Indexed	, Reg::M8   , 6	 },
     /*70*/  	{ Op::NEG	  , Left::LdSt, Right::None , Adr::Extended	, Reg::M8   , 7	 },
@@ -189,11 +189,11 @@ static constexpr Opcode opcodeTable[ ] = {
     /*7A*/  	{ Op::DEC	  , Left::LdSt, Right::None , Adr::Extended	, Reg::M8   , 7	 },
     /*7B*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None     , Reg::None , 0  },
     /*7C*/  	{ Op::INC	  , Left::LdSt, Right::None , Adr::Extended	, Reg::M8   , 7	 },
-    /*7D*/  	{ Op::TST	  , Left::LdSt, Right::None , Adr::Extended	, Reg::M8   , 7	 },
+    /*7D*/  	{ Op::TST	  , Left::Ld  , Right::None , Adr::Extended	, Reg::M8   , 7	 },
     /*7E*/  	{ Op::JMP	  , Left::None, Right::None , Adr::Extended	, Reg::None , 4	 },
     /*7F*/  	{ Op::CLR	  , Left::None, Right::None , Adr::Extended	, Reg::M8   , 7	 },
-    /*80*/  	{ Op::SUB8	  , Left::LdSt, Right::Ld8  , Adr::Immed8	, Reg::A    , 2	 },
-    /*81*/  	{ Op::CMP8	  , Left::Ld  , Right::Ld8  , Adr::Immed8	, Reg::A    , 2	 },
+    /*80*/  	{ Op::SUB8	  , Left::LdSt, Right::None , Adr::Immed8	, Reg::A    , 2	 },
+    /*81*/  	{ Op::CMP8	  , Left::Ld  , Right::None , Adr::Immed8	, Reg::A    , 2	 },
     /*82*/  	{ Op::SBC	  , Left::LdSt, Right::None , Adr::Immed8	, Reg::A    , 2	 },
     /*83*/  	{ Op::SUB16	  , Left::LdSt, Right::None , Adr::Immed16	, Reg::D    , 4	 },
     /*84*/  	{ Op::AND	  , Left::LdSt, Right::None , Adr::Immed8	, Reg::A    , 2	 },
@@ -204,12 +204,12 @@ static constexpr Opcode opcodeTable[ ] = {
     /*89*/  	{ Op::ADC	  , Left::LdSt, Right::None , Adr::Immed8	, Reg::A    , 2	 },
     /*8A*/  	{ Op::OR	  , Left::LdSt, Right::None , Adr::Immed8	, Reg::A    , 2	 },
     /*8B*/  	{ Op::ADD8	  , Left::LdSt, Right::None , Adr::Immed8	, Reg::A    , 2	 },
-    /*8C*/  	{ Op::CMP16	  , Left::LdSt, Right::None , Adr::Immed16	, Reg::X    , 4	 },
+    /*8C*/  	{ Op::CMP16	  , Left::Ld  , Right::None , Adr::Immed16	, Reg::X    , 4	 },
     /*8D*/  	{ Op::BSR	  , Left::None, Right::None , Adr::Rel      , Reg::None , 7	 },
     /*8E*/  	{ Op::LD16	  , Left::St  , Right::None , Adr::Immed16	, Reg::X    , 3	 },
     /*8F*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None     , Reg::None , 0  },
     /*90*/  	{ Op::SUB8	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::A    , 4	 },
-    /*91*/  	{ Op::CMP8	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::A    , 4	 },
+    /*91*/  	{ Op::CMP8	  , Left::Ld  , Right::Ld8  , Adr::Direct	, Reg::A    , 4	 },
     /*92*/  	{ Op::SBC	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::A    , 4	 },
     /*93*/  	{ Op::SUB16	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::D    , 6	 },
     /*94*/  	{ Op::AND	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::A    , 4	 },
@@ -220,7 +220,7 @@ static constexpr Opcode opcodeTable[ ] = {
     /*99*/  	{ Op::ADC	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::A    , 4	 },
     /*9A*/  	{ Op::OR	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::A    , 4	 },
     /*9B*/  	{ Op::ADD8	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::A    , 4	 },
-    /*9C*/  	{ Op::CMP16	  , Left::LdSt, Right::Ld8  , Adr::Direct	, Reg::X    , 6	 },
+    /*9C*/  	{ Op::CMP16	  , Left::Ld  , Right::Ld8  , Adr::Direct	, Reg::X    , 6	 },
     /*9D*/  	{ Op::JSR	  , Left::None, Right::None , Adr::Direct	, Reg::None , 7	 },
     /*9E*/  	{ Op::LD16	  , Left::St  , Right::Ld16 , Adr::Direct	, Reg::X    , 5	 },
     /*9F*/  	{ Op::ST16	  , Left::Ld  , Right::St16 , Adr::Direct	, Reg::X    , 5	 },
@@ -289,7 +289,7 @@ static constexpr Opcode opcodeTable[ ] = {
     /*DE*/  	{ Op::LD16	  , Left::St  , Right::Ld16 , Adr::Direct	, Reg::U    , 5	 },
     /*DF*/  	{ Op::ST16	  , Left::Ld  , Right::St16 , Adr::Direct	, Reg::U    , 5	 },
     /*E0*/  	{ Op::SUB8	  , Left::LdSt, Right::Ld8  , Adr::Indexed	, Reg::B    , 4	 },
-    /*E1*/  	{ Op::CMP8	  , Left::LdSt, Right::Ld8  , Adr::Indexed	, Reg::B    , 4	 },
+    /*E1*/  	{ Op::CMP8	  , Left::Ld  , Right::Ld8  , Adr::Indexed	, Reg::B    , 4	 },
     /*E2*/  	{ Op::SBC	  , Left::LdSt, Right::Ld8  , Adr::Indexed	, Reg::B    , 4	 },
     /*E3*/  	{ Op::ADD16	  , Left::LdSt, Right::Ld16 , Adr::Indexed	, Reg::D    , 6	 },
     /*E4*/  	{ Op::AND	  , Left::LdSt, Right::Ld8  , Adr::Indexed	, Reg::B    , 4	 },
@@ -386,7 +386,6 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
           case Adr::RelP:
                 if (prevOp == Op::Page2) {
                     _right = int16_t(next16());
-                    _pc += 2;
                 } else {
                     _right = int8_t(next8());
                 }
@@ -736,7 +735,7 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
                 // Now what?
                 break;
             case Op::TFR:
-                setReg(Reg(_right >> 4), getReg(Reg(_right & 0xf)));
+                setReg(Reg(_right & 0xf), getReg(Reg(_right >> 4)));
                 break;
             case Op::TST:
                 _result = _left - 0;
