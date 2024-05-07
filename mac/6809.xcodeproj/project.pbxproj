@@ -50,6 +50,7 @@
 		49065CFE2BD5D3E400E27819 /* forth9.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = forth9.asm; path = ../test/forth9.asm; sourceTree = "<group>"; };
 		49065CFF2BD5DADA00E27819 /* HelloWorld.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = HelloWorld.asm; path = ../test/HelloWorld.asm; sourceTree = "<group>"; };
 		49065D012BD6C70400E27819 /* MC6809.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MC6809.h; path = ../emulator/MC6809.h; sourceTree = "<group>"; };
+		490F10FB2BE99A7C00AC1440 /* test09.lst */ = {isa = PBXFileReference; lastKnownFileType = text; name = test09.lst; path = ../test/test09.lst; sourceTree = "<group>"; };
 		495775542BD5BE4400755E8A /* as9n.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = as9n.c; path = ../as9/as9n.c; sourceTree = "<group>"; };
 		495775552BD5BE4400755E8A /* output.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = output.c; path = ../as9/output.c; sourceTree = "<group>"; };
 		495775562BD5BE4400755E8A /* pseudo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pseudo.c; path = ../as9/pseudo.c; sourceTree = "<group>"; };
@@ -114,6 +115,7 @@
 				49E11A9B2BE1CD8F004BC747 /* asmtest.asm */,
 				49E11A9A2BE1CD8F004BC747 /* basic.asm */,
 				49E11A9C2BE1CD8F004BC747 /* test09.asm */,
+				490F10FB2BE99A7C00AC1440 /* test09.lst */,
 				49065CFD2BD5D3E400E27819 /* assist09.asm */,
 				49065CFE2BD5D3E400E27819 /* forth9.asm */,
 				49065CFF2BD5DADA00E27819 /* HelloWorld.asm */,
