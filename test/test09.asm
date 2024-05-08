@@ -25,7 +25,6 @@ outdig  adda #48
         cmpa #57
         bls  od2
         adda #7
-        tfr b,a
 od2     jsr putc
         rts
 
@@ -149,7 +148,7 @@ goot16  jsr good
         lbne error
         jsr good
 
-        lds #$8000       ; test #5: registers and their values, tfr, exg
+        lds #$8000       ; test #5: registers and their values
         lda #$28
         ldb #$7f
         ldu #3417
@@ -159,9 +158,9 @@ goot16  jsr good
         lbne error
         cmpb #$7f
         lbne error
+        jsr good
         cmpd #$287f
         lbne error
-        jsr good
         cmpx #2221
         lbne error
         jsr good
@@ -184,7 +183,8 @@ goot16  jsr good
         cmpy #2221
         lbne error
         jsr good
-        exg x,d
+        
+        exg x,d         ; test #6: test tfr, exg
         cmpd #16555
         lbne error
         cmpx #$287f
@@ -225,7 +225,7 @@ here    cmpx #here
         lbne error
         jsr good
 
-        lda #128       ;Test 6: Arithmetic and their status.
+        lda #128       ;Test 7: Arithmetic and their status.
         adda #255
         lbcc error
         lbvc error
@@ -308,7 +308,7 @@ here    cmpx #here
         lbne error
         jsr good
 
-        lda #$23      ;Test #7: decimal arithmetic.
+        lda #$23      ;Test #8: decimal arithmetic.
         adda #$34
         daa
         lbcs error
@@ -328,7 +328,7 @@ here    cmpx #here
         cmpa #$00
         jsr good
 
-        lda #128       ;Test#8:  MUL and SEX
+        lda #128       ;Test#9:  MUL and SEX
         ldb #2
         mul
         lbeq error
@@ -367,7 +367,7 @@ here    cmpx #here
         lbne error
         jsr good
 
-        lda #$55    ; Test #9: Shifts and rotates.
+        lda #$55    ; Test #10: Shifts and rotates.
         asla
         lbcs error
         cmpa #$aa
@@ -403,7 +403,7 @@ here    cmpx #here
         lbne error
         jsr good
 
-        orcc #15          ; Test #10: INC, DEC and NEG
+        orcc #15          ; Test #11: INC, DEC and NEG
         lda #33
         inca
         lbeq error
@@ -441,7 +441,7 @@ here    cmpx #here
         jsr good
 
 	
-        ldx #testdat+4          ;test #11 Addessing modes.
+        ldx #testdat+4          ;test #12 Addessing modes.
         lda ,x
         cmpa #5
         lbne error

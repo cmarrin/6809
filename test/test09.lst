@@ -38,14 +38,14 @@
      0080             (       test09.asm):00005         testnr  equ 128
                       (       test09.asm):00006         
                       (       test09.asm):00007                 org $400
-0400 7E0457           (       test09.asm):00008                 jmp entry
+0400 7E0455           (       test09.asm):00008                 jmp entry
                       (       test09.asm):00009         
                       (       test09.asm):00010         ; Output an error message: 'ERROR xx' where xx is test number in hex
                       (       test09.asm):00011         ;
 0403 8E0414           (       test09.asm):00012         error   ldx #errmsg
 0406 BDFC02           (       test09.asm):00013                 jsr puts
 0409 9680             (       test09.asm):00014                 lda testnr
-040B 8D1D             (       test09.asm):00015                 bsr outhex
+040B 8D1B             (       test09.asm):00015                 bsr outhex
 040D 860A             (       test09.asm):00016                 lda #newline
 040F BDFC00           (       test09.asm):00017                 jsr putc
 0412 20FE             (       test09.asm):00018         eloop   bra eloop
@@ -56,469 +56,469 @@
                       (       test09.asm):00023         ;
 041C 8B30             (       test09.asm):00024         outdig  adda #48
 041E 8139             (       test09.asm):00025                 cmpa #57
-0420 2304             (       test09.asm):00026                 bls  od2
+0420 2302             (       test09.asm):00026                 bls  od2
 0422 8B07             (       test09.asm):00027                 adda #7
-0424 1F98             (       test09.asm):00028                 tfr b,a
-0426 BDFC00           (       test09.asm):00029         od2     jsr putc
-0429 39               (       test09.asm):00030                 rts
-                      (       test09.asm):00031         
-                      (       test09.asm):00032         ; Output a as 2 hex digits
-                      (       test09.asm):00033         ;
-042A 3402             (       test09.asm):00034         outhex  pshs a
-042C 44               (       test09.asm):00035                 lsra
-042D 44               (       test09.asm):00036                 lsra
-042E 44               (       test09.asm):00037                 lsra
-042F 44               (       test09.asm):00038                 lsra
-0430 8DEA             (       test09.asm):00039                 bsr outdig
-0432 3502             (       test09.asm):00040                 puls a
-0434 840F             (       test09.asm):00041                 anda #$0f
-0436 20E4             (       test09.asm):00042                 bra outdig
-                      (       test09.asm):00043         
-                      (       test09.asm):00044         ; Output an passed message: 'PASSED xx' where xx is test number in hex
-                      (       test09.asm):00045         ;
-0438 3413             (       test09.asm):00046         good    pshs a,x,cc
-043A 8E044F           (       test09.asm):00047                 ldx #passmsg
-043D BDFC02           (       test09.asm):00048                 jsr puts
-0440 9680             (       test09.asm):00049                 lda testnr
-0442 BD042A           (       test09.asm):00050                 jsr outhex
-0445 860A             (       test09.asm):00051                 lda #newline
-0447 BDFC00           (       test09.asm):00052                 jsr putc
-044A 0C80             (       test09.asm):00053                 inc testnr
-044C 3513             (       test09.asm):00054                 puls a,x,cc
-044E 39               (       test09.asm):00055                 rts
-                      (       test09.asm):00056         
-044F 5041535345442000 (       test09.asm):00057         passmsg  fcn "PASSED "
-                      (       test09.asm):00058         
-0457 0F80             (       test09.asm):00059         entry   clr testnr
-0459 BD0438           (       test09.asm):00060                 jsr good          ;test #0, does it print msg?
-                      (       test09.asm):00061                 
-045C 1C00             (       test09.asm):00062                 andcc #0          ;test #1, conditional (long) branches, expect no branch
-045E 1029FFA1         (       test09.asm):00063                 lbvs error        ;         andcc, orcc
-0462 1025FF9D         (       test09.asm):00064                 lbcs error
-0466 1027FF99         (       test09.asm):00065                 lbeq error
-046A 102BFF95         (       test09.asm):00066                 lbmi error
-046E 1023FF91         (       test09.asm):00067                 lbls error
-0472 102DFF8D         (       test09.asm):00068                 lblt error
-0476 102FFF89         (       test09.asm):00069                 lble error
-047A 1021FF85         (       test09.asm):00070                 lbrn error
-047E BD0438           (       test09.asm):00071                 jsr good
-                      (       test09.asm):00072         
-0481 2912             (       test09.asm):00073                 bvs errt1           ;test #2, conditional (long) branches, expect no branch, with jump
-0483 2510             (       test09.asm):00074                 bcs errt1
-0485 270E             (       test09.asm):00075                 beq errt1
-0487 2B0C             (       test09.asm):00076                 bmi errt1
-0489 230A             (       test09.asm):00077                 bls errt1
-048B 2D08             (       test09.asm):00078                 blt errt1
-048D 2F06             (       test09.asm):00079                 ble errt1
-048F 2104             (       test09.asm):00080                 brn errt1
-0491 10280003         (       test09.asm):00081                 lbvc goot1
-0495 7E0403           (       test09.asm):00082         errt1   jmp error
-                      (       test09.asm):00083         
-0498 BD0438           (       test09.asm):00084         goot1   jsr good
-                      (       test09.asm):00085         
-049B 10240003         (       test09.asm):00086                 lbcc goot2          ;test #3, conditional (long) branches, expect branch
-049F 7E0403           (       test09.asm):00087                 jmp error
-04A2 10260003         (       test09.asm):00088         goot2   lbne goot3
-04A6 7E0403           (       test09.asm):00089                 jmp error
-04A9 102A0003         (       test09.asm):00090         goot3   lbpl goot4
-04AD 7E0403           (       test09.asm):00091                 jmp error
-04B0 10220003         (       test09.asm):00092         goot4   lbhi goot5
-04B4 7E0403           (       test09.asm):00093                 jmp error
-04B7 102C0003         (       test09.asm):00094         goot5   lbge goot6
-04BB 7E0403           (       test09.asm):00095                 jmp error
-04BE 102E0003         (       test09.asm):00096         goot6   lbgt goot7
-04C2 7E0403           (       test09.asm):00097                 jmp error
-04C5 160003           (       test09.asm):00098         goot7   lbra goot8
-04C8 7E0403           (       test09.asm):00099                 jmp error
-04CB 2803             (       test09.asm):00100         goot8   bvc goot9
-04CD 7E0403           (       test09.asm):00101                 jmp error
-04D0 2403             (       test09.asm):00102         goot9   bcc goot10
-04D2 7E0403           (       test09.asm):00103                 jmp error
-04D5 2603             (       test09.asm):00104         goot10  bne goot11
-04D7 7E0403           (       test09.asm):00105                 jmp error
-04DA 2A03             (       test09.asm):00106         goot11  bpl goot12
-04DC 7E0403           (       test09.asm):00107                 jmp error
-04DF 2203             (       test09.asm):00108         goot12  bhi goot13
-04E1 7E0403           (       test09.asm):00109                 jmp error
-04E4 2C03             (       test09.asm):00110         goot13  bge goot14
-04E6 7E0403           (       test09.asm):00111                 jmp error
-04E9 2E03             (       test09.asm):00112         goot14  bgt goot15
-04EB 7E0403           (       test09.asm):00113                 jmp error
-04EE 2003             (       test09.asm):00114         goot15  bra goot16
-04F0 7E0403           (       test09.asm):00115                 jmp error
-                      (       test09.asm):00116                 
-04F3 BD0438           (       test09.asm):00117         goot16  jsr good
-                      (       test09.asm):00118         
-04F6 1FA8             (       test09.asm):00119                 tfr cc,a            ;test #4, test cc codes. expect no branch
-04F8 4D               (       test09.asm):00120                 tsta
-04F9 1026FF06         (       test09.asm):00121                 lbne error
-04FD 1C00             (       test09.asm):00122                 andcc #0
-04FF 1A01             (       test09.asm):00123                 orcc #1
-0501 1024FEFE         (       test09.asm):00124                 lbcc error
-0505 1027FEFA         (       test09.asm):00125                 lbeq error
-0509 1029FEF6         (       test09.asm):00126                 lbvs error
-050D 102BFEF2         (       test09.asm):00127                 lbmi error
-0511 1A02             (       test09.asm):00128                 orcc #2
-0513 1028FEEC         (       test09.asm):00129                 lbvc error
-0517 1027FEE8         (       test09.asm):00130                 lbeq error
-051B 102BFEE4         (       test09.asm):00131                 lbmi error
-051F 1A04             (       test09.asm):00132                 orcc #4
-0521 1026FEDE         (       test09.asm):00133                 lbne error
-0525 102BFEDA         (       test09.asm):00134                 lbmi error
-0529 1A08             (       test09.asm):00135                 orcc #8
-052B 102AFED4         (       test09.asm):00136                 lbpl error
-052F 1FA8             (       test09.asm):00137                 tfr cc,a
-0531 810F             (       test09.asm):00138                 cmpa #15
-0533 1026FECC         (       test09.asm):00139                 lbne error
-0537 1A0F             (       test09.asm):00140                 orcc #15
-0539 1AF0             (       test09.asm):00141                 orcc #240
-053B 1FA8             (       test09.asm):00142                 tfr cc,a
-053D 4C               (       test09.asm):00143                 inca
-053E 1026FEC1         (       test09.asm):00144                 lbne error
-0542 1AFF             (       test09.asm):00145                 orcc #255
-0544 1CAA             (       test09.asm):00146                 andcc #$aa
-0546 1FA8             (       test09.asm):00147                 tfr cc,a
-0548 81AA             (       test09.asm):00148                 cmpa #$aa
-054A 1026FEB5         (       test09.asm):00149                 lbne error
-054E BD0438           (       test09.asm):00150                 jsr good
-                      (       test09.asm):00151         
-0551 10CE8000         (       test09.asm):00152                 lds #$8000       ; test #5: registers and their values, tfr, exg
-0555 8628             (       test09.asm):00153                 lda #$28
-0557 C67F             (       test09.asm):00154                 ldb #$7f
-0559 CE0D59           (       test09.asm):00155                 ldu #3417
-055C 8E08AD           (       test09.asm):00156                 ldx #2221
-055F 108E40AB         (       test09.asm):00157                 ldy #16555
-0563 8128             (       test09.asm):00158                 cmpa #$28
-0565 1026FE9A         (       test09.asm):00159                 lbne error
-0569 C17F             (       test09.asm):00160                 cmpb #$7f
-056B 1026FE94         (       test09.asm):00161                 lbne error
-056F 1083287F         (       test09.asm):00162                 cmpd #$287f
-0573 1026FE8C         (       test09.asm):00163                 lbne error
-0577 BD0438           (       test09.asm):00164                 jsr good
-057A 8C08AD           (       test09.asm):00165                 cmpx #2221
-057D 1026FE82         (       test09.asm):00166                 lbne error
-0581 BD0438           (       test09.asm):00167                 jsr good
-0584 108C000D         (       test09.asm):00168                 cmpy #13
-0588 1027FE77         (       test09.asm):00169                 lbeq error
-058C BD0438           (       test09.asm):00170                 jsr good
-058F 108C40AB         (       test09.asm):00171                 cmpy #16555
-0593 1026FE6C         (       test09.asm):00172                 lbne error
-0597 BD0438           (       test09.asm):00173                 jsr good
-059A 11830D59         (       test09.asm):00174                 cmpu #3417
-059E 1026FE61         (       test09.asm):00175                 lbne error
-05A2 BD0438           (       test09.asm):00176                 jsr good
-05A5 118C8000         (       test09.asm):00177                 cmps #$8000
-05A9 1026FE56         (       test09.asm):00178                 lbne error
-05AD BD0438           (       test09.asm):00179                 jsr good
-05B0 1E12             (       test09.asm):00180                 exg x,y
-05B2 8C40AB           (       test09.asm):00181                 cmpx #16555
-05B5 1026FE4A         (       test09.asm):00182                 lbne error
-05B9 BD0438           (       test09.asm):00183                 jsr good
-05BC 108C08AD         (       test09.asm):00184                 cmpy #2221
-05C0 1026FE3F         (       test09.asm):00185                 lbne error
-05C4 BD0438           (       test09.asm):00186                 jsr good
-05C7 1E10             (       test09.asm):00187                 exg x,d
-05C9 108340AB         (       test09.asm):00188                 cmpd #16555
-05CD 1026FE32         (       test09.asm):00189                 lbne error
-05D1 8C287F           (       test09.asm):00190                 cmpx #$287f
-05D4 1026FE2B         (       test09.asm):00191                 lbne error
-05D8 108C08AD         (       test09.asm):00192                 cmpy #2221
-05DC 1026FE23         (       test09.asm):00193                 lbne error
-05E0 1E10             (       test09.asm):00194                 exg x,d
-05E2 1E8B             (       test09.asm):00195                 exg a,dp
-05E4 4D               (       test09.asm):00196                 tsta
-05E5 1026FE1A         (       test09.asm):00197                 lbne error
-05E9 1E8B             (       test09.asm):00198                 exg a,dp
-05EB 1E89             (       test09.asm):00199                 exg a,b
-05ED 817F             (       test09.asm):00200                 cmpa #$7f
-05EF 1026FE10         (       test09.asm):00201                 lbne error
-05F3 C128             (       test09.asm):00202                 cmpb #$28
-05F5 1026FE0A         (       test09.asm):00203                 lbne error
-05F9 1F98             (       test09.asm):00204                 tfr b,a
-05FB C128             (       test09.asm):00205                 cmpb #$28
-05FD 1026FE02         (       test09.asm):00206                 lbne error
-0601 8128             (       test09.asm):00207                 cmpa #$28
-0603 1026FDFC         (       test09.asm):00208                 lbne error
-0607 1F31             (       test09.asm):00209                 tfr u,x
-0609 11830D59         (       test09.asm):00210                 cmpu #3417
-060D 1026FDF2         (       test09.asm):00211                 lbne error
-0611 8C0D59           (       test09.asm):00212                 cmpx #3417
-0614 1026FDEB         (       test09.asm):00213                 lbne error
-0618 1F51             (       test09.asm):00214                 tfr pc,x
-061A 8C061A           (       test09.asm):00215         here    cmpx #here
-061D 1026FDE2         (       test09.asm):00216                 lbne error
-0621 1F34             (       test09.asm):00217                 tfr u,s
-0623 118C0D59         (       test09.asm):00218                 cmps #3417
-0627 1026FDD8         (       test09.asm):00219                 lbne error
-062B 10CE8000         (       test09.asm):00220                 lds #$8000
-062F 4F               (       test09.asm):00221                 clra
-0630 1F9A             (       test09.asm):00222                 tfr b,cc
-0632 1FA8             (       test09.asm):00223                 tfr cc,a
-0634 8128             (       test09.asm):00224                 cmpa #$28
-0636 1026FDC9         (       test09.asm):00225                 lbne error
-063A BD0438           (       test09.asm):00226                 jsr good
+0424 BDFC00           (       test09.asm):00028         od2     jsr putc
+0427 39               (       test09.asm):00029                 rts
+                      (       test09.asm):00030         
+                      (       test09.asm):00031         ; Output a as 2 hex digits
+                      (       test09.asm):00032         ;
+0428 3402             (       test09.asm):00033         outhex  pshs a
+042A 44               (       test09.asm):00034                 lsra
+042B 44               (       test09.asm):00035                 lsra
+042C 44               (       test09.asm):00036                 lsra
+042D 44               (       test09.asm):00037                 lsra
+042E 8DEC             (       test09.asm):00038                 bsr outdig
+0430 3502             (       test09.asm):00039                 puls a
+0432 840F             (       test09.asm):00040                 anda #$0f
+0434 20E6             (       test09.asm):00041                 bra outdig
+                      (       test09.asm):00042         
+                      (       test09.asm):00043         ; Output an passed message: 'PASSED xx' where xx is test number in hex
+                      (       test09.asm):00044         ;
+0436 3413             (       test09.asm):00045         good    pshs a,x,cc
+0438 8E044D           (       test09.asm):00046                 ldx #passmsg
+043B BDFC02           (       test09.asm):00047                 jsr puts
+043E 9680             (       test09.asm):00048                 lda testnr
+0440 BD0428           (       test09.asm):00049                 jsr outhex
+0443 860A             (       test09.asm):00050                 lda #newline
+0445 BDFC00           (       test09.asm):00051                 jsr putc
+0448 0C80             (       test09.asm):00052                 inc testnr
+044A 3513             (       test09.asm):00053                 puls a,x,cc
+044C 39               (       test09.asm):00054                 rts
+                      (       test09.asm):00055         
+044D 5041535345442000 (       test09.asm):00056         passmsg  fcn "PASSED "
+                      (       test09.asm):00057         
+0455 0F80             (       test09.asm):00058         entry   clr testnr
+0457 BD0436           (       test09.asm):00059                 jsr good          ;test #0, does it print msg?
+                      (       test09.asm):00060                 
+045A 1C00             (       test09.asm):00061                 andcc #0          ;test #1, conditional (long) branches, expect no branch
+045C 1029FFA3         (       test09.asm):00062                 lbvs error        ;         andcc, orcc
+0460 1025FF9F         (       test09.asm):00063                 lbcs error
+0464 1027FF9B         (       test09.asm):00064                 lbeq error
+0468 102BFF97         (       test09.asm):00065                 lbmi error
+046C 1023FF93         (       test09.asm):00066                 lbls error
+0470 102DFF8F         (       test09.asm):00067                 lblt error
+0474 102FFF8B         (       test09.asm):00068                 lble error
+0478 1021FF87         (       test09.asm):00069                 lbrn error
+047C BD0436           (       test09.asm):00070                 jsr good
+                      (       test09.asm):00071         
+047F 2912             (       test09.asm):00072                 bvs errt1           ;test #2, conditional (long) branches, expect no branch, with jump
+0481 2510             (       test09.asm):00073                 bcs errt1
+0483 270E             (       test09.asm):00074                 beq errt1
+0485 2B0C             (       test09.asm):00075                 bmi errt1
+0487 230A             (       test09.asm):00076                 bls errt1
+0489 2D08             (       test09.asm):00077                 blt errt1
+048B 2F06             (       test09.asm):00078                 ble errt1
+048D 2104             (       test09.asm):00079                 brn errt1
+048F 10280003         (       test09.asm):00080                 lbvc goot1
+0493 7E0403           (       test09.asm):00081         errt1   jmp error
+                      (       test09.asm):00082         
+0496 BD0436           (       test09.asm):00083         goot1   jsr good
+                      (       test09.asm):00084         
+0499 10240003         (       test09.asm):00085                 lbcc goot2          ;test #3, conditional (long) branches, expect branch
+049D 7E0403           (       test09.asm):00086                 jmp error
+04A0 10260003         (       test09.asm):00087         goot2   lbne goot3
+04A4 7E0403           (       test09.asm):00088                 jmp error
+04A7 102A0003         (       test09.asm):00089         goot3   lbpl goot4
+04AB 7E0403           (       test09.asm):00090                 jmp error
+04AE 10220003         (       test09.asm):00091         goot4   lbhi goot5
+04B2 7E0403           (       test09.asm):00092                 jmp error
+04B5 102C0003         (       test09.asm):00093         goot5   lbge goot6
+04B9 7E0403           (       test09.asm):00094                 jmp error
+04BC 102E0003         (       test09.asm):00095         goot6   lbgt goot7
+04C0 7E0403           (       test09.asm):00096                 jmp error
+04C3 160003           (       test09.asm):00097         goot7   lbra goot8
+04C6 7E0403           (       test09.asm):00098                 jmp error
+04C9 2803             (       test09.asm):00099         goot8   bvc goot9
+04CB 7E0403           (       test09.asm):00100                 jmp error
+04CE 2403             (       test09.asm):00101         goot9   bcc goot10
+04D0 7E0403           (       test09.asm):00102                 jmp error
+04D3 2603             (       test09.asm):00103         goot10  bne goot11
+04D5 7E0403           (       test09.asm):00104                 jmp error
+04D8 2A03             (       test09.asm):00105         goot11  bpl goot12
+04DA 7E0403           (       test09.asm):00106                 jmp error
+04DD 2203             (       test09.asm):00107         goot12  bhi goot13
+04DF 7E0403           (       test09.asm):00108                 jmp error
+04E2 2C03             (       test09.asm):00109         goot13  bge goot14
+04E4 7E0403           (       test09.asm):00110                 jmp error
+04E7 2E03             (       test09.asm):00111         goot14  bgt goot15
+04E9 7E0403           (       test09.asm):00112                 jmp error
+04EC 2003             (       test09.asm):00113         goot15  bra goot16
+04EE 7E0403           (       test09.asm):00114                 jmp error
+                      (       test09.asm):00115                 
+04F1 BD0436           (       test09.asm):00116         goot16  jsr good
+                      (       test09.asm):00117         
+04F4 1FA8             (       test09.asm):00118                 tfr cc,a            ;test #4, test cc codes. expect no branch
+04F6 4D               (       test09.asm):00119                 tsta
+04F7 1026FF08         (       test09.asm):00120                 lbne error
+04FB 1C00             (       test09.asm):00121                 andcc #0
+04FD 1A01             (       test09.asm):00122                 orcc #1
+04FF 1024FF00         (       test09.asm):00123                 lbcc error
+0503 1027FEFC         (       test09.asm):00124                 lbeq error
+0507 1029FEF8         (       test09.asm):00125                 lbvs error
+050B 102BFEF4         (       test09.asm):00126                 lbmi error
+050F 1A02             (       test09.asm):00127                 orcc #2
+0511 1028FEEE         (       test09.asm):00128                 lbvc error
+0515 1027FEEA         (       test09.asm):00129                 lbeq error
+0519 102BFEE6         (       test09.asm):00130                 lbmi error
+051D 1A04             (       test09.asm):00131                 orcc #4
+051F 1026FEE0         (       test09.asm):00132                 lbne error
+0523 102BFEDC         (       test09.asm):00133                 lbmi error
+0527 1A08             (       test09.asm):00134                 orcc #8
+0529 102AFED6         (       test09.asm):00135                 lbpl error
+052D 1FA8             (       test09.asm):00136                 tfr cc,a
+052F 810F             (       test09.asm):00137                 cmpa #15
+0531 1026FECE         (       test09.asm):00138                 lbne error
+0535 1A0F             (       test09.asm):00139                 orcc #15
+0537 1AF0             (       test09.asm):00140                 orcc #240
+0539 1FA8             (       test09.asm):00141                 tfr cc,a
+053B 4C               (       test09.asm):00142                 inca
+053C 1026FEC3         (       test09.asm):00143                 lbne error
+0540 1AFF             (       test09.asm):00144                 orcc #255
+0542 1CAA             (       test09.asm):00145                 andcc #$aa
+0544 1FA8             (       test09.asm):00146                 tfr cc,a
+0546 81AA             (       test09.asm):00147                 cmpa #$aa
+0548 1026FEB7         (       test09.asm):00148                 lbne error
+054C BD0436           (       test09.asm):00149                 jsr good
+                      (       test09.asm):00150         
+054F 10CE8000         (       test09.asm):00151                 lds #$8000       ; test #5: registers and their values
+0553 8628             (       test09.asm):00152                 lda #$28
+0555 C67F             (       test09.asm):00153                 ldb #$7f
+0557 CE0D59           (       test09.asm):00154                 ldu #3417
+055A 8E08AD           (       test09.asm):00155                 ldx #2221
+055D 108E40AB         (       test09.asm):00156                 ldy #16555
+0561 8128             (       test09.asm):00157                 cmpa #$28
+0563 1026FE9C         (       test09.asm):00158                 lbne error
+0567 C17F             (       test09.asm):00159                 cmpb #$7f
+0569 1026FE96         (       test09.asm):00160                 lbne error
+056D BD0436           (       test09.asm):00161                 jsr good
+0570 1083287F         (       test09.asm):00162                 cmpd #$287f
+0574 1026FE8B         (       test09.asm):00163                 lbne error
+0578 8C08AD           (       test09.asm):00164                 cmpx #2221
+057B 1026FE84         (       test09.asm):00165                 lbne error
+057F BD0436           (       test09.asm):00166                 jsr good
+0582 108C000D         (       test09.asm):00167                 cmpy #13
+0586 1027FE79         (       test09.asm):00168                 lbeq error
+058A BD0436           (       test09.asm):00169                 jsr good
+058D 108C40AB         (       test09.asm):00170                 cmpy #16555
+0591 1026FE6E         (       test09.asm):00171                 lbne error
+0595 BD0436           (       test09.asm):00172                 jsr good
+0598 11830D59         (       test09.asm):00173                 cmpu #3417
+059C 1026FE63         (       test09.asm):00174                 lbne error
+05A0 BD0436           (       test09.asm):00175                 jsr good
+05A3 118C8000         (       test09.asm):00176                 cmps #$8000
+05A7 1026FE58         (       test09.asm):00177                 lbne error
+05AB BD0436           (       test09.asm):00178                 jsr good
+05AE 1E12             (       test09.asm):00179                 exg x,y
+05B0 8C40AB           (       test09.asm):00180                 cmpx #16555
+05B3 1026FE4C         (       test09.asm):00181                 lbne error
+05B7 BD0436           (       test09.asm):00182                 jsr good
+05BA 108C08AD         (       test09.asm):00183                 cmpy #2221
+05BE 1026FE41         (       test09.asm):00184                 lbne error
+05C2 BD0436           (       test09.asm):00185                 jsr good
+                      (       test09.asm):00186                 
+05C5 1E10             (       test09.asm):00187                 exg x,d         ; test #6: test tfr, exg
+05C7 108340AB         (       test09.asm):00188                 cmpd #16555
+05CB 1026FE34         (       test09.asm):00189                 lbne error
+05CF 8C287F           (       test09.asm):00190                 cmpx #$287f
+05D2 1026FE2D         (       test09.asm):00191                 lbne error
+05D6 108C08AD         (       test09.asm):00192                 cmpy #2221
+05DA 1026FE25         (       test09.asm):00193                 lbne error
+05DE 1E10             (       test09.asm):00194                 exg x,d
+05E0 1E8B             (       test09.asm):00195                 exg a,dp
+05E2 4D               (       test09.asm):00196                 tsta
+05E3 1026FE1C         (       test09.asm):00197                 lbne error
+05E7 1E8B             (       test09.asm):00198                 exg a,dp
+05E9 1E89             (       test09.asm):00199                 exg a,b
+05EB 817F             (       test09.asm):00200                 cmpa #$7f
+05ED 1026FE12         (       test09.asm):00201                 lbne error
+05F1 C128             (       test09.asm):00202                 cmpb #$28
+05F3 1026FE0C         (       test09.asm):00203                 lbne error
+05F7 1F98             (       test09.asm):00204                 tfr b,a
+05F9 C128             (       test09.asm):00205                 cmpb #$28
+05FB 1026FE04         (       test09.asm):00206                 lbne error
+05FF 8128             (       test09.asm):00207                 cmpa #$28
+0601 1026FDFE         (       test09.asm):00208                 lbne error
+0605 1F31             (       test09.asm):00209                 tfr u,x
+0607 11830D59         (       test09.asm):00210                 cmpu #3417
+060B 1026FDF4         (       test09.asm):00211                 lbne error
+060F 8C0D59           (       test09.asm):00212                 cmpx #3417
+0612 1026FDED         (       test09.asm):00213                 lbne error
+0616 1F51             (       test09.asm):00214                 tfr pc,x
+0618 8C0618           (       test09.asm):00215         here    cmpx #here
+061B 1026FDE4         (       test09.asm):00216                 lbne error
+061F 1F34             (       test09.asm):00217                 tfr u,s
+0621 118C0D59         (       test09.asm):00218                 cmps #3417
+0625 1026FDDA         (       test09.asm):00219                 lbne error
+0629 10CE8000         (       test09.asm):00220                 lds #$8000
+062D 4F               (       test09.asm):00221                 clra
+062E 1F9A             (       test09.asm):00222                 tfr b,cc
+0630 1FA8             (       test09.asm):00223                 tfr cc,a
+0632 8128             (       test09.asm):00224                 cmpa #$28
+0634 1026FDCB         (       test09.asm):00225                 lbne error
+0638 BD0436           (       test09.asm):00226                 jsr good
                       (       test09.asm):00227         
-063D 8680             (       test09.asm):00228                 lda #128       ;Test 6: Arithmetic and their status.
-063F 8BFF             (       test09.asm):00229                 adda #255
-0641 1024FDBE         (       test09.asm):00230                 lbcc error
-0645 1028FDBA         (       test09.asm):00231                 lbvc error
-0649 102BFDB6         (       test09.asm):00232                 lbmi error
-064D 817F             (       test09.asm):00233                 cmpa #127
-064F 1026FDB0         (       test09.asm):00234                 lbne error
-0653 8600             (       test09.asm):00235                 lda #0
-0655 8BFF             (       test09.asm):00236                 adda #255
-0657 1025FDA8         (       test09.asm):00237                 lbcs error
-065B 1029FDA4         (       test09.asm):00238                 lbvs error
-065F 102AFDA0         (       test09.asm):00239                 lbpl error
-0663 81FF             (       test09.asm):00240                 cmpa #255
-0665 1026FD9A         (       test09.asm):00241                 lbne error
-0669 1A01             (       test09.asm):00242                 orcc #1
-066B 86FF             (       test09.asm):00243                 lda #255
-066D 8900             (       test09.asm):00244                 adca #0
-066F 1026FD90         (       test09.asm):00245                 lbne error
-0673 102BFD8C         (       test09.asm):00246                 lbmi error
-0677 1024FD88         (       test09.asm):00247                 lbcc error
-067B 86D8             (       test09.asm):00248                 lda #216
-067D 8B28             (       test09.asm):00249                 adda #40
-067F 1026FD80         (       test09.asm):00250                 lbne error
-0683 8650             (       test09.asm):00251                 lda #80
-0685 8B28             (       test09.asm):00252                 adda #40
-0687 1025FD78         (       test09.asm):00253                 lbcs error
-068B 1029FD74         (       test09.asm):00254                 lbvs error
-068F 8178             (       test09.asm):00255                 cmpa #120
-0691 1026FD6E         (       test09.asm):00256                 lbne error
-0695 1A01             (       test09.asm):00257                 orcc #1
-0697 8650             (       test09.asm):00258                 lda #80
-0699 8928             (       test09.asm):00259                 adca #40
-069B 1025FD64         (       test09.asm):00260                 lbcs error
-069F 1029FD60         (       test09.asm):00261                 lbvs error
-06A3 8179             (       test09.asm):00262                 cmpa #121
-06A5 1026FD5A         (       test09.asm):00263                 lbne error
-06A9 1CFE             (       test09.asm):00264                 andcc #254
-06AB C650             (       test09.asm):00265                 ldb #80
-06AD C928             (       test09.asm):00266                 adcb #40
-06AF 1025FD50         (       test09.asm):00267                 lbcs error
-06B3 1029FD4C         (       test09.asm):00268                 lbvs error
-06B7 C178             (       test09.asm):00269                 cmpb #120
-06B9 1026FD46         (       test09.asm):00270                 lbne error
-06BD C650             (       test09.asm):00271                 ldb #80
-06BF C078             (       test09.asm):00272                 subb #120
-06C1 1024FD3E         (       test09.asm):00273                 lbcc error
-06C5 1029FD3A         (       test09.asm):00274                 lbvs error
-06C9 C1D8             (       test09.asm):00275                 cmpb #216
-06CB 1026FD34         (       test09.asm):00276                 lbne error
-06CF 1CFE             (       test09.asm):00277                 andcc #254
-06D1 868C             (       test09.asm):00278                 lda #140
-06D3 8214             (       test09.asm):00279                 sbca #20
-06D5 1028FD2A         (       test09.asm):00280                 lbvc error
-06D9 1025FD26         (       test09.asm):00281                 lbcs error
-06DD 8178             (       test09.asm):00282                 cmpa #120
-06DF 1026FD20         (       test09.asm):00283                 lbne error
-06E3 1A01             (       test09.asm):00284                 orcc #1
-06E5 868C             (       test09.asm):00285                 lda #140
-06E7 8214             (       test09.asm):00286                 sbca #20
-06E9 1028FD16         (       test09.asm):00287                 lbvc error
-06ED 1025FD12         (       test09.asm):00288                 lbcs error
-06F1 8177             (       test09.asm):00289                 cmpa #119
-06F3 1026FD0C         (       test09.asm):00290                 lbne error
-06F7 CC9C40           (       test09.asm):00291                 ldd #40000
-06FA 834E20           (       test09.asm):00292                 subd #20000
-06FD 1028FD02         (       test09.asm):00293                 lbvc error
-0701 1025FCFE         (       test09.asm):00294                 lbcs error
-0705 10834E20         (       test09.asm):00295                 cmpd #20000
-0709 1026FCF6         (       test09.asm):00296                 lbne error
-070D CC4E20           (       test09.asm):00297                 ldd #20000
-0710 839C40           (       test09.asm):00298                 subd #40000
-0713 1028FCEC         (       test09.asm):00299                 lbvc error
-0717 1024FCE8         (       test09.asm):00300                 lbcc error
-071B 1083B1E0         (       test09.asm):00301                 cmpd #-20000
-071F 1026FCE0         (       test09.asm):00302                 lbne error
-0723 CC7530           (       test09.asm):00303                 ldd #30000
-0726 C3B1E0           (       test09.asm):00304                 addd #-20000
-0729 1024FCD6         (       test09.asm):00305                 lbcc error
-072D 1029FCD2         (       test09.asm):00306                 lbvs error
-0731 10832710         (       test09.asm):00307                 cmpd #10000
-0735 1026FCCA         (       test09.asm):00308                 lbne error
-0739 BD0438           (       test09.asm):00309                 jsr good
+063B 8680             (       test09.asm):00228                 lda #128       ;Test 7: Arithmetic and their status.
+063D 8BFF             (       test09.asm):00229                 adda #255
+063F 1024FDC0         (       test09.asm):00230                 lbcc error
+0643 1028FDBC         (       test09.asm):00231                 lbvc error
+0647 102BFDB8         (       test09.asm):00232                 lbmi error
+064B 817F             (       test09.asm):00233                 cmpa #127
+064D 1026FDB2         (       test09.asm):00234                 lbne error
+0651 8600             (       test09.asm):00235                 lda #0
+0653 8BFF             (       test09.asm):00236                 adda #255
+0655 1025FDAA         (       test09.asm):00237                 lbcs error
+0659 1029FDA6         (       test09.asm):00238                 lbvs error
+065D 102AFDA2         (       test09.asm):00239                 lbpl error
+0661 81FF             (       test09.asm):00240                 cmpa #255
+0663 1026FD9C         (       test09.asm):00241                 lbne error
+0667 1A01             (       test09.asm):00242                 orcc #1
+0669 86FF             (       test09.asm):00243                 lda #255
+066B 8900             (       test09.asm):00244                 adca #0
+066D 1026FD92         (       test09.asm):00245                 lbne error
+0671 102BFD8E         (       test09.asm):00246                 lbmi error
+0675 1024FD8A         (       test09.asm):00247                 lbcc error
+0679 86D8             (       test09.asm):00248                 lda #216
+067B 8B28             (       test09.asm):00249                 adda #40
+067D 1026FD82         (       test09.asm):00250                 lbne error
+0681 8650             (       test09.asm):00251                 lda #80
+0683 8B28             (       test09.asm):00252                 adda #40
+0685 1025FD7A         (       test09.asm):00253                 lbcs error
+0689 1029FD76         (       test09.asm):00254                 lbvs error
+068D 8178             (       test09.asm):00255                 cmpa #120
+068F 1026FD70         (       test09.asm):00256                 lbne error
+0693 1A01             (       test09.asm):00257                 orcc #1
+0695 8650             (       test09.asm):00258                 lda #80
+0697 8928             (       test09.asm):00259                 adca #40
+0699 1025FD66         (       test09.asm):00260                 lbcs error
+069D 1029FD62         (       test09.asm):00261                 lbvs error
+06A1 8179             (       test09.asm):00262                 cmpa #121
+06A3 1026FD5C         (       test09.asm):00263                 lbne error
+06A7 1CFE             (       test09.asm):00264                 andcc #254
+06A9 C650             (       test09.asm):00265                 ldb #80
+06AB C928             (       test09.asm):00266                 adcb #40
+06AD 1025FD52         (       test09.asm):00267                 lbcs error
+06B1 1029FD4E         (       test09.asm):00268                 lbvs error
+06B5 C178             (       test09.asm):00269                 cmpb #120
+06B7 1026FD48         (       test09.asm):00270                 lbne error
+06BB C650             (       test09.asm):00271                 ldb #80
+06BD C078             (       test09.asm):00272                 subb #120
+06BF 1024FD40         (       test09.asm):00273                 lbcc error
+06C3 1029FD3C         (       test09.asm):00274                 lbvs error
+06C7 C1D8             (       test09.asm):00275                 cmpb #216
+06C9 1026FD36         (       test09.asm):00276                 lbne error
+06CD 1CFE             (       test09.asm):00277                 andcc #254
+06CF 868C             (       test09.asm):00278                 lda #140
+06D1 8214             (       test09.asm):00279                 sbca #20
+06D3 1028FD2C         (       test09.asm):00280                 lbvc error
+06D7 1025FD28         (       test09.asm):00281                 lbcs error
+06DB 8178             (       test09.asm):00282                 cmpa #120
+06DD 1026FD22         (       test09.asm):00283                 lbne error
+06E1 1A01             (       test09.asm):00284                 orcc #1
+06E3 868C             (       test09.asm):00285                 lda #140
+06E5 8214             (       test09.asm):00286                 sbca #20
+06E7 1028FD18         (       test09.asm):00287                 lbvc error
+06EB 1025FD14         (       test09.asm):00288                 lbcs error
+06EF 8177             (       test09.asm):00289                 cmpa #119
+06F1 1026FD0E         (       test09.asm):00290                 lbne error
+06F5 CC9C40           (       test09.asm):00291                 ldd #40000
+06F8 834E20           (       test09.asm):00292                 subd #20000
+06FB 1028FD04         (       test09.asm):00293                 lbvc error
+06FF 1025FD00         (       test09.asm):00294                 lbcs error
+0703 10834E20         (       test09.asm):00295                 cmpd #20000
+0707 1026FCF8         (       test09.asm):00296                 lbne error
+070B CC4E20           (       test09.asm):00297                 ldd #20000
+070E 839C40           (       test09.asm):00298                 subd #40000
+0711 1028FCEE         (       test09.asm):00299                 lbvc error
+0715 1024FCEA         (       test09.asm):00300                 lbcc error
+0719 1083B1E0         (       test09.asm):00301                 cmpd #-20000
+071D 1026FCE2         (       test09.asm):00302                 lbne error
+0721 CC7530           (       test09.asm):00303                 ldd #30000
+0724 C3B1E0           (       test09.asm):00304                 addd #-20000
+0727 1024FCD8         (       test09.asm):00305                 lbcc error
+072B 1029FCD4         (       test09.asm):00306                 lbvs error
+072F 10832710         (       test09.asm):00307                 cmpd #10000
+0733 1026FCCC         (       test09.asm):00308                 lbne error
+0737 BD0436           (       test09.asm):00309                 jsr good
                       (       test09.asm):00310         
-073C 8623             (       test09.asm):00311                 lda #$23      ;Test #7: decimal arithmetic.
-073E 8B34             (       test09.asm):00312                 adda #$34
-0740 19               (       test09.asm):00313                 daa
-0741 1025FCBE         (       test09.asm):00314                 lbcs error
-0745 8157             (       test09.asm):00315                 cmpa #$57
-0747 1026FCB8         (       test09.asm):00316                 lbne error
-074B 1A01             (       test09.asm):00317                 orcc #1
-074D 8619             (       test09.asm):00318                 lda #$19
-074F 8929             (       test09.asm):00319                 adca #$29
-0751 19               (       test09.asm):00320                 daa
-0752 1025FCAD         (       test09.asm):00321                 lbcs error
-0756 8149             (       test09.asm):00322                 cmpa #$49
-0758 1026FCA7         (       test09.asm):00323                 lbne error
-075C 8692             (       test09.asm):00324                 lda #$92
-075E 8B08             (       test09.asm):00325                 adda #$8
-0760 19               (       test09.asm):00326                 daa
-0761 1024FC9E         (       test09.asm):00327                 lbcc error
-0765 8100             (       test09.asm):00328                 cmpa #$00
-0767 BD0438           (       test09.asm):00329                 jsr good
+073A 8623             (       test09.asm):00311                 lda #$23      ;Test #8: decimal arithmetic.
+073C 8B34             (       test09.asm):00312                 adda #$34
+073E 19               (       test09.asm):00313                 daa
+073F 1025FCC0         (       test09.asm):00314                 lbcs error
+0743 8157             (       test09.asm):00315                 cmpa #$57
+0745 1026FCBA         (       test09.asm):00316                 lbne error
+0749 1A01             (       test09.asm):00317                 orcc #1
+074B 8619             (       test09.asm):00318                 lda #$19
+074D 8929             (       test09.asm):00319                 adca #$29
+074F 19               (       test09.asm):00320                 daa
+0750 1025FCAF         (       test09.asm):00321                 lbcs error
+0754 8149             (       test09.asm):00322                 cmpa #$49
+0756 1026FCA9         (       test09.asm):00323                 lbne error
+075A 8692             (       test09.asm):00324                 lda #$92
+075C 8B08             (       test09.asm):00325                 adda #$8
+075E 19               (       test09.asm):00326                 daa
+075F 1024FCA0         (       test09.asm):00327                 lbcc error
+0763 8100             (       test09.asm):00328                 cmpa #$00
+0765 BD0436           (       test09.asm):00329                 jsr good
                       (       test09.asm):00330         
-076A 8680             (       test09.asm):00331                 lda #128       ;Test#8:  MUL and SEX
-076C C602             (       test09.asm):00332                 ldb #2
-076E 3D               (       test09.asm):00333                 mul
-076F 1027FC90         (       test09.asm):00334                 lbeq error
-0773 1025FC8C         (       test09.asm):00335                 lbcs error
-0777 10830100         (       test09.asm):00336                 cmpd #256
-077B 1026FC84         (       test09.asm):00337                 lbne error
-077F 8600             (       test09.asm):00338                 lda #0
-0781 C617             (       test09.asm):00339                 ldb #23
-0783 3D               (       test09.asm):00340                 mul
-0784 1026FC7B         (       test09.asm):00341                 lbne error
-0788 1025FC77         (       test09.asm):00342                 lbcs error
-078C 10830000         (       test09.asm):00343                 cmpd #0
-0790 1026FC6F         (       test09.asm):00344                 lbne error
-0794 860A             (       test09.asm):00345                 lda #10
-0796 C614             (       test09.asm):00346                 ldb #20
-0798 3D               (       test09.asm):00347                 mul
-0799 1024FC66         (       test09.asm):00348                 lbcc error
-079D 108300C8         (       test09.asm):00349                 cmpd #200
-07A1 1026FC5E         (       test09.asm):00350                 lbne error
-07A5 8664             (       test09.asm):00351                 lda #100
-07A7 C631             (       test09.asm):00352                 ldb #49
-07A9 3D               (       test09.asm):00353                 mul
-07AA 10831324         (       test09.asm):00354                 cmpd #4900
-07AE 1026FC51         (       test09.asm):00355                 lbne error
-07B2 5F               (       test09.asm):00356                 clrb
-07B3 1D               (       test09.asm):00357                 sex
-07B4 10830000         (       test09.asm):00358                 cmpd #0
-07B8 1026FC47         (       test09.asm):00359                 lbne error
-07BC C680             (       test09.asm):00360                 ldb #128
-07BE 1D               (       test09.asm):00361                 sex
-07BF 1083FF80         (       test09.asm):00362                 cmpd #-128
-07C3 1026FC3C         (       test09.asm):00363                 lbne error
-07C7 C632             (       test09.asm):00364                 ldb #50
-07C9 1D               (       test09.asm):00365                 sex
-07CA 10830032         (       test09.asm):00366                 cmpd #50
-07CE 1026FC31         (       test09.asm):00367                 lbne error
-07D2 BD0438           (       test09.asm):00368                 jsr good
+0768 8680             (       test09.asm):00331                 lda #128       ;Test#9:  MUL and SEX
+076A C602             (       test09.asm):00332                 ldb #2
+076C 3D               (       test09.asm):00333                 mul
+076D 1027FC92         (       test09.asm):00334                 lbeq error
+0771 1025FC8E         (       test09.asm):00335                 lbcs error
+0775 10830100         (       test09.asm):00336                 cmpd #256
+0779 1026FC86         (       test09.asm):00337                 lbne error
+077D 8600             (       test09.asm):00338                 lda #0
+077F C617             (       test09.asm):00339                 ldb #23
+0781 3D               (       test09.asm):00340                 mul
+0782 1026FC7D         (       test09.asm):00341                 lbne error
+0786 1025FC79         (       test09.asm):00342                 lbcs error
+078A 10830000         (       test09.asm):00343                 cmpd #0
+078E 1026FC71         (       test09.asm):00344                 lbne error
+0792 860A             (       test09.asm):00345                 lda #10
+0794 C614             (       test09.asm):00346                 ldb #20
+0796 3D               (       test09.asm):00347                 mul
+0797 1024FC68         (       test09.asm):00348                 lbcc error
+079B 108300C8         (       test09.asm):00349                 cmpd #200
+079F 1026FC60         (       test09.asm):00350                 lbne error
+07A3 8664             (       test09.asm):00351                 lda #100
+07A5 C631             (       test09.asm):00352                 ldb #49
+07A7 3D               (       test09.asm):00353                 mul
+07A8 10831324         (       test09.asm):00354                 cmpd #4900
+07AC 1026FC53         (       test09.asm):00355                 lbne error
+07B0 5F               (       test09.asm):00356                 clrb
+07B1 1D               (       test09.asm):00357                 sex
+07B2 10830000         (       test09.asm):00358                 cmpd #0
+07B6 1026FC49         (       test09.asm):00359                 lbne error
+07BA C680             (       test09.asm):00360                 ldb #128
+07BC 1D               (       test09.asm):00361                 sex
+07BD 1083FF80         (       test09.asm):00362                 cmpd #-128
+07C1 1026FC3E         (       test09.asm):00363                 lbne error
+07C5 C632             (       test09.asm):00364                 ldb #50
+07C7 1D               (       test09.asm):00365                 sex
+07C8 10830032         (       test09.asm):00366                 cmpd #50
+07CC 1026FC33         (       test09.asm):00367                 lbne error
+07D0 BD0436           (       test09.asm):00368                 jsr good
                       (       test09.asm):00369         
-07D5 8655             (       test09.asm):00370                 lda #$55    ; Test #9: Shifts and rotates.
-07D7 48               (       test09.asm):00371                 asla
-07D8 1025FC27         (       test09.asm):00372                 lbcs error
-07DC 81AA             (       test09.asm):00373                 cmpa #$aa
-07DE 1026FC21         (       test09.asm):00374                 lbne error
-07E2 48               (       test09.asm):00375                 asla
-07E3 1024FC1C         (       test09.asm):00376                 lbcc error
-07E7 8154             (       test09.asm):00377                 cmpa #$54
-07E9 1026FC16         (       test09.asm):00378                 lbne error
-07ED 8600             (       test09.asm):00379                 lda #$0
-07EF 1CFE             (       test09.asm):00380                 andcc #254
-07F1 49               (       test09.asm):00381                 rola
-07F2 1026FC0D         (       test09.asm):00382                 lbne error
-07F6 1A01             (       test09.asm):00383                 orcc #1
-07F8 49               (       test09.asm):00384                 rola
-07F9 4A               (       test09.asm):00385                 deca
-07FA 1026FC05         (       test09.asm):00386                 lbne error
-07FE 1CFE             (       test09.asm):00387                 andcc #254
-0800 46               (       test09.asm):00388                 rora
-0801 1026FBFE         (       test09.asm):00389                 lbne error
-0805 1A01             (       test09.asm):00390                 orcc #1
-0807 46               (       test09.asm):00391                 rora
-0808 8180             (       test09.asm):00392                 cmpa #128
-080A 1026FBF5         (       test09.asm):00393                 lbne error
-080E 47               (       test09.asm):00394                 asra
-080F 81C0             (       test09.asm):00395                 cmpa #192
-0811 1026FBEE         (       test09.asm):00396                 lbne error
-0815 44               (       test09.asm):00397                 lsra
-0816 8160             (       test09.asm):00398                 cmpa #96
-0818 1026FBE7         (       test09.asm):00399                 lbne error
-081C C636             (       test09.asm):00400                 ldb #54
-081E 58               (       test09.asm):00401                 aslb
-081F C16C             (       test09.asm):00402                 cmpb #108
-0821 1026FBDE         (       test09.asm):00403                 lbne error
-0825 BD0438           (       test09.asm):00404                 jsr good
+07D3 8655             (       test09.asm):00370                 lda #$55    ; Test #10: Shifts and rotates.
+07D5 48               (       test09.asm):00371                 asla
+07D6 1025FC29         (       test09.asm):00372                 lbcs error
+07DA 81AA             (       test09.asm):00373                 cmpa #$aa
+07DC 1026FC23         (       test09.asm):00374                 lbne error
+07E0 48               (       test09.asm):00375                 asla
+07E1 1024FC1E         (       test09.asm):00376                 lbcc error
+07E5 8154             (       test09.asm):00377                 cmpa #$54
+07E7 1026FC18         (       test09.asm):00378                 lbne error
+07EB 8600             (       test09.asm):00379                 lda #$0
+07ED 1CFE             (       test09.asm):00380                 andcc #254
+07EF 49               (       test09.asm):00381                 rola
+07F0 1026FC0F         (       test09.asm):00382                 lbne error
+07F4 1A01             (       test09.asm):00383                 orcc #1
+07F6 49               (       test09.asm):00384                 rola
+07F7 4A               (       test09.asm):00385                 deca
+07F8 1026FC07         (       test09.asm):00386                 lbne error
+07FC 1CFE             (       test09.asm):00387                 andcc #254
+07FE 46               (       test09.asm):00388                 rora
+07FF 1026FC00         (       test09.asm):00389                 lbne error
+0803 1A01             (       test09.asm):00390                 orcc #1
+0805 46               (       test09.asm):00391                 rora
+0806 8180             (       test09.asm):00392                 cmpa #128
+0808 1026FBF7         (       test09.asm):00393                 lbne error
+080C 47               (       test09.asm):00394                 asra
+080D 81C0             (       test09.asm):00395                 cmpa #192
+080F 1026FBF0         (       test09.asm):00396                 lbne error
+0813 44               (       test09.asm):00397                 lsra
+0814 8160             (       test09.asm):00398                 cmpa #96
+0816 1026FBE9         (       test09.asm):00399                 lbne error
+081A C636             (       test09.asm):00400                 ldb #54
+081C 58               (       test09.asm):00401                 aslb
+081D C16C             (       test09.asm):00402                 cmpb #108
+081F 1026FBE0         (       test09.asm):00403                 lbne error
+0823 BD0436           (       test09.asm):00404                 jsr good
                       (       test09.asm):00405         
-0828 1A0F             (       test09.asm):00406                 orcc #15          ; Test #10: INC, DEC and NEG
-082A 8621             (       test09.asm):00407                 lda #33
-082C 4C               (       test09.asm):00408                 inca
-082D 1027FBD2         (       test09.asm):00409                 lbeq error
-0831 1029FBCE         (       test09.asm):00410                 lbvs error
-0835 1024FBCA         (       test09.asm):00411                 lbcc error
-0839 102BFBC6         (       test09.asm):00412                 lbmi error
-083D 4A               (       test09.asm):00413                 deca
-083E 1027FBC1         (       test09.asm):00414                 lbeq error
-0842 1029FBBD         (       test09.asm):00415                 lbvs error
-0846 1024FBB9         (       test09.asm):00416                 lbcc error
-084A 102BFBB5         (       test09.asm):00417                 lbmi error
-084E 4F               (       test09.asm):00418                 clra
-084F 1CFE             (       test09.asm):00419                 andcc #254
-0851 4A               (       test09.asm):00420                 deca
-0852 1025FBAD         (       test09.asm):00421                 lbcs error
-0856 102AFBA9         (       test09.asm):00422                 lbpl error
-085A 4C               (       test09.asm):00423                 inca
-085B 1026FBA4         (       test09.asm):00424                 lbne error
-085F C67E             (       test09.asm):00425                 ldb #126
-0861 50               (       test09.asm):00426                 negb
-0862 1029FB9D         (       test09.asm):00427                 lbvs error
-0866 1024FB99         (       test09.asm):00428                 lbcc error
-086A C182             (       test09.asm):00429                 cmpb #130
-086C 1026FB93         (       test09.asm):00430                 lbne error
-0870 5A               (       test09.asm):00431                 decb
-0871 5A               (       test09.asm):00432                 decb
-0872 50               (       test09.asm):00433                 negb
-0873 1028FB8C         (       test09.asm):00434                 lbvc error
-0877 C180             (       test09.asm):00435                 cmpb #128
-0879 1026FB86         (       test09.asm):00436                 lbne error
-087D 5F               (       test09.asm):00437                 clrb
-087E 50               (       test09.asm):00438                 negb
-087F 1025FB80         (       test09.asm):00439                 lbcs error
-0883 1026FB7C         (       test09.asm):00440                 lbne error
-0887 BD0438           (       test09.asm):00441                 jsr good
+0826 1A0F             (       test09.asm):00406                 orcc #15          ; Test #11: INC, DEC and NEG
+0828 8621             (       test09.asm):00407                 lda #33
+082A 4C               (       test09.asm):00408                 inca
+082B 1027FBD4         (       test09.asm):00409                 lbeq error
+082F 1029FBD0         (       test09.asm):00410                 lbvs error
+0833 1024FBCC         (       test09.asm):00411                 lbcc error
+0837 102BFBC8         (       test09.asm):00412                 lbmi error
+083B 4A               (       test09.asm):00413                 deca
+083C 1027FBC3         (       test09.asm):00414                 lbeq error
+0840 1029FBBF         (       test09.asm):00415                 lbvs error
+0844 1024FBBB         (       test09.asm):00416                 lbcc error
+0848 102BFBB7         (       test09.asm):00417                 lbmi error
+084C 4F               (       test09.asm):00418                 clra
+084D 1CFE             (       test09.asm):00419                 andcc #254
+084F 4A               (       test09.asm):00420                 deca
+0850 1025FBAF         (       test09.asm):00421                 lbcs error
+0854 102AFBAB         (       test09.asm):00422                 lbpl error
+0858 4C               (       test09.asm):00423                 inca
+0859 1026FBA6         (       test09.asm):00424                 lbne error
+085D C67E             (       test09.asm):00425                 ldb #126
+085F 50               (       test09.asm):00426                 negb
+0860 1029FB9F         (       test09.asm):00427                 lbvs error
+0864 1024FB9B         (       test09.asm):00428                 lbcc error
+0868 C182             (       test09.asm):00429                 cmpb #130
+086A 1026FB95         (       test09.asm):00430                 lbne error
+086E 5A               (       test09.asm):00431                 decb
+086F 5A               (       test09.asm):00432                 decb
+0870 50               (       test09.asm):00433                 negb
+0871 1028FB8E         (       test09.asm):00434                 lbvc error
+0875 C180             (       test09.asm):00435                 cmpb #128
+0877 1026FB88         (       test09.asm):00436                 lbne error
+087B 5F               (       test09.asm):00437                 clrb
+087C 50               (       test09.asm):00438                 negb
+087D 1025FB82         (       test09.asm):00439                 lbcs error
+0881 1026FB7E         (       test09.asm):00440                 lbne error
+0885 BD0436           (       test09.asm):00441                 jsr good
                       (       test09.asm):00442         
                       (       test09.asm):00443                 
-088A 8E0908           (       test09.asm):00444                 ldx #testdat+4          ;test #11 Addessing modes.
-088D A684             (       test09.asm):00445                 lda ,x
-088F 8105             (       test09.asm):00446                 cmpa #5
-0891 1026FB6E         (       test09.asm):00447                 lbne error
-0895 A680             (       test09.asm):00448                 lda ,x+
-0897 8105             (       test09.asm):00449                 cmpa #5
-0899 1026FB66         (       test09.asm):00450                 lbne error
-089D 8C0909           (       test09.asm):00451                 cmpx #testdat+5
-08A0 1026FB5F         (       test09.asm):00452                 lbne error
-08A4 EC81             (       test09.asm):00453                 ldd ,x++
-08A6 10830607         (       test09.asm):00454                 cmpd #6*256+7
-08AA 1026FB55         (       test09.asm):00455                 lbne error
-08AE 8C090B           (       test09.asm):00456                 cmpx #testdat+7
-08B1 1026FB4E         (       test09.asm):00457                 lbne error
-08B5 8E0908           (       test09.asm):00458                 ldx #testdat+4
-08B8 A682             (       test09.asm):00459                 lda ,-x
-08BA 8104             (       test09.asm):00460                 cmpa #4
-08BC 1026FB43         (       test09.asm):00461                 lbne error
-08C0 8C0907           (       test09.asm):00462                 cmpx #testdat+3
-08C3 1026FB3C         (       test09.asm):00463                 lbne error
-08C7 EC83             (       test09.asm):00464                 ldd ,--x
-08C9 10830203         (       test09.asm):00465                 cmpd #2*256+3
-08CD 1026FB32         (       test09.asm):00466                 lbne error
-08D1 8C0905           (       test09.asm):00467                 cmpx #testdat+1
-08D4 1026FB2B         (       test09.asm):00468                 lbne error
-08D8 8E0908           (       test09.asm):00469                 ldx #testdat+4
-08DB A61E             (       test09.asm):00470                 lda -2,x
-08DD 8103             (       test09.asm):00471                 cmpa #3
-08DF 1026FB20         (       test09.asm):00472                 lbne error
-08E3 A602             (       test09.asm):00473                 lda 2,x
-08E5 8107             (       test09.asm):00474                 cmpa #7
-08E7 1026FB18         (       test09.asm):00475                 lbne error
-08EB 8E090E           (       test09.asm):00476                 ldx #td1
-08EE EC94             (       test09.asm):00477                 ldd [,x]
-08F0 10830304         (       test09.asm):00478                 cmpd #3*256+4
-08F4 1026FB0B         (       test09.asm):00479                 lbne error
-08F8 8C090E           (       test09.asm):00480                 cmpx #td1
-08FB 1026FB04         (       test09.asm):00481                 lbne error
-08FF BD0438           (       test09.asm):00482                 jsr good
-0902 200C             (       test09.asm):00483                 bra next1
+0888 8E0906           (       test09.asm):00444                 ldx #testdat+4          ;test #12 Addessing modes.
+088B A684             (       test09.asm):00445                 lda ,x
+088D 8105             (       test09.asm):00446                 cmpa #5
+088F 1026FB70         (       test09.asm):00447                 lbne error
+0893 A680             (       test09.asm):00448                 lda ,x+
+0895 8105             (       test09.asm):00449                 cmpa #5
+0897 1026FB68         (       test09.asm):00450                 lbne error
+089B 8C0907           (       test09.asm):00451                 cmpx #testdat+5
+089E 1026FB61         (       test09.asm):00452                 lbne error
+08A2 EC81             (       test09.asm):00453                 ldd ,x++
+08A4 10830607         (       test09.asm):00454                 cmpd #6*256+7
+08A8 1026FB57         (       test09.asm):00455                 lbne error
+08AC 8C0909           (       test09.asm):00456                 cmpx #testdat+7
+08AF 1026FB50         (       test09.asm):00457                 lbne error
+08B3 8E0906           (       test09.asm):00458                 ldx #testdat+4
+08B6 A682             (       test09.asm):00459                 lda ,-x
+08B8 8104             (       test09.asm):00460                 cmpa #4
+08BA 1026FB45         (       test09.asm):00461                 lbne error
+08BE 8C0905           (       test09.asm):00462                 cmpx #testdat+3
+08C1 1026FB3E         (       test09.asm):00463                 lbne error
+08C5 EC83             (       test09.asm):00464                 ldd ,--x
+08C7 10830203         (       test09.asm):00465                 cmpd #2*256+3
+08CB 1026FB34         (       test09.asm):00466                 lbne error
+08CF 8C0903           (       test09.asm):00467                 cmpx #testdat+1
+08D2 1026FB2D         (       test09.asm):00468                 lbne error
+08D6 8E0906           (       test09.asm):00469                 ldx #testdat+4
+08D9 A61E             (       test09.asm):00470                 lda -2,x
+08DB 8103             (       test09.asm):00471                 cmpa #3
+08DD 1026FB22         (       test09.asm):00472                 lbne error
+08E1 A602             (       test09.asm):00473                 lda 2,x
+08E3 8107             (       test09.asm):00474                 cmpa #7
+08E5 1026FB1A         (       test09.asm):00475                 lbne error
+08E9 8E090C           (       test09.asm):00476                 ldx #td1
+08EC EC94             (       test09.asm):00477                 ldd [,x]
+08EE 10830304         (       test09.asm):00478                 cmpd #3*256+4
+08F2 1026FB0D         (       test09.asm):00479                 lbne error
+08F6 8C090C           (       test09.asm):00480                 cmpx #td1
+08F9 1026FB06         (       test09.asm):00481                 lbne error
+08FD BD0436           (       test09.asm):00482                 jsr good
+0900 200C             (       test09.asm):00483                 bra next1
                       (       test09.asm):00484             
-0904 0102030405060708 (       test09.asm):00485         testdat fcb 1,2,3,4,5,6,7,8,9,10
+0902 0102030405060708 (       test09.asm):00485         testdat fcb 1,2,3,4,5,6,7,8,9,10
      090A
-090E 0906             (       test09.asm):00486         td1     fdb testdat+2
-0910                  (       test09.asm):00487         next1   
+090C 0904             (       test09.asm):00486         td1     fdb testdat+2
+090E                  (       test09.asm):00487         next1   
                       (       test09.asm):00488         
-0910 20FE             (       test09.asm):00489         gloop   bra gloop
+090E 20FE             (       test09.asm):00489         gloop   bra gloop
                       (       test09.asm):00490                 end $400
