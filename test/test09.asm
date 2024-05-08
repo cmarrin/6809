@@ -158,28 +158,21 @@ goot16  jsr good
         lbne error
         cmpb #$7f
         lbne error
-        jsr good
         cmpd #$287f
         lbne error
         cmpx #2221
         lbne error
-        jsr good
         cmpy #13
         lbeq error
-        jsr good
         cmpy #16555
         lbne error
-        jsr good
         cmpu #3417
         lbne error
-        jsr good
         cmps #$8000
         lbne error
-        jsr good
         exg x,y
         cmpx #16555
         lbne error
-        jsr good
         cmpy #2221
         lbne error
         jsr good
