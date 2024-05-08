@@ -43,7 +43,7 @@ outhex  pshs a
 
 ; Output an passed message: 'PASSED xx' where xx is test number in hex
 ;
-good    pshs cc
+good    pshs a,x,cc
         ldx #passmsg
         jsr puts
         lda testnr
@@ -51,7 +51,7 @@ good    pshs cc
         lda #newline
         jsr putc
         inc testnr
-        puls cc
+        puls a,x,cc
         rts
 
 passmsg  fcn "PASSED "
@@ -161,21 +161,29 @@ goot16  jsr good
         lbne error
         cmpd #$287f
         lbne error
+        jsr good
         cmpx #2221
         lbne error
+        jsr good
         cmpy #13
         lbeq error
+        jsr good
         cmpy #16555
         lbne error
+        jsr good
         cmpu #3417
         lbne error
+        jsr good
         cmps #$8000
         lbne error
+        jsr good
         exg x,y
         cmpx #16555
         lbne error
+        jsr good
         cmpy #2221
         lbne error
+        jsr good
         exg x,d
         cmpd #16555
         lbne error
