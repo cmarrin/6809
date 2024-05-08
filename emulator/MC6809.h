@@ -39,8 +39,7 @@ enum class Op : uint8_t {
     INC, JMP, JSR, LD8, LD16, LEA, LSR, MUL,
     NEG, NOP, OR, ORCC, PSH, PUL, ROL, ROR,
     RTI, RTS, SBC, SEX, ST8, ST16, SUB8, SUB16,
-    SWI, SWI2, SWI3, SYNC, TFR, TST, FIRQ, IRQ,
-    NMI, RESTART
+    SWI, SYNC, TFR, TST, FIRQ, IRQ, NMI, RESTART
 };
 
 // Indexed mode
@@ -98,18 +97,20 @@ struct Opcode
     Adr adr : 4;
     Reg reg : 4;
     uint8_t cycles : 5;
+    Reg page2Reg : 4;
+    Reg page3Reg : 4;
 };
 
 struct CC
 {
-    bool E : 1; // Entire       : All registers stacked from last interrupt
-    bool F : 1; // FIRQ Mask    : Disable fast interrupt request (FIRQ)
-    bool H : 1; // Half Carry   : Carry from bit 3 (for decimal arith)
-    bool I : 1; // IRQ Mask     : Disable interrupt request (IRQ)
-    bool N : 1; // Negative     : MSB of previous operation was set
-    bool Z : 1; // Zero         : Result of previous operation was zero
-    bool V : 1; // Overflow     : Previous operation caused signed arith overflow
     bool C : 1; // Carry        : Carry or borrow from bit 7 of previous operation
+    bool V : 1; // Overflow     : Previous operation caused signed arith overflow
+    bool Z : 1; // Zero         : Result of previous operation was zero
+    bool N : 1; // Negative     : MSB of previous operation was set
+    bool I : 1; // IRQ Mask     : Disable interrupt request (IRQ)
+    bool H : 1; // Half Carry   : Carry from bit 3 (for decimal arith)
+    bool F : 1; // FIRQ Mask    : Disable fast interrupt request (FIRQ)
+    bool E : 1; // Entire       : All registers stacked from last interrupt
 };
 
 class Emulator
@@ -143,10 +144,10 @@ public:
     uint8_t* getAddr(uint16_t ea) { return _ram + ea; }
     
 private:
-    uint16_t getReg(Reg r)
+    uint16_t getReg(Reg reg)
     {
-        switch(r) {
-            default: return 0;
+        switch(reg) {
+            default:        return 0;
             case Reg::A:    return _a;
             case Reg::B:    return _b;
             case Reg::D:    return _d;
@@ -160,9 +161,23 @@ private:
         }
     }
 
-    void setReg(Reg r, uint16_t v)
+    uint16_t getReg(const Opcode* op)
     {
-        switch(r) {
+        Reg reg;
+        
+        if (_prevOp == Op::Page2) {
+            reg = op->page2Reg;
+        } else if (_prevOp == Op::Page3) {
+            reg = op->page3Reg;
+        } else {
+            reg = op->reg;
+        }
+        return getReg(reg);
+    }
+
+    void setReg(Reg reg, uint16_t v)
+    {
+        switch(reg) {
             default: break;
             case Reg::A:    _a = v; break;
             case Reg::B:    _b = v; break;
@@ -175,6 +190,20 @@ private:
             case Reg::PC:   _pc = v; break;
             case Reg::DP:   _dp = v; break;
         }
+    }
+
+    void setReg(const Opcode* op, uint16_t v)
+    {
+        Reg reg;
+        
+        if (_prevOp == Op::Page2) {
+            reg = op->page2Reg;
+        } else if (_prevOp == Op::Page3) {
+            reg = op->page3Reg;
+        } else {
+            reg = op->reg;
+        }
+        setReg(reg, v);
     }
 
     void push8(uint16_t& s, uint8_t v)
@@ -299,7 +328,7 @@ private:
     uint8_t* _ram = nullptr;
     
     union {
-        struct { uint8_t _a; uint8_t _b; };
+        struct { uint8_t _b; uint8_t _a; };
         uint16_t _d = 0;
     };
     
@@ -319,7 +348,7 @@ private:
     uint32_t _left = 0;
     uint32_t _right = 0;
     uint32_t _result = 0;
- 
+    Op _prevOp = Op::NOP;
     
     BOSSCore _core;
 };
