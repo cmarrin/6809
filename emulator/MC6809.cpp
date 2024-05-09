@@ -545,12 +545,15 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
                 _ccByte &= _right;
                 break;
             case Op::ASL:
-                _result = _right << 1;
+                _result = _left << 1;
                 xNZxC8();
                 _cc.V = (((_left & 0x40) >> 6) ^ ((_left & 0x80) >> 7)) != 0;
                 break;
             case Op::ASR:
-                _result = int16_t(_right) >> 1;
+                _result = int16_t(_left) >> 1;
+                if (_left & 0x80) {
+                    _result |= 0x80;
+                }
                 xNZxC8();
                 break;
             case Op::BIT:
@@ -723,17 +726,20 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
             }
             case Op::ROL:
                 _result = _left << 1;
-                xNZxx8();
-                _cc.V = (((_left & 0x40) >> 6) ^ ((_left & 0x80) >> 7)) != 0;
                 if (_cc.C) {
                     _result |= 0x01;
                 }
+                xNZxC8();
+                _cc.V = (((_left & 0x40) >> 6) ^ ((_left & 0x80) >> 7)) != 0;
                 break;
             case Op::ROR:
                 _result = _left >> 1;
                 xNZxx8();
                 if (_cc.C) {
                     _result |= 0x80;
+                }
+                if (_left & 0x01) {
+                    _cc.C = true;
                 }
                 break;
             case Op::RTI:
