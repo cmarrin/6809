@@ -20,6 +20,8 @@
 
 #include "core.h"
 
+//#define COMPUTE_CYCLES
+
 namespace mc6809 {
 
 static constexpr uint16_t SystemAddrStart = 0xFC00;
@@ -96,7 +98,6 @@ struct Opcode
     Right right : 3;
     Adr adr : 4;
     Reg reg : 4;
-    uint8_t cycles : 5;
     Reg page2Reg : 4;
     Reg page3Reg : 4;
 };
