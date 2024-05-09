@@ -597,18 +597,29 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
                 
                 // Now what?
                 break;
-            case Op::DAA:
+            case Op::DAA: {
+                _result = _a;
+                uint8_t LSN = _result & 0x0f;
+                uint8_t MSN = (_result & 0xf0) >> 4;
+                
                 // LSN
-                if (_cc.H || (_a & 0x0f) > 9) {
-                    _a += 6;
+                if (_cc.H || LSN > 9) {
+                    _result += 6;
                 }
                 
                 // MSN
-                if (_cc.C || (_a & 0xf0) > 0x90) {
-                    _a += 0x60;
+                if (_cc.C || (MSN > 9) || (MSN > 8 && LSN > 9)) {
+                    _result += 0x60;
                 }
                 xNZ0C8();
+                _a = _result;
+                
+                // Set C if resulting MSN is > 9
+//                if ((_a & 0xf0) > 0x90) {
+//                    _cc.C = true;
+//                }
                 break;
+            }
             case Op::DEC:
                 _result = _left - 1;
                 xNZxx8();
