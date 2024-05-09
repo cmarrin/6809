@@ -28,12 +28,14 @@
                       (        BOSS9.inc):00025                                 ; pointed to by X, with max length in Y
      FC0C             (        BOSS9.inc):00026         peeks   equ     $FC0C   ; Return in A a 1 if a line is available and 0 otherwise.
                       (        BOSS9.inc):00027                                 ; If available return length of line in Y
-                      (        BOSS9.inc):00028                                 
-                      (        BOSS9.inc):00029         * Misc equates
+                      (        BOSS9.inc):00028         
+     FC0E             (        BOSS9.inc):00029         exit    equ     $FC0E   ; Exit program. A ccontains exit code
                       (        BOSS9.inc):00030         
-     000A             (        BOSS9.inc):00031         newline equ     $0a
-                      (        BOSS9.inc):00032                                 
-                      (        BOSS9.inc):00033         
+                      (        BOSS9.inc):00031         * Misc equates
+                      (        BOSS9.inc):00032         
+     000A             (        BOSS9.inc):00033         newline equ     $0a
+                      (        BOSS9.inc):00034                                 
+                      (        BOSS9.inc):00035         
                       (       test09.asm):00004         
      0080             (       test09.asm):00005         testnr  equ 128
                       (       test09.asm):00006         
@@ -467,51 +469,59 @@
 0870 BD0436           (       test09.asm):00434                 jsr good
                       (       test09.asm):00435         
                       (       test09.asm):00436                 
-0873 8E08F1           (       test09.asm):00437                 ldx #testdat+4          ;test #12 Addessing modes.
+0873 8E08FE           (       test09.asm):00437                 ldx #testdat+4          ;test #12 Addessing modes.
 0876 A684             (       test09.asm):00438                 lda ,x
 0878 8105             (       test09.asm):00439                 cmpa #5
 087A 1026FB85         (       test09.asm):00440                 lbne error
 087E A680             (       test09.asm):00441                 lda ,x+
 0880 8105             (       test09.asm):00442                 cmpa #5
 0882 1026FB7D         (       test09.asm):00443                 lbne error
-0886 8C08F2           (       test09.asm):00444                 cmpx #testdat+5
+0886 8C08FF           (       test09.asm):00444                 cmpx #testdat+5
 0889 1026FB76         (       test09.asm):00445                 lbne error
 088D EC81             (       test09.asm):00446                 ldd ,x++
 088F 10830607         (       test09.asm):00447                 cmpd #6*256+7
 0893 1026FB6C         (       test09.asm):00448                 lbne error
-0897 8C08F4           (       test09.asm):00449                 cmpx #testdat+7
+0897 8C0901           (       test09.asm):00449                 cmpx #testdat+7
 089A 1026FB65         (       test09.asm):00450                 lbne error
-089E 8E08F1           (       test09.asm):00451                 ldx #testdat+4
+089E 8E08FE           (       test09.asm):00451                 ldx #testdat+4
 08A1 A682             (       test09.asm):00452                 lda ,-x
 08A3 8104             (       test09.asm):00453                 cmpa #4
 08A5 1026FB5A         (       test09.asm):00454                 lbne error
-08A9 8C08F0           (       test09.asm):00455                 cmpx #testdat+3
+08A9 8C08FD           (       test09.asm):00455                 cmpx #testdat+3
 08AC 1026FB53         (       test09.asm):00456                 lbne error
 08B0 EC83             (       test09.asm):00457                 ldd ,--x
 08B2 10830203         (       test09.asm):00458                 cmpd #2*256+3
 08B6 1026FB49         (       test09.asm):00459                 lbne error
-08BA 8C08EE           (       test09.asm):00460                 cmpx #testdat+1
+08BA 8C08FB           (       test09.asm):00460                 cmpx #testdat+1
 08BD 1026FB42         (       test09.asm):00461                 lbne error
-08C1 8E08F1           (       test09.asm):00462                 ldx #testdat+4
+08C1 8E08FE           (       test09.asm):00462                 ldx #testdat+4
 08C4 A61E             (       test09.asm):00463                 lda -2,x
 08C6 8103             (       test09.asm):00464                 cmpa #3
 08C8 1026FB37         (       test09.asm):00465                 lbne error
 08CC A602             (       test09.asm):00466                 lda 2,x
 08CE 8107             (       test09.asm):00467                 cmpa #7
 08D0 1026FB2F         (       test09.asm):00468                 lbne error
-08D4 8E08F7           (       test09.asm):00469                 ldx #td1
+08D4 8E0904           (       test09.asm):00469                 ldx #td1
 08D7 EC94             (       test09.asm):00470                 ldd [,x]
 08D9 10830304         (       test09.asm):00471                 cmpd #3*256+4
 08DD 1026FB22         (       test09.asm):00472                 lbne error
-08E1 8C08F7           (       test09.asm):00473                 cmpx #td1
+08E1 8C0904           (       test09.asm):00473                 cmpx #td1
 08E4 1026FB1B         (       test09.asm):00474                 lbne error
 08E8 BD0436           (       test09.asm):00475                 jsr good
-08EB 200C             (       test09.asm):00476                 bra next1
-                      (       test09.asm):00477             
-08ED 0102030405060708 (       test09.asm):00478         testdat fcb 1,2,3,4,5,6,7,8,9,10
+                      (       test09.asm):00476                 
+08EB 8E0906           (       test09.asm):00477                 ldx #allpass
+08EE BDFC02           (       test09.asm):00478                 jsr puts
+08F1 860A             (       test09.asm):00479                 lda #newline
+08F3 BDFC00           (       test09.asm):00480                 jsr putc
+08F6 4F               (       test09.asm):00481                 clra
+08F7 BDFC0E           (       test09.asm):00482                 jsr exit
+                      (       test09.asm):00483         
+08FA 0102030405060708 (       test09.asm):00484         testdat fcb 1,2,3,4,5,6,7,8,9,10
      090A
-08F7 08EF             (       test09.asm):00479         td1     fdb testdat+2
-08F9                  (       test09.asm):00480         next1   
-                      (       test09.asm):00481         
-08F9 20FE             (       test09.asm):00482         gloop   bra gloop
-                      (       test09.asm):00483                 end $400
+0904 08FC             (       test09.asm):00485         td1     fdb testdat+2
+                      (       test09.asm):00486         
+0906 416C6C2054657374 (       test09.asm):00487         allpass fcn "All Tests Passed"
+     7320506173736564
+     00
+                      (       test09.asm):00488         
+                      (       test09.asm):00489                 end $400

@@ -473,13 +473,19 @@ here    cmpx #here
         cmpx #td1
         lbne error
         jsr good
-        bra next1
-    
+        
+        ldx #allpass
+        jsr puts
+        lda #newline
+        jsr putc
+        clra
+        jsr exit
+
 testdat	fcb 1,2,3,4,5,6,7,8,9,10
 td1	fdb testdat+2
-next1   
 
-gloop   bra gloop
+allpass fcn "All Tests Passed"
+
         end $400
 
 

@@ -25,7 +25,9 @@ gets    equ     $FC0A   ; Get a line terminated by \n, place in buffer
                         ; pointed to by X, with max length in Y
 peeks   equ     $FC0C   ; Return in A a 1 if a line is available and 0 otherwise.
                         ; If available return length of line in Y
-                        
+
+exit    equ     $FC0E   ; Exit program. A ccontains exit code
+
 * Misc equates
 
 newline equ     $0a

@@ -13,6 +13,8 @@
 //  Created by Chris Marrin on 5/4/24.
 //
 
+#include <unistd.h>
+
 #include "core.h"
 #include "MC6809.h"
 
@@ -29,6 +31,11 @@ bool BOSSCore::call(Emulator* engine, uint16_t ea)
             puts(s);
             break;
         }
+        case Func::exit:
+            // Enter the monitor eventually. For now just loop
+            while(1) {
+                sleep(1);
+            }
         
         default: return false;
     }

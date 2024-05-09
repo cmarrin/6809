@@ -35,6 +35,7 @@ enum class Func : uint16_t {
                                             // pointed to by X, with max length in Y
     peeks = 0xFC0C,   // Return in A a 1 if a line is available and 0 otherwise.
                                             // If available return length of line in Y
+    exit = 0xFC0E,    // Exit program. A contains exit code
 };
 
 class BOSSCore
