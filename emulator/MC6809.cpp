@@ -448,7 +448,7 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
                     ea = *reg + offset;
                 } else {
                     switch(IdxMode(postbyte & IdxModeMask)) {
-                        case IdxMode::ConstRegNoOff   : break;
+                        case IdxMode::ConstRegNoOff   : ea = *reg; break;
                         case IdxMode::ConstReg8Off    : ea = *reg + int8_t(load8(_pc)); _pc += 1; break;
                         case IdxMode::ConstReg16Off   : ea = *reg + int16_t(load16(_pc)); _pc += 2; break;
                         case IdxMode::AccAOffReg      : ea = *reg + int8_t(_a); break;
@@ -456,8 +456,8 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
                         case IdxMode::AccDOffReg      : ea = *reg + int16_t(_d); break;
                         case IdxMode::Inc1Reg         : ea = *reg; (*reg) += 1; break;
                         case IdxMode::Inc2Reg         : ea = *reg; (*reg) += 2; break;
-                        case IdxMode::Dec1Reg         : (*reg) += 1; ea = *reg; break;
-                        case IdxMode::Dec2Reg         : (*reg) += 2; ea = *reg; break;
+                        case IdxMode::Dec1Reg         : (*reg) -= 1; ea = *reg; break;
+                        case IdxMode::Dec2Reg         : (*reg) -= 2; ea = *reg; break;
                         case IdxMode::ConstPC8Off     : ea = _pc + int8_t(load8(_pc)); _pc += 1; break;
                         case IdxMode::ConstPC16Off    : ea = _pc + int16_t(load16(_pc)); _pc += 2; break;
                         case IdxMode::Extended        : ea = next16();
