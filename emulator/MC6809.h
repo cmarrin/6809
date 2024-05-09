@@ -18,7 +18,7 @@
 #include <cstdint>
 #include <iostream>
 
-#include "core.h"
+#include "BOSS9.h"
 
 //#define COMPUTE_CYCLES
 

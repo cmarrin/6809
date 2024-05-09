@@ -7,16 +7,16 @@
     found in the LICENSE file.
 -------------------------------------------------------------------------*/
 
-#include "MString.h"
+#include "string.h"
 
 #include <cmath>
 #include <cstdlib>
 
-using namespace mc6809;
+using namespace m8r;
 
 static constexpr uint32_t MaxFloatDigits = 16;
 
-mc6809::String& mc6809::String::erase(uint16_t pos, uint16_t len)
+string& string::erase(uint16_t pos, uint16_t len)
 {
     if (pos >= _size - 1) {
         return *this;
@@ -29,7 +29,7 @@ mc6809::String& mc6809::String::erase(uint16_t pos, uint16_t len)
     return *this;
 }
 
-mc6809::String mc6809::String::slice(int32_t start, int32_t end) const
+string string::slice(int32_t start, int32_t end) const
 {
     int32_t sz = static_cast<int32_t>(size());
     if (start < 0) {
@@ -42,15 +42,15 @@ mc6809::String mc6809::String::slice(int32_t start, int32_t end) const
         end = sz;
     }
     if (start >= end) {
-        return String();
+        return string();
     }
-    return String(_data + start, end - start);
+    return string(_data + start, end - start);
 }
 
-mc6809::String mc6809::String::trim() const
+string string::trim() const
 {
     if (_size < 2 || !_data) {
-        return String();
+        return string();
     }
     uint16_t l = _size - 1;
     char* s = _data;
@@ -61,12 +61,12 @@ mc6809::String mc6809::String::trim() const
         ++s;
         --l;
     }
-    return String(s, static_cast<int32_t>(l));
+    return string(s, static_cast<int32_t>(l));
 }
 
-Vector<mc6809::String> mc6809::String::split(const mc6809::String& separator, bool skipEmpty) const
+vector<string> string::split(const string& separator, bool skipEmpty) const
 {
-    Vector<String> array;
+    vector<string> array;
     if (size() == 0) {
         return array;
     }
@@ -75,7 +75,7 @@ Vector<mc6809::String> mc6809::String::split(const mc6809::String& separator, bo
     while (1) {
         char* n = strstr(p, separator.c_str());
         if (!n || n - p != 0 || !skipEmpty) {
-            array.push_back(String(p, static_cast<int32_t>(n ? (n - p) : -1)));
+            array.push_back(string(p, static_cast<int32_t>(n ? (n - p) : -1)));
         }
         if (!n) {
             break;
@@ -85,9 +85,9 @@ Vector<mc6809::String> mc6809::String::split(const mc6809::String& separator, bo
     return array;
 }
 
-mc6809::String mc6809::String::join(const Vector<mc6809::String>& array, const mc6809::String& separator)
+string string::join(const vector<string>& array, const string& separator)
 {
-    String s;
+    string s;
     bool first = true;
     for (auto it : array) {
         if (first) {
@@ -100,16 +100,16 @@ mc6809::String mc6809::String::join(const Vector<mc6809::String>& array, const m
     return s;
 }
 
-mc6809::String mc6809::String::join(const Vector<char>& array)
+string string::join(const vector<char>& array)
 {
-    String s;
+    string s;
     s.ensureCapacity(array.size());
     for (auto it : array) {
         s += it;
     }
     return s;
 }
-void mc6809::String::doEnsureCapacity(uint16_t size)
+void string::doEnsureCapacity(uint16_t size)
 {
     _capacity = _capacity ? _capacity * 2 : 1;
     if (_capacity < size) {
@@ -254,7 +254,7 @@ static void decompose(double f, int64_t& mantissa, int16_t& exp)
     mantissa = int64_t(f);
 }
 
-mc6809::String::String(double value, uint8_t decimalDigits)
+string::string(double value, uint8_t decimalDigits)
 {
     //          sign    digits  dp      'e'     dp      exp     '\0'
     char buf[   1 +     16 +    1 +     1 +     1 +     3 +     1];
@@ -269,50 +269,50 @@ mc6809::String::String(double value, uint8_t decimalDigits)
     } else {
         ::toString(buf, mantissa, exp, decimalDigits);
     }
-    *this = String(buf);
+    *this = string(buf);
 }
 
-mc6809::String::String(uint32_t value)
+string::string(uint32_t value)
 {
     char buf[12];
     int16_t exp = 0;
     ::toString(buf, value, exp, 0);
-    *this = String(buf);
+    *this = string(buf);
 }
 
-mc6809::String::String(int32_t value)
+string::string(int32_t value)
 {
-    String s;
+    string s;
     if (value < 0) {
-        *this = String('-') + String(static_cast<uint32_t>(-value));
+        *this = string('-') + string(static_cast<uint32_t>(-value));
     } else {
-        *this = String(static_cast<uint32_t>(value));
+        *this = string(static_cast<uint32_t>(value));
     }
 }
 
-mc6809::String::String(void* value)
+string::string(void* value)
 {
     // Convert to a uint32_t. This will truncate the pointer on Mac
-    *this = String::format("0x%08x", static_cast<uint32_t>(reinterpret_cast<intptr_t>(value)));
+    *this = string::format("0x%08x", static_cast<uint32_t>(reinterpret_cast<intptr_t>(value)));
 }
 
-mc6809::String mc6809::String::prettySize(uint32_t size, uint8_t decimalDigits, bool binary)
+string string::prettySize(uint32_t size, uint8_t decimalDigits, bool binary)
 {
-    mc6809::String s;
+    string s;
     int32_t multiplier = binary ? 1024 : 1000;
     
     if (static_cast<int32_t>(size) < multiplier) {
-        return String(size) + ' ';
+        return string(size) + ' ';
     } else if (static_cast<int32_t>(size) < multiplier * multiplier) {
-        return String(float(size) / multiplier, decimalDigits) + " K";
+        return string(float(size) / multiplier, decimalDigits) + " K";
     } else if (static_cast<int32_t>(size) < multiplier * multiplier * multiplier) {
-        return String(float(size) / multiplier / multiplier, decimalDigits) + " M";
+        return string(float(size) / multiplier / multiplier, decimalDigits) + " M";
     } else {
-        return String(float(size) / multiplier / multiplier / multiplier, decimalDigits) + " G";
+        return string(float(size) / multiplier / multiplier / multiplier, decimalDigits) + " G";
     }
 }
 
-mc6809::String String::vformat(const char* fmt, va_list args)
+string string::vformat(const char* fmt, va_list args)
 {
     va_list args2;
     va_copy(args2, args);
@@ -322,12 +322,12 @@ mc6809::String String::vformat(const char* fmt, va_list args)
     }
     char* buf(new char[size]); 
     ::vsnprintf(buf, size, fmt, args2);
-    String s(buf, int32_t(size - 1));
+    string s(buf, int32_t(size - 1));
     delete [ ] buf;
     return s;
 }
 
-mc6809::String String::format(const char* fmt, ...)
+string string::format(const char* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);

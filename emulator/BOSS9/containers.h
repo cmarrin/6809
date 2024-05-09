@@ -15,37 +15,34 @@
 #include <cstdint>
 #include <cstring>
 #include <limits>
-#include <vector>
-//#include "Defines.h"
-//#include "Mallocator.h"
 
-namespace mc6809 {
+namespace m8r {
 
 //
 //
-//  Class: Vector
+//  Class: vector
 //
 //  Vector class that works with the Mad allocator
 //
 
 template<typename T>
-class Vector {
+class vector {
 public:
-    Vector() { }
+    vector() { }
     
-    Vector(std::initializer_list<T> list) { insert(begin(), list.begin(), list.end()); }
+    vector(std::initializer_list<T> list) { insert(begin(), list.begin(), list.end()); }
     
-    Vector(const Vector& other)
+    vector(const vector& other)
     {
         *this = other;
     };
     
-    Vector(Vector&& other)
+    vector(vector&& other)
     {
         *this = other;
     }
     
-    ~Vector()
+    ~vector()
     {
         clear();
         delete [ ] _data;
@@ -60,7 +57,7 @@ public:
     iterator end() { return _data + _size; }
     const_iterator end() const { return _data + _size; }
 
-    Vector& operator=(const Vector& other)
+    vector& operator=(const vector& other)
     {
         clear();
         delete [ ] _data;
@@ -78,7 +75,7 @@ public:
         return *this;
     };
 
-    Vector& operator=(Vector&& other)
+    vector& operator=(vector&& other)
     {
         clear();
         delete [ ] _data;
@@ -128,7 +125,7 @@ public:
         push_back(T(args...));
     }
     
-    void swap(Vector& other)
+    void swap(vector& other)
     {
         std::swap(_size, other._size);
         std::swap(_capacity, other._capacity);
@@ -284,16 +281,16 @@ private:
 };
 
 //
-//  Class: Stack
+//  Class: stack
 //
-//  Wrapper around Vector to give stack semantics
+//  Wrapper around vector to give stack semantics
 //
 
 template<typename T>
-class Stack {
+class stack {
 public:
-    Stack() { }
-    Stack(size_t reserveCount) { _stack.reserve(reserveCount); }
+    stack() { }
+    stack(size_t reserveCount) { _stack.reserve(reserveCount); }
     
     void clear() { _stack.clear(); }
     size_t size() const { return _stack.size(); }
@@ -380,19 +377,19 @@ public:
     const T* end() const { return _stack.end(); }
 
 private:
-    Vector<T> _stack;
+    vector<T> _stack;
     uint32_t _frame = 0;
 };
 
 //
-//  Class: Map
+//  Class: map
 //
 //  Wrapper Map class that works on both Mac and ESP
 //  Simle ordered array. Done this way to minimize space
 //
 
 template<typename Key, typename Value>
-class Map {
+class map {
 public:
     struct Pair
     {
@@ -401,7 +398,7 @@ public:
         Value value;
     };
     
-    using MapList = Vector<Pair>;
+    using MapList = vector<Pair>;
     using iterator = typename MapList::iterator;
     using const_iterator = typename MapList::const_iterator;
 

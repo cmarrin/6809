@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		495775792BD5BF5E00755E8A /* as9.c in Sources */ = {isa = PBXBuildFile; fileRef = 495775592BD5BE4400755E8A /* as9.c */; };
 		49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B142BE410C600B7C3CF /* MC6809.cpp */; };
-		49750B1F2BE6E40600B7C3CF /* MString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B1C2BE6E3FE00B7C3CF /* MString.cpp */; };
-		49750B242BE6ECBE00B7C3CF /* core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B182BE6D43900B7C3CF /* core.cpp */; };
+		49750B1F2BE6E40600B7C3CF /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B1C2BE6E3FE00B7C3CF /* string.cpp */; };
+		49750B242BE6ECBE00B7C3CF /* BOSS9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B182BE6D43900B7C3CF /* BOSS9.cpp */; };
 		49E11A992BD84324004BC747 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A982BD84324004BC747 /* main.cpp */; };
 		49EA27A02BE52FE400620B26 /* srec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EA279E2BE52FE400620B26 /* srec.cpp */; };
 /* End PBXBuildFile section */
@@ -70,12 +70,12 @@
 		49750B0C2BE30D0600B7C3CF /* lwasm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lwasm; sourceTree = BUILT_PRODUCTS_DIR; };
 		49750B142BE410C600B7C3CF /* MC6809.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MC6809.cpp; path = ../emulator/MC6809.cpp; sourceTree = "<group>"; };
 		49750B162BE419D400B7C3CF /* simple.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = simple.asm; path = ../test/simple.asm; sourceTree = "<group>"; };
-		49750B182BE6D43900B7C3CF /* core.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = core.cpp; path = ../emulator/BOSS9/core.cpp; sourceTree = "<group>"; };
-		49750B192BE6D43900B7C3CF /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = core.h; path = ../emulator/BOSS9/core.h; sourceTree = "<group>"; };
+		49750B182BE6D43900B7C3CF /* BOSS9.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BOSS9.cpp; path = ../emulator/BOSS9/BOSS9.cpp; sourceTree = "<group>"; };
+		49750B192BE6D43900B7C3CF /* BOSS9.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BOSS9.h; path = ../emulator/BOSS9/BOSS9.h; sourceTree = "<group>"; };
 		49750B1B2BE6DF7200B7C3CF /* BOSS9.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; name = BOSS9.inc; path = ../emulator/BOSS9/BOSS9.inc; sourceTree = "<group>"; };
-		49750B1C2BE6E3FE00B7C3CF /* MString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MString.cpp; path = ../emulator/BOSS9/MString.cpp; sourceTree = "<group>"; };
-		49750B1D2BE6E3FE00B7C3CF /* MString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MString.h; path = ../emulator/BOSS9/MString.h; sourceTree = "<group>"; };
-		49750B202BE6E48000B7C3CF /* Containers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Containers.h; path = ../emulator/BOSS9/Containers.h; sourceTree = "<group>"; };
+		49750B1C2BE6E3FE00B7C3CF /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cpp; path = ../emulator/BOSS9/string.cpp; sourceTree = "<group>"; };
+		49750B1D2BE6E3FE00B7C3CF /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = ../emulator/BOSS9/string.h; sourceTree = "<group>"; };
+		49750B202BE6E48000B7C3CF /* containers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = containers.h; path = ../emulator/BOSS9/containers.h; sourceTree = "<group>"; };
 		49E11A982BD84324004BC747 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		49E11A9A2BE1CD8F004BC747 /* basic.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = basic.asm; path = ../test/basic.asm; sourceTree = "<group>"; };
 		49E11A9B2BE1CD8F004BC747 /* asmtest.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = asmtest.asm; path = ../test/asmtest.asm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.asm.i386; };
@@ -181,11 +181,11 @@
 		49750B172BE6D40A00B7C3CF /* BOSS9 */ = {
 			isa = PBXGroup;
 			children = (
-				49750B202BE6E48000B7C3CF /* Containers.h */,
-				49750B1C2BE6E3FE00B7C3CF /* MString.cpp */,
-				49750B1D2BE6E3FE00B7C3CF /* MString.h */,
-				49750B182BE6D43900B7C3CF /* core.cpp */,
-				49750B192BE6D43900B7C3CF /* core.h */,
+				49750B202BE6E48000B7C3CF /* containers.h */,
+				49750B1C2BE6E3FE00B7C3CF /* string.cpp */,
+				49750B1D2BE6E3FE00B7C3CF /* string.h */,
+				49750B182BE6D43900B7C3CF /* BOSS9.cpp */,
+				49750B192BE6D43900B7C3CF /* BOSS9.h */,
 				49750B1B2BE6DF7200B7C3CF /* BOSS9.inc */,
 			);
 			name = BOSS9;
@@ -327,10 +327,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49750B1F2BE6E40600B7C3CF /* MString.cpp in Sources */,
+				49750B1F2BE6E40600B7C3CF /* string.cpp in Sources */,
 				49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */,
 				49E11A992BD84324004BC747 /* main.cpp in Sources */,
-				49750B242BE6ECBE00B7C3CF /* core.cpp in Sources */,
+				49750B242BE6ECBE00B7C3CF /* BOSS9.cpp in Sources */,
 				49EA27A02BE52FE400620B26 /* srec.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,7 +7,7 @@
     found in the LICENSE file.
 -------------------------------------------------------------------------*/
 //
-//  BOSS9/core.h
+//  BOSS9.cpp
 //  Basic Operating System Services for the 6809
 //
 //  Created by Chris Marrin on 5/4/24.
@@ -15,7 +15,7 @@
 
 #include <unistd.h>
 
-#include "core.h"
+#include "BOSS9.h"
 #include "MC6809.h"
 
 using namespace mc6809;

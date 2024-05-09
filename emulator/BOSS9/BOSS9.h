@@ -7,7 +7,7 @@
     found in the LICENSE file.
 -------------------------------------------------------------------------*/
 //
-//  BOSS9/core.h
+//  BOSS9.h
 //  Basic Operating System Services for the 6809
 //
 //  Created by Chris Marrin on 5/4/24.
@@ -16,7 +16,7 @@
 #pragma once
 
 #include <functional>
-#include "MString.h"
+#include "string.h"
 
 namespace mc6809 {
 
@@ -64,7 +64,7 @@ class BOSSCore
 
     void vprintf(const char* fmt, va_list args) const
     {
-        print(String::vformat(fmt, args).c_str());
+        print(m8r::string::vformat(fmt, args).c_str());
     }
     
     void setStartInMonitor(bool b) { _startInMonitor = b; }

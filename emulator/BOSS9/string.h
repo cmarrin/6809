@@ -15,11 +15,10 @@
 #include <cstring>
 #include <limits>
 #include <functional>
-#include <vector>
-#include "Containers.h"
-//#include "Defines.h"
 
-namespace mc6809 {
+#include "containers.h"
+
+namespace m8r {
 
 //
 //  Class: String
@@ -27,13 +26,13 @@ namespace mc6809 {
 //  String class that works on both Mac and ESP
 //
 
-class String {
+class string {
 public:
     static constexpr uint32_t DefaultFloatDigits = 6;
 
-    String() : _size(1), _capacity(0) { }
-    String(const uint8_t* s, int32_t len = -1) { *this = String(reinterpret_cast<const char*>(s), len); }
-    String(const char* s, int32_t len = -1) : _size(0), _capacity(0)
+    string() : _size(1), _capacity(0) { }
+    string(const uint8_t* s, int32_t len = -1) { *this = string(reinterpret_cast<const char*>(s), len); }
+    string(const char* s, int32_t len = -1) : _size(0), _capacity(0)
     {
         if (!s) {
             return;
@@ -49,12 +48,12 @@ public:
         _data[_size - 1] = '\0';
     }
     
-    String(const String& other)
+    string(const string& other)
     {
         *this = other;
     };
     
-    String(String&& other)
+    string(string&& other)
     {
         delete [ ] _data;
         _data = other._data;
@@ -65,7 +64,7 @@ public:
         other._capacity = 0;
     }
     
-    String(char c)
+    string(char c)
     {
         ensureCapacity(2);
         char* s = _data;
@@ -74,19 +73,19 @@ public:
         _size = 2;
     }
     
-    String(double, uint8_t decimalDigits = DefaultFloatDigits);
-    String(int32_t);
-    String(uint32_t);
-    String(void*);
+    string(double, uint8_t decimalDigits = DefaultFloatDigits);
+    string(int32_t);
+    string(uint32_t);
+    string(void*);
 
-    ~String()
+    ~string()
     {
         delete [ ] _data;
         _data = nullptr;
         _destroyed = true;
     };
     
-    String& operator=(const String& other)
+    string& operator=(const string& other)
     {
     assert(!_destroyed && !other._destroyed);
         delete [ ] _data;
@@ -108,7 +107,7 @@ public:
         return *this;
     }
     
-    String& operator=(String&& other)
+    string& operator=(string&& other)
     {
     assert(!_destroyed && !other._destroyed);
         if (this == &other) {
@@ -128,7 +127,7 @@ public:
         return *this;
     }
     
-    String& operator=(char c)
+    string& operator=(char c)
     {
         ensureCapacity(2);
         char* s = _data;
@@ -154,7 +153,7 @@ public:
     uint16_t size() const { return _size ? (_size - 1) : 0; }
     bool empty() const { return _size <= 1; }
     void clear() { _size = 1; if (_data) _data[0] = '\0'; }
-    String& operator+=(uint8_t c)
+    string& operator+=(uint8_t c)
     {
         ensureCapacity(_size + 1);
         char* s = _data;
@@ -163,7 +162,7 @@ public:
         return *this;
     }
     
-    String& operator+=(char c)
+    string& operator+=(char c)
     {
         ensureCapacity(_size + 1);
         char* s = _data;
@@ -173,7 +172,7 @@ public:
         return *this;
     }
     
-    String& operator+=(const char* s)
+    string& operator+=(const char* s)
     {
     assert(!_destroyed);
         uint16_t len = strlen(s);
@@ -183,48 +182,48 @@ public:
         return *this;
     }
     
-    String& operator+=(const String& s) { assert(!_destroyed && !s._destroyed); return *this += s.c_str(); }
+    string& operator+=(const string& s) { assert(!_destroyed && !s._destroyed); return *this += s.c_str(); }
     
-    friend String operator +(const String& s1 , const String& s2) { String s = s1; s += s2; return s; }
-    friend String operator +(const String& s1 , const char* s2) { String s = s1; s += s2; return s; }
-    friend String operator +(const String& s1 , char c) { String s = s1; s += c; return s; }
-    friend String operator +(const char* s1 , const String& s2) { String s = s1; s += s2; return s; }
+    friend string operator +(const string& s1 , const string& s2) { string s = s1; s += s2; return s; }
+    friend string operator +(const string& s1 , const char* s2) { string s = s1; s += s2; return s; }
+    friend string operator +(const string& s1 , char c) { string s = s1; s += c; return s; }
+    friend string operator +(const char* s1 , const string& s2) { string s = s1; s += s2; return s; }
     
-    bool operator<(const String& other) const { return compare(*this, other) < 0; }
-    bool operator<=(const String& other) const { return compare(*this, other) <= 0; }
-    bool operator>(const String& other) const { return compare(*this, other) > 0; }
-    bool operator>=(const String& other) const { return compare(*this, other) >= 0; }
-    bool operator==(const String& other) const { return compare(*this, other) == 0; }
-    bool operator!=(const String& other) const { return compare(*this, other) != 0; }
+    bool operator<(const string& other) const { return compare(*this, other) < 0; }
+    bool operator<=(const string& other) const { return compare(*this, other) <= 0; }
+    bool operator>(const string& other) const { return compare(*this, other) > 0; }
+    bool operator>=(const string& other) const { return compare(*this, other) >= 0; }
+    bool operator==(const string& other) const { return compare(*this, other) == 0; }
+    bool operator!=(const string& other) const { return compare(*this, other) != 0; }
     
-    friend int compare(const String& a, const String& b)
+    friend int compare(const string& a, const string& b)
     {
         return strcmp(a.c_str(), b.c_str());
     }
 
     const char* c_str() const { return _data ? _data : ""; }
-    String& erase(uint16_t pos, uint16_t len);
+    string& erase(uint16_t pos, uint16_t len);
 
-    String& erase(uint16_t pos = 0)
+    string& erase(uint16_t pos = 0)
     {
         return erase(pos, _size - pos);
     }
     
-    String slice(int32_t start, int32_t end) const;
+    string slice(int32_t start, int32_t end) const;
     
-    String slice(int32_t start) const
+    string slice(int32_t start) const
     {
         return slice(start, static_cast<int32_t>(size()));
     }
     
-    String trim() const;
+    string trim() const;
     
     // If skipEmpty is true, substrings of zero length are not added to the array
-    Vector<String> split(const String& separator, bool skipEmpty = false) const;
+    vector<string> split(const string& separator, bool skipEmpty = false) const;
     
-    static String join(const Vector<String>& array, const String& separator);
+    static string join(const vector<string>& array, const string& separator);
     
-    static String join(const Vector<char>& array);
+    static string join(const vector<char>& array);
     
     bool isMarked() const { return _marked; }
     void setMarked(bool b) { _marked = b; }
@@ -236,10 +235,10 @@ public:
     // decimalDigits specifies the number of digits to the right of the decimal point. Value is
     // rounded to this many digits. Trailing zeros are omitted. If there are no digits to the
     // right of the dp, either because of rounding or decimalDigits = 0, the dp is omitted
-    static String prettySize(uint32_t size, uint8_t decimalDigits = DefaultFloatDigits, bool binary = false);
+    static string prettySize(uint32_t size, uint8_t decimalDigits = DefaultFloatDigits, bool binary = false);
     
-    static String vformat(const char* format, va_list args);
-    static String format(const char* format, ...);
+    static string vformat(const char* format, va_list args);
+    static string format(const char* format, ...);
 
 private:
     void doEnsureCapacity(uint16_t size);
