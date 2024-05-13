@@ -20,6 +20,23 @@
 
 using namespace mc6809;
 
+void BOSSCore::enterMonitor()
+{
+    handleCommand();
+}
+
+void BOSSCore::handleCommand()
+{
+    char cmdbuf[81];
+    while(1) {
+        prompt();
+        fgets(cmdbuf, 80, stdin);
+        m8r::string cmd(cmdbuf);
+        printf("Got Command \"%s\"\n", cmdbuf);
+        sleep(1);
+    }
+}
+
 bool BOSSCore::call(Emulator* engine, uint16_t ea)
 {
     switch (Func(ea)) {

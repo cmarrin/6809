@@ -84,6 +84,6 @@ int main(int argc, char * const argv[])
         }
     }
     
-    emu.execute(startAddr);
+    emu.execute(startAddr, startInMonitor);
     return 0;
 }

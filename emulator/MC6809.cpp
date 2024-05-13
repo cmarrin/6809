@@ -407,6 +407,10 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
     uint16_t ea = 0;
     
     while(true) {
+        if (startInMonitor) {
+            _core.enterMonitor();
+        }
+        
         uint8_t opIndex = next8();
         
         const Opcode* opcode = &(opcodeTable[opIndex]);

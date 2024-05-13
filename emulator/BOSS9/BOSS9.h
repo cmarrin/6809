@@ -22,6 +22,8 @@ namespace mc6809 {
 
 using ConsoleCB = std::function<void(const char*)>;
 
+static constexpr const char* PromptString = "BOSS9> ";
+
 class Emulator;
 
 // These must match BOSS9.inc
@@ -48,6 +50,8 @@ class BOSSCore
     }
     ~BOSSCore() { }
     
+    void enterMonitor();
+    
     bool call(Emulator*, uint16_t ea);
     
     void putc(char c) { char s[2] = " "; s[0] = c; print(s); }
@@ -72,8 +76,11 @@ class BOSSCore
   protected:
     
   private:
-      ConsoleCB _consoleCB;
-      bool _startInMonitor = false;
+    void prompt() { puts(PromptString); }
+    void handleCommand();
+    
+    ConsoleCB _consoleCB;
+    bool _startInMonitor = false;
 };
 
 }
