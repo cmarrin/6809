@@ -636,11 +636,6 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
                 }
                 xNZ0C8();
                 _a = _result;
-                
-                // Set C if resulting MSN is > 9
-//                if ((_a & 0xf0) > 0x90) {
-//                    _cc.C = true;
-//                }
                 break;
             }
             case Op::DEC:
