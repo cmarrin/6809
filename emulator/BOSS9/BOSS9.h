@@ -40,46 +40,46 @@ enum class Func : uint16_t {
     exit = 0xFC0E,    // Exit program. A contains exit code
 };
 
-class BOSSCore
+class BOSS9
 {
   public:
-    BOSSCore()
-    {
-        // FIXME: Need to make this cross platform
-        _consoleCB = [](const char* s) { ::printf("%s", s); };
-    }
-    ~BOSSCore() { }
+    BOSS9() { }
+    
+    virtual ~BOSS9() { }
     
     void enterMonitor();
     
     bool call(Emulator*, uint16_t ea);
     
-    void putc(char c) { char s[2] = " "; s[0] = c; print(s); }
-    void puts(const char* s) { print(s); }
-    
-    void print(const char* s) const { _consoleCB(s); }
-    
-    void printf(const char* fmt, ...) const
+    void puts(const char* s)
+    {
+        while (*s) {
+            putc(*s++);
+        }
+    }
+        
+    void printf(const char* fmt, ...)
     {
         va_list args;
         va_start(args, fmt);
         vprintf(fmt, args);
     }
 
-    void vprintf(const char* fmt, va_list args) const
+    void vprintf(const char* fmt, va_list args)
     {
-        print(m8r::string::vformat(fmt, args).c_str());
+        puts(m8r::string::vformat(fmt, args).c_str());
     }
     
     void setStartInMonitor(bool b) { _startInMonitor = b; }
     
   protected:
+    // Methods to override
+    virtual void putc(char c) = 0;
     
   private:
     void prompt() { puts(PromptString); }
     void handleCommand();
     
-    ConsoleCB _consoleCB;
     bool _startInMonitor = false;
 };
 

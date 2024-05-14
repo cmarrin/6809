@@ -117,9 +117,10 @@ struct CC
 class Emulator
 {
 public:
-    Emulator(uint32_t size)
+    Emulator(uint32_t size, BOSS9* boss9)
     {
         _ram = new uint8_t[size];
+        _boss9 = boss9;
     }
     
     ~Emulator() { delete [ ] _ram; }
@@ -351,7 +352,7 @@ private:
     uint32_t _result = 0;
     Op _prevOp = Op::NOP;
     
-    BOSSCore _core;
+    BOSS9* _boss9 = nullptr;
 };
 
 }

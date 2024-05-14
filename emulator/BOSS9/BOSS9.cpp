@@ -20,12 +20,12 @@
 
 using namespace mc6809;
 
-void BOSSCore::enterMonitor()
+void BOSS9::enterMonitor()
 {
     handleCommand();
 }
 
-void BOSSCore::handleCommand()
+void BOSS9::handleCommand()
 {
     char cmdbuf[81];
     while(1) {
@@ -37,7 +37,7 @@ void BOSSCore::handleCommand()
     }
 }
 
-bool BOSSCore::call(Emulator* engine, uint16_t ea)
+bool BOSS9::call(Emulator* engine, uint16_t ea)
 {
     switch (Func(ea)) {
         case Func::putc:

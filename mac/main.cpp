@@ -12,6 +12,8 @@
 #include <unistd.h>
 
 #include "MC6809.h"
+#include "BOSS9.h"
+#include "tigr.h"
 
 // Test data (see test/simple.asm)
 //
@@ -36,6 +38,37 @@ char simpleTest[ ] =    "S01C00005B6C77746F6F6C7320342E32325D2073696D706C652E617
 
 ;
 
+static constexpr uint32_t WindowWidth = 500;
+static constexpr uint32_t WindowHeight = 500;
+static constexpr uint32_t ConsoleWidth = 80;
+static constexpr uint32_t ConsoleHeight = 24;
+
+
+class MacBOSS9 : public mc6809::BOSS9
+{
+  public:
+    MacBOSS9()
+    {
+        _window = tigrWindow(WindowWidth, WindowHeight, "BOSS9", TIGR_AUTO);
+    }
+    
+    virtual ~MacBOSS9() { }
+
+  protected:
+    virtual void putc(char c) override
+    {
+        _console[_cursor++] = c;
+        showConsole();
+    }
+    
+  private:
+    void showConsole() { }
+    
+    Tigr* _window;
+    char _console[ConsoleWidth * ConsoleHeight];
+    uint32_t _cursor = 0;
+};
+
 //
 // Usage: emulator -m [filename]
 //
@@ -50,7 +83,9 @@ int main(int argc, char * const argv[])
     //
     // We'll figure out the rest later.
     
-    mc6809::Emulator emu(65536);
+    MacBOSS9 boss9;
+    
+    mc6809::Emulator emu(65536, &boss9);
     emu.setStack(0xe000);
     
     uint16_t startAddr = 0;
@@ -83,7 +118,7 @@ int main(int argc, char * const argv[])
             return -1;
         }
     }
-    
+
     emu.execute(startAddr, startInMonitor);
     return 0;
 }

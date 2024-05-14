@@ -402,13 +402,13 @@ uint16_t Emulator::load(std::istream& stream)
 
 bool Emulator::execute(uint16_t addr, bool startInMonitor)
 {
-    _core.setStartInMonitor(startInMonitor);
+    _boss9->setStartInMonitor(startInMonitor);
     _pc = addr;
     uint16_t ea = 0;
     
     while(true) {
         if (startInMonitor) {
-            _core.enterMonitor();
+            _boss9->enterMonitor();
         }
         
         uint8_t opIndex = next8();
@@ -669,7 +669,7 @@ bool Emulator::execute(uint16_t addr, bool startInMonitor)
             case Op::JSR:
                 if (ea >= SystemAddrStart) {
                     // This is possibly a system call
-                    _core.call(this, ea);
+                    _boss9->call(this, ea);
                 } else {
                     push16(_s, _pc);
                     _pc = ea;
