@@ -11,11 +11,23 @@
 		49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B142BE410C600B7C3CF /* MC6809.cpp */; };
 		49750B1F2BE6E40600B7C3CF /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B1C2BE6E3FE00B7C3CF /* string.cpp */; };
 		49750B242BE6ECBE00B7C3CF /* BOSS9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B182BE6D43900B7C3CF /* BOSS9.cpp */; };
-		49E11A992BD84324004BC747 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A982BD84324004BC747 /* main.cpp */; };
+		49DE542E2BF58EC200191E37 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DE542D2BF58EC200191E37 /* AppDelegate.m */; };
+		49DE54302BF58EC400191E37 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49DE542F2BF58EC400191E37 /* Assets.xcassets */; };
+		49DE54332BF58EC400191E37 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54312BF58EC400191E37 /* MainMenu.xib */; };
+		49DE54352BF58EC400191E37 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 49DE54342BF58EC400191E37 /* main.mm */; };
+		49DE543B2BF68C0100191E37 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B1C2BE6E3FE00B7C3CF /* string.cpp */; };
+		49DE543C2BF68C0500191E37 /* BOSS9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B182BE6D43900B7C3CF /* BOSS9.cpp */; };
+		49DE543D2BF68C0900191E37 /* srec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EA279E2BE52FE400620B26 /* srec.cpp */; };
+		49DE543E2BF68C1B00191E37 /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B142BE410C600B7C3CF /* MC6809.cpp */; };
+		49DE543F2BF6B52F00191E37 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A982BD84324004BC747 /* main.cpp */; };
+		49DE54462BF6B6B000191E37 /* forth9.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54402BF6B6B000191E37 /* forth9.s19 */; };
+		49DE54472BF6B6B000191E37 /* HelloWorld.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54412BF6B6B000191E37 /* HelloWorld.s19 */; };
+		49DE54482BF6B6B000191E37 /* simple.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54422BF6B6B000191E37 /* simple.s19 */; };
+		49DE54492BF6B6B000191E37 /* asmtest.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54432BF6B6B000191E37 /* asmtest.s19 */; };
+		49DE544A2BF6B6B000191E37 /* test09.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54442BF6B6B000191E37 /* test09.s19 */; };
+		49DE544B2BF6B6B000191E37 /* assist09.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54452BF6B6B000191E37 /* assist09.s19 */; };
 		49EA27A02BE52FE400620B26 /* srec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EA279E2BE52FE400620B26 /* srec.cpp */; };
 		49EA27AE2BF2F00400620B26 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EA27AD2BF2F00400620B26 /* Cocoa.framework */; };
-		49EA27B02BF2F01200620B26 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EA27AF2BF2F01200620B26 /* OpenGL.framework */; };
-		49EA27B12BF2F0B500620B26 /* tigr.c in Sources */ = {isa = PBXBuildFile; fileRef = 49EA27A52BF2D5E000620B26 /* tigr.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +57,15 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		49DE544C2BF6B98E00191E37 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -79,26 +100,36 @@
 		49750B1C2BE6E3FE00B7C3CF /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cpp; path = ../emulator/BOSS9/string.cpp; sourceTree = "<group>"; };
 		49750B1D2BE6E3FE00B7C3CF /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = ../emulator/BOSS9/string.h; sourceTree = "<group>"; };
 		49750B202BE6E48000B7C3CF /* containers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = containers.h; path = ../emulator/BOSS9/containers.h; sourceTree = "<group>"; };
+		49DE542A2BF58EC200191E37 /* Emu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Emu.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		49DE542D2BF58EC200191E37 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		49DE542F2BF58EC400191E37 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		49DE54322BF58EC400191E37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		49DE54342BF58EC400191E37 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		49DE54362BF58EC400191E37 /* Emu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Emu.entitlements; sourceTree = "<group>"; };
+		49DE543A2BF58FF400191E37 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		49DE54402BF6B6B000191E37 /* forth9.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = forth9.s19; path = ../test/forth9.s19; sourceTree = "<group>"; };
+		49DE54412BF6B6B000191E37 /* HelloWorld.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = HelloWorld.s19; path = ../test/HelloWorld.s19; sourceTree = "<group>"; };
+		49DE54422BF6B6B000191E37 /* simple.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = simple.s19; path = ../test/simple.s19; sourceTree = "<group>"; };
+		49DE54432BF6B6B000191E37 /* asmtest.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = asmtest.s19; path = ../test/asmtest.s19; sourceTree = "<group>"; };
+		49DE54442BF6B6B000191E37 /* test09.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test09.s19; path = ../test/test09.s19; sourceTree = "<group>"; };
+		49DE54452BF6B6B000191E37 /* assist09.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = assist09.s19; path = ../test/assist09.s19; sourceTree = "<group>"; };
 		49E11A982BD84324004BC747 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		49E11A9A2BE1CD8F004BC747 /* basic.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = basic.asm; path = ../test/basic.asm; sourceTree = "<group>"; };
 		49E11A9B2BE1CD8F004BC747 /* asmtest.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = asmtest.asm; path = ../test/asmtest.asm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.asm.i386; };
 		49E11A9C2BE1CD8F004BC747 /* test09.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = test09.asm; path = ../test/test09.asm; sourceTree = "<group>"; };
 		49EA279E2BE52FE400620B26 /* srec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = srec.cpp; path = ../emulator/srec.cpp; sourceTree = "<group>"; };
 		49EA279F2BE52FE400620B26 /* srec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = srec.h; path = ../emulator/srec.h; sourceTree = "<group>"; };
-		49EA27A22BF2D5E000620B26 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = tigr/src; sourceTree = "<group>"; };
-		49EA27A32BF2D5E000620B26 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = tigr/README.md; sourceTree = "<group>"; };
-		49EA27A42BF2D5E000620B26 /* tigr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tigr.png; path = tigr/tigr.png; sourceTree = "<group>"; };
-		49EA27A52BF2D5E000620B26 /* tigr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tigr.c; path = tigr/tigr.c; sourceTree = "<group>"; };
-		49EA27A62BF2D5E000620B26 /* demo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = demo.gif; path = tigr/demo.gif; sourceTree = "<group>"; };
-		49EA27A72BF2D5E000620B26 /* UNLICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = UNLICENSE; path = tigr/UNLICENSE; sourceTree = "<group>"; };
-		49EA27A82BF2D5E000620B26 /* ci */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ci; path = tigr/ci; sourceTree = "<group>"; };
-		49EA27A92BF2D5E000620B26 /* tigr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tigr.h; path = tigr/tigr.h; sourceTree = "<group>"; };
-		49EA27AA2BF2D5E000620B26 /* examples */ = {isa = PBXFileReference; lastKnownFileType = folder; name = examples; path = tigr/examples; sourceTree = "<group>"; };
 		49EA27AD2BF2F00400620B26 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		49EA27AF2BF2F01200620B26 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		490F110F2BF3D05500AC1440 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		495775632BD5BEFF00755E8A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -111,11 +142,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				49EA27AE2BF2F00400620B26 /* Cocoa.framework in Frameworks */,
-				49EA27B02BF2F01200620B26 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		49750B092BE30D0600B7C3CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49DE54272BF58EC200191E37 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -128,6 +165,12 @@
 		49065CFC2BD5D3C300E27819 /* test */ = {
 			isa = PBXGroup;
 			children = (
+				49DE54432BF6B6B000191E37 /* asmtest.s19 */,
+				49DE54452BF6B6B000191E37 /* assist09.s19 */,
+				49DE54402BF6B6B000191E37 /* forth9.s19 */,
+				49DE54412BF6B6B000191E37 /* HelloWorld.s19 */,
+				49DE54422BF6B6B000191E37 /* simple.s19 */,
+				49DE54442BF6B6B000191E37 /* test09.s19 */,
 				49E11A9B2BE1CD8F004BC747 /* asmtest.asm */,
 				49E11A9A2BE1CD8F004BC747 /* basic.asm */,
 				49E11A9C2BE1CD8F004BC747 /* test09.asm */,
@@ -147,6 +190,7 @@
 				495775522BD5BE1A00755E8A /* as9 */,
 				495775532BD5BE2500755E8A /* emulator */,
 				49E11A972BD84304004BC747 /* mac */,
+				49DE542B2BF58EC200191E37 /* Emu */,
 				495775452BD5BBC900755E8A /* Products */,
 				49EA27AC2BF2F00400620B26 /* Frameworks */,
 			);
@@ -158,6 +202,7 @@
 				495775662BD5BEFF00755E8A /* as9 */,
 				495775712BD5BF1600755E8A /* emulator */,
 				49750B0C2BE30D0600B7C3CF /* lwasm */,
+				49DE542A2BF58EC200191E37 /* Emu.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,35 +253,30 @@
 			name = BOSS9;
 			sourceTree = "<group>";
 		};
+		49DE542B2BF58EC200191E37 /* Emu */ = {
+			isa = PBXGroup;
+			children = (
+				49DE543A2BF58FF400191E37 /* AppDelegate.h */,
+				49DE542D2BF58EC200191E37 /* AppDelegate.m */,
+				49DE542F2BF58EC400191E37 /* Assets.xcassets */,
+				49DE54312BF58EC400191E37 /* MainMenu.xib */,
+				49DE54342BF58EC400191E37 /* main.mm */,
+				49DE54362BF58EC400191E37 /* Emu.entitlements */,
+			);
+			path = Emu;
+			sourceTree = "<group>";
+		};
 		49E11A972BD84304004BC747 /* mac */ = {
 			isa = PBXGroup;
 			children = (
-				49EA27A12BF2D5C500620B26 /* tigr */,
 				49E11A982BD84324004BC747 /* main.cpp */,
 			);
 			name = mac;
 			sourceTree = "<group>";
 		};
-		49EA27A12BF2D5C500620B26 /* tigr */ = {
-			isa = PBXGroup;
-			children = (
-				49EA27A82BF2D5E000620B26 /* ci */,
-				49EA27A62BF2D5E000620B26 /* demo.gif */,
-				49EA27AA2BF2D5E000620B26 /* examples */,
-				49EA27A32BF2D5E000620B26 /* README.md */,
-				49EA27A22BF2D5E000620B26 /* src */,
-				49EA27A52BF2D5E000620B26 /* tigr.c */,
-				49EA27A92BF2D5E000620B26 /* tigr.h */,
-				49EA27A42BF2D5E000620B26 /* tigr.png */,
-				49EA27A72BF2D5E000620B26 /* UNLICENSE */,
-			);
-			name = tigr;
-			sourceTree = "<group>";
-		};
 		49EA27AC2BF2F00400620B26 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				49EA27AF2BF2F01200620B26 /* OpenGL.framework */,
 				49EA27AD2BF2F00400620B26 /* Cocoa.framework */,
 			);
 			name = Frameworks;
@@ -245,6 +285,21 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		490F11112BF3D05500AC1440 /* demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 490F11162BF3D05500AC1440 /* Build configuration list for PBXNativeTarget "demo" */;
+			buildPhases = (
+				490F110E2BF3D05500AC1440 /* Sources */,
+				490F110F2BF3D05500AC1440 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = demo;
+			productName = demo;
+			productType = "com.apple.product-type.tool";
+		};
 		495775652BD5BEFF00755E8A /* as9 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4957756A2BD5BEFF00755E8A /* Build configuration list for PBXNativeTarget "as9" */;
@@ -297,6 +352,24 @@
 			productReference = 49750B0C2BE30D0600B7C3CF /* lwasm */;
 			productType = "com.apple.product-type.tool";
 		};
+		49DE54292BF58EC200191E37 /* Emu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49DE54372BF58EC400191E37 /* Build configuration list for PBXNativeTarget "Emu" */;
+			buildPhases = (
+				49DE54262BF58EC200191E37 /* Sources */,
+				49DE54272BF58EC200191E37 /* Frameworks */,
+				49DE54282BF58EC200191E37 /* Resources */,
+				49DE544C2BF6B98E00191E37 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Emu;
+			productName = Emu;
+			productReference = 49DE542A2BF58EC200191E37 /* Emu.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -304,8 +377,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
+					490F11112BF3D05500AC1440 = {
+						CreatedOnToolsVersion = 13.4;
+					};
 					495775652BD5BEFF00755E8A = {
 						CreatedOnToolsVersion = 15.2;
 					};
@@ -313,6 +390,9 @@
 						CreatedOnToolsVersion = 15.2;
 					};
 					49750B0B2BE30D0600B7C3CF = {
+						CreatedOnToolsVersion = 13.4;
+					};
+					49DE54292BF58EC200191E37 = {
 						CreatedOnToolsVersion = 13.4;
 					};
 				};
@@ -333,9 +413,29 @@
 				495775652BD5BEFF00755E8A /* as9 */,
 				495775702BD5BF1600755E8A /* emulator */,
 				49750B0B2BE30D0600B7C3CF /* lwasm */,
+				490F11112BF3D05500AC1440 /* demo */,
+				49DE54292BF58EC200191E37 /* Emu */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		49DE54282BF58EC200191E37 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49DE54302BF58EC400191E37 /* Assets.xcassets in Resources */,
+				49DE54472BF6B6B000191E37 /* HelloWorld.s19 in Resources */,
+				49DE544A2BF6B6B000191E37 /* test09.s19 in Resources */,
+				49DE54462BF6B6B000191E37 /* forth9.s19 in Resources */,
+				49DE54492BF6B6B000191E37 /* asmtest.s19 in Resources */,
+				49DE54482BF6B6B000191E37 /* simple.s19 in Resources */,
+				49DE54332BF58EC400191E37 /* MainMenu.xib in Resources */,
+				49DE544B2BF6B6B000191E37 /* assist09.s19 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		49750B132BE30E3000B7C3CF /* ShellScript */ = {
@@ -358,6 +458,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		490F110E2BF3D05500AC1440 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		495775622BD5BEFF00755E8A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -371,9 +478,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				49750B1F2BE6E40600B7C3CF /* string.cpp in Sources */,
-				49EA27B12BF2F0B500620B26 /* tigr.c in Sources */,
+				49DE543F2BF6B52F00191E37 /* main.cpp in Sources */,
 				49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */,
-				49E11A992BD84324004BC747 /* main.cpp in Sources */,
 				49750B242BE6ECBE00B7C3CF /* BOSS9.cpp in Sources */,
 				49EA27A02BE52FE400620B26 /* srec.cpp in Sources */,
 			);
@@ -386,9 +492,57 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		49DE54262BF58EC200191E37 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49DE543E2BF68C1B00191E37 /* MC6809.cpp in Sources */,
+				49DE543B2BF68C0100191E37 /* string.cpp in Sources */,
+				49DE54352BF58EC400191E37 /* main.mm in Sources */,
+				49DE543C2BF68C0500191E37 /* BOSS9.cpp in Sources */,
+				49DE543D2BF68C0900191E37 /* srec.cpp in Sources */,
+				49DE542E2BF58EC200191E37 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		49DE54312BF58EC400191E37 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				49DE54322BF58EC400191E37 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		490F11172BF3D05500AC1440 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		490F11182BF3D05500AC1440 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		495775492BD5BBC900755E8A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -584,9 +738,72 @@
 			};
 			name = Release;
 		};
+		49DE54382BF58EC400191E37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = Emu/Emu.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.marrin.Emu;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		49DE54392BF58EC400191E37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = Emu/Emu.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.marrin.Emu;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		490F11162BF3D05500AC1440 /* Build configuration list for PBXNativeTarget "demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				490F11172BF3D05500AC1440 /* Debug */,
+				490F11182BF3D05500AC1440 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4957753F2BD5BBC900755E8A /* Build configuration list for PBXProject "6809" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -619,6 +836,15 @@
 			buildConfigurations = (
 				49750B112BE30D0600B7C3CF /* Debug */,
 				49750B122BE30D0600B7C3CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49DE54372BF58EC400191E37 /* Build configuration list for PBXNativeTarget "Emu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49DE54382BF58EC400191E37 /* Debug */,
+				49DE54392BF58EC400191E37 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
