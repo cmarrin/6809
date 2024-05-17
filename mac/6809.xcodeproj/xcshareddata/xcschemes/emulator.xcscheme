@@ -57,7 +57,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-m test09.s19"
+            argument = "test09.s19"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
