@@ -22,18 +22,42 @@ using namespace mc6809;
 
 void BOSS9::enterMonitor()
 {
+    prompt();
     handleCommand();
 }
 
 void BOSS9::handleCommand()
 {
-    char cmdbuf[81];
-    while(1) {
+    m8r::string cmd;
+    cmd.reserve(CmdBufSize);
+    bool haveCmd = false;
+    
+    while (true) {
+        int c = getc();
+        if (c == 0) {
+            break;
+        }
+        if (c < 0) {
+            printf("*** getc error: c='%02x'\n", c);
+            break;
+        }
+        if (cmd.size() > CmdBufSize) {
+            printf("*** too many chars in cmdbuf\n");
+            break;
+        }
+        
+        putc(c);
+        
+        if (c == '\n') {
+            haveCmd = true;
+            break;
+        }
+        cmd += char(c);
+    }
+    
+    if (haveCmd) {
+        printf("Got Command \"%s\"\n", cmd.c_str());
         prompt();
-        fgets(cmdbuf, 80, stdin);
-        m8r::string cmd(cmdbuf);
-        printf("Got Command \"%s\"\n", cmdbuf);
-        sleep(1);
     }
 }
 
@@ -57,4 +81,20 @@ bool BOSS9::call(Emulator* engine, uint16_t ea)
         default: return false;
     }
     return false;
+}
+
+bool BOSS9::startExecution(uint16_t addr, bool startInMonitor)
+{
+    _inMonitor = startInMonitor;
+    _emu.setPC(addr);
+    return true;
+}
+
+bool BOSS9::continueExecution()
+{
+    if (_inMonitor) {
+        enterMonitor();
+        return true;
+    }
+    return _emu.execute();
 }

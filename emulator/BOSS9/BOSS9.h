@@ -17,12 +17,14 @@
 
 #include <functional>
 #include "string.h"
+#include "MC6809.h"
 
 namespace mc6809 {
 
 using ConsoleCB = std::function<void(const char*)>;
 
 static constexpr const char* PromptString = "BOSS9> ";
+static constexpr uint16_t CmdBufSize = 80;
 
 class Emulator;
 
@@ -43,7 +45,7 @@ enum class Func : uint16_t {
 class BOSS9
 {
   public:
-    BOSS9() { }
+    BOSS9(uint32_t size) : _emu(size, this) { }
     
     virtual ~BOSS9() { }
     
@@ -70,17 +72,28 @@ class BOSS9
         puts(m8r::string::vformat(fmt, args).c_str());
     }
     
-    void setStartInMonitor(bool b) { _startInMonitor = b; }
+    void setStartInMonitor(bool b) { _inMonitor = b; }
+    
+    // Calls to emulator
+    uint16_t load(std::istream& stream) { return _emu.load(stream); }
+    void setStack(uint16_t stack) { _emu.setStack(stack); }
+    
+    bool startExecution(uint16_t addr, bool startInMonitor = false);
+    bool continueExecution();
     
   protected:
     // Methods to override
     virtual void putc(char c) = 0;
+    virtual int getc() = 0;
+    virtual bool handleRunLoop() = 0;
     
   private:
     void prompt() { puts(PromptString); }
     void handleCommand();
     
-    bool _startInMonitor = false;
+    bool _inMonitor = false;
+    
+    Emulator _emu;
 };
 
 }

@@ -18,11 +18,11 @@
 #include <cstdint>
 #include <iostream>
 
-#include "BOSS9.h"
-
 //#define COMPUTE_CYCLES
 
 namespace mc6809 {
+
+class BOSS9;
 
 static constexpr uint16_t SystemAddrStart = 0xFC00;
 
@@ -131,7 +131,9 @@ public:
     
     void setStack(uint16_t stack) { _s = stack; }
     
-    bool execute(uint16_t addr, bool startInMonitor = false);
+    void setPC(uint16_t addr) { _pc = addr; }
+    
+    bool execute();
     
     uint8_t getA() const { return _a; }
     uint8_t getB() const { return _b; }

@@ -18,6 +18,7 @@
 #include <iomanip>
 
 #include "MC6809.h"
+#include "BOSS9.h"
 #include "srec.h"
 
 using namespace mc6809;
@@ -400,17 +401,10 @@ uint16_t Emulator::load(std::istream& stream)
     return sRecInfo.startAddr();
 }
 
-bool Emulator::execute(uint16_t addr, bool startInMonitor)
+bool Emulator::execute()
 {
-    _boss9->setStartInMonitor(startInMonitor);
-    _pc = addr;
-    uint16_t ea = 0;
-    
     while(true) {
-        if (startInMonitor) {
-            _boss9->enterMonitor();
-        }
-        
+        uint16_t ea = 0;
         uint8_t opIndex = next8();
         
         const Opcode* opcode = &(opcodeTable[opIndex]);

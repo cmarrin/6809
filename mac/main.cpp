@@ -11,9 +11,7 @@
 #include <string>
 #include <unistd.h>
 
-#include "MC6809.h"
 #include "BOSS9.h"
-#include "tigr.h"
 
 // Test data (see test/simple.asm)
 //
@@ -47,9 +45,8 @@ static constexpr uint32_t ConsoleHeight = 24;
 class MacBOSS9 : public mc6809::BOSS9
 {
   public:
-    MacBOSS9()
+    MacBOSS9(uint32_t size) : BOSS9(size)
     {
-        _window = tigrWindow(WindowWidth, WindowHeight, "BOSS9", TIGR_AUTO);
     }
     
     virtual ~MacBOSS9() { }
@@ -57,14 +54,21 @@ class MacBOSS9 : public mc6809::BOSS9
   protected:
     virtual void putc(char c) override
     {
+        fputc(c, stdout);
         _console[_cursor++] = c;
-        showConsole();
+    }
+    
+    virtual int getc() override
+    {
+        return -1;
+    }
+
+    virtual bool handleRunLoop() override
+    {
+        return true;
     }
     
   private:
-    void showConsole() { }
-    
-    Tigr* _window;
     char _console[ConsoleWidth * ConsoleHeight];
     uint32_t _cursor = 0;
 };
@@ -83,10 +87,9 @@ int main(int argc, char * const argv[])
     //
     // We'll figure out the rest later.
     
-    MacBOSS9 boss9;
+    MacBOSS9 boss9(65536);
     
-    mc6809::Emulator emu(65536, &boss9);
-    emu.setStack(0xe000);
+    boss9.setStack(0xe000);
     
     uint16_t startAddr = 0;
     bool startInMonitor = false;
@@ -106,12 +109,12 @@ int main(int argc, char * const argv[])
     if (optind >= argc) {
         // use sample
         std::stringstream stream(simpleTest);
-        startAddr = emu.load(stream);
+        startAddr = boss9.load(stream);
     } else {
         const char* filename = argv[optind];
         std::ifstream f(filename);
         if (f.is_open()) {
-            startAddr = emu.load(f);
+            startAddr = boss9.load(f);
             f.close();
         } else {
             std::cout << "Unable to open file";
@@ -119,6 +122,8 @@ int main(int argc, char * const argv[])
         }
     }
 
-    emu.execute(startAddr, startInMonitor);
+    boss9.startExecution(startAddr, startInMonitor);
+    boss9.continueExecution();
+    
     return 0;
 }
