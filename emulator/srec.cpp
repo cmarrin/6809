@@ -9,8 +9,8 @@
 
 // ---- Include Files ------------------------------------------------------
 
-#include <iostream>
-#include <stdio.h>
+//#include <iostream>
+#include <cctype>
 #include <string.h>
 
 #include "srec.h"
@@ -63,7 +63,7 @@ void SRecordParser::Error( unsigned lineNum, const char *fmt, ... )
    va_list  args;
 
    va_start( args, fmt );
-   vError( lineNum, fmt, args );
+   ParseError( lineNum, fmt, args );
    va_end( args );
 }
 
@@ -183,58 +183,6 @@ bool SRecordParser::ParsedData( const SRecordData *sRecData )
    }
 
    m_segLen += sRecData->m_dataLen;
-
-   return true;
-}
-
-/***************************************************************************/
-// virtual 
-
-void  SRecordParser::ParseError( unsigned lineNum, const char *str )
-{
-   std::cerr << "Error: ";
-   if ( lineNum > 0 )
-   {
-      std::cerr << "line " << lineNum << ": ";
-   }
-   std::cerr << str << std::endl;
-}
-
-/***************************************************************************/
-
-bool SRecordParser::ParseFile( const char *fileName )
-{
-   FILE  *fs;
-
-   if (( fs = fopen( fileName, "rt" )) == NULL )
-   {
-      return false;
-   }
-   
-   bool rc = ParseFile( fs );
-
-   fclose( fs );
-
-   return rc;
-}
-
-/***************************************************************************/
-
-bool SRecordParser::ParseFile( FILE *fs )
-{
-   unsigned lineNum = 0;
-   char     line[ 100 ];
-
-   while ( fgets( line, sizeof( line ), fs ) != NULL )
-   {
-      lineNum++;
-
-      if ( !ParseLine( lineNum, line ))
-      {
-         return false;
-      }
-   }
-   Flush();
 
    return true;
 }
@@ -394,17 +342,6 @@ bool SRecordParser::StartAddress( const SRecordData *sRecInfo )
 bool SRecordParser::StartSegment( unsigned addr )
 {
    return true;
-}
-
-/***************************************************************************/
-
-void SRecordParser::vError( unsigned lineNum, const char *fmt, va_list args )
-{
-   char  errStr[ 256 ];
-
-   vsnprintf( errStr, sizeof( errStr ), fmt, args );
-
-   ParseError( lineNum, errStr );
 }
 
 /** @} */

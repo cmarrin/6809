@@ -16,7 +16,6 @@
 
 // ---- Include Files ------------------------------------------------------
 
-#include <stdio.h>
 #include <stdarg.h>
 
 /**
@@ -87,28 +86,6 @@ public:
 
    //-----------------------------------------------------------------------
    /**
-   *  Parses the S-Record file named by @a fileName.
-   *
-   *  @param   fileName (in)  Name of the file to parse.
-   *
-   *  @return  true if the file was parsed successfully, false otherwise.
-   */
-   
-   bool  ParseFile( const char *fileName );
-   
-   //-----------------------------------------------------------------------
-   /**
-   *  Parses the S-Record file indicated by @a fs.
-   *
-   *  @param   fs (mod)  File to parse (assumes that it's positioned correctly).
-   *
-   *  @return  true if the file was parsed successfully, false otherwise.
-   */
-   
-   bool  ParseFile( FILE *fs );
-   
-   //-----------------------------------------------------------------------
-   /**
    *  Parses a single line from an S-Record file.
    *
    *  @param   line  (in)  Line from S-Record file to parse.
@@ -164,7 +141,7 @@ protected:
    *  by a derived class requiring different behaviour.
    */
    
-   virtual  void  ParseError( unsigned lineNum, const char *str );
+   virtual  void  ParseError( unsigned lineNum, const char *fmt, va_list args ) = 0;
    
    //-----------------------------------------------------------------------
    /**
@@ -256,16 +233,6 @@ private:
    
    bool  ParsedData( const SRecordData *sRecData );
 
-   //-----------------------------------------------------------------------
-   /**
-   *  Called when an error is encountered parsing the file.
-   *
-   *  @param   fmt   (in)  As per vprintf.
-   *  @param   args  (in)  As per vprintf.
-   */
-   
-   void  vError( unsigned lineNum, const char *fmt, va_list args );
-   
    //-----------------------------------------------------------------------
 
    bool        m_inSeg;    ///< Are we currently inside a segment?
