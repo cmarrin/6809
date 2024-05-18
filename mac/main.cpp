@@ -48,8 +48,6 @@ char simpleTest[ ] =
     "S9030200FA\n"
 ;
 
-static constexpr uint32_t ConsoleWidth = 80;
-static constexpr uint32_t ConsoleHeight = 24;
 static constexpr uint32_t MemorySize = 65536;
 
 class MacBOSS9 : public mc6809::BOSS9<MemorySize>
@@ -65,12 +63,11 @@ class MacBOSS9 : public mc6809::BOSS9<MemorySize>
     virtual void putc(char c) override
     {
         fputc(c, stdout);
-        _console[_cursor++] = c;
     }
     
     virtual int getc() override
     {
-        return -1;
+        return getchar();
     }
 
     virtual bool handleRunLoop() override
@@ -86,7 +83,6 @@ class MacBOSS9 : public mc6809::BOSS9<MemorySize>
     }
 
   private:
-    char _console[ConsoleWidth * ConsoleHeight];
     uint32_t _cursor = 0;
 };
 

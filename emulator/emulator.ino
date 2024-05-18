@@ -43,6 +43,7 @@ char simpleTest[ ] =
     "S9030200FA\n"
 ;
 
+static constexpr bool StartInMonitor = true;
 static constexpr uint32_t ConsoleWidth = 80;
 static constexpr uint32_t ConsoleHeight = 24;
 static constexpr uint32_t MemorySize = 32768;
@@ -63,7 +64,7 @@ class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
         uint16_t startAddr = 0;
         setStack(0x6000);
         startAddr = load(simpleTest);
-        startExecution(startAddr, false);
+        startExecution(startAddr, StartInMonitor);
     }
 
     void loop()
@@ -80,7 +81,14 @@ class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
 
     virtual int getc() override
     {
-        return -1;
+        int c = Serial.read();
+        if (c == 0x0d) {
+            c = '\n';
+        }
+//        if (c > 0) {
+//            printf("*** get char %02x\n", c);
+//        }
+        return c;
     }
 
     virtual bool handleRunLoop() override

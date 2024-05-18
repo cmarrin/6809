@@ -18,43 +18,43 @@
 
 using namespace mc6809;
 
-void BOSS9Base::enterMonitor()
-{
-    prompt();
-    handleCommand();
-}
-
 void BOSS9Base::handleCommand()
 {
-    m8r::string cmd;
-    cmd.reserve(CmdBufSize);
     bool haveCmd = false;
     
     while (true) {
         int c = getc();
-        if (c == 0) {
+        if (c <= 0) {
             break;
         }
-        if (c < 0) {
-            printf("*** getc error: c='%02x'\n", c);
-            break;
-        }
-        if (cmd.size() > CmdBufSize) {
+//        if (c < 0) {
+//            printf("*** getc error: c='%02x'\n", c);
+//            _cursor = 0;
+//            haveCmd = true;
+//            break;
+//        }
+        if (_cursor >= CmdBufSize - 1) {
             printf("*** too many chars in cmdbuf\n");
-            break;
-        }
-        
-        putc(c);
-        
-        if (c == '\n') {
+            _cursor = 0;
             haveCmd = true;
             break;
         }
-        cmd += char(c);
+        
+        //putc(c);
+        
+        if (c == '\n') {
+            haveCmd = true;
+            _cmdBuf[_cursor] = '\0';
+            break;
+        }
+        
+        _cmdBuf[_cursor++] = char(c);
     }
     
     if (haveCmd) {
-        printf("Got Command \"%s\"\n", cmd.c_str());
+        if (_cursor > 0) {
+            printf("Got Command \"%s\"\n", _cmdBuf);
+        }
         prompt();
     }
 }
@@ -82,13 +82,19 @@ bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
 {
     _inMonitor = startInMonitor;
     _emu.setPC(addr);
+    
+    if (_inMonitor) {
+        // Do initial prompt
+        prompt();
+        _cursor = 0;
+    }
     return true;
 }
 
 bool BOSS9Base::continueExecution()
 {
     if (_inMonitor) {
-        enterMonitor();
+        handleCommand();
         return true;
     }
     return _emu.execute();

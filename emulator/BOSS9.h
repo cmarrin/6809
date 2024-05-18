@@ -47,9 +47,7 @@ class BOSS9Base
     BOSS9Base(uint8_t* ram) : _emu(ram, this) { }
     
     virtual ~BOSS9Base() { }
-    
-    void enterMonitor();
-    
+        
     bool call(Emulator*, uint16_t ea);
     
     void puts(const char* s)
@@ -93,6 +91,8 @@ class BOSS9Base
     
     bool _inMonitor = false;
     
+    char _cmdBuf[CmdBufSize];
+    uint32_t _cursor = 0;
     Emulator _emu;
 };
 
