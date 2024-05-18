@@ -12,21 +12,11 @@
 		49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B142BE410C600B7C3CF /* MC6809.cpp */; };
 		49750B1F2BE6E40600B7C3CF /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B1C2BE6E3FE00B7C3CF /* string.cpp */; };
 		49750B242BE6ECBE00B7C3CF /* BOSS9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B182BE6D43900B7C3CF /* BOSS9.cpp */; };
-		49DE542E2BF58EC200191E37 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DE542D2BF58EC200191E37 /* AppDelegate.m */; };
-		49DE54302BF58EC400191E37 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49DE542F2BF58EC400191E37 /* Assets.xcassets */; };
-		49DE54332BF58EC400191E37 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54312BF58EC400191E37 /* MainMenu.xib */; };
-		49DE54352BF58EC400191E37 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 49DE54342BF58EC400191E37 /* main.mm */; };
-		49DE543B2BF68C0100191E37 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B1C2BE6E3FE00B7C3CF /* string.cpp */; };
-		49DE543C2BF68C0500191E37 /* BOSS9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B182BE6D43900B7C3CF /* BOSS9.cpp */; };
-		49DE543D2BF68C0900191E37 /* srec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EA279E2BE52FE400620B26 /* srec.cpp */; };
-		49DE543E2BF68C1B00191E37 /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B142BE410C600B7C3CF /* MC6809.cpp */; };
+		49BAAE842BF9653C001A545A /* EmuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BAAE832BF9653C001A545A /* EmuApp.swift */; };
+		49BAAE862BF9653C001A545A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BAAE852BF9653C001A545A /* ContentView.swift */; };
+		49BAAE882BF9653E001A545A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49BAAE872BF9653E001A545A /* Assets.xcassets */; };
+		49BAAE8B2BF9653E001A545A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49BAAE8A2BF9653E001A545A /* Preview Assets.xcassets */; };
 		49DE543F2BF6B52F00191E37 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E11A982BD84324004BC747 /* main.cpp */; };
-		49DE54462BF6B6B000191E37 /* forth9.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54402BF6B6B000191E37 /* forth9.s19 */; };
-		49DE54472BF6B6B000191E37 /* HelloWorld.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54412BF6B6B000191E37 /* HelloWorld.s19 */; };
-		49DE54482BF6B6B000191E37 /* simple.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54422BF6B6B000191E37 /* simple.s19 */; };
-		49DE54492BF6B6B000191E37 /* asmtest.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54432BF6B6B000191E37 /* asmtest.s19 */; };
-		49DE544A2BF6B6B000191E37 /* test09.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54442BF6B6B000191E37 /* test09.s19 */; };
-		49DE544B2BF6B6B000191E37 /* assist09.s19 in Resources */ = {isa = PBXBuildFile; fileRef = 49DE54452BF6B6B000191E37 /* assist09.s19 */; };
 		49EA27A02BE52FE400620B26 /* srec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EA279E2BE52FE400620B26 /* srec.cpp */; };
 		49EA27AE2BF2F00400620B26 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EA27AD2BF2F00400620B26 /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -58,15 +48,6 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
-		};
-		49DE544C2BF6B98E00191E37 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -102,13 +83,12 @@
 		49750B1C2BE6E3FE00B7C3CF /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cpp; path = ../emulator/string.cpp; sourceTree = "<group>"; };
 		49750B1D2BE6E3FE00B7C3CF /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = ../emulator/string.h; sourceTree = "<group>"; };
 		49750B202BE6E48000B7C3CF /* containers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = containers.h; path = ../emulator/containers.h; sourceTree = "<group>"; };
-		49DE542A2BF58EC200191E37 /* Emu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Emu.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		49DE542D2BF58EC200191E37 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		49DE542F2BF58EC400191E37 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		49DE54322BF58EC400191E37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		49DE54342BF58EC400191E37 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		49DE54362BF58EC400191E37 /* Emu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Emu.entitlements; sourceTree = "<group>"; };
-		49DE543A2BF58FF400191E37 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		49BAAE812BF9653C001A545A /* Emu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Emu.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		49BAAE832BF9653C001A545A /* EmuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmuApp.swift; sourceTree = "<group>"; };
+		49BAAE852BF9653C001A545A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		49BAAE872BF9653E001A545A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		49BAAE8A2BF9653E001A545A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		49BAAE8C2BF9653E001A545A /* Emu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Emu.entitlements; sourceTree = "<group>"; };
 		49DE54402BF6B6B000191E37 /* forth9.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = forth9.s19; path = ../test/forth9.s19; sourceTree = "<group>"; };
 		49DE54412BF6B6B000191E37 /* HelloWorld.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = HelloWorld.s19; path = ../test/HelloWorld.s19; sourceTree = "<group>"; };
 		49DE54422BF6B6B000191E37 /* simple.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = simple.s19; path = ../test/simple.s19; sourceTree = "<group>"; };
@@ -154,7 +134,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		49DE54272BF58EC200191E37 /* Frameworks */ = {
+		49BAAE7E2BF9653C001A545A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -200,7 +180,7 @@
 				495775522BD5BE1A00755E8A /* as9 */,
 				495775532BD5BE2500755E8A /* emulator */,
 				49E11A972BD84304004BC747 /* mac */,
-				49DE542B2BF58EC200191E37 /* Emu */,
+				49BAAE822BF9653C001A545A /* Emu */,
 				495775452BD5BBC900755E8A /* Products */,
 				49EA27AC2BF2F00400620B26 /* Frameworks */,
 			);
@@ -212,7 +192,7 @@
 				495775662BD5BEFF00755E8A /* as9 */,
 				495775712BD5BF1600755E8A /* emulator */,
 				49750B0C2BE30D0600B7C3CF /* lwasm */,
-				49DE542A2BF58EC200191E37 /* Emu.app */,
+				49BAAE812BF9653C001A545A /* Emu.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -264,17 +244,24 @@
 			name = BOSS9;
 			sourceTree = "<group>";
 		};
-		49DE542B2BF58EC200191E37 /* Emu */ = {
+		49BAAE822BF9653C001A545A /* Emu */ = {
 			isa = PBXGroup;
 			children = (
-				49DE543A2BF58FF400191E37 /* AppDelegate.h */,
-				49DE542D2BF58EC200191E37 /* AppDelegate.m */,
-				49DE542F2BF58EC400191E37 /* Assets.xcassets */,
-				49DE54312BF58EC400191E37 /* MainMenu.xib */,
-				49DE54342BF58EC400191E37 /* main.mm */,
-				49DE54362BF58EC400191E37 /* Emu.entitlements */,
+				49BAAE832BF9653C001A545A /* EmuApp.swift */,
+				49BAAE852BF9653C001A545A /* ContentView.swift */,
+				49BAAE872BF9653E001A545A /* Assets.xcassets */,
+				49BAAE8C2BF9653E001A545A /* Emu.entitlements */,
+				49BAAE892BF9653E001A545A /* Preview Content */,
 			);
 			path = Emu;
+			sourceTree = "<group>";
+		};
+		49BAAE892BF9653E001A545A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				49BAAE8A2BF9653E001A545A /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		49E11A972BD84304004BC747 /* mac */ = {
@@ -363,14 +350,13 @@
 			productReference = 49750B0C2BE30D0600B7C3CF /* lwasm */;
 			productType = "com.apple.product-type.tool";
 		};
-		49DE54292BF58EC200191E37 /* Emu */ = {
+		49BAAE802BF9653C001A545A /* Emu */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 49DE54372BF58EC400191E37 /* Build configuration list for PBXNativeTarget "Emu" */;
+			buildConfigurationList = 49BAAE8D2BF9653E001A545A /* Build configuration list for PBXNativeTarget "Emu" */;
 			buildPhases = (
-				49DE54262BF58EC200191E37 /* Sources */,
-				49DE54272BF58EC200191E37 /* Frameworks */,
-				49DE54282BF58EC200191E37 /* Resources */,
-				49DE544C2BF6B98E00191E37 /* CopyFiles */,
+				49BAAE7D2BF9653C001A545A /* Sources */,
+				49BAAE7E2BF9653C001A545A /* Frameworks */,
+				49BAAE7F2BF9653C001A545A /* Resources */,
 			);
 			buildRules = (
 			);
@@ -378,7 +364,7 @@
 			);
 			name = Emu;
 			productName = Emu;
-			productReference = 49DE542A2BF58EC200191E37 /* Emu.app */;
+			productReference = 49BAAE812BF9653C001A545A /* Emu.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -403,7 +389,7 @@
 					49750B0B2BE30D0600B7C3CF = {
 						CreatedOnToolsVersion = 13.4;
 					};
-					49DE54292BF58EC200191E37 = {
+					49BAAE802BF9653C001A545A = {
 						CreatedOnToolsVersion = 13.4;
 					};
 				};
@@ -425,24 +411,18 @@
 				495775702BD5BF1600755E8A /* emulator */,
 				49750B0B2BE30D0600B7C3CF /* lwasm */,
 				490F11112BF3D05500AC1440 /* demo */,
-				49DE54292BF58EC200191E37 /* Emu */,
+				49BAAE802BF9653C001A545A /* Emu */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		49DE54282BF58EC200191E37 /* Resources */ = {
+		49BAAE7F2BF9653C001A545A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49DE54302BF58EC400191E37 /* Assets.xcassets in Resources */,
-				49DE54472BF6B6B000191E37 /* HelloWorld.s19 in Resources */,
-				49DE544A2BF6B6B000191E37 /* test09.s19 in Resources */,
-				49DE54462BF6B6B000191E37 /* forth9.s19 in Resources */,
-				49DE54492BF6B6B000191E37 /* asmtest.s19 in Resources */,
-				49DE54482BF6B6B000191E37 /* simple.s19 in Resources */,
-				49DE54332BF58EC400191E37 /* MainMenu.xib in Resources */,
-				49DE544B2BF6B6B000191E37 /* assist09.s19 in Resources */,
+				49BAAE8B2BF9653E001A545A /* Preview Assets.xcassets in Resources */,
+				49BAAE882BF9653E001A545A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,31 +484,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		49DE54262BF58EC200191E37 /* Sources */ = {
+		49BAAE7D2BF9653C001A545A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49DE543E2BF68C1B00191E37 /* MC6809.cpp in Sources */,
-				49DE543B2BF68C0100191E37 /* string.cpp in Sources */,
-				49DE54352BF58EC400191E37 /* main.mm in Sources */,
-				49DE543C2BF68C0500191E37 /* BOSS9.cpp in Sources */,
-				49DE543D2BF68C0900191E37 /* srec.cpp in Sources */,
-				49DE542E2BF58EC200191E37 /* AppDelegate.m in Sources */,
+				49BAAE862BF9653C001A545A /* ContentView.swift in Sources */,
+				49BAAE842BF9653C001A545A /* EmuApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		49DE54312BF58EC400191E37 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				49DE54322BF58EC400191E37 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		490F11172BF3D05500AC1440 /* Debug */ = {
@@ -750,7 +715,7 @@
 			};
 			name = Release;
 		};
-		49DE54382BF58EC400191E37 /* Debug */ = {
+		49BAAE8E2BF9653E001A545A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -760,11 +725,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Emu/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainNibFile = MainMenu;
-				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -773,11 +738,14 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.marrin.Emu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		49DE54392BF58EC400191E37 /* Release */ = {
+		49BAAE8F2BF9653E001A545A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -787,11 +755,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Emu/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainNibFile = MainMenu;
-				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -800,7 +768,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.marrin.Emu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -852,11 +823,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		49DE54372BF58EC400191E37 /* Build configuration list for PBXNativeTarget "Emu" */ = {
+		49BAAE8D2BF9653E001A545A /* Build configuration list for PBXNativeTarget "Emu" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				49DE54382BF58EC400191E37 /* Debug */,
-				49DE54392BF58EC400191E37 /* Release */,
+				49BAAE8E2BF9653E001A545A /* Debug */,
+				49BAAE8F2BF9653E001A545A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
