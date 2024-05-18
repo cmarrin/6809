@@ -13,20 +13,18 @@
 //  Created by Chris Marrin on 5/4/24.
 //
 
-#include <unistd.h>
-
 #include "BOSS9.h"
 #include "MC6809.h"
 
 using namespace mc6809;
 
-void BOSS9::enterMonitor()
+void BOSS9Base::enterMonitor()
 {
     prompt();
     handleCommand();
 }
 
-void BOSS9::handleCommand()
+void BOSS9Base::handleCommand()
 {
     m8r::string cmd;
     cmd.reserve(CmdBufSize);
@@ -61,7 +59,7 @@ void BOSS9::handleCommand()
     }
 }
 
-bool BOSS9::call(Emulator* engine, uint16_t ea)
+bool BOSS9Base::call(Emulator* engine, uint16_t ea)
 {
     switch (Func(ea)) {
         case Func::putc:
@@ -73,24 +71,21 @@ bool BOSS9::call(Emulator* engine, uint16_t ea)
             break;
         }
         case Func::exit:
-            // Enter the monitor eventually. For now just loop
-            while(1) {
-                sleep(1);
-            }
+            exit(0);
         
         default: return false;
     }
     return false;
 }
 
-bool BOSS9::startExecution(uint16_t addr, bool startInMonitor)
+bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
 {
     _inMonitor = startInMonitor;
     _emu.setPC(addr);
     return true;
 }
 
-bool BOSS9::continueExecution()
+bool BOSS9Base::continueExecution()
 {
     if (_inMonitor) {
         enterMonitor();

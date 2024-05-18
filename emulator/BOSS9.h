@@ -15,7 +15,6 @@
 
 #pragma once
 
-#include <functional>
 #include "string.h"
 #include "MC6809.h"
 
@@ -42,12 +41,12 @@ enum class Func : uint16_t {
     exit = 0xFC0E,    // Exit program. A contains exit code
 };
 
-class BOSS9
+class BOSS9Base
 {
   public:
-    BOSS9(uint32_t size) : _emu(size, this) { }
+    BOSS9Base(uint8_t* ram) : _emu(ram, this) { }
     
-    virtual ~BOSS9() { }
+    virtual ~BOSS9Base() { }
     
     void enterMonitor();
     
@@ -75,7 +74,7 @@ class BOSS9
     void setStartInMonitor(bool b) { _inMonitor = b; }
     
     // Calls to emulator
-    uint16_t load(std::istream& stream) { return _emu.load(stream); }
+    uint16_t load(const char* data) { return _emu.load(data); }
     void setStack(uint16_t stack) { _emu.setStack(stack); }
     
     bool startExecution(uint16_t addr, bool startInMonitor = false);
@@ -86,6 +85,7 @@ class BOSS9
     virtual void putc(char c) = 0;
     virtual int getc() = 0;
     virtual bool handleRunLoop() = 0;
+    virtual void exit(int n) = 0;
     
   private:
     void prompt() { puts(PromptString); }
@@ -94,6 +94,17 @@ class BOSS9
     bool _inMonitor = false;
     
     Emulator _emu;
+};
+
+template<uint32_t size> class BOSS9 : public BOSS9Base
+{
+  public:
+    BOSS9() : BOSS9Base(_ram) { }
+    
+    ~BOSS9() { }
+    
+  private:
+    uint8_t _ram[size];
 };
 
 }
