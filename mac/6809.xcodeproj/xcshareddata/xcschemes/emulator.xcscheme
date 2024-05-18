@@ -53,12 +53,16 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
+            argument = ""
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-m HelloWorld.s19"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "test09.s19"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
