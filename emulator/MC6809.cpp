@@ -13,10 +13,6 @@
 //  Created by Chris Marrin on 4/22/24.
 //
 
-#include <string>
-#include <iostream>
-#include <iomanip>
-
 #include "MC6809.h"
 #include "BOSS9.h"
 #include "srec.h"
@@ -26,7 +22,7 @@ using namespace mc6809;
 class SRecordInfo : public SRecordParser
 {
   public:
-    SRecordInfo(uint8_t* ram) : _ram(ram) { }
+    SRecordInfo(uint8_t* ram, BOSS9Base* boss9) : _ram(ram), _boss9(boss9) { }
     virtual  ~SRecordInfo() { }
     
     uint16_t startAddr() const { return _startAddr; }
@@ -56,10 +52,23 @@ class SRecordInfo : public SRecordParser
         return true;
     }
     
+    virtual void ParseError(unsigned linenum, const char *fmt, va_list args)
+    {
+        if (linenum == 0) {
+            _boss9->printf("Error: line %d: ", linenum);
+        } else {
+            _boss9->printf("Error: ");
+        }
+        _boss9->vprintf(fmt, args);
+        _boss9->printf("\n");
+    }
+    
   private:
     uint8_t* _ram = nullptr;
     uint16_t _startAddr = 0;
     bool _startAddrSet = false;
+    
+    BOSS9Base* _boss9 = nullptr;
 };
 
 static_assert (sizeof(Opcode) == 4, "Opcode is wrong size");
@@ -387,15 +396,29 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
     return (uint16_t(a) << 8) | uint16_t(b);
 }
 
-uint16_t Emulator::load(std::istream& stream)
+const char* findNextLine(const char* s)
 {
-    SRecordInfo sRecInfo(_ram);
-    std::string line;
+    while (*s != '\n' && *s != '\0') {
+        ++s;
+    }
+    if (*s != '\0') {
+        s++;
+    }
+    return s;
+}
+
+uint16_t Emulator::load(const char* data)
+{
+    SRecordInfo sRecInfo(_ram, _boss9);
     unsigned lineNum = 0;
     
-    while (std::getline(stream, line)) {
+    while (true) {
         lineNum++;
-        sRecInfo.ParseLine(lineNum, line.c_str());
+        sRecInfo.ParseLine(lineNum, data);
+        data = findNextLine(data);
+        if (*data == '\0') {
+            break;
+        }
     }
     sRecInfo.Flush();
     return sRecInfo.startAddr();
@@ -403,7 +426,9 @@ uint16_t Emulator::load(std::istream& stream)
 
 bool Emulator::execute()
 {
-    while(true) {
+    uint32_t instructionsToExecute = InstructionsToExecutePerContinue;
+    
+    while(instructionsToExecute--) {
         uint16_t ea = 0;
         uint8_t opIndex = next8();
         
@@ -413,7 +438,14 @@ bool Emulator::execute()
         // If this is an addressing mode that produces a 16 bit effective address
         // it will be placed in ea. If it's immediate or branch relative then the
         // 8 or 16 bit value is placed in _right
-        switch(opcode->adr) {
+        //
+        // NOTE: gcc seems to have a problem with emum class and bitfields. It
+        // tries to cast the value to an int, which can't be done implicitly with
+        // enum class. Moving the value into a bare variable solves the problem.
+        //
+        Adr adr = opcode->adr;
+        
+        switch(adr) {
             case Adr::None:
             case Adr::Inherent:
                 break;
@@ -510,7 +542,9 @@ bool Emulator::execute()
         }
                 
         // Perform operation
-        switch(opcode->op) {
+        Op op = opcode->op;
+        
+        switch(op) {
             case Op::ILL:
                 return false;
             case Op::Page2:
@@ -839,6 +873,11 @@ bool Emulator::execute()
     }
     
     return true;
+}
+
+void Emulator::readOnlyAddr(uint16_t addr)
+{
+    _boss9->printf("Address %0x4 is read-only\n", addr);
 }
 
 // TODO:

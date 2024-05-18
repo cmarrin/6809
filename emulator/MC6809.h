@@ -16,21 +16,21 @@
 #pragma once
 
 #include <cstdint>
-#include <iostream>
 
 //#define COMPUTE_CYCLES
 
 namespace mc6809 {
 
-class BOSS9;
-
 static constexpr uint16_t SystemAddrStart = 0xFC00;
+static constexpr uint32_t InstructionsToExecutePerContinue = 10;
 
 // Opcode table
 
 // The 6809 has 2 extended opcodess Page2 (0x10) and Page3 (0x11). These
 // typically indicate a change the opcode in the following byte. For instance
 // for branches it indicates a long (16 bit) branch.
+
+#undef DEC // For Arduino
 
 enum class Op : uint8_t {
     ILL, Page2, Page3, ABX, ADC, ADD8, ADD16, AND,
@@ -114,20 +114,22 @@ struct CC
     bool E : 1; // Entire       : All registers stacked from last interrupt
 };
 
+class BOSS9Base;
+
 class Emulator
 {
 public:
-    Emulator(uint32_t size, BOSS9* boss9)
+    Emulator(uint8_t* ram, BOSS9Base* boss9)
     {
-        _ram = new uint8_t[size];
+        _ram = ram;
         _boss9 = boss9;
     }
     
-    ~Emulator() { delete [ ] _ram; }
+    ~Emulator() { }
     
     // Assumes data is in s19 format
     // Returns the start addr of the program
-    uint16_t load(std::istream& stream);
+    uint16_t load(const char* data);
     
     void setStack(uint16_t stack) { _s = stack; }
     
@@ -261,7 +263,7 @@ private:
     void store8(uint16_t ea, uint8_t v)
     {
         if (ea >= SystemAddrStart) {
-            printf("Address %0x4 is read-only\n", ea);
+            readOnlyAddr(ea);
         } else {
             _ram[ea] = v;
         }
@@ -270,7 +272,7 @@ private:
     void store16(uint16_t ea, uint16_t v)
     {
         if (ea >= SystemAddrStart) {
-            printf("Address %0x4 is read-only\n", ea);
+            readOnlyAddr(ea);
         } else {
             _ram[ea] = v >> 8;
             _ram[ea + 1] = v;
@@ -329,7 +331,9 @@ private:
         _cc.V = ((_left ^ _right ^ _result ^ (_result >> 1)) & 0x8000) != 0;
     }
     
-    uint8_t* _ram = nullptr;
+    void readOnlyAddr(uint16_t addr);
+    
+    uint8_t* _ram;
     
     union {
         struct { uint8_t _b; uint8_t _a; };
@@ -354,7 +358,7 @@ private:
     uint32_t _result = 0;
     Op _prevOp = Op::NOP;
     
-    BOSS9* _boss9 = nullptr;
+    BOSS9Base* _boss9 = nullptr;
 };
 
 }

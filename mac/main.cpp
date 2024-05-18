@@ -13,39 +13,49 @@
 
 #include "BOSS9.h"
 
-// Test data (see test/simple.asm)
+// Test data (see test/HelloWorld.asm)
+//        *  calling monitor c function
+//        *  display text on terminal using UART
 //
-//                          (       simple.asm):00001         *  simple test file
-//                          (       simple.asm):00002
-//                          (       simple.asm):00003                 org $200
-//                          (       simple.asm):00004
-//    0200                  (       simple.asm):00005         loop
-//    0200 CC0208           (       simple.asm):00006                 ldd #text3
-//    0203 FD020F           (       simple.asm):00007                 std store
-//    0206 20F8             (       simple.asm):00008                 bra loop
-//                          (       simple.asm):00009
-//    0208 48656C6C6F5C6E   (       simple.asm):00010         text3   fcc "Hello\n"
-//    020F                  (       simple.asm):00011         store   rmb     2
-//                          (       simple.asm):00012
-//                          (       simple.asm):00013                 end $200
+//            include BOSS9.inc
+//
+//        NumPrints equ 10
+//                org $200
+//
+//        main    lda #NumPrints
+//                sta count
+//        loop
+//                ldx #text3
+//                jsr puts
+//                lda #newline
+//                jsr putc
+//                dec count
+//                bgt loop
+//        done    bra done
+//
+//        text3   fcn "Hello from 6809 kit"
+//
+//        count   rmb 1
+//
+//            end main
 
-char simpleTest[ ] =    "S01C00005B6C77746F6F6C7320342E32325D2073696D706C652E61736D18\n"
-                        "S1120200CC0208FD020F20F848656C6C6F5C6E31\n"
-                        "S5030001FB\n"
-                        "S9030200FA\n"
-
+char simpleTest[ ] =
+    "S02000005B6C77746F6F6C7320342E32325D2048656C6C6F576F726C642E61736DA2\n"
+    "S1130200860AB7022B8E0217BDFC02860ABDFC00CB\n"
+    "S11302107A022B2EF020FE48656C6C6F2066726F9C\n"
+    "S10E02206D2036383039206B69740003\n"
+    "S5030003F9\n"
+    "S9030200FA\n"
 ;
 
-static constexpr uint32_t WindowWidth = 500;
-static constexpr uint32_t WindowHeight = 500;
 static constexpr uint32_t ConsoleWidth = 80;
 static constexpr uint32_t ConsoleHeight = 24;
+static constexpr uint32_t MemorySize = 65536;
 
-
-class MacBOSS9 : public mc6809::BOSS9
+class MacBOSS9 : public mc6809::BOSS9<MemorySize>
 {
   public:
-    MacBOSS9(uint32_t size) : BOSS9(size)
+    MacBOSS9() : BOSS9()
     {
     }
     
@@ -68,6 +78,13 @@ class MacBOSS9 : public mc6809::BOSS9
         return true;
     }
     
+    virtual void exit(int n) override
+    {
+        while (true) {
+            sleep(1);
+        }
+    }
+
   private:
     char _console[ConsoleWidth * ConsoleHeight];
     uint32_t _cursor = 0;
@@ -87,7 +104,7 @@ int main(int argc, char * const argv[])
     //
     // We'll figure out the rest later.
     
-    MacBOSS9 boss9(65536);
+    MacBOSS9 boss9;
     
     boss9.setStack(0xe000);
     
@@ -106,15 +123,22 @@ int main(int argc, char * const argv[])
         }
     }
     
+    char* fileString = nullptr;
+    bool isFileStringAllocated = false;
+    uint32_t size = 0;
+    
     if (optind >= argc) {
         // use sample
-        std::stringstream stream(simpleTest);
-        startAddr = boss9.load(stream);
+        fileString = simpleTest;
+        size = sizeof(simpleTest);
     } else {
         const char* filename = argv[optind];
+        size = uint32_t(std::filesystem::file_size(filename));
         std::ifstream f(filename);
         if (f.is_open()) {
-            startAddr = boss9.load(f);
+            fileString = new char[size + 1];
+            f.read(fileString, size);
+            fileString[size] = '\0';
             f.close();
         } else {
             std::cout << "Unable to open file";
@@ -122,8 +146,16 @@ int main(int argc, char * const argv[])
         }
     }
 
+        
+    startAddr = boss9.load(fileString);
+    
+    if (isFileStringAllocated) {
+        delete [ ] fileString;
+    }
+
     boss9.startExecution(startAddr, startInMonitor);
-    boss9.continueExecution();
+    
+    while (boss9.continueExecution()) { }
     
     return 0;
 }
