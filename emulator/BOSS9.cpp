@@ -18,7 +18,7 @@
 
 using namespace mc6809;
 
-void BOSS9Base::handleCommand()
+void BOSS9Base::getCommand()
 {
     bool haveCmd = false;
     
@@ -27,21 +27,13 @@ void BOSS9Base::handleCommand()
         if (c <= 0) {
             break;
         }
-//        if (c < 0) {
-//            printf("*** getc error: c='%02x'\n", c);
-//            _cursor = 0;
-//            haveCmd = true;
-//            break;
-//        }
         if (_cursor >= CmdBufSize - 1) {
             printf("*** too many chars in cmdbuf\n");
             _cursor = 0;
             haveCmd = true;
             break;
         }
-        
-        //putc(c);
-        
+
         if (c == '\n') {
             haveCmd = true;
             _cmdBuf[_cursor] = '\0';
@@ -53,10 +45,33 @@ void BOSS9Base::handleCommand()
     
     if (haveCmd) {
         if (_cursor > 0) {
-            printf("Got Command \"%s\"\n", _cmdBuf);
+            processCommand();
         }
         prompt();
     }
+}
+
+void BOSS9Base::processCommand()
+{
+    if (_loading) {
+        bool finished;
+        if (!loadLine(_cmdBuf, finished)) {
+            _loading = false;
+            printf("Error loading\n");
+        }
+        if (finished) {
+            _startAddr = loadFinish();
+            _loading = false;
+            printf("Load complete, start addr = 0x%04x\n", _startAddr);
+        }
+    } else if (_cmdBuf[0] == 'l') {
+        printf("Ready to start loading. ESC to abort\n");
+        _loading = true;
+        loadStart();
+    } else {
+        printf("'%s': no such command\n", _cmdBuf);
+    }
+    _cursor = 0;
 }
 
 bool BOSS9Base::call(Emulator* engine, uint16_t ea)
@@ -94,7 +109,7 @@ bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
 bool BOSS9Base::continueExecution()
 {
     if (_inMonitor) {
-        handleCommand();
+        getCommand();
         return true;
     }
     return _emu.execute();

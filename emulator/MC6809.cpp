@@ -15,61 +15,8 @@
 
 #include "MC6809.h"
 #include "BOSS9.h"
-#include "srec.h"
 
 using namespace mc6809;
-
-class SRecordInfo : public SRecordParser
-{
-  public:
-    SRecordInfo(uint8_t* ram, BOSS9Base* boss9) : _ram(ram), _boss9(boss9) { }
-    virtual  ~SRecordInfo() { }
-    
-    uint16_t startAddr() const { return _startAddr; }
-
-  protected:
-    virtual bool Header(const SRecordHeader *sRecHdr)
-    {
-        return true;
-    }
-    
-    virtual bool StartAddress(const SRecordData *sRecData)
-    {
-        _startAddr = sRecData->m_addr;
-        return true;
-    }
-    
-    virtual bool Data(const SRecordData *sRecData)
-    {
-        // FIXME: Need to handle ranges, which means we need to pass in the ram size
-        
-        // If the start addr has not been set, set it to the start of the first record.
-        // The StartAddress function can change this at the end
-        if (!_startAddrSet) {
-            _startAddr = sRecData->m_addr;
-        }
-        memcpy(_ram + sRecData->m_addr, sRecData->m_data, sRecData->m_dataLen);
-        return true;
-    }
-    
-    virtual void ParseError(unsigned linenum, const char *fmt, va_list args)
-    {
-        if (linenum == 0) {
-            _boss9->printf("Error: line %d: ", linenum);
-        } else {
-            _boss9->printf("Error: ");
-        }
-        _boss9->vprintf(fmt, args);
-        _boss9->printf("\n");
-    }
-    
-  private:
-    uint8_t* _ram = nullptr;
-    uint16_t _startAddr = 0;
-    bool _startAddrSet = false;
-    
-    BOSS9Base* _boss9 = nullptr;
-};
 
 static_assert (sizeof(Opcode) == 4, "Opcode is wrong size");
 
@@ -396,30 +343,35 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
     return (uint16_t(a) << 8) | uint16_t(b);
 }
 
-const char* findNextLine(const char* s)
+void SRecordInfo::ParseError(unsigned linenum, const char *fmt, va_list args)
 {
-    while (*s != '\n' && *s != '\0') {
-        ++s;
+    if (linenum == 0) {
+        _boss9->printf("Error: line %d: ", linenum);
+    } else {
+        _boss9->printf("Error: ");
     }
-    if (*s != '\0') {
-        s++;
-    }
-    return s;
+    _boss9->vprintf(fmt, args);
+    _boss9->printf("\n");
+}
+    
+void Emulator::loadStart()
+{
+    sRecInfo.init();
+    _lineNum = 0;
 }
 
-uint16_t Emulator::load(const char* data)
+bool Emulator::loadLine(const char* data, bool& finished)
 {
-    SRecordInfo sRecInfo(_ram, _boss9);
-    unsigned lineNum = 0;
-    
-    while (true) {
-        lineNum++;
-        sRecInfo.ParseLine(lineNum, data);
-        data = findNextLine(data);
-        if (*data == '\0') {
-            break;
-        }
+    _lineNum++;
+    if (!sRecInfo.ParseLine(_lineNum, data)) {
+        return false;
     }
+    finished = sRecInfo.finished();
+    return true;
+}
+
+uint16_t Emulator::loadFinish()
+{
     sRecInfo.Flush();
     return sRecInfo.startAddr();
 }

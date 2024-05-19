@@ -33,11 +33,15 @@
 /***************************************************************************/
 
 SRecordParser::SRecordParser()
-   : m_inSeg( false ),
-     m_segAddr( 0 ),
-     m_segLen( 0 )
 {
-   // Currently nothing to do.
+    init();
+}
+
+void SRecordParser::init()
+{
+    m_inSeg = false;
+    m_segAddr = 0;
+    m_segLen = 0;
 }
 
 /***************************************************************************/

@@ -16,6 +16,9 @@
 #pragma once
 
 #include <cstdint>
+#include <cstring>
+
+#include "srec.h"
 
 //#define COMPUTE_CYCLES
 
@@ -116,10 +119,62 @@ struct CC
 
 class BOSS9Base;
 
+class SRecordInfo : public SRecordParser
+{
+  public:
+    SRecordInfo(uint8_t* ram, BOSS9Base* boss9) : _ram(ram), _boss9(boss9) { }
+    void init()
+    {
+        SRecordParser::init();
+        _startAddr = 0;
+        _startAddrSet = false;
+    }
+    
+    virtual  ~SRecordInfo() { }
+    
+    bool finished() { return _startAddrSet; }
+    uint16_t startAddr() const { return _startAddr; }
+
+  protected:
+    virtual bool Header(const SRecordHeader *sRecHdr)
+    {
+        return true;
+    }
+    
+    virtual bool StartAddress(const SRecordData *sRecData)
+    {
+        _startAddr = sRecData->m_addr;
+        _startAddrSet = true;
+        return true;
+    }
+    
+    virtual bool Data(const SRecordData *sRecData)
+    {
+        // FIXME: Need to handle ranges, which means we need to pass in the ram size
+        
+        // If the start addr has not been set, set it to the start of the first record.
+        // The StartAddress function can change this at the end
+        if (!_startAddrSet) {
+            _startAddr = sRecData->m_addr;
+        }
+        memcpy(_ram + sRecData->m_addr, sRecData->m_data, sRecData->m_dataLen);
+        return true;
+    }
+    
+    virtual void ParseError(unsigned linenum, const char *fmt, va_list args);
+    
+  private:
+    uint8_t* _ram = nullptr;
+    uint16_t _startAddr = 0;
+    bool _startAddrSet = false;
+    
+    BOSS9Base* _boss9 = nullptr;
+};
+
 class Emulator
 {
 public:
-    Emulator(uint8_t* ram, BOSS9Base* boss9)
+    Emulator(uint8_t* ram, BOSS9Base* boss9) : sRecInfo(ram, boss9)
     {
         _ram = ram;
         _boss9 = boss9;
@@ -129,7 +184,9 @@ public:
     
     // Assumes data is in s19 format
     // Returns the start addr of the program
-    uint16_t load(const char* data);
+    void loadStart();
+    bool loadLine(const char* data, bool& finished);
+    uint16_t loadFinish();
     
     void setStack(uint16_t stack) { _s = stack; }
     
@@ -359,6 +416,9 @@ private:
     Op _prevOp = Op::NOP;
     
     BOSS9Base* _boss9 = nullptr;
+    
+    SRecordInfo sRecInfo;
+    unsigned _lineNum = 0;
 };
 
 }

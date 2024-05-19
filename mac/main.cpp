@@ -86,6 +86,17 @@ class MacBOSS9 : public mc6809::BOSS9<MemorySize>
     uint32_t _cursor = 0;
 };
 
+char* findNextLine(char* s)
+{
+    while (*s != '\n' && *s != '\0') {
+        ++s;
+    }
+    if (*s != '\0') {
+        s++;
+    }
+    return s;
+}
+
 //
 // Usage: emulator -m [filename]
 //
@@ -137,13 +148,26 @@ int main(int argc, char * const argv[])
             fileString[size] = '\0';
             f.close();
         } else {
-            std::cout << "Unable to open file";
+            std::cout << "Unable to open file\n";
             return -1;
         }
     }
+    
+    boss9.loadStart();
+    while (true) {
+        bool finished;
+        if (!boss9.loadLine(fileString, finished)) {
+            std::cout << "Unable to load file\n";
+            return -1;
+        }
 
-        
-    startAddr = boss9.load(fileString);
+        fileString = findNextLine(fileString);
+        if (*fileString == '\0') {
+            break;
+        }
+    }
+    
+    startAddr = boss9.loadFinish();
     
     if (isFileStringAllocated) {
         delete [ ] fileString;

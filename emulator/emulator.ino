@@ -43,10 +43,21 @@ char simpleTest[ ] =
     "S9030200FA\n"
 ;
 
-static constexpr bool StartInMonitor = true;
+static constexpr bool StartInMonitor = false;
 static constexpr uint32_t ConsoleWidth = 80;
 static constexpr uint32_t ConsoleHeight = 24;
 static constexpr uint32_t MemorySize = 32768;
+
+char* findNextLine(char* s)
+{
+    while (*s != '\n' && *s != '\0') {
+        ++s;
+    }
+    if (*s != '\0') {
+        s++;
+    }
+    return s;
+}
 
 class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
 {
@@ -63,7 +74,25 @@ class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
 
         uint16_t startAddr = 0;
         setStack(0x6000);
-        startAddr = load(simpleTest);
+
+        char* fileString = simpleTest;
+        
+        loadStart();
+        while (true) {
+            bool finished;
+            if (!loadLine(fileString, finished)) {
+                Serial.println("Unable to load file\n");
+                break;
+            }
+
+            fileString = findNextLine(fileString);
+            if (*fileString == '\0') {
+                break;
+            }
+        }
+    
+        startAddr = loadFinish();
+
         startExecution(startAddr, StartInMonitor);
     }
 

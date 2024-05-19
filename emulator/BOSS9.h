@@ -72,7 +72,9 @@ class BOSS9Base
     void setStartInMonitor(bool b) { _inMonitor = b; }
     
     // Calls to emulator
-    uint16_t load(const char* data) { return _emu.load(data); }
+    void loadStart() { _emu.loadStart(); }
+    bool loadLine(const char* data, bool& finished) { return _emu.loadLine(data, finished); }
+    uint16_t loadFinish() { return _emu.loadFinish(); }
     void setStack(uint16_t stack) { _emu.setStack(stack); }
     
     bool startExecution(uint16_t addr, bool startInMonitor = false);
@@ -87,12 +89,17 @@ class BOSS9Base
     
   private:
     void prompt() { puts(PromptString); }
-    void handleCommand();
+    void getCommand();
+    void processCommand();
     
     bool _inMonitor = false;
     
     char _cmdBuf[CmdBufSize];
     uint32_t _cursor = 0;
+    
+    bool _loading = false;
+    uint16_t _startAddr = 0;
+    
     Emulator _emu;
 };
 

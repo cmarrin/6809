@@ -71,6 +71,8 @@ public:
    /// Default Constructor.
    
    SRecordParser();
+   
+   void init();
 
    //-----------------------------------------------------------------------
    /// Destructor.
