@@ -205,7 +205,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         
         // run
         leaveMonitor();
-        printf("Running at address 0x%04x\n", _startAddr);
+        printf("Running at address $%04x\n", _startAddr);
         _emu.setPC(_startAddr);
         return true;
     }
