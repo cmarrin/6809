@@ -15,9 +15,10 @@ loop
         jsr putc
         dec count
         bgt loop
-done    bra done
+        clra
+        jsr exit
 	
-text3   fcn "Hello from 6809 kit"
+text3   fcn "Hello from 6809"
 
 count   rmb 1
 

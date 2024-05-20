@@ -1,0 +1,61 @@
+                      (   HelloWorld.asm):00001         *  calling monitor c function
+                      (   HelloWorld.asm):00002         *  display text on terminal using UART
+                      (   HelloWorld.asm):00003         
+                      (   HelloWorld.asm):00004             include BOSS9.inc
+                      (        BOSS9.inc):00001         *-------------------------------------------------------------------------
+                      (        BOSS9.inc):00002         *    This source file is a part of the MC6809 Simulator
+                      (        BOSS9.inc):00003         *    For the latest info, see http:www.marrin.org/
+                      (        BOSS9.inc):00004         *    Copyright (c) 2018-2024, Chris Marrin
+                      (        BOSS9.inc):00005         *    All rights reserved.
+                      (        BOSS9.inc):00006         *    Use of this source code is governed by the MIT license that can be
+                      (        BOSS9.inc):00007         *    found in the LICENSE file.
+                      (        BOSS9.inc):00008         *-------------------------------------------------------------------------
+                      (        BOSS9.inc):00009         *
+                      (        BOSS9.inc):00010         *  BOSS9.inc
+                      (        BOSS9.inc):00011         *  Assembly language function and address includes for BOSS9
+                      (        BOSS9.inc):00012         *
+                      (        BOSS9.inc):00013         *  Created by Chris Marrin on 5/4/24.
+                      (        BOSS9.inc):00014         *
+                      (        BOSS9.inc):00015         
+                      (        BOSS9.inc):00016         *
+                      (        BOSS9.inc):00017         * Console functions
+                      (        BOSS9.inc):00018         *
+     FC00             (        BOSS9.inc):00019         putc    equ     $FC00   ; output char in A to console
+     FC02             (        BOSS9.inc):00020         puts    equ     $FC02   ; output string pointed to by X (null terminated)
+     FC04             (        BOSS9.inc):00021         putsn   equ     $FC04   ; Output string pointed to by X for length in Y
+     FC06             (        BOSS9.inc):00022         getc    equ     $FC06   ; Get char from console, return it in A
+     FC08             (        BOSS9.inc):00023         peekc   equ     $FC08   ; Return in A a 1 if a char is available and 0 otherwise
+     FC0A             (        BOSS9.inc):00024         gets    equ     $FC0A   ; Get a line terminated by \n, place in buffer
+                      (        BOSS9.inc):00025                                 ; pointed to by X, with max length in Y
+     FC0C             (        BOSS9.inc):00026         peeks   equ     $FC0C   ; Return in A a 1 if a line is available and 0 otherwise.
+                      (        BOSS9.inc):00027                                 ; If available return length of line in Y
+                      (        BOSS9.inc):00028         
+     FC0E             (        BOSS9.inc):00029         exit    equ     $FC0E   ; Exit program. A ccontains exit code
+                      (        BOSS9.inc):00030         
+                      (        BOSS9.inc):00031         * Misc equates
+                      (        BOSS9.inc):00032         
+     000A             (        BOSS9.inc):00033         newline equ     $0a
+                      (        BOSS9.inc):00034                                 
+                      (        BOSS9.inc):00035         
+                      (   HelloWorld.asm):00005         
+     000A             (   HelloWorld.asm):00006         NumPrints equ 10
+                      (   HelloWorld.asm):00007                 org $200
+                      (   HelloWorld.asm):00008         
+0200 860A             (   HelloWorld.asm):00009         main    lda #NumPrints
+0202 B70229           (   HelloWorld.asm):00010                 sta count
+0205                  (   HelloWorld.asm):00011         loop
+0205 8E0219           (   HelloWorld.asm):00012                 ldx #text3
+0208 BDFC02           (   HelloWorld.asm):00013                 jsr puts
+020B 860A             (   HelloWorld.asm):00014                 lda #newline
+020D BDFC00           (   HelloWorld.asm):00015                 jsr putc
+0210 7A0229           (   HelloWorld.asm):00016                 dec count
+0213 2EF0             (   HelloWorld.asm):00017                 bgt loop
+0215 4F               (   HelloWorld.asm):00018                 clra
+0216 BDFC0E           (   HelloWorld.asm):00019                 jsr exit
+                      (   HelloWorld.asm):00020                 
+0219 48656C6C6F206672 (   HelloWorld.asm):00021         text3   fcn "Hello from 6809"
+     6F6D203638303900
+                      (   HelloWorld.asm):00022         
+0229                  (   HelloWorld.asm):00023         count   rmb 1
+                      (   HelloWorld.asm):00024         
+                      (   HelloWorld.asm):00025                 end main
