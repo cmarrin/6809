@@ -31,9 +31,10 @@
 //                jsr putc
 //                dec count
 //                bgt loop
-//        done    bra done
+//                clra
+//                jsr exit
 //
-//        text3   fcn "Hello from 6809 kit"
+//        text3   fcn "Hello from 6809"
 //
 //        count   rmb 1
 //
@@ -41,9 +42,9 @@
 
 char simpleTest[ ] =
     "S02000005B6C77746F6F6C7320342E32325D2048656C6C6F576F726C642E61736DA2\n"
-    "S1130200860AB7022B8E0217BDFC02860ABDFC00CB\n"
-    "S11302107A022B2EF020FE48656C6C6F2066726F9C\n"
-    "S10E02206D2036383039206B69740003\n"
+    "S1130200860AB702298E0219BDFC02860ABDFC00CB\n"
+    "S11302107A02292EF04FBDFC0E48656C6C6F206687\n"
+    "S10C0220726F6D2036383039008C\n"
     "S5030003F9\n"
     "S9030200FA\n"
 ;
@@ -75,13 +76,6 @@ class MacBOSS9 : public mc6809::BOSS9<MemorySize>
         return true;
     }
     
-    virtual void exit(int n) override
-    {
-        while (true) {
-            sleep(1);
-        }
-    }
-
   private:
     uint32_t _cursor = 0;
 };

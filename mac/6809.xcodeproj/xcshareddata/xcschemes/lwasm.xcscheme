@@ -56,12 +56,12 @@
       </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-I ../emulator/BOSS9 -f srec -o HelloWorld.s19 -l HelloWorld.lst HelloWorld.asm"
-            isEnabled = "NO">
+            argument = "-I ../emulator -f srec -oHelloWorld.s19 -lHelloWorld.lst HelloWorld.asm"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-I ../emulator/BOSS9 -f srec -o test09.s19 -ltest09.lst test09.asm"
-            isEnabled = "YES">
+            argument = "-I ../emulator -f srec -o test09.s19 -ltest09.lst test09.asm"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-f srec -o asmtest.s19 -l asmtest.asm"
