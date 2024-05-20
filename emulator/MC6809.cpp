@@ -649,7 +649,9 @@ bool Emulator::execute()
             case Op::JSR:
                 if (ea >= SystemAddrStart) {
                     // This is possibly a system call
-                    _boss9->call(this, ea);
+                    if (!_boss9->call(this, ea)) {
+                        return true;
+                    }
                 } else {
                     push16(_s, _pc);
                     _pc = ea;
