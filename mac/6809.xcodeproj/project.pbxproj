@@ -89,6 +89,7 @@
 		49BAAE872BF9653E001A545A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49BAAE8A2BF9653E001A545A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		49BAAE8C2BF9653E001A545A /* Emu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Emu.entitlements; sourceTree = "<group>"; };
+		49BAAE902BFC1683001A545A /* HelloWorld.lst */ = {isa = PBXFileReference; lastKnownFileType = text; name = HelloWorld.lst; path = ../test/HelloWorld.lst; sourceTree = "<group>"; };
 		49DE54402BF6B6B000191E37 /* forth9.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = forth9.s19; path = ../test/forth9.s19; sourceTree = "<group>"; };
 		49DE54412BF6B6B000191E37 /* HelloWorld.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = HelloWorld.s19; path = ../test/HelloWorld.s19; sourceTree = "<group>"; };
 		49DE54422BF6B6B000191E37 /* simple.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = simple.s19; path = ../test/simple.s19; sourceTree = "<group>"; };
@@ -155,6 +156,7 @@
 				49DE54402BF6B6B000191E37 /* forth9.s19 */,
 				49065CFF2BD5DADA00E27819 /* HelloWorld.asm */,
 				49DE54412BF6B6B000191E37 /* HelloWorld.s19 */,
+				49BAAE902BFC1683001A545A /* HelloWorld.lst */,
 				49750B162BE419D400B7C3CF /* simple.asm */,
 				49DE54422BF6B6B000191E37 /* simple.s19 */,
 				49E11A9A2BE1CD8F004BC747 /* basic.asm */,
