@@ -381,6 +381,12 @@ bool Emulator::execute()
     uint32_t instructionsToExecute = InstructionsToExecutePerContinue;
     
     while(instructionsToExecute--) {
+        if (atBreakpoint(_pc)) {
+            _boss9->printf("\n*** hit breakpoint at addr $%04x\n\n", _pc);
+            _boss9->enterMonitor();
+            return true;
+        }
+        
         uint16_t ea = 0;
         uint8_t opIndex = next8();
         
@@ -832,6 +838,46 @@ bool Emulator::execute()
 void Emulator::readOnlyAddr(uint16_t addr)
 {
     _boss9->printf("Address %0x4 is read-only\n", addr);
+}
+
+bool Emulator::breakpoint(uint8_t i, BreakpointEntry& entry)
+{
+    return true;
+}
+
+bool Emulator::setBreakpoint(uint16_t addr)
+{
+    return true;
+}
+
+bool Emulator::clearBreakpoint(uint8_t i)
+{
+    return true;
+}
+
+bool Emulator::clearAllBreakpoints()
+{
+    return true;
+}
+
+bool Emulator::disableBreakpoint(uint8_t i)
+{
+    return true;
+}
+
+bool Emulator::disableAllBreakpoints()
+{
+    return true;
+}
+
+bool Emulator::enableBreakpoint(uint8_t i)
+{
+    return true;
+}
+
+bool Emulator::enableAllBreakpoints()
+{
+    return true;
 }
 
 // TODO:

@@ -26,6 +26,7 @@ namespace mc6809 {
 
 static constexpr uint16_t SystemAddrStart = 0xFC00;
 static constexpr uint32_t InstructionsToExecutePerContinue = 10;
+static constexpr uint8_t NumBreakpoints = 4;
 
 // Opcode table
 
@@ -117,6 +118,14 @@ struct CC
     bool E : 1; // Entire       : All registers stacked from last interrupt
 };
 
+enum class BPStatus { Empty, Enabled, Disabled };
+
+struct BreakpointEntry
+{
+    uint16_t addr;
+    BPStatus status = BPStatus::Empty;
+};
+
 class BOSS9Base;
 
 class SRecordInfo : public SRecordParser
@@ -178,6 +187,11 @@ public:
     {
         _ram = ram;
         _boss9 = boss9;
+        
+        // Testing
+        _haveBreakpoints = true;
+        _breakpoints[0].status = BPStatus::Enabled;
+        _breakpoints[0].addr = 0x205;
     }
     
     ~Emulator() { }
@@ -205,6 +219,29 @@ public:
     uint16_t getPC() const { return _pc; }
     
     uint8_t* getAddr(uint16_t ea) { return _ram + ea; }
+    
+    // Breakpoint support
+    bool breakpoint(uint8_t i, BreakpointEntry& entry);
+    bool setBreakpoint(uint16_t addr);
+    bool clearBreakpoint(uint8_t i);
+    bool clearAllBreakpoints();
+    bool disableBreakpoint(uint8_t i);
+    bool disableAllBreakpoints();
+    bool enableBreakpoint(uint8_t i);
+    bool enableAllBreakpoints();
+    
+    bool atBreakpoint(uint16_t addr)
+    {
+        if (!_haveBreakpoints) {
+            return false;
+        }
+        for (auto it : _breakpoints) {
+            if (it.status == BPStatus::Enabled && it.addr == addr) {
+                return true;
+            }
+        }
+        return false;
+    }
     
 private:
     uint16_t getReg(Reg reg)
@@ -419,6 +456,10 @@ private:
     
     SRecordInfo sRecInfo;
     unsigned _lineNum = 0;
+
+    // Breakpoint support
+    BreakpointEntry _breakpoints[NumBreakpoints];
+    bool _haveBreakpoints = false;
 };
 
 }
