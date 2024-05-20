@@ -22,7 +22,8 @@ namespace mc6809 {
 
 using ConsoleCB = std::function<void(const char*)>;
 
-static constexpr const char* PromptString = "BOSS9> ";
+static constexpr const char* MainPromptString = "BOSS9> ";
+static constexpr const char* LoadingPromptString = "Loading> ";
 static constexpr uint16_t CmdBufSize = 80;
 
 class Emulator;
@@ -39,6 +40,12 @@ enum class Func : uint16_t {
     peeks = 0xFC0C,   // Return in A a 1 if a line is available and 0 otherwise.
                                             // If available return length of line in Y
     exit = 0xFC0E,    // Exit program. A contains exit code
+};
+
+enum class CmdState {
+    Cmd,
+    Loading,
+    Running,
 };
 
 class BOSS9Base
@@ -94,7 +101,7 @@ class BOSS9Base
     void promptIfNeeded()
     {
         if (_needPrompt) {
-            puts(PromptString);
+            puts((_cmdState == CmdState::Loading) ? LoadingPromptString : MainPromptString);
             _cursor = 0;
             _needPrompt = false;
         }
@@ -108,6 +115,7 @@ class BOSS9Base
     
     void getCommand();
     void processCommand();
+    bool executeCommand(m8r::string _cmdElements[3]);
     
     bool _inMonitor = false;
     bool _needPrompt = false;
@@ -115,8 +123,9 @@ class BOSS9Base
     char _cmdBuf[CmdBufSize];
     uint32_t _cursor = 0;
     
-    bool _loading = false;
     uint16_t _startAddr = 0;
+    
+    CmdState _cmdState = CmdState::Cmd;
     
     Emulator _emu;
 };
