@@ -50,7 +50,7 @@ The API is implemented as addresses in high memory. They are called with JSR (or
 
       [ ] BS <addr>       - Set breakpoint at <addr>, error if breakpoint list is full
 
-      [ ] BC <num>        - Clear breakpoint <num> (0-3)
+      [ ] BC [<num>]      - Clear breakpoint <num> (0-3) or all breakpoints
 
       [ ] BD [<num>]      - Disable breakpoint <num> or all breakpoints
 
