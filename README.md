@@ -12,7 +12,37 @@ I will create what is the equivalent of a 6809 SBC running on an ESP8266 or ESP3
 
 I'm implementing my own system software for the emulator. There's lots of system software out there for the 6809, from monitors written in the distant past, to more recent efforts for modern 6809 SBC system. But all of these are designed for actual 6809 hardware and everything on this system will be emulated. So I'm creating BOSS9 (Basic Operating System Services for the 6809). I want to have system calls to handle console input and output, making TCP/IP connection (e.g. remote console, accessing weather data, etc.), and disk I/O. All of these will be handled by making indirect JSR calls to specific locations in high memory. Using indirect calls would allow actual addresses to 6809 functions to be stored at these locations. But for this system, the emulator will intercept these calls and route them to native ESP functions.
 
-More on the specifics of the functionality later.
+### API
+
+The API is implemented as addresses in high memory. They are called with JSR (or JMP in the case of exit). Params and return values can be in registers or on the stack according to the description of the function call.
+
+<pre>
+*
+* Console functions
+*
+putc    equ     $FC00   ; output char in A to console
+puts    equ     $FC02   ; output string pointed to by X (null terminated)
+putsn   equ     $FC04   ; Output string pointed to by X for length in Y
+getc    equ     $FC06   ; Get char from console, return it in A
+peekc   equ     $FC08   ; Return in A a 1 if a char is available and 0 otherwise
+gets    equ     $FC0A   ; Get a line terminated by \n, place in buffer
+                        ; pointed to by X, with max length in Y
+peeks   equ     $FC0C   ; Return in A a 1 if a line is available and 0 otherwise.
+                        ; If available return length of line in Y
+
+exit    equ     $FC0E   ; Exit program. A contains exit code. If active, enter monitor
+                        ; and show prompt
+
+* Misc equates
+
+newline equ     $0a  
+</pre>
+
+### Commands
+
+<pre>
+  
+</pre>
 
 ## External Code/Docs Used
 
