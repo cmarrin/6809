@@ -12,7 +12,67 @@ I will create what is the equivalent of a 6809 SBC running on an ESP8266 or ESP3
 
 I'm implementing my own system software for the emulator. There's lots of system software out there for the 6809, from monitors written in the distant past, to more recent efforts for modern 6809 SBC system. But all of these are designed for actual 6809 hardware and everything on this system will be emulated. So I'm creating BOSS9 (Basic Operating System Services for the 6809). I want to have system calls to handle console input and output, making TCP/IP connection (e.g. remote console, accessing weather data, etc.), and disk I/O. All of these will be handled by making indirect JSR calls to specific locations in high memory. Using indirect calls would allow actual addresses to 6809 functions to be stored at these locations. But for this system, the emulator will intercept these calls and route them to native ESP functions.
 
-More on the specifics of the functionality later.
+### API
+
+The API is implemented as addresses in high memory. They are called with JSR (or JMP in the case of exit). Params and return values can be in registers or on the stack according to the description of the function call.
+
+    *
+    * Console functions
+    *
+    [x] putc    equ     $FC00   ; output char in A to console
+    [x] puts    equ     $FC02   ; output string pointed to by X (null terminated)
+    [ ] putsn   equ     $FC04   ; Output string pointed to by X for length in Y
+    [ ] getc    equ     $FC06   ; Get char from console, return it in A
+    [ ] peekc   equ     $FC08   ; Return in A a 1 if a char is available and 0 otherwise
+    [ ] gets    equ     $FC0A   ; Get a line terminated by \n, place in buffer
+                                ; pointed to by X, with max length in Y
+    [ ] peeks   equ     $FC0C   ; Return in A a 1 if a line is available and 0 otherwise.
+                                ; If available return length of line in Y
+
+    [x] exit    equ     $FC0E   ; Exit program. A contains exit code. If active, enter monitor
+                                ; and show prompt
+    *
+    * Misc equates
+    *
+    [x] newline equ     $0a  
+
+### Commands
+
+     All commands are case insensitive. [x] incicates that the command is implemented
+
+      [ ] <ESC>           - Abort loading or running. Go back to monitor
+
+      [x] L               - Load s19 file. Set _startAddress if successful
+
+      [x] R [<addr>]      - Run from startAddr or passed addr
+
+      [ ] B               - View current breakpoints
+
+      [ ] BS <addr>       - Set breakpoint at <addr>, error if breakpoint list is full
+
+      [ ] BC [<num>]      - Clear breakpoint <num> (0-3) or all breakpoints
+
+      [ ] BD [<num>]      - Disable breakpoint <num> or all breakpoints
+
+      [ ] BE [<num>]      - Enable breakpoint <num> or all breakpoints
+
+      [ ] N [<num>]       - Execute the next 1 or <num> instructions, stepping over BSR and JSR
+
+      [ ] S [<num>]       - Execute the next 1 or <num> instructions, stepping into BSR and JSR
+
+      [ ] O               - Step out of current function, stepping over any JSR or BSR instructions
+
+      [ ] M [<addr>]      - Show 16 bytes at <addr> or at current addr. Set current addr to <addr> + 16
+
+      [ ] RX [<reg>]      - Show <reg> or all regs. <reg> is A | B | D | DP | X | Y | U | S | PC
+
+      [ ] RS <reg> <val>  - Set <reg> to <val>
+
+     <addr> and <val> can be decimal or hex is preceded by '$'. If value is too large it will
+     be truncated. There can be 4 breakpoints and each is assigned a number from 0 to 3. when
+     a breakpoint is deleted the others are moved up in the list. 'B' lists the breakpoints
+     with their assigned number. If a breakpoint is enabled it will be prededed by a '+' sign.
+     If disabled it will be preceded by a '-' sign.
 
 ## External Code/Docs Used
 
