@@ -68,9 +68,7 @@ class BOSS9Base
     {
         puts(m8r::string::vformat(fmt, args).c_str());
     }
-    
-    void setStartInMonitor(bool b) { _inMonitor = b; }
-    
+
     // Calls to emulator
     void loadStart() { _emu.loadStart(); }
     bool loadLine(const char* data, bool& finished) { return _emu.loadLine(data, finished); }
@@ -85,14 +83,34 @@ class BOSS9Base
     virtual void putc(char c) = 0;
     virtual int getc() = 0;
     virtual bool handleRunLoop() = 0;
-    virtual void exit(int n) = 0;
     
   private:
-    void prompt() { puts(PromptString); }
+    void enterMonitor()
+    {
+        _inMonitor = true;
+        _needPrompt = true;
+    }
+    
+    void promptIfNeeded()
+    {
+        if (_needPrompt) {
+            puts(PromptString);
+            _cursor = 0;
+            _needPrompt = false;
+        }
+    }
+    
+    void leaveMonitor()
+    {
+        _inMonitor = false;
+        _needPrompt = false;
+    }
+    
     void getCommand();
     void processCommand();
     
     bool _inMonitor = false;
+    bool _needPrompt = false;
     
     char _cmdBuf[CmdBufSize];
     uint32_t _cursor = 0;

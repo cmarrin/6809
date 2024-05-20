@@ -21,6 +21,7 @@ using namespace mc6809;
 void BOSS9Base::getCommand()
 {
     bool haveCmd = false;
+    promptIfNeeded();
     
     while (true) {
         int c = getc();
@@ -42,12 +43,12 @@ void BOSS9Base::getCommand()
         
         _cmdBuf[_cursor++] = char(c);
     }
-    
+        
     if (haveCmd) {
+        enterMonitor();
         if (_cursor > 0) {
             processCommand();
         }
-        prompt();
     }
 }
 
@@ -68,6 +69,10 @@ void BOSS9Base::processCommand()
         printf("Ready to start loading. ESC to abort\n");
         _loading = true;
         loadStart();
+    } else if (_cmdBuf[0] == 'r') {
+        leaveMonitor();
+        printf("Running at address 0x%04x\n", _startAddr);
+        _emu.setPC(_startAddr);
     } else {
         printf("'%s': no such command\n", _cmdBuf);
     }
@@ -79,15 +84,16 @@ bool BOSS9Base::call(Emulator* engine, uint16_t ea)
     switch (Func(ea)) {
         case Func::putc:
             putc(engine->getA());
-            break;
+            return true;
         case Func::puts: {
             const char* s = reinterpret_cast<const char*>(engine->getAddr(engine->getX()));
             puts(s);
-            break;
+            return true;
         }
         case Func::exit:
-            exit(0);
-        
+            printf("Program exited with code %d\n", int32_t(engine->getA()));
+            enterMonitor();
+            return false;
         default: return false;
     }
     return false;
@@ -95,14 +101,13 @@ bool BOSS9Base::call(Emulator* engine, uint16_t ea)
 
 bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
 {
-    _inMonitor = startInMonitor;
-    _emu.setPC(addr);
-    
-    if (_inMonitor) {
-        // Do initial prompt
-        prompt();
-        _cursor = 0;
+    if (startInMonitor) {
+        enterMonitor();
     }
+    _emu.setPC(addr);
+    _startAddr = addr;
+    
+    promptIfNeeded();
     return true;
 }
 
