@@ -85,6 +85,12 @@ class BOSS9Base
     bool startExecution(uint16_t addr, bool startInMonitor = false);
     bool continueExecution();
     
+    void enterMonitor()
+    {
+        _inMonitor = true;
+        _needPrompt = true;
+    }
+    
   protected:
     // Methods to override
     virtual void putc(char c) = 0;
@@ -92,12 +98,6 @@ class BOSS9Base
     virtual bool handleRunLoop() = 0;
     
   private:
-    void enterMonitor()
-    {
-        _inMonitor = true;
-        _needPrompt = true;
-    }
-    
     void promptIfNeeded()
     {
         if (_needPrompt) {
