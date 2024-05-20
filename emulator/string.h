@@ -15,7 +15,7 @@
 #include <cstring>
 #include <limits>
 #include <functional>
-
+#include <stdarg.h>
 #include "containers.h"
 
 namespace m8r {

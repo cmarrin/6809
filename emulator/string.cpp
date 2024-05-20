@@ -11,6 +11,7 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <cctype>
 
 using namespace m8r;
 
