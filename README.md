@@ -46,9 +46,9 @@ The API is implemented as addresses in high memory. They are called with JSR (or
 
       [x] R [<addr>]      - Run from startAddr or passed addr
 
-      [ ] B               - View current breakpoints
+      [x] B               - View current breakpoints
 
-      [ ] BS <addr>       - Set breakpoint at <addr>, error if breakpoint list is full
+      [x] BS <addr>       - Set breakpoint at <addr>, error if breakpoint list is full
 
       [ ] BC [<num>]      - Clear breakpoint <num> (0-3) or all breakpoints
 
