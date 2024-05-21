@@ -118,6 +118,8 @@ class BOSS9Base
     bool executeCommand(m8r::string _cmdElements[3]);
 
     void showBreakpoint(uint8_t i) const;
+    
+    bool checkEscape(int c);
 
     bool _inMonitor = false;
     bool _needPrompt = false;

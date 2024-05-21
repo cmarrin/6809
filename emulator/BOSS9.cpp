@@ -45,11 +45,7 @@ void BOSS9Base::getCommand()
             break;
         }
         
-        if (c == 0x1b) {
-            // Escape - go back  to command mode
-            _cmdState = CmdState::Cmd;
-            enterMonitor();
-            printf("...ABORT...\n");
+        if (checkEscape(c)) {
             break;
         }
         
@@ -67,6 +63,18 @@ void BOSS9Base::getCommand()
             processCommand();
         }
     }
+}
+
+bool BOSS9Base::checkEscape(int c)
+{
+    if (c == 0x1b) {
+        // Escape - go back  to command mode
+        _cmdState = CmdState::Cmd;
+        enterMonitor();
+        printf("...ABORT...\n");
+        return true;
+    }
+    return false;
 }
 
 // Commands
@@ -311,5 +319,13 @@ bool BOSS9Base::continueExecution()
         getCommand();
         return true;
     }
+    
+    // See if we got an ESC
+    int c = getc();
+    if (checkEscape(c)) {
+        printf("*** Stopped at $%04x\n", _emu.getPC());
+        return true;
+    }
+        
     return _emu.execute();
 }

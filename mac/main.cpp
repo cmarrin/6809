@@ -10,6 +10,7 @@
 #include <sstream>
 #include <string>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 #include "BOSS9.h"
 
@@ -68,6 +69,13 @@ class MacBOSS9 : public mc6809::BOSS9<MemorySize>
     
     virtual int getc() override
     {
+        int bytes = 0;
+        if (ioctl(0, FIONREAD, &bytes) == -1) {
+            return -1;
+        }
+        if (bytes == 0) {
+            return 0;
+        }
         return getchar();
     }
 
