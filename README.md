@@ -40,7 +40,7 @@ The API is implemented as addresses in high memory. They are called with JSR (or
 
      All commands are case insensitive. [x] incicates that the command is implemented
 
-      [ ] <ESC>           - Abort loading or running. Go back to monitor
+      [x] <ESC>           - Abort loading or running. Go back to monitor
 
       [x] L               - Load s19 file. Set _startAddress if successful
 
