@@ -2,12 +2,18 @@
 
 	org $200
 
+    include BOSS9.inc
+
 loop
-        ldd #text3
-        std store
+        ldx #text3
+        jsr puts
+        lda #newline
+        jsr putc
+        nop
+        nop
         bra loop
 	
-text3   fcc "Hello\n"
+text3   fcc "Hello"
 store	rmb	2
 
 	end $200
