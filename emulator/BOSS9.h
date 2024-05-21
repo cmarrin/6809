@@ -57,21 +57,21 @@ class BOSS9Base
         
     bool call(Emulator*, uint16_t ea);
     
-    void puts(const char* s)
+    void puts(const char* s) const
     {
         while (*s) {
             putc(*s++);
         }
     }
         
-    void printf(const char* fmt, ...)
+    void printf(const char* fmt, ...) const
     {
         va_list args;
         va_start(args, fmt);
         vprintf(fmt, args);
     }
 
-    void vprintf(const char* fmt, va_list args)
+    void vprintf(const char* fmt, va_list args) const
     {
         puts(m8r::string::vformat(fmt, args).c_str());
     }
@@ -93,7 +93,7 @@ class BOSS9Base
     
   protected:
     // Methods to override
-    virtual void putc(char c) = 0;
+    virtual void putc(char c) const = 0;
     virtual int getc() = 0;
     virtual bool handleRunLoop() = 0;
     
@@ -116,7 +116,9 @@ class BOSS9Base
     void getCommand();
     void processCommand();
     bool executeCommand(m8r::string _cmdElements[3]);
-    
+
+    void showBreakpoint(uint8_t i) const;
+
     bool _inMonitor = false;
     bool _needPrompt = false;
     

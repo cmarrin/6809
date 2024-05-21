@@ -175,6 +175,13 @@ bool toNum(m8r::string& s, uint32_t& num)
     return (strend != s.c_str() + i) && (errno != ERANGE);
 }
 
+void BOSS9Base::showBreakpoint(uint8_t i) const
+{
+    BreakpointEntry entry;
+    _emu.breakpoint(i, entry);
+    printf("    Breakpoint[%d] -> $%04x (%sabled)\n", i, entry.addr, (entry.status == BPStatus::Enabled) ? "en" : "dis");
+}
+
 bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
 {
     if (cmdElements[0] == "l") {
@@ -207,6 +214,46 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         leaveMonitor();
         printf("Running at address $%04x\n", _startAddr);
         _emu.setPC(_startAddr);
+        return true;
+    }
+    
+    if (cmdElements[0] == "b") {
+        if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
+            return false;
+        }
+        bool haveBreakpoints = false;
+        
+        for (auto i = 0; i < NumBreakpoints; ++i) {
+            BreakpointEntry entry;
+            if (_emu.breakpoint(i, entry)) {
+                showBreakpoint(i);
+                haveBreakpoints = true;
+            }
+        }
+        if (!haveBreakpoints) {
+            printf("    No breakpoints\n");
+        }
+        return true;
+    }
+    
+    if (cmdElements[0] == "bs") {
+        if (!cmdElements[2].empty()) {
+            return false;
+        }
+
+        uint32_t num;
+        if (!toNum(cmdElements[1], num)) {
+            printf("%s is not a valid number\n", cmdElements[1].c_str());
+            return false;
+        }
+        
+        uint8_t breakpointNum;
+        if (!_emu.setBreakpoint(num, breakpointNum)) {
+            printf("too many breakpoints\n");
+            return false;
+        }
+        
+        showBreakpoint(breakpointNum);
         return true;
     }
     

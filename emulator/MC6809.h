@@ -221,8 +221,8 @@ public:
     uint8_t* getAddr(uint16_t ea) { return _ram + ea; }
     
     // Breakpoint support
-    bool breakpoint(uint8_t i, BreakpointEntry& entry);
-    bool setBreakpoint(uint16_t addr);
+    bool breakpoint(uint8_t i, BreakpointEntry& entry) const;
+    bool setBreakpoint(uint16_t addr, uint8_t& i);
     bool clearBreakpoint(uint8_t i);
     bool clearAllBreakpoints();
     bool disableBreakpoint(uint8_t i);

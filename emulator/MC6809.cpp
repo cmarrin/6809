@@ -840,14 +840,27 @@ void Emulator::readOnlyAddr(uint16_t addr)
     _boss9->printf("Address %0x4 is read-only\n", addr);
 }
 
-bool Emulator::breakpoint(uint8_t i, BreakpointEntry& entry)
+bool Emulator::breakpoint(uint8_t i, BreakpointEntry& entry) const
 {
+    if (i >= NumBreakpoints || _breakpoints[i].status == BPStatus::Empty) {
+        return false;
+    }
+    entry = _breakpoints[i];
     return true;
 }
 
-bool Emulator::setBreakpoint(uint16_t addr)
+bool Emulator::setBreakpoint(uint16_t addr, uint8_t& i)
 {
-    return true;
+    i = 0;
+    for (auto &it : _breakpoints) {
+        if (it.status == BPStatus::Empty) {
+            it.status = BPStatus::Enabled;
+            it.addr = addr;
+            return true;
+        }
+        i += 1;
+    }
+    return false;
 }
 
 bool Emulator::clearBreakpoint(uint8_t i)

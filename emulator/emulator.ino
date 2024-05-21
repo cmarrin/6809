@@ -45,8 +45,6 @@ char simpleTest[ ] =
 ;
 
 static constexpr bool StartInMonitor = true;
-static constexpr uint32_t ConsoleWidth = 80;
-static constexpr uint32_t ConsoleHeight = 24;
 static constexpr uint32_t MemorySize = 32768;
 
 char* findNextLine(char* s)
@@ -103,10 +101,9 @@ class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
     }
 
   protected:
-    virtual void putc(char c) override
+    virtual void putc(char c) const override
     {
         Serial.write(c);
-        _console[_cursor++] = c;
     }
 
     virtual int getc() override
@@ -127,8 +124,6 @@ class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
     }
     
   private:
-    char _console[ConsoleWidth * ConsoleHeight];
-    uint32_t _cursor = 0;
 };
 
 ESPBOSS9 boss9;

@@ -61,7 +61,7 @@ class MacBOSS9 : public mc6809::BOSS9<MemorySize>
     virtual ~MacBOSS9() { }
 
   protected:
-    virtual void putc(char c) override
+    virtual void putc(char c) const override
     {
         fputc(c, stdout);
     }
