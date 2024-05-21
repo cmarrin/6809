@@ -105,6 +105,8 @@ int main(int argc, char * const argv[])
     //
     // We'll figure out the rest later.
     
+    system("stty raw");
+    
     MacBOSS9 boss9;
     
     boss9.setStack(0xe000);

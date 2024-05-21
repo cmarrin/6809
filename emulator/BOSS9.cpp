@@ -39,9 +39,22 @@ void BOSS9Base::getCommand()
             break;
         }
 
-        if (c == '\n') {
+        if (c == '\n' || c == '\r') {
             haveCmd = true;
             _cmdBuf[_cursor] = '\0';
+            break;
+        }
+        
+        if (c == 0x1b) {
+            // Escape - go back  to command mode
+            _cmdState = CmdState::Cmd;
+            enterMonitor();
+            printf("...ABORT...\n");
+            break;
+        }
+        
+        if (c < 0x20 || c > 0x7f) {
+            // Some other control character, for now ignore
             break;
         }
         
