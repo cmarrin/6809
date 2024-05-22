@@ -211,7 +211,7 @@ public:
     
     void setPC(uint16_t addr) { _pc = addr; }
     
-    bool execute();
+    bool execute(RunState);
     
     uint8_t getA() const { return _a; }
     uint8_t getB() const { return _b; }

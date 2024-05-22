@@ -318,6 +318,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
 
+    // Disable all or one breakpoint
     if(cmdElements[0] == "bd") {
         if (!cmdElements[2].empty()) {
             return false;
@@ -389,6 +390,19 @@ bool BOSS9Base::continueExecution()
         printf("*** Stopped at $%04x\n", _emu.getPC());
         return true;
     }
-        
-    return _emu.execute();
+    
+    // At this point the RunState is anything but Cmd. if its Running
+    // it either means we executed the Run command from the monitor
+    // or we're looping from main. If it's Continuing it means we
+    // just executed the Continue command from the monitor and we
+    // need to avoid taking a breakpoint at the current PC (or we'd
+    // never execute any instructions). If this is the case we need
+    // to change the state to Running after execute() so we run normally
+    // the next time through. The other states are for stepping through
+    // the code which execute() will deal with.
+    bool retval = _emu.execute(_runState);
+    if (_runState == RunState::Continuing) {
+        _runState = RunState::Running;
+    }
+    return retval;
 }

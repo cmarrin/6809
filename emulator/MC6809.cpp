@@ -376,16 +376,23 @@ uint16_t Emulator::loadFinish()
     return sRecInfo.startAddr();
 }
 
-bool Emulator::execute()
+bool Emulator::execute(RunState runState)
 {
     uint32_t instructionsToExecute = InstructionsToExecutePerContinue;
+    bool firstTime = true;
     
     while(instructionsToExecute--) {
-        if (atBreakpoint(_pc)) {
-            _boss9->printf("\n*** hit breakpoint at addr $%04x\n\n", _pc);
-            _boss9->enterMonitor();
-            return true;
+        // if runState is Continuing we need to ignore a breakpoint at the
+        // PC upon entry
+        if (!firstTime || runState != RunState::Continuing) {
+            if (atBreakpoint(_pc)) {
+                _boss9->printf("\n*** hit breakpoint at addr $%04x\n\n", _pc);
+                _boss9->enterMonitor();
+                return true;
+            }
         }
+        
+        firstTime = false;
         
         uint16_t ea = 0;
         uint8_t opIndex = next8();
