@@ -187,11 +187,6 @@ public:
     {
         _ram = ram;
         _boss9 = boss9;
-        
-        // Testing
-        _haveBreakpoints = true;
-        _breakpoints[0].status = BPStatus::Enabled;
-        _breakpoints[0].addr = 0x205;
     }
     
     ~Emulator() { }

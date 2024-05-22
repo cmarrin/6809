@@ -162,8 +162,8 @@ void BOSS9Base::processCommand()
     if (_cmdState == CmdState::Cmd) {
         // Parse Command
         m8r::string cmdElements[3];
-        if (!parseCmd(_cmdBuf, cmdElements) || !executeCommand(cmdElements)) {
-            printf("Invalid command\n");
+        if (parseCmd(_cmdBuf, cmdElements)) {
+            executeCommand(cmdElements);
         }
         return;
     }
@@ -183,7 +183,7 @@ void BOSS9Base::processCommand()
     _cursor = 0;
 }
 
-bool toNum(m8r::string& s, uint32_t& num)
+static bool toNum(m8r::string& s, uint32_t& num)
 {
     bool ishex = false;
     int i = 0;
@@ -193,14 +193,19 @@ bool toNum(m8r::string& s, uint32_t& num)
     }
     char* strend = nullptr;
     num = uint32_t(strtol(s.c_str() + i, &strend, ishex ? 16 : 10));
-    return (strend != s.c_str() + i) && (errno != ERANGE);
+    if ((strend == s.c_str() + i) || (errno == ERANGE)) {
+        printf("%s is not a valid number\n", s.c_str());
+        return false;
+    }
+    return true;
 }
 
 void BOSS9Base::showBreakpoint(uint8_t i) const
 {
     BreakpointEntry entry;
-    _emu.breakpoint(i, entry);
-    printf("    Breakpoint[%d] -> $%04x (%sabled)\n", i, entry.addr, (entry.status == BPStatus::Enabled) ? "en" : "dis");
+    if (_emu.breakpoint(i, entry)) {
+        printf("    Breakpoint[%d] -> $%04x (%sabled)\n", i, entry.addr, (entry.status == BPStatus::Enabled) ? "en" : "dis");
+    }
 }
 
 bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
@@ -225,7 +230,6 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         if (!cmdElements[1].empty()) {
             uint32_t num;
             if (!toNum(cmdElements[1], num)) {
-                printf("%s is not a valid number\n", cmdElements[1].c_str());
                 return false;
             }
             _startAddr = num;
@@ -264,7 +268,6 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
 
         uint32_t num;
         if (!toNum(cmdElements[1], num)) {
-            printf("%s is not a valid number\n", cmdElements[1].c_str());
             return false;
         }
         
@@ -278,6 +281,25 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
     
+    if(cmdElements[0] == "bc") {
+        if (!cmdElements[2].empty()) {
+            _emu.clearAllBreakpoints();
+            return true;
+        }
+        
+        uint32_t num;
+        if (!toNum(cmdElements[1], num)) {
+            return false;
+        }
+
+        if (!_emu.clearBreakpoint(num)) {
+            printf("invalid breakpoint index\n");
+            return false;
+        }
+        return true;
+    }
+
+    printf("Invalid command\n");
     return false;
 }
 

@@ -865,6 +865,15 @@ bool Emulator::setBreakpoint(uint16_t addr, uint8_t& i)
 
 bool Emulator::clearBreakpoint(uint8_t i)
 {
+    // Clear the passed breakpoint and move all the others past it up one
+    if (i >= NumBreakpoints || _breakpoints[i].status == BPStatus::Empty) {
+        return false;
+    }
+    
+    for ( ; i < NumBreakpoints - 1; ++i) {
+        _breakpoints[i] = _breakpoints[i + 1];
+    }
+    _breakpoints[i].status = BPStatus::Empty;
     return true;
 }
 
