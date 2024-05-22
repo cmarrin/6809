@@ -186,6 +186,7 @@ void BOSS9Base::showBreakpoint(uint8_t i) const
 
 bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
 {
+    // Load file
     if (cmdElements[0] == "l") {
         if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
             return false;
@@ -198,6 +199,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
 
+    // Run at <addr> or at current addr
     if (cmdElements[0] == "r") {
         if (!cmdElements[2].empty()) {
             return false;
@@ -218,6 +220,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
     
+    // Continue running at PC
     if (cmdElements[0] == "c") {
         if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
             return false;
@@ -225,10 +228,12 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         
         // run from current PC
         leaveMonitor();
+        _runState = RunState::Continuing;
         printf("Continuing at address $%04x\n", _emu.getPC());
         return true;
     }
     
+    // Show or set breakpoint
     if (cmdElements[0] == "b") {
         if (!cmdElements[2].empty()) {
             return false;
@@ -267,6 +272,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
     
+    // Clear all or one breakpoint
     if(cmdElements[0] == "bc") {
         if (!cmdElements[2].empty()) {
             return false;
@@ -289,6 +295,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
 
+    // Enable all or one breakpoint
     if(cmdElements[0] == "be") {
         if (!cmdElements[2].empty()) {
             return false;
