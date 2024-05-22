@@ -120,6 +120,16 @@ struct CC
 
 enum class BPStatus { Empty, Enabled, Disabled };
 
+enum class RunState {
+    Loading,
+    Cmd,
+    Running,
+    Continuing,
+    StepIn,
+    StepOut,
+    StepOver,
+};
+
 struct BreakpointEntry
 {
     uint16_t addr;

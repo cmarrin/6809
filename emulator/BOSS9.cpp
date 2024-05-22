@@ -84,7 +84,7 @@ bool BOSS9Base::checkEscape(int c)
 {
     if (c == 0x1b) {
         // Escape - go back  to command mode
-        _cmdState = CmdState::Cmd;
+        _runState = RunState::Cmd;
         enterMonitor();
         printf("...ABORT...\n");
         return true;
@@ -135,7 +135,7 @@ bool parseCmd(const char* cmdbuf, m8r::string cmdElements[3])
 
 void BOSS9Base::processCommand()
 {
-    if (_cmdState == CmdState::Cmd) {
+    if (_runState == RunState::Cmd) {
         // Parse Command
         m8r::string cmdElements[3];
         if (parseCmd(_cmdBuf, cmdElements)) {
@@ -144,15 +144,15 @@ void BOSS9Base::processCommand()
         return;
     }
         
-    if (_cmdState == CmdState::Loading) {
+    if (_runState == RunState::Loading) {
         bool finished;
         if (!loadLine(_cmdBuf, finished)) {
-            _cmdState = CmdState::Cmd;
+            _runState = RunState::Cmd;
             printf("Error loading\n");
         }
         if (finished) {
             _startAddr = loadFinish();
-            _cmdState = CmdState::Cmd;
+            _runState = RunState::Cmd;
             printf("Load complete, start addr = 0x%04x\n", _startAddr);
         }
     }
@@ -193,7 +193,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         
         // Load s19 file
         printf("Ready to start loading. ESC to abort\n");
-        _cmdState = CmdState::Loading;
+        _runState = RunState::Loading;
         loadStart();
         return true;
     }
@@ -371,7 +371,7 @@ bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
 
 bool BOSS9Base::continueExecution()
 {
-    if (_inMonitor) {
+    if (_runState == RunState::Cmd || _runState == RunState::Loading) {
         getCommand();
         return true;
     }

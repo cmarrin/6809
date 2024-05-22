@@ -42,12 +42,6 @@ enum class Func : uint16_t {
     exit = 0xFC0E,    // Exit program. A contains exit code
 };
 
-enum class CmdState {
-    Cmd,
-    Loading,
-    Running,
-};
-
 class BOSS9Base
 {
   public:
@@ -87,7 +81,7 @@ class BOSS9Base
     
     void enterMonitor()
     {
-        _inMonitor = true;
+        _runState = RunState::Cmd;
         _needPrompt = true;
     }
     
@@ -103,7 +97,7 @@ class BOSS9Base
     void promptIfNeeded()
     {
         if (_needPrompt) {
-            puts((_cmdState == CmdState::Loading) ? LoadingPromptString : MainPromptString);
+            puts((_runState == RunState::Loading) ? LoadingPromptString : MainPromptString);
             _cursor = 0;
             _needPrompt = false;
         }
@@ -111,7 +105,7 @@ class BOSS9Base
     
     void leaveMonitor()
     {
-        _inMonitor = false;
+        _runState = RunState::Running;
         _needPrompt = false;
     }
     
@@ -125,8 +119,6 @@ class BOSS9Base
     
     bool toNum(m8r::string& s, uint32_t& num);
 
-
-    bool _inMonitor = false;
     bool _needPrompt = false;
     
     char _cmdBuf[CmdBufSize];
@@ -134,7 +126,7 @@ class BOSS9Base
     
     uint16_t _startAddr = 0;
     
-    CmdState _cmdState = CmdState::Cmd;
+    RunState _runState = RunState::Cmd;
     
     Emulator _emu;
 };
