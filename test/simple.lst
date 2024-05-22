@@ -1,0 +1,54 @@
+                      (       simple.asm):00001         *  simple test file
+                      (       simple.asm):00002         
+                      (       simple.asm):00003                 org $200
+                      (       simple.asm):00004         
+                      (       simple.asm):00005             include BOSS9.inc
+                      (        BOSS9.inc):00001         *-------------------------------------------------------------------------
+                      (        BOSS9.inc):00002         *    This source file is a part of the MC6809 Simulator
+                      (        BOSS9.inc):00003         *    For the latest info, see http:www.marrin.org/
+                      (        BOSS9.inc):00004         *    Copyright (c) 2018-2024, Chris Marrin
+                      (        BOSS9.inc):00005         *    All rights reserved.
+                      (        BOSS9.inc):00006         *    Use of this source code is governed by the MIT license that can be
+                      (        BOSS9.inc):00007         *    found in the LICENSE file.
+                      (        BOSS9.inc):00008         *-------------------------------------------------------------------------
+                      (        BOSS9.inc):00009         *
+                      (        BOSS9.inc):00010         *  BOSS9.inc
+                      (        BOSS9.inc):00011         *  Assembly language function and address includes for BOSS9
+                      (        BOSS9.inc):00012         *
+                      (        BOSS9.inc):00013         *  Created by Chris Marrin on 5/4/24.
+                      (        BOSS9.inc):00014         *
+                      (        BOSS9.inc):00015         
+                      (        BOSS9.inc):00016         *
+                      (        BOSS9.inc):00017         * Console functions
+                      (        BOSS9.inc):00018         *
+     FC00             (        BOSS9.inc):00019         putc    equ     $FC00   ; output char in A to console
+     FC02             (        BOSS9.inc):00020         puts    equ     $FC02   ; output string pointed to by X (null terminated)
+     FC04             (        BOSS9.inc):00021         putsn   equ     $FC04   ; Output string pointed to by X for length in Y
+     FC06             (        BOSS9.inc):00022         getc    equ     $FC06   ; Get char from console, return it in A
+     FC08             (        BOSS9.inc):00023         peekc   equ     $FC08   ; Return in A a 1 if a char is available and 0 otherwise
+     FC0A             (        BOSS9.inc):00024         gets    equ     $FC0A   ; Get a line terminated by \n, place in buffer
+                      (        BOSS9.inc):00025                                 ; pointed to by X, with max length in Y
+     FC0C             (        BOSS9.inc):00026         peeks   equ     $FC0C   ; Return in A a 1 if a line is available and 0 otherwise.
+                      (        BOSS9.inc):00027                                 ; If available return length of line in Y
+                      (        BOSS9.inc):00028         
+     FC0E             (        BOSS9.inc):00029         exit    equ     $FC0E   ; Exit program. A ccontains exit code
+                      (        BOSS9.inc):00030         
+                      (        BOSS9.inc):00031         * Misc equates
+                      (        BOSS9.inc):00032         
+     000A             (        BOSS9.inc):00033         newline equ     $0a
+                      (        BOSS9.inc):00034                                 
+                      (        BOSS9.inc):00035         
+                      (       simple.asm):00006         
+0200                  (       simple.asm):00007         loop
+0200 8E020F           (       simple.asm):00008                 ldx #text3
+0203 BDFC02           (       simple.asm):00009                 jsr puts
+0206 860A             (       simple.asm):00010                 lda #newline
+0208 BDFC00           (       simple.asm):00011                 jsr putc
+020B 12               (       simple.asm):00012                 nop
+020C 12               (       simple.asm):00013                 nop
+020D 20F1             (       simple.asm):00014                 bra loop
+                      (       simple.asm):00015                 
+020F 48656C6C6F       (       simple.asm):00016         text3   fcc "Hello"
+0214                  (       simple.asm):00017         store   rmb     2
+                      (       simple.asm):00018         
+                      (       simple.asm):00019                 end $200
