@@ -203,30 +203,40 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
     
-    if (cmdElements[0] == "b") {
+    if (cmdElements[0] == "c") {
         if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
             return false;
         }
-        bool haveBreakpoints = false;
         
-        for (auto i = 0; i < NumBreakpoints; ++i) {
-            BreakpointEntry entry;
-            if (_emu.breakpoint(i, entry)) {
-                showBreakpoint(i);
-                haveBreakpoints = true;
-            }
-        }
-        if (!haveBreakpoints) {
-            printf("    No breakpoints\n");
-        }
+        // run from current PC
+        leaveMonitor();
+        printf("Continuing at address $%04x\n", _emu.getPC());
         return true;
     }
     
-    if (cmdElements[0] == "bs") {
+    if (cmdElements[0] == "b") {
         if (!cmdElements[2].empty()) {
             return false;
         }
 
+        if (cmdElements[1].empty()) {
+            // Show breakpoints
+            bool haveBreakpoints = false;
+        
+            for (auto i = 0; i < NumBreakpoints; ++i) {
+                BreakpointEntry entry;
+                if (_emu.breakpoint(i, entry)) {
+                    showBreakpoint(i);
+                    haveBreakpoints = true;
+                }
+            }
+            if (!haveBreakpoints) {
+                printf("    No breakpoints\n");
+            }
+            return true;
+        }
+        
+        // Set breakpoint
         uint32_t num;
         if (!toNum(cmdElements[1], num)) {
             return false;

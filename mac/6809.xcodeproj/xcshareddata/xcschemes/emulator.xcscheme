@@ -57,7 +57,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "simple.s19"
+            argument = "-m simple.s19"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
