@@ -60,7 +60,10 @@ char* findNextLine(char* s)
 class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
 {
   public:
-    ESPBOSS9() : BOSS9() { }
+    ESPBOSS9() : BOSS9()
+    {
+        _echoBS = true;
+    }
     
     virtual ~ESPBOSS9() { }
 

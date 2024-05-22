@@ -49,8 +49,23 @@ void BOSS9Base::getCommand()
             break;
         }
         
+        if (c == 0x08 || c == 0x7f) {
+            // backspace
+            if (_echoBS) {
+                putc(' ');
+                putc(0x08);
+            }
+            if (_cursor != 0) {
+                _cursor -= 1;
+            }
+            continue;
+        }
+        
         if (c < 0x20 || c > 0x7f) {
-            // Some other control character, for now ignore
+            // Some other control character, for now error
+            printf("*** unrecognized control char '0x%02x'\n", uint8_t(c));
+            _cursor = 0;
+            haveCmd = true;
             break;
         }
         

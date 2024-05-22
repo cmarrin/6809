@@ -57,6 +57,7 @@ class MacBOSS9 : public mc6809::BOSS9<MemorySize>
   public:
     MacBOSS9() : BOSS9()
     {
+        _echoBS = false;
     }
     
     virtual ~MacBOSS9() { }

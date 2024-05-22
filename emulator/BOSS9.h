@@ -96,6 +96,8 @@ class BOSS9Base
     virtual void putc(char c) const = 0;
     virtual int getc() = 0;
     virtual bool handleRunLoop() = 0;
+
+    bool _echoBS = false; // If true when backspace received, sends <space><backspace> to erase char
     
   private:
     void promptIfNeeded()
