@@ -52,9 +52,9 @@ The API is implemented as addresses in high memory. They are called with JSR (or
 
       [x] BC [<num>]      - Clear breakpoint <num> (0-3) or all breakpoints
 
-      [ ] BD [<num>]      - Disable breakpoint <num> or all breakpoints
+      [x] BD [<num>]      - Disable breakpoint <num> or all breakpoints
 
-      [ ] BE [<num>]      - Enable breakpoint <num> or all breakpoints
+      [x] BE [<num>]      - Enable breakpoint <num> or all breakpoints
 
       [ ] N [<num>]       - Execute the next 1 or <num> instructions, stepping over BSR and JSR
 
