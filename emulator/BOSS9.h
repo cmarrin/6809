@@ -120,6 +120,9 @@ class BOSS9Base
     void showBreakpoint(uint8_t i) const;
     
     bool checkEscape(int c);
+    
+    bool toNum(m8r::string& s, uint32_t& num);
+
 
     bool _inMonitor = false;
     bool _needPrompt = false;

@@ -422,6 +422,9 @@ private:
     
     void readOnlyAddr(uint16_t addr);
     
+    void checkActiveBreakpoints();
+
+    
     uint8_t* _ram;
     
     union {

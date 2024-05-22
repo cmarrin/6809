@@ -183,7 +183,7 @@ void BOSS9Base::processCommand()
     _cursor = 0;
 }
 
-static bool toNum(m8r::string& s, uint32_t& num)
+bool BOSS9Base::toNum(m8r::string& s, uint32_t& num)
 {
     bool ishex = false;
     int i = 0;
@@ -283,6 +283,10 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     
     if(cmdElements[0] == "bc") {
         if (!cmdElements[2].empty()) {
+            return false;
+        }
+
+        if (cmdElements[1].empty()) {
             _emu.clearAllBreakpoints();
             return true;
         }
@@ -293,6 +297,50 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
 
         if (!_emu.clearBreakpoint(num)) {
+            printf("invalid breakpoint index\n");
+            return false;
+        }
+        return true;
+    }
+
+    if(cmdElements[0] == "be") {
+        if (!cmdElements[2].empty()) {
+            return false;
+        }
+
+        if (cmdElements[1].empty()) {
+            _emu.enableAllBreakpoints();
+            return true;
+        }
+        
+        uint32_t num;
+        if (!toNum(cmdElements[1], num)) {
+            return false;
+        }
+
+        if (!_emu.enableBreakpoint(num)) {
+            printf("invalid breakpoint index\n");
+            return false;
+        }
+        return true;
+    }
+
+    if(cmdElements[0] == "bd") {
+        if (!cmdElements[2].empty()) {
+            return false;
+        }
+
+        if (cmdElements[1].empty()) {
+            _emu.disableAllBreakpoints();
+            return true;
+        }
+        
+        uint32_t num;
+        if (!toNum(cmdElements[1], num)) {
+            return false;
+        }
+
+        if (!_emu.disableBreakpoint(num)) {
             printf("invalid breakpoint index\n");
             return false;
         }

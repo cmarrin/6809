@@ -840,6 +840,17 @@ void Emulator::readOnlyAddr(uint16_t addr)
     _boss9->printf("Address %0x4 is read-only\n", addr);
 }
 
+void Emulator::checkActiveBreakpoints()
+{
+    _haveBreakpoints = false;
+    for (auto it : _breakpoints) {
+        if (it.status == BPStatus::Enabled) {
+            _haveBreakpoints = true;
+            return;
+        }
+    }
+}
+
 bool Emulator::breakpoint(uint8_t i, BreakpointEntry& entry) const
 {
     if (i >= NumBreakpoints || _breakpoints[i].status == BPStatus::Empty) {
@@ -856,6 +867,7 @@ bool Emulator::setBreakpoint(uint16_t addr, uint8_t& i)
         if (it.status == BPStatus::Empty) {
             it.status = BPStatus::Enabled;
             it.addr = addr;
+            _haveBreakpoints = true;
             return true;
         }
         i += 1;
@@ -874,31 +886,61 @@ bool Emulator::clearBreakpoint(uint8_t i)
         _breakpoints[i] = _breakpoints[i + 1];
     }
     _breakpoints[i].status = BPStatus::Empty;
+    
+    checkActiveBreakpoints();
     return true;
 }
 
 bool Emulator::clearAllBreakpoints()
 {
+    for (auto &it : _breakpoints) {
+        it.status = BPStatus::Empty;
+    }
+    checkActiveBreakpoints();
     return true;
 }
 
 bool Emulator::disableBreakpoint(uint8_t i)
 {
+    if (i >= NumBreakpoints || _breakpoints[i].status == BPStatus::Empty) {
+        return false;
+    }
+    
+    _breakpoints[i].status = BPStatus::Disabled;
+    checkActiveBreakpoints();
     return true;
 }
 
 bool Emulator::disableAllBreakpoints()
 {
+    for (auto &it : _breakpoints) {
+        if (it.status == BPStatus::Enabled) {
+            it.status = BPStatus::Disabled;
+        }
+    }
+    checkActiveBreakpoints();
     return true;
 }
 
 bool Emulator::enableBreakpoint(uint8_t i)
 {
+    if (i >= NumBreakpoints || _breakpoints[i].status == BPStatus::Empty) {
+        return false;
+    }
+    
+    _breakpoints[i].status = BPStatus::Enabled;
+    checkActiveBreakpoints();
     return true;
 }
 
 bool Emulator::enableAllBreakpoints()
 {
+    for (auto &it : _breakpoints) {
+        if (it.status == BPStatus::Disabled) {
+            it.status = BPStatus::Enabled;
+        }
+    }
+    checkActiveBreakpoints();
     return true;
 }
 
