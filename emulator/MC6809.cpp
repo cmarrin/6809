@@ -381,10 +381,11 @@ bool Emulator::execute(RunState runState)
     uint32_t instructionsToExecute = InstructionsToExecutePerContinue;
     bool firstTime = true;
     
-    while(instructionsToExecute--) {
-        // if runState is Continuing we need to ignore a breakpoint at the
-        // PC upon entry
-        if (!firstTime || runState != RunState::Continuing) {
+    while(true) {
+        // if runState is not Running we need to ignore a breakpoint at the
+        // PC upon entry. Continuing and all the stepping states need to
+        // execute the first instruction they encounter
+        if (!firstTime || runState == RunState::Running) {
             if (atBreakpoint(_pc)) {
                 _boss9->printf("\n*** hit breakpoint at addr $%04x\n\n", _pc);
                 _boss9->enterMonitor();
@@ -514,7 +515,12 @@ bool Emulator::execute(RunState runState)
                 return false;
             case Op::Page2:
             case Op::Page3:
-                break;
+                // We never want to leave execution after a Page2 or Page3.
+                // They are basically just part of the next instruction.
+                // Since we do the check for whether or not to leave the
+                // loop at the end we can ensure that simply by doing
+                // a continue to skip that test
+                continue;
 
             case Op::BHS:
             case Op::BCC: if (!_cc.C) _pc += _right; break;
@@ -837,9 +843,19 @@ bool Emulator::execute(RunState runState)
         }
         
         _prevOp = opcode->op;
+        
+        // If runState is StepIn then we need to go back to the monitor after
+        // executing one instruction.
+        if (runState == RunState::StepIn) {
+            _boss9->printf("\n*** step in, stopped at addr $%04x\n\n", _pc);
+            _boss9->enterMonitor();
+            return true;
+        }
+        
+        if (--instructionsToExecute == 0) {
+            return true;
+        }
     }
-    
-    return true;
 }
 
 void Emulator::readOnlyAddr(uint16_t addr)

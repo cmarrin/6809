@@ -341,6 +341,16 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
 
+    // Step in
+    if (cmdElements[0] == "s") {
+        if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
+            return false;
+        }
+        
+        _runState = RunState::StepIn;
+        return true;
+    }
+    
     printf("Invalid command\n");
     return false;
 }
