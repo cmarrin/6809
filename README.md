@@ -46,7 +46,7 @@ The API is implemented as addresses in high memory. They are called with JSR (or
 
       [x] R [<addr>]      - Run from startAddr or passed addr
 
-      [ ] C               - Continue running from the current PC
+      [x] C               - Continue running from the current PC
 
       [x] B [<addr]       - If no addr view current breakpoints, otherwise set a breakpoint at addr
 
