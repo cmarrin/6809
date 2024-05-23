@@ -58,7 +58,7 @@ The API is implemented as addresses in high memory. They are called with JSR (or
 
       [ ] N [<num>]       - Execute the next 1 or <num> instructions, stepping over BSR and JSR
 
-      [ ] S [<num>]       - Execute the next 1 or <num> instructions, stepping into BSR and JSR
+      [x] S [<num>]       - Execute the next 1 or <num> instructions, stepping into BSR and JSR
 
       [ ] O               - Step out of current function, stepping over any JSR or BSR instructions
 
