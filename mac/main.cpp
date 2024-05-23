@@ -14,33 +14,7 @@
 
 #include "BOSS9.h"
 
-// Test data (see test/HelloWorld.asm)
-//        *  calling monitor c function
-//        *  display text on terminal using UART
-//
-//            include BOSS9.inc
-//
-//        NumPrints equ 10
-//                org $200
-//
-//        main    lda #NumPrints
-//                sta count
-//        loop
-//                ldx #text3
-//                jsr puts
-//                lda #newline
-//                jsr putc
-//                dec count
-//                bgt loop
-//                clra
-//                jsr exit
-//
-//        text3   fcn "Hello from 6809"
-//
-//        count   rmb 1
-//
-//            end main
-
+// Test data
 char simpleTest[ ] =
     "S02000005B6C77746F6F6C7320342E32325D2048656C6C6F576F726C642E61736DA2\n"
     "S1130200860AB702298E0219BDFC02860ABDFC00CB\n"
