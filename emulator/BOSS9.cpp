@@ -186,6 +186,8 @@ void BOSS9Base::showBreakpoint(uint8_t i) const
 
 bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
 {
+    assert(_runState == RunState::Cmd);
+    
     // Load file
     if (cmdElements[0] == "l") {
         if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
