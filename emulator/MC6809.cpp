@@ -777,7 +777,8 @@ bool Emulator::execute(RunState runState)
                 break;
             case Op::RTS:
                 _pc = pop16(_s);
-                if (--_subroutineDepth == 0) {
+                _subroutineDepth -= 1;
+                if (_lastRunState != RunState::Running && _subroutineDepth == 0) {
                     _boss9->printf("\n*** step %s, stopped at addr $%04x\n\n",
                             (_lastRunState == RunState::StepOver) ? "over" : "out", _pc);
                     _boss9->enterMonitor();
