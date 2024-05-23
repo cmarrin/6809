@@ -343,14 +343,17 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
 
-    // Step in
+    // Step
     if (cmdElements[0] == "s") {
-        if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
-            return false;
-        }
-        
         _runState = RunState::StepIn;
-        return true;
+    } else if (cmdElements[0] == "n") {
+        _runState = RunState::StepOver;
+    } else if (cmdElements[0] == "o") {
+        _runState = RunState::StepOut;
+    }
+    
+    if (_runState != RunState::Cmd) {
+        return cmdElements[1].empty() && cmdElements[2].empty();
     }
     
     printf("Invalid command\n");

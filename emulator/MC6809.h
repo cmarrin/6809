@@ -468,6 +468,8 @@ private:
     // Breakpoint support
     BreakpointEntry _breakpoints[NumBreakpoints];
     bool _haveBreakpoints = false;
+    uint32_t _subroutineDepth = 0; // Determines when we've returned from subroutine for Step Over and Step Out
+    RunState _lastRunState = RunState::Running;
 };
 
 }
