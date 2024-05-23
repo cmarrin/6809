@@ -371,6 +371,10 @@ bool BOSS9Base::call(Emulator* engine, uint16_t ea)
             puts(s);
             return true;
         }
+        case Func::getc: {
+            engine->setA(getc());
+            break;
+        }
         case Func::exit:
             printf("Program exited with code %d\n", int32_t(engine->getA()));
             enterMonitor();
