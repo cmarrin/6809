@@ -57,8 +57,12 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-m simple.s19"
+            argument = "basic.s19"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-m simple.s19"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-m HelloWorld.s19"

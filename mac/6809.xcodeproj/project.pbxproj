@@ -94,6 +94,8 @@
 		49BAAE922BFEC71E001A545A /* perf.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = perf.asm; path = ../test/perf.asm; sourceTree = "<group>"; };
 		49BAAE932BFEC7AB001A545A /* perf.lst */ = {isa = PBXFileReference; lastKnownFileType = text; name = perf.lst; path = ../test/perf.lst; sourceTree = "<group>"; };
 		49BAAE942BFEC7AB001A545A /* perf.s19 */ = {isa = PBXFileReference; lastKnownFileType = text; name = perf.s19; path = ../test/perf.s19; sourceTree = "<group>"; };
+		49BAAE952BFFEED3001A545A /* basic.lst */ = {isa = PBXFileReference; lastKnownFileType = text; name = basic.lst; path = ../test/basic.lst; sourceTree = "<group>"; };
+		49BAAE962BFFEED3001A545A /* basic.s19 */ = {isa = PBXFileReference; lastKnownFileType = text; name = basic.s19; path = ../test/basic.s19; sourceTree = "<group>"; };
 		49DE54402BF6B6B000191E37 /* forth9.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = forth9.s19; path = ../test/forth9.s19; sourceTree = "<group>"; };
 		49DE54412BF6B6B000191E37 /* HelloWorld.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = HelloWorld.s19; path = ../test/HelloWorld.s19; sourceTree = "<group>"; };
 		49DE54422BF6B6B000191E37 /* simple.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = simple.s19; path = ../test/simple.s19; sourceTree = "<group>"; };
@@ -101,7 +103,7 @@
 		49DE54442BF6B6B000191E37 /* test09.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test09.s19; path = ../test/test09.s19; sourceTree = "<group>"; };
 		49DE54452BF6B6B000191E37 /* assist09.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = assist09.s19; path = ../test/assist09.s19; sourceTree = "<group>"; };
 		49E11A982BD84324004BC747 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		49E11A9A2BE1CD8F004BC747 /* basic.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = basic.asm; path = ../test/basic.asm; sourceTree = "<group>"; };
+		49E11A9A2BE1CD8F004BC747 /* basic.asm */ = {isa = PBXFileReference; explicitFileType = sourcecode.asm.asm; name = basic.asm; path = ../test/basic.asm; sourceTree = "<group>"; };
 		49E11A9B2BE1CD8F004BC747 /* asmtest.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = asmtest.asm; path = ../test/asmtest.asm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.asm.i386; };
 		49E11A9C2BE1CD8F004BC747 /* test09.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = test09.asm; path = ../test/test09.asm; sourceTree = "<group>"; };
 		49EA279E2BE52FE400620B26 /* srec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = srec.cpp; path = ../emulator/srec.cpp; sourceTree = "<group>"; };
@@ -156,6 +158,9 @@
 				49DE54432BF6B6B000191E37 /* asmtest.s19 */,
 				49065CFD2BD5D3E400E27819 /* assist09.asm */,
 				49DE54452BF6B6B000191E37 /* assist09.s19 */,
+				49E11A9A2BE1CD8F004BC747 /* basic.asm */,
+				49BAAE962BFFEED3001A545A /* basic.s19 */,
+				49BAAE952BFFEED3001A545A /* basic.lst */,
 				49065CFE2BD5D3E400E27819 /* forth9.asm */,
 				49DE54402BF6B6B000191E37 /* forth9.s19 */,
 				49065CFF2BD5DADA00E27819 /* HelloWorld.asm */,
@@ -167,7 +172,6 @@
 				49750B162BE419D400B7C3CF /* simple.asm */,
 				49DE54422BF6B6B000191E37 /* simple.s19 */,
 				49BAAE912BFEB290001A545A /* simple.lst */,
-				49E11A9A2BE1CD8F004BC747 /* basic.asm */,
 				49E11A9C2BE1CD8F004BC747 /* test09.asm */,
 				49DE54442BF6B6B000191E37 /* test09.s19 */,
 				490F10FB2BE99A7C00AC1440 /* test09.lst */,

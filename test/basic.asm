@@ -12,6 +12,9 @@
 *	REVISED 21-NOV-84 FOR 6809
 *	REVISED FEB 94 ADAPTED TO SIMULATOR AND BUGFIXES BY L.C. BENSCHOP.
 *
+
+    include BOSS9.inc
+
 EOL	EQU	$04
 ETX	EQU	$03
 SPACE	EQU	$20
@@ -30,11 +33,12 @@ RMCR	EQU	ACIA
 TRCS	EQU	ACIA
 RECEV	EQU	ACIA+1
 TRANS	EQU	ACIA+1
-CNTL1	EQU	$03
-CNTL2	EQU	$15
-RDRF	EQU	$01
-ORFE	EQU	$20
-TDRE	EQU	$02
+CNTL1	EQU	$03     ; Master Reset
+CNTL2	EQU	$15     ; 8 bits, 1 stop, divide by 16
+RDRF	EQU	$01     ; Receive Data Register Full
+ORFE	EQU	$20     ; Overrun
+TDRE	EQU	$02     ; Transmit Data Register Empty
+
 * EDIT THE FOLLOWING EQUATES TO REFLECT THE
 * DESIRED ROM AND RAM LAYOUT
 LORAM	EQU	$0080	; ADDRESS OF DIRECT PAGE SCRATCH RAM
@@ -1059,47 +1063,71 @@ VERBT	FCC	/LET/
 	FCB	EOL
 	FDB	PRINT
 	FCB	EOL
+    
 ******************************
+* I/O Functions
 ******************************
-TSTBRK	bsr	BRKEEE 	
-	beq	GETC05
-GETCHR	bsr 	INEEE
-	CMPA	#ETX
-	BNE	GETC05
-	JMP	BREAK
-GETC05	RTS
-PUTCHR	INC	ZONE
-	JMP	OUTEEE
-******************************
-******************************
-INEEE	BSR	BRKEEE
-	BEQ	INEEE
-	LDA	RECEV
-	ANDA	#$7F
-	RTS
-OUTEEE	PSHS	A
-OUT01	LDA	TRCS
-	BITA	#TDRE
-	BEQ	OUT01
-	PULS	A
-	STA	TRANS
-	RTS
-BRKEEE	PSHS	A
-BRK03	LDA	TRCS
-	BITA	#ORFE
-	BEQ	BRK05
-	LDA	RECEV
-	BRA	BRK03
-BRK05	BITA	#RDRF
-	PULS	A
-	RTS
-*
-	LDA	#CNTL1
-	STA	RMCR
-	LDA	#CNTL2
-	STA	TRCS
-INTEEE  EQU     *
-	RTS
+
+* Externally accessed functions
+* are:
+*   TSTBRK
+*   GETCHR  - Wait for input, return in A
+*   PUTCHR  - Output char in A
+*   INTEEE  - Initialize ACIA
+
+INTEEE RTS  ; Do nothing for now
+
+TSTBRK  BSR GETCHR   ; Maybe does the same?
+
+GETCHR  JSR getc     ; Need to loop until get char
+        TSTA
+        BEQ GETCHR
+        RTS
+        
+PUTCHR  JSR putc
+        RTS
+
+; TSTBRK	bsr	BRKEEE
+; 	beq	GETC05
+; GETCHR	bsr 	INEEE
+; 	CMPA	#ETX
+; 	BNE	GETC05
+; 	JMP	BREAK
+; GETC05	RTS
+; PUTCHR	INC	ZONE
+; 	JMP	OUTEEE
+;
+; ******************************
+; ******************************
+; INEEE	BSR	BRKEEE
+; 	BEQ	INEEE
+; 	LDA	RECEV
+; 	ANDA	#$7F
+; 	RTS
+; OUTEEE	PSHS	A
+; OUT01	LDA	TRCS
+; 	BITA	#TDRE
+; 	BEQ	OUT01
+; 	PULS	A
+; 	STA	TRANS
+; 	RTS
+;
+; BRKEEE	PSHS	A
+; BRK03	LDA	TRCS
+; 	BITA	#ORFE       ; Overrun?
+; 	BEQ	BRK05
+; 	LDA	RECEV
+; 	BRA	BRK03
+; BRK05	BITA	#RDRF   ; Read data full?
+; 	PULS	A
+; 	RTS
+; *
+; 	LDA	#CNTL1
+; 	STA	RMCR
+; 	LDA	#CNTL2
+; 	STA	TRCS
+; INTEEE  EQU     *
+; 	RTS
 
 
 
