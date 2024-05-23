@@ -91,6 +91,9 @@
 		49BAAE8C2BF9653E001A545A /* Emu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Emu.entitlements; sourceTree = "<group>"; };
 		49BAAE902BFC1683001A545A /* HelloWorld.lst */ = {isa = PBXFileReference; lastKnownFileType = text; name = HelloWorld.lst; path = ../test/HelloWorld.lst; sourceTree = "<group>"; };
 		49BAAE912BFEB290001A545A /* simple.lst */ = {isa = PBXFileReference; lastKnownFileType = text; name = simple.lst; path = ../test/simple.lst; sourceTree = "<group>"; };
+		49BAAE922BFEC71E001A545A /* perf.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = perf.asm; path = ../test/perf.asm; sourceTree = "<group>"; };
+		49BAAE932BFEC7AB001A545A /* perf.lst */ = {isa = PBXFileReference; lastKnownFileType = text; name = perf.lst; path = ../test/perf.lst; sourceTree = "<group>"; };
+		49BAAE942BFEC7AB001A545A /* perf.s19 */ = {isa = PBXFileReference; lastKnownFileType = text; name = perf.s19; path = ../test/perf.s19; sourceTree = "<group>"; };
 		49DE54402BF6B6B000191E37 /* forth9.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = forth9.s19; path = ../test/forth9.s19; sourceTree = "<group>"; };
 		49DE54412BF6B6B000191E37 /* HelloWorld.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = HelloWorld.s19; path = ../test/HelloWorld.s19; sourceTree = "<group>"; };
 		49DE54422BF6B6B000191E37 /* simple.s19 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = simple.s19; path = ../test/simple.s19; sourceTree = "<group>"; };
@@ -158,6 +161,9 @@
 				49065CFF2BD5DADA00E27819 /* HelloWorld.asm */,
 				49DE54412BF6B6B000191E37 /* HelloWorld.s19 */,
 				49BAAE902BFC1683001A545A /* HelloWorld.lst */,
+				49BAAE922BFEC71E001A545A /* perf.asm */,
+				49BAAE942BFEC7AB001A545A /* perf.s19 */,
+				49BAAE932BFEC7AB001A545A /* perf.lst */,
 				49750B162BE419D400B7C3CF /* simple.asm */,
 				49DE54422BF6B6B000191E37 /* simple.s19 */,
 				49BAAE912BFEB290001A545A /* simple.lst */,

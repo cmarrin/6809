@@ -60,8 +60,16 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-I ../emulator -f srec -operf.s19 -lperf.lst perf.asm"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-I ../emulator -f srec -o test09.s19 -ltest09.lst test09.asm"
             isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-I ../emulator -f srec -osimple.s19 -lsimple.lst simple.asm"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-f srec -o asmtest.s19 -l asmtest.asm"
@@ -78,10 +86,6 @@
          <CommandLineArgument
             argument = "-f srec -o forth9.s19 -l forth9.asm"
             isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-I ../emulator -f srec -osimple.s19 -lsimple.lst simple.asm"
-            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
