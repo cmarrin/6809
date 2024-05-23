@@ -379,6 +379,8 @@ bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
 {
     if (startInMonitor) {
         enterMonitor();
+    } else {
+        leaveMonitor();
     }
     _emu.setPC(addr);
     _startAddr = addr;
