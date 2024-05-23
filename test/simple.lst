@@ -40,15 +40,25 @@
                       (        BOSS9.inc):00035         
                       (       simple.asm):00006         
 0200                  (       simple.asm):00007         loop
-0200 8E020F           (       simple.asm):00008                 ldx #text3
+0200 8E021A           (       simple.asm):00008                 ldx #text3
 0203 BDFC02           (       simple.asm):00009                 jsr puts
 0206 860A             (       simple.asm):00010                 lda #newline
 0208 BDFC00           (       simple.asm):00011                 jsr putc
 020B 12               (       simple.asm):00012                 nop
-020C 12               (       simple.asm):00013                 nop
-020D 20F1             (       simple.asm):00014                 bra loop
-                      (       simple.asm):00015                 
-020F 48656C6C6F       (       simple.asm):00016         text3   fcc "Hello"
-0214                  (       simple.asm):00017         store   rmb     2
-                      (       simple.asm):00018         
-                      (       simple.asm):00019                 end $200
+020C BD0212           (       simple.asm):00013                 jsr sub1
+020F 12               (       simple.asm):00014                 nop
+0210 20EE             (       simple.asm):00015                 bra loop
+                      (       simple.asm):00016                 
+0212 12               (       simple.asm):00017         sub1    nop
+0213 8D02             (       simple.asm):00018                 bsr sub2
+0215 12               (       simple.asm):00019                 nop
+0216 39               (       simple.asm):00020                 rts
+                      (       simple.asm):00021                 
+0217 12               (       simple.asm):00022         sub2    nop
+0218 12               (       simple.asm):00023                 nop
+0219 39               (       simple.asm):00024                 rts
+                      (       simple.asm):00025                 
+021A 48656C6C6F       (       simple.asm):00026         text3   fcc "Hello"
+021F                  (       simple.asm):00027         store   rmb     2
+                      (       simple.asm):00028         
+                      (       simple.asm):00029                 end $200

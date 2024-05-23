@@ -10,8 +10,18 @@ loop
         lda #newline
         jsr putc
         nop
+        jsr sub1
         nop
         bra loop
+        
+sub1    nop
+        bsr sub2
+        nop
+        rts
+        
+sub2    nop
+        nop
+        rts
 	
 text3   fcc "Hello"
 store	rmb	2
