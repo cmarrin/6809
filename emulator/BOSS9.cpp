@@ -73,7 +73,7 @@ void BOSS9Base::getCommand()
     }
         
     if (haveCmd) {
-        enterMonitor();
+        _needPrompt = true;
         if (_cursor > 0) {
             processCommand();
         }
