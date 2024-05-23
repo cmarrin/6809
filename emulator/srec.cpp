@@ -197,7 +197,7 @@ bool SRecordParser::ParseLine( unsigned lineNum, const char *line )
 {
    SRecordData    sRecData;
    SRecordHeader  sRecHdr;
-   unsigned char  data[ 50 ];
+   unsigned char  data[ 70 ];
 
    memset( &sRecData, 0, sizeof( sRecData ));
    memset( data, 0, sizeof( data ));
