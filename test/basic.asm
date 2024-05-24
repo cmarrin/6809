@@ -261,7 +261,8 @@ GL03	JSR	GETCHR
 	LDA	#BELL
 	BRA	GL02
 GL04	STA	,X+
-GL02	JSR	PUTCHR
+GL02
+    ; JSR	PUTCHR ; skip echo
 	BRA	GL03
 GL05	CMPA	#BS
 	BEQ	GL07
@@ -1084,7 +1085,8 @@ GETCHR  JSR getc     ; Need to loop until get char
         BEQ GETCHR
         RTS
         
-PUTCHR  JSR putc
+PUTCHR  INC	ZONE
+        JSR putc
         RTS
 
 ; TSTBRK	bsr	BRKEEE

@@ -105,11 +105,11 @@
                       (        basic.asm):00070                 ORG     ROMADR
 0400 7E040B           (        basic.asm):00071         BASIC   JMP     SETUP
 0403 10DE86           (        basic.asm):00072         WARMS   LDS     STKTOP
-0406 BD0B96           (        basic.asm):00073                 JSR     INTEEE
+0406 BD0B93           (        basic.asm):00073                 JSR     INTEEE
 0409 2013             (        basic.asm):00074                 BRA     WMS05
 040B 10CE5FCC         (        basic.asm):00075         SETUP   LDS     #RAMEND-52
 040F 10DF86           (        basic.asm):00076         SET03   STS     STKTOP
-0412 BD0B96           (        basic.asm):00077                 JSR     INTEEE
+0412 BD0B93           (        basic.asm):00077                 JSR     INTEEE
 0415 CC4049           (        basic.asm):00078         CLEAR   LDD     #RAMBEG
 0418 DD80             (        basic.asm):00079                 STD     USRBAS
 041A DD82             (        basic.asm):00080                 STD     USRTOP
@@ -127,15 +127,15 @@
 0438 0D93             (        basic.asm):00092                 TST     MODE
 043A 2605             (        basic.asm):00093                 BNE     CMD01
 043C 863A             (        basic.asm):00094                 LDA     #':
-043E BD0BA0           (        basic.asm):00095                 JSR     PUTCHR
+043E BD0B9D           (        basic.asm):00095                 JSR     PUTCHR
 0441 BD0588           (        basic.asm):00096         CMD01   JSR     GETLIN
-0444 BD06E2           (        basic.asm):00097                 JSR     TSTNBR
+0444 BD06DF           (        basic.asm):00097                 JSR     TSTNBR
 0447 240E             (        basic.asm):00098                 BCC     CMD02
 0449 292B             (        basic.asm):00099                 BVS     CMD05
-044B BD0653           (        basic.asm):00100                 JSR     SKIPSP
+044B BD0650           (        basic.asm):00100                 JSR     SKIPSP
 044E 8104             (        basic.asm):00101                 CMPA    #EOL
 0450 27E1             (        basic.asm):00102                 BEQ     CMDE
-0452 BD0605           (        basic.asm):00103                 JSR     MSLINE
+0452 BD0602           (        basic.asm):00103                 JSR     MSLINE
 0455 20D0             (        basic.asm):00104                 BRA     CMDB
 0457 3410             (        basic.asm):00105         CMD02   PSHS    X
 0459 9E82             (        basic.asm):00106                 LDX     USRTOP
@@ -158,7 +158,7 @@
                       (        basic.asm):00122         ******************************
                       (        basic.asm):00123         ******************************
 0484 3406             (        basic.asm):00124         EDITOR  PSHS    D
-0486 BD0653           (        basic.asm):00125                 JSR     SKIPSP
+0486 BD0650           (        basic.asm):00125                 JSR     SKIPSP
 0489 9F8E             (        basic.asm):00126                 STX     SCRTCH
 048B A660             (        basic.asm):00127                 LDA     0,S
 048D 9E88             (        basic.asm):00128                 LDX     CURSOR
@@ -167,7 +167,7 @@
 0493 10A300           (        basic.asm):00131                 CMPD    0,X
 0496 2402             (        basic.asm):00132                 BCC     ED01
 0498 9E80             (        basic.asm):00133         ED00    LDX     USRBAS
-049A BD07BE           (        basic.asm):00134         ED01    JSR     FNDLIN
+049A BD07BB           (        basic.asm):00134         ED01    JSR     FNDLIN
 049D 9F88             (        basic.asm):00135                 STX     CURSOR
 049F 2522             (        basic.asm):00136                 BCS     ED04
 04A1 9F8A             (        basic.asm):00137                 STX     SAVESP
@@ -212,7 +212,7 @@
 04EA D382             (        basic.asm):00176                 ADDD    USRTOP
 04EC DD82             (        basic.asm):00177                 STD     USRTOP
 04EE DD84             (        basic.asm):00178                 STD     STKLIM
-04F0 BD075A           (        basic.asm):00179                 JSR     TSTSTK
+04F0 BD0757           (        basic.asm):00179                 JSR     TSTSTK
 04F3 2407             (        basic.asm):00180                 BCC     ED07
 04F5 9F82             (        basic.asm):00181                 STX     USRTOP
 04F7 9F84             (        basic.asm):00182                 STX     STKLIM
@@ -242,7 +242,7 @@
 0528 39               (        basic.asm):00206                 RTS
                       (        basic.asm):00207         ******************************
                       (        basic.asm):00208         ******************************
-0529 BD0BA0           (        basic.asm):00209         PUTS01  JSR     PUTCHR
+0529 BD0B9D           (        basic.asm):00209         PUTS01  JSR     PUTCHR
 052C 3001             (        basic.asm):00210                 LEAX    1,X
 052E A600             (        basic.asm):00211         PUTSTR  LDA     0,X
 0530 8104             (        basic.asm):00212                 CMPA    #EOL
@@ -274,11 +274,11 @@
 056B 04               (        basic.asm):00238                 FCB     EOL
 056C 8DC7             (        basic.asm):00239         ER01    BSR     CRLF
 056E 8607             (        basic.asm):00240                 LDA     #BELL
-0570 BD0BA0           (        basic.asm):00241                 JSR     PUTCHR
+0570 BD0B9D           (        basic.asm):00241                 JSR     PUTCHR
 0573 DC8C             (        basic.asm):00242                 LDD     LINENB
-0575 BD0A58           (        basic.asm):00243                 JSR     PRNT4
+0575 BD0A55           (        basic.asm):00243                 JSR     PRNT4
 0578 8620             (        basic.asm):00244                 LDA     #SPACE
-057A BD0BA0           (        basic.asm):00245                 JSR     PUTCHR
+057A BD0B9D           (        basic.asm):00245                 JSR     PUTCHR
 057D 3510             (        basic.asm):00246                 PULS    X
 057F 8DAD             (        basic.asm):00247                 BSR     PUTSTR
 0581 8DB2             (        basic.asm):00248                 BSR     CRLF
@@ -287,9 +287,9 @@
                       (        basic.asm):00251         ******************************
 0586 8DAD             (        basic.asm):00252         GL00    BSR     CRLF
 0588 8E4000           (        basic.asm):00253         GETLIN  LDX     #BUFFER
-058B BD0B99           (        basic.asm):00254         GL03    JSR     GETCHR
+058B BD0B96           (        basic.asm):00254         GL03    JSR     GETCHR
 058E 8120             (        basic.asm):00255                 CMPA    #SPACE
-0590 2514             (        basic.asm):00256                 BCS     GL05
+0590 2511             (        basic.asm):00256                 BCS     GL05
 0592 817F             (        basic.asm):00257                 CMPA    #$7F
 0594 27F5             (        basic.asm):00258                 BEQ     GL03
 0596 8C4048           (        basic.asm):00259                 CMPX    #BUFFER+BSIZE-1
@@ -297,876 +297,878 @@
 059B 8607             (        basic.asm):00261                 LDA     #BELL
 059D 2002             (        basic.asm):00262                 BRA     GL02
 059F A780             (        basic.asm):00263         GL04    STA     ,X+
-05A1 BD0BA0           (        basic.asm):00264         GL02    JSR     PUTCHR
-05A4 20E5             (        basic.asm):00265                 BRA     GL03
-05A6 8108             (        basic.asm):00266         GL05    CMPA    #BS
-05A8 2724             (        basic.asm):00267                 BEQ     GL07
-05AA 8118             (        basic.asm):00268                 CMPA    #CAN
-05AC 27D8             (        basic.asm):00269                 BEQ     GL00
-05AE 810A             (        basic.asm):00270                 CMPA    #LF
-05B0 2731             (        basic.asm):00271                 BEQ     GL09
-05B2 810D             (        basic.asm):00272                 CMPA    #CR
-05B4 26D5             (        basic.asm):00273                 BNE     GL03
-05B6 0D93             (        basic.asm):00274                 TST     MODE
-05B8 2705             (        basic.asm):00275                 BEQ     GL06
-05BA BD0BA0           (        basic.asm):00276                 JSR     PUTCHR
-05BD 2007             (        basic.asm):00277                 BRA     GL08
-05BF 3410             (        basic.asm):00278         GL06    PSHS    X
-05C1 BD0535           (        basic.asm):00279                 JSR     CRLF
-05C4 3510             (        basic.asm):00280                 PULS    X
-05C6 8604             (        basic.asm):00281         GL08    LDA     #EOL
-05C8 A700             (        basic.asm):00282                 STA     0,X
-05CA 8E4000           (        basic.asm):00283                 LDX     #BUFFER
-05CD 39               (        basic.asm):00284                 RTS
-05CE 8C4000           (        basic.asm):00285         GL07    CMPX    #BUFFER
-05D1 27B8             (        basic.asm):00286                 BEQ     GL03
-05D3 301F             (        basic.asm):00287                 LEAX    -1,X
-05D5 8608             (        basic.asm):00288                 LDA     #BS
-05D7 BD0BA0           (        basic.asm):00289                 JSR     PUTCHR
-05DA 8620             (        basic.asm):00290                 LDA     #SPACE
-05DC BD0BA0           (        basic.asm):00291                 JSR     PUTCHR
-05DF 8608             (        basic.asm):00292                 LDA     #BS
-05E1 20BE             (        basic.asm):00293                 BRA     GL02
-05E3 1A01             (        basic.asm):00294         GL09    ORCC    #$01
-05E5 0693             (        basic.asm):00295                 ROR     MODE
-05E7 20B8             (        basic.asm):00296                 BRA     GL02
-                      (        basic.asm):00297         ******************************
+05A1                  (        basic.asm):00264         GL02
+                      (        basic.asm):00265             ; JSR       PUTCHR ; skip echo
+05A1 20E8             (        basic.asm):00266                 BRA     GL03
+05A3 8108             (        basic.asm):00267         GL05    CMPA    #BS
+05A5 2724             (        basic.asm):00268                 BEQ     GL07
+05A7 8118             (        basic.asm):00269                 CMPA    #CAN
+05A9 27DB             (        basic.asm):00270                 BEQ     GL00
+05AB 810A             (        basic.asm):00271                 CMPA    #LF
+05AD 2731             (        basic.asm):00272                 BEQ     GL09
+05AF 810D             (        basic.asm):00273                 CMPA    #CR
+05B1 26D8             (        basic.asm):00274                 BNE     GL03
+05B3 0D93             (        basic.asm):00275                 TST     MODE
+05B5 2705             (        basic.asm):00276                 BEQ     GL06
+05B7 BD0B9D           (        basic.asm):00277                 JSR     PUTCHR
+05BA 2007             (        basic.asm):00278                 BRA     GL08
+05BC 3410             (        basic.asm):00279         GL06    PSHS    X
+05BE BD0535           (        basic.asm):00280                 JSR     CRLF
+05C1 3510             (        basic.asm):00281                 PULS    X
+05C3 8604             (        basic.asm):00282         GL08    LDA     #EOL
+05C5 A700             (        basic.asm):00283                 STA     0,X
+05C7 8E4000           (        basic.asm):00284                 LDX     #BUFFER
+05CA 39               (        basic.asm):00285                 RTS
+05CB 8C4000           (        basic.asm):00286         GL07    CMPX    #BUFFER
+05CE 27BB             (        basic.asm):00287                 BEQ     GL03
+05D0 301F             (        basic.asm):00288                 LEAX    -1,X
+05D2 8608             (        basic.asm):00289                 LDA     #BS
+05D4 BD0B9D           (        basic.asm):00290                 JSR     PUTCHR
+05D7 8620             (        basic.asm):00291                 LDA     #SPACE
+05D9 BD0B9D           (        basic.asm):00292                 JSR     PUTCHR
+05DC 8608             (        basic.asm):00293                 LDA     #BS
+05DE 20C1             (        basic.asm):00294                 BRA     GL02
+05E0 1A01             (        basic.asm):00295         GL09    ORCC    #$01
+05E2 0693             (        basic.asm):00296                 ROR     MODE
+05E4 20BB             (        basic.asm):00297                 BRA     GL02
                       (        basic.asm):00298         ******************************
-05E9 3001             (        basic.asm):00299         REM00   LEAX    1,X
-05EB 8D66             (        basic.asm):00300         REM     BSR     SKIPSP
-05ED 8104             (        basic.asm):00301                 CMPA    #EOL
-05EF 26F8             (        basic.asm):00302                 BNE     REM00
-05F1 BD092B           (        basic.asm):00303         ENDSMT  JSR     TSTEOL
-05F4 968C             (        basic.asm):00304         ENDS02  LDA     LINENB
-05F6 9A8D             (        basic.asm):00305                 ORA     LINENB+1
-05F8 2714             (        basic.asm):00306                 BEQ     REM09
-05FA 9C82             (        basic.asm):00307         REM05   CMPX    USRTOP
-05FC 2603             (        basic.asm):00308                 BNE     NXTLIN
-05FE 7E0555           (        basic.asm):00309                 JMP     ERRORR
-0601 EC81             (        basic.asm):00310         NXTLIN  LDD     ,X++
-0603 DD8C             (        basic.asm):00311                 STD     LINENB
-0605 BD0B97           (        basic.asm):00312         MSLINE  JSR     TSTBRK
-0608 8D08             (        basic.asm):00313                 BSR     IFAN
-060A 2503             (        basic.asm):00314                 BCS     IMPLET
-060C 3406             (        basic.asm):00315                 PSHS    D
-060E 39               (        basic.asm):00316         REM09   RTS
-060F 7E093C           (        basic.asm):00317         IMPLET  JMP     LET
-                      (        basic.asm):00318         ******************************
+                      (        basic.asm):00299         ******************************
+05E6 3001             (        basic.asm):00300         REM00   LEAX    1,X
+05E8 8D66             (        basic.asm):00301         REM     BSR     SKIPSP
+05EA 8104             (        basic.asm):00302                 CMPA    #EOL
+05EC 26F8             (        basic.asm):00303                 BNE     REM00
+05EE BD0928           (        basic.asm):00304         ENDSMT  JSR     TSTEOL
+05F1 968C             (        basic.asm):00305         ENDS02  LDA     LINENB
+05F3 9A8D             (        basic.asm):00306                 ORA     LINENB+1
+05F5 2714             (        basic.asm):00307                 BEQ     REM09
+05F7 9C82             (        basic.asm):00308         REM05   CMPX    USRTOP
+05F9 2603             (        basic.asm):00309                 BNE     NXTLIN
+05FB 7E0555           (        basic.asm):00310                 JMP     ERRORR
+05FE EC81             (        basic.asm):00311         NXTLIN  LDD     ,X++
+0600 DD8C             (        basic.asm):00312                 STD     LINENB
+0602 BD0B94           (        basic.asm):00313         MSLINE  JSR     TSTBRK
+0605 8D08             (        basic.asm):00314                 BSR     IFAN
+0607 2503             (        basic.asm):00315                 BCS     IMPLET
+0609 3406             (        basic.asm):00316                 PSHS    D
+060B 39               (        basic.asm):00317         REM09   RTS
+060C 7E0939           (        basic.asm):00318         IMPLET  JMP     LET
                       (        basic.asm):00319         ******************************
-0612 8D3F             (        basic.asm):00320         IFAN    BSR     SKIPSP
-0614 9F88             (        basic.asm):00321                 STX     CURSOR
-0616 8E0B31           (        basic.asm):00322                 LDX     #VERBT
-0619 A680             (        basic.asm):00323         FAN00   LDA     ,X+
-061B 8104             (        basic.asm):00324                 CMPA    #EOL
-061D 2605             (        basic.asm):00325                 BNE     FAN04
-061F 9E88             (        basic.asm):00326                 LDX     CURSOR
-0621 1A01             (        basic.asm):00327                 ORCC    #$01
-0623 39               (        basic.asm):00328                 RTS
-0624 9F90             (        basic.asm):00329         FAN04   STX     CHAR
-0626 9E88             (        basic.asm):00330                 LDX     CURSOR
-0628 9F8E             (        basic.asm):00331                 STX     SCRTCH
-062A 9E8E             (        basic.asm):00332         FAN05   LDX     SCRTCH
-062C A100             (        basic.asm):00333                 CMPA    0,X
-062E 2615             (        basic.asm):00334                 BNE     FAN07
-0630 3001             (        basic.asm):00335                 LEAX    1,X
-0632 9F8E             (        basic.asm):00336                 STX     SCRTCH
-0634 9E90             (        basic.asm):00337                 LDX     CHAR
-0636 A680             (        basic.asm):00338                 LDA     ,X+
-0638 9F90             (        basic.asm):00339                 STX     CHAR
-063A 8104             (        basic.asm):00340                 CMPA    #EOL
-063C 26EC             (        basic.asm):00341                 BNE     FAN05
-063E EC00             (        basic.asm):00342                 LDD     0,X
-0640 9E8E             (        basic.asm):00343                 LDX     SCRTCH
-0642 1CFE             (        basic.asm):00344                 ANDCC   #$FE
-0644 39               (        basic.asm):00345                 RTS
-0645 9E90             (        basic.asm):00346         FAN07   LDX     CHAR
-0647 A680             (        basic.asm):00347         FAN08   LDA     ,X+
-0649 8104             (        basic.asm):00348                 CMPA    #EOL
-064B 26FA             (        basic.asm):00349                 BNE     FAN08
-064D 3002             (        basic.asm):00350                 LEAX    2,X
-064F 20C8             (        basic.asm):00351                 BRA     FAN00
-                      (        basic.asm):00352         ******************************
+                      (        basic.asm):00320         ******************************
+060F 8D3F             (        basic.asm):00321         IFAN    BSR     SKIPSP
+0611 9F88             (        basic.asm):00322                 STX     CURSOR
+0613 8E0B2E           (        basic.asm):00323                 LDX     #VERBT
+0616 A680             (        basic.asm):00324         FAN00   LDA     ,X+
+0618 8104             (        basic.asm):00325                 CMPA    #EOL
+061A 2605             (        basic.asm):00326                 BNE     FAN04
+061C 9E88             (        basic.asm):00327                 LDX     CURSOR
+061E 1A01             (        basic.asm):00328                 ORCC    #$01
+0620 39               (        basic.asm):00329                 RTS
+0621 9F90             (        basic.asm):00330         FAN04   STX     CHAR
+0623 9E88             (        basic.asm):00331                 LDX     CURSOR
+0625 9F8E             (        basic.asm):00332                 STX     SCRTCH
+0627 9E8E             (        basic.asm):00333         FAN05   LDX     SCRTCH
+0629 A100             (        basic.asm):00334                 CMPA    0,X
+062B 2615             (        basic.asm):00335                 BNE     FAN07
+062D 3001             (        basic.asm):00336                 LEAX    1,X
+062F 9F8E             (        basic.asm):00337                 STX     SCRTCH
+0631 9E90             (        basic.asm):00338                 LDX     CHAR
+0633 A680             (        basic.asm):00339                 LDA     ,X+
+0635 9F90             (        basic.asm):00340                 STX     CHAR
+0637 8104             (        basic.asm):00341                 CMPA    #EOL
+0639 26EC             (        basic.asm):00342                 BNE     FAN05
+063B EC00             (        basic.asm):00343                 LDD     0,X
+063D 9E8E             (        basic.asm):00344                 LDX     SCRTCH
+063F 1CFE             (        basic.asm):00345                 ANDCC   #$FE
+0641 39               (        basic.asm):00346                 RTS
+0642 9E90             (        basic.asm):00347         FAN07   LDX     CHAR
+0644 A680             (        basic.asm):00348         FAN08   LDA     ,X+
+0646 8104             (        basic.asm):00349                 CMPA    #EOL
+0648 26FA             (        basic.asm):00350                 BNE     FAN08
+064A 3002             (        basic.asm):00351                 LEAX    2,X
+064C 20C8             (        basic.asm):00352                 BRA     FAN00
                       (        basic.asm):00353         ******************************
-0651 3001             (        basic.asm):00354         NXTNSP  LEAX    1,X
-0653 A600             (        basic.asm):00355         SKIPSP  LDA     0,X
-0655 8120             (        basic.asm):00356                 CMPA    #SPACE
-0657 27F8             (        basic.asm):00357                 BEQ     NXTNSP
-0659 39               (        basic.asm):00358                 RTS
-                      (        basic.asm):00359         ******************************
+                      (        basic.asm):00354         ******************************
+064E 3001             (        basic.asm):00355         NXTNSP  LEAX    1,X
+0650 A600             (        basic.asm):00356         SKIPSP  LDA     0,X
+0652 8120             (        basic.asm):00357                 CMPA    #SPACE
+0654 27F8             (        basic.asm):00358                 BEQ     NXTNSP
+0656 39               (        basic.asm):00359                 RTS
                       (        basic.asm):00360         ******************************
-065A 8D1A             (        basic.asm):00361         TSTHEX  BSR     TSTDIG
-065C 2422             (        basic.asm):00362                 BCC     TST05
-065E 8141             (        basic.asm):00363                 CMPA    #'A
-0660 2511             (        basic.asm):00364                 BCS     TST03
-0662 8146             (        basic.asm):00365                 CMPA    #'F
-0664 220D             (        basic.asm):00366                 BHI     TST03
-0666 8037             (        basic.asm):00367                 SUBA    #'A-10
-0668 1CFE             (        basic.asm):00368                 ANDCC   #$FE
-066A 39               (        basic.asm):00369                 RTS
-                      (        basic.asm):00370         ******************************
+                      (        basic.asm):00361         ******************************
+0657 8D1A             (        basic.asm):00362         TSTHEX  BSR     TSTDIG
+0659 2422             (        basic.asm):00363                 BCC     TST05
+065B 8141             (        basic.asm):00364                 CMPA    #'A
+065D 2511             (        basic.asm):00365                 BCS     TST03
+065F 8146             (        basic.asm):00366                 CMPA    #'F
+0661 220D             (        basic.asm):00367                 BHI     TST03
+0663 8037             (        basic.asm):00368                 SUBA    #'A-10
+0665 1CFE             (        basic.asm):00369                 ANDCC   #$FE
+0667 39               (        basic.asm):00370                 RTS
                       (        basic.asm):00371         ******************************
-066B 8141             (        basic.asm):00372         TSTLTR  CMPA    #'A
-066D 2504             (        basic.asm):00373                 BCS     TST03
-066F 815A             (        basic.asm):00374                 CMPA    #'Z
-0671 230D             (        basic.asm):00375                 BLS     TST05
-0673 1A01             (        basic.asm):00376         TST03   ORCC    #$01
-0675 39               (        basic.asm):00377                 RTS
-                      (        basic.asm):00378         ******************************
+                      (        basic.asm):00372         ******************************
+0668 8141             (        basic.asm):00373         TSTLTR  CMPA    #'A
+066A 2504             (        basic.asm):00374                 BCS     TST03
+066C 815A             (        basic.asm):00375                 CMPA    #'Z
+066E 230D             (        basic.asm):00376                 BLS     TST05
+0670 1A01             (        basic.asm):00377         TST03   ORCC    #$01
+0672 39               (        basic.asm):00378                 RTS
                       (        basic.asm):00379         ******************************
-0676 8130             (        basic.asm):00380         TSTDIG  CMPA    #'0
-0678 25F9             (        basic.asm):00381                 BCS     TST03
-067A 8139             (        basic.asm):00382                 CMPA    #'9
-067C 22F5             (        basic.asm):00383                 BHI     TST03
-067E 8030             (        basic.asm):00384                 SUBA    #'0
-0680 1CFE             (        basic.asm):00385         TST05   ANDCC   #$FE
-0682 39               (        basic.asm):00386                 RTS
-                      (        basic.asm):00387         ******************************
+                      (        basic.asm):00380         ******************************
+0673 8130             (        basic.asm):00381         TSTDIG  CMPA    #'0
+0675 25F9             (        basic.asm):00382                 BCS     TST03
+0677 8139             (        basic.asm):00383                 CMPA    #'9
+0679 22F5             (        basic.asm):00384                 BHI     TST03
+067B 8030             (        basic.asm):00385                 SUBA    #'0
+067D 1CFE             (        basic.asm):00386         TST05   ANDCC   #$FE
+067F 39               (        basic.asm):00387                 RTS
                       (        basic.asm):00388         ******************************
-0683 8DCE             (        basic.asm):00389         TSTVAR  BSR     SKIPSP
-0685 8DE4             (        basic.asm):00390                 BSR     TSTLTR
-0687 2512             (        basic.asm):00391                 BCS     TSTV03
-0689 1F89             (        basic.asm):00392                 TFR     A,B
-068B A601             (        basic.asm):00393                 LDA     1,X
-068D 8DDC             (        basic.asm):00394                 BSR     TSTLTR
-068F 24E2             (        basic.asm):00395                 BCC     TST03
-0691 3001             (        basic.asm):00396                 LEAX    1,X
-0693 C041             (        basic.asm):00397                 SUBB    #'A
-0695 58               (        basic.asm):00398                 ASLB
-0696 4F               (        basic.asm):00399                 CLRA
-0697 D386             (        basic.asm):00400                 ADDD    STKTOP
-0699 1CFE             (        basic.asm):00401         TSTV02  ANDCC   #$FE
-069B 39               (        basic.asm):00402         TSTV03  RTS
-                      (        basic.asm):00403         ******************************
+                      (        basic.asm):00389         ******************************
+0680 8DCE             (        basic.asm):00390         TSTVAR  BSR     SKIPSP
+0682 8DE4             (        basic.asm):00391                 BSR     TSTLTR
+0684 2512             (        basic.asm):00392                 BCS     TSTV03
+0686 1F89             (        basic.asm):00393                 TFR     A,B
+0688 A601             (        basic.asm):00394                 LDA     1,X
+068A 8DDC             (        basic.asm):00395                 BSR     TSTLTR
+068C 24E2             (        basic.asm):00396                 BCC     TST03
+068E 3001             (        basic.asm):00397                 LEAX    1,X
+0690 C041             (        basic.asm):00398                 SUBB    #'A
+0692 58               (        basic.asm):00399                 ASLB
+0693 4F               (        basic.asm):00400                 CLRA
+0694 D386             (        basic.asm):00401                 ADDD    STKTOP
+0696 1CFE             (        basic.asm):00402         TSTV02  ANDCC   #$FE
+0698 39               (        basic.asm):00403         TSTV03  RTS
                       (        basic.asm):00404         ******************************
-069C BD090A           (        basic.asm):00405         USER    JSR     ARGONE
-069F 3406             (        basic.asm):00406                 PSHS    D
-06A1 BD0653           (        basic.asm):00407                 JSR     SKIPSP
-06A4 812C             (        basic.asm):00408                 CMPA    #',
-06A6 2709             (        basic.asm):00409                 BEQ     USER03
-06A8 8129             (        basic.asm):00410                 CMPA    #')
-06AA 1A01             (        basic.asm):00411                 ORCC    #$01
-06AC 2715             (        basic.asm):00412                 BEQ     USER05
-06AE 7E054C           (        basic.asm):00413         USER02  JMP     ERRORS
-06B1 3001             (        basic.asm):00414         USER03  LEAX    1,X
-06B3 BD083D           (        basic.asm):00415                 JSR     EXPR
-06B6 3402             (        basic.asm):00416                 PSHS    A
-06B8 BD0653           (        basic.asm):00417                 JSR     SKIPSP
-06BB 8129             (        basic.asm):00418                 CMPA    #')
-06BD 3502             (        basic.asm):00419                 PULS    A
-06BF 26ED             (        basic.asm):00420                 BNE     USER02
-06C1 1CFE             (        basic.asm):00421                 ANDCC   #$FE
-06C3 3001             (        basic.asm):00422         USER05  LEAX    1,X
-06C5 9F88             (        basic.asm):00423                 STX     CURSOR
-06C7 ADF1             (        basic.asm):00424                 JSR     [,S++]
-06C9 9E88             (        basic.asm):00425                 LDX     CURSOR
-06CB 1CFE             (        basic.asm):00426                 ANDCC   #$FE
-06CD 39               (        basic.asm):00427                 RTS
-                      (        basic.asm):00428         ******************************
+                      (        basic.asm):00405         ******************************
+0699 BD0907           (        basic.asm):00406         USER    JSR     ARGONE
+069C 3406             (        basic.asm):00407                 PSHS    D
+069E BD0650           (        basic.asm):00408                 JSR     SKIPSP
+06A1 812C             (        basic.asm):00409                 CMPA    #',
+06A3 2709             (        basic.asm):00410                 BEQ     USER03
+06A5 8129             (        basic.asm):00411                 CMPA    #')
+06A7 1A01             (        basic.asm):00412                 ORCC    #$01
+06A9 2715             (        basic.asm):00413                 BEQ     USER05
+06AB 7E054C           (        basic.asm):00414         USER02  JMP     ERRORS
+06AE 3001             (        basic.asm):00415         USER03  LEAX    1,X
+06B0 BD083A           (        basic.asm):00416                 JSR     EXPR
+06B3 3402             (        basic.asm):00417                 PSHS    A
+06B5 BD0650           (        basic.asm):00418                 JSR     SKIPSP
+06B8 8129             (        basic.asm):00419                 CMPA    #')
+06BA 3502             (        basic.asm):00420                 PULS    A
+06BC 26ED             (        basic.asm):00421                 BNE     USER02
+06BE 1CFE             (        basic.asm):00422                 ANDCC   #$FE
+06C0 3001             (        basic.asm):00423         USER05  LEAX    1,X
+06C2 9F88             (        basic.asm):00424                 STX     CURSOR
+06C4 ADF1             (        basic.asm):00425                 JSR     [,S++]
+06C6 9E88             (        basic.asm):00426                 LDX     CURSOR
+06C8 1CFE             (        basic.asm):00427                 ANDCC   #$FE
+06CA 39               (        basic.asm):00428                 RTS
                       (        basic.asm):00429         ******************************
-06CE BD0653           (        basic.asm):00430         TSTSNB  JSR     SKIPSP
-06D1 812D             (        basic.asm):00431                 CMPA    #'-
-06D3 260D             (        basic.asm):00432                 BNE     TSTNBR
-06D5 3001             (        basic.asm):00433                 LEAX    1,X
-06D7 8D09             (        basic.asm):00434                 BSR     TSTNBR
-06D9 2506             (        basic.asm):00435                 BCS     TSN02
-06DB 40               (        basic.asm):00436                 NEGA
-06DC 50               (        basic.asm):00437                 NEGB
-06DD 8200             (        basic.asm):00438                 SBCA    #0
-06DF 1CFC             (        basic.asm):00439                 ANDCC   #$FC
-06E1 39               (        basic.asm):00440         TSN02   RTS
-                      (        basic.asm):00441         ******************************
+                      (        basic.asm):00430         ******************************
+06CB BD0650           (        basic.asm):00431         TSTSNB  JSR     SKIPSP
+06CE 812D             (        basic.asm):00432                 CMPA    #'-
+06D0 260D             (        basic.asm):00433                 BNE     TSTNBR
+06D2 3001             (        basic.asm):00434                 LEAX    1,X
+06D4 8D09             (        basic.asm):00435                 BSR     TSTNBR
+06D6 2506             (        basic.asm):00436                 BCS     TSN02
+06D8 40               (        basic.asm):00437                 NEGA
+06D9 50               (        basic.asm):00438                 NEGB
+06DA 8200             (        basic.asm):00439                 SBCA    #0
+06DC 1CFC             (        basic.asm):00440                 ANDCC   #$FC
+06DE 39               (        basic.asm):00441         TSN02   RTS
                       (        basic.asm):00442         ******************************
-06E2 BD0653           (        basic.asm):00443         TSTNBR  JSR     SKIPSP
-06E5 BD0676           (        basic.asm):00444                 JSR     TSTDIG
-06E8 242F             (        basic.asm):00445                 BCC     TSTN02
-06EA 8124             (        basic.asm):00446                 CMPA    #'$
-06EC 1A01             (        basic.asm):00447                 ORCC    #$01
-06EE 2660             (        basic.asm):00448                 BNE     TSTN09
-06F0 3001             (        basic.asm):00449         TSTN20  LEAX    1,X
-06F2 6FE2             (        basic.asm):00450                 CLR     ,-S
-06F4 6FE2             (        basic.asm):00451                 CLR     ,-S
-06F6 A600             (        basic.asm):00452         TSTN23  LDA     0,X
-06F8 BD065A           (        basic.asm):00453                 JSR     TSTHEX
-06FB 254F             (        basic.asm):00454                 BCS     TSTN07
-06FD 3001             (        basic.asm):00455                 LEAX    1,X
-06FF 3410             (        basic.asm):00456                 PSHS    X
-0701 3402             (        basic.asm):00457                 PSHS    A
-0703 EC63             (        basic.asm):00458                 LDD     3,S
-0705 85F0             (        basic.asm):00459                 BITA    #$F0
-0707 264A             (        basic.asm):00460                 BNE     TSTN11
-0709 58               (        basic.asm):00461                 ASLB
-070A 49               (        basic.asm):00462                 ROLA
-070B 58               (        basic.asm):00463                 ASLB
-070C 49               (        basic.asm):00464                 ROLA
-070D 58               (        basic.asm):00465                 ASLB
-070E 49               (        basic.asm):00466                 ROLA
-070F 58               (        basic.asm):00467                 ASLB
-0710 49               (        basic.asm):00468                 ROLA
-0711 EBE0             (        basic.asm):00469                 ADDB    ,S+
-0713 ED62             (        basic.asm):00470                 STD     2,S
-0715 3510             (        basic.asm):00471                 PULS    X
-0717 20DD             (        basic.asm):00472                 BRA     TSTN23
-0719 3001             (        basic.asm):00473         TSTN02  LEAX    1,X
-071B 3402             (        basic.asm):00474                 PSHS    A
-071D 6FE2             (        basic.asm):00475                 CLR     ,-S
-071F A600             (        basic.asm):00476         TSTN03  LDA     0,X
-0721 BD0676           (        basic.asm):00477                 JSR     TSTDIG
-0724 2526             (        basic.asm):00478                 BCS     TSTN07
-0726 3001             (        basic.asm):00479                 LEAX    1,X
-0728 3410             (        basic.asm):00480                 PSHS    X
-072A 3402             (        basic.asm):00481                 PSHS    A
-072C EC63             (        basic.asm):00482                 LDD     3,S
-072E 58               (        basic.asm):00483                 ASLB
-072F 49               (        basic.asm):00484                 ROLA
-0730 2921             (        basic.asm):00485                 BVS     TSTN11
-0732 58               (        basic.asm):00486                 ASLB
-0733 49               (        basic.asm):00487                 ROLA
-0734 291D             (        basic.asm):00488                 BVS     TSTN11
-0736 E363             (        basic.asm):00489                 ADDD    3,S
-0738 2919             (        basic.asm):00490                 BVS     TSTN11
-073A 58               (        basic.asm):00491                 ASLB
-073B 49               (        basic.asm):00492                 ROLA
-073C 2915             (        basic.asm):00493                 BVS     TSTN11
-073E EB60             (        basic.asm):00494                 ADDB    0,S
-0740 8900             (        basic.asm):00495                 ADCA    #0
-0742 290F             (        basic.asm):00496                 BVS     TSTN11
-0744 ED63             (        basic.asm):00497                 STD     3,S
-0746 3261             (        basic.asm):00498                 LEAS    1,S
-0748 3510             (        basic.asm):00499                 PULS    X
-074A 20D3             (        basic.asm):00500                 BRA     TSTN03
-074C 3506             (        basic.asm):00501         TSTN07  PULS    D
-074E 1CFE             (        basic.asm):00502                 ANDCC   #$FE
-0750 1CFD             (        basic.asm):00503         TSTN09  ANDCC   #$FD
-0752 39               (        basic.asm):00504                 RTS
-0753 AE61             (        basic.asm):00505         TSTN11  LDX     1,S
-0755 3265             (        basic.asm):00506                 LEAS    5,S
-0757 1A03             (        basic.asm):00507                 ORCC    #$03
-0759 39               (        basic.asm):00508                 RTS
-                      (        basic.asm):00509         ******************************
+                      (        basic.asm):00443         ******************************
+06DF BD0650           (        basic.asm):00444         TSTNBR  JSR     SKIPSP
+06E2 BD0673           (        basic.asm):00445                 JSR     TSTDIG
+06E5 242F             (        basic.asm):00446                 BCC     TSTN02
+06E7 8124             (        basic.asm):00447                 CMPA    #'$
+06E9 1A01             (        basic.asm):00448                 ORCC    #$01
+06EB 2660             (        basic.asm):00449                 BNE     TSTN09
+06ED 3001             (        basic.asm):00450         TSTN20  LEAX    1,X
+06EF 6FE2             (        basic.asm):00451                 CLR     ,-S
+06F1 6FE2             (        basic.asm):00452                 CLR     ,-S
+06F3 A600             (        basic.asm):00453         TSTN23  LDA     0,X
+06F5 BD0657           (        basic.asm):00454                 JSR     TSTHEX
+06F8 254F             (        basic.asm):00455                 BCS     TSTN07
+06FA 3001             (        basic.asm):00456                 LEAX    1,X
+06FC 3410             (        basic.asm):00457                 PSHS    X
+06FE 3402             (        basic.asm):00458                 PSHS    A
+0700 EC63             (        basic.asm):00459                 LDD     3,S
+0702 85F0             (        basic.asm):00460                 BITA    #$F0
+0704 264A             (        basic.asm):00461                 BNE     TSTN11
+0706 58               (        basic.asm):00462                 ASLB
+0707 49               (        basic.asm):00463                 ROLA
+0708 58               (        basic.asm):00464                 ASLB
+0709 49               (        basic.asm):00465                 ROLA
+070A 58               (        basic.asm):00466                 ASLB
+070B 49               (        basic.asm):00467                 ROLA
+070C 58               (        basic.asm):00468                 ASLB
+070D 49               (        basic.asm):00469                 ROLA
+070E EBE0             (        basic.asm):00470                 ADDB    ,S+
+0710 ED62             (        basic.asm):00471                 STD     2,S
+0712 3510             (        basic.asm):00472                 PULS    X
+0714 20DD             (        basic.asm):00473                 BRA     TSTN23
+0716 3001             (        basic.asm):00474         TSTN02  LEAX    1,X
+0718 3402             (        basic.asm):00475                 PSHS    A
+071A 6FE2             (        basic.asm):00476                 CLR     ,-S
+071C A600             (        basic.asm):00477         TSTN03  LDA     0,X
+071E BD0673           (        basic.asm):00478                 JSR     TSTDIG
+0721 2526             (        basic.asm):00479                 BCS     TSTN07
+0723 3001             (        basic.asm):00480                 LEAX    1,X
+0725 3410             (        basic.asm):00481                 PSHS    X
+0727 3402             (        basic.asm):00482                 PSHS    A
+0729 EC63             (        basic.asm):00483                 LDD     3,S
+072B 58               (        basic.asm):00484                 ASLB
+072C 49               (        basic.asm):00485                 ROLA
+072D 2921             (        basic.asm):00486                 BVS     TSTN11
+072F 58               (        basic.asm):00487                 ASLB
+0730 49               (        basic.asm):00488                 ROLA
+0731 291D             (        basic.asm):00489                 BVS     TSTN11
+0733 E363             (        basic.asm):00490                 ADDD    3,S
+0735 2919             (        basic.asm):00491                 BVS     TSTN11
+0737 58               (        basic.asm):00492                 ASLB
+0738 49               (        basic.asm):00493                 ROLA
+0739 2915             (        basic.asm):00494                 BVS     TSTN11
+073B EB60             (        basic.asm):00495                 ADDB    0,S
+073D 8900             (        basic.asm):00496                 ADCA    #0
+073F 290F             (        basic.asm):00497                 BVS     TSTN11
+0741 ED63             (        basic.asm):00498                 STD     3,S
+0743 3261             (        basic.asm):00499                 LEAS    1,S
+0745 3510             (        basic.asm):00500                 PULS    X
+0747 20D3             (        basic.asm):00501                 BRA     TSTN03
+0749 3506             (        basic.asm):00502         TSTN07  PULS    D
+074B 1CFE             (        basic.asm):00503                 ANDCC   #$FE
+074D 1CFD             (        basic.asm):00504         TSTN09  ANDCC   #$FD
+074F 39               (        basic.asm):00505                 RTS
+0750 AE61             (        basic.asm):00506         TSTN11  LDX     1,S
+0752 3265             (        basic.asm):00507                 LEAS    5,S
+0754 1A03             (        basic.asm):00508                 ORCC    #$03
+0756 39               (        basic.asm):00509                 RTS
                       (        basic.asm):00510         ******************************
-075A 10DF8A           (        basic.asm):00511         TSTSTK  STS     SAVESP
-075D DC8A             (        basic.asm):00512                 LDD     SAVESP
-075F 830030           (        basic.asm):00513                 SUBD    #STKCUS
-0762 9384             (        basic.asm):00514                 SUBD    STKLIM
-0764 39               (        basic.asm):00515                 RTS
-                      (        basic.asm):00516         ******************************
+                      (        basic.asm):00511         ******************************
+0757 10DF8A           (        basic.asm):00512         TSTSTK  STS     SAVESP
+075A DC8A             (        basic.asm):00513                 LDD     SAVESP
+075C 830030           (        basic.asm):00514                 SUBD    #STKCUS
+075F 9384             (        basic.asm):00515                 SUBD    STKLIM
+0761 39               (        basic.asm):00516                 RTS
                       (        basic.asm):00517         ******************************
-0765 BD08F7           (        basic.asm):00518         PEEK    JSR     PAREXP
-0768 3406             (        basic.asm):00519                 PSHS    D
-076A 3410             (        basic.asm):00520                 PSHS    X
-076C E6F802           (        basic.asm):00521                 LDB     [2,S]
-076F 3510             (        basic.asm):00522                 PULS    X
-0771 3262             (        basic.asm):00523                 LEAS    2,S
-0773 4F               (        basic.asm):00524                 CLRA
-0774 39               (        basic.asm):00525                 RTS
-                      (        basic.asm):00526         ******************************
+                      (        basic.asm):00518         ******************************
+0762 BD08F4           (        basic.asm):00519         PEEK    JSR     PAREXP
+0765 3406             (        basic.asm):00520                 PSHS    D
+0767 3410             (        basic.asm):00521                 PSHS    X
+0769 E6F802           (        basic.asm):00522                 LDB     [2,S]
+076C 3510             (        basic.asm):00523                 PULS    X
+076E 3262             (        basic.asm):00524                 LEAS    2,S
+0770 4F               (        basic.asm):00525                 CLRA
+0771 39               (        basic.asm):00526                 RTS
                       (        basic.asm):00527         ******************************
-0775 BD08F7           (        basic.asm):00528         POKE    JSR     PAREXP
-0778 3406             (        basic.asm):00529                 PSHS    D
-077A BD0653           (        basic.asm):00530                 JSR     SKIPSP
-077D 813D             (        basic.asm):00531                 CMPA    #'=
-077F 2703             (        basic.asm):00532                 BEQ     POKE05
-0781 7E054C           (        basic.asm):00533                 JMP     ERRORS
-0784 3001             (        basic.asm):00534         POKE05  LEAX    1,X
-0786 BD083D           (        basic.asm):00535                 JSR     EXPR
-0789 BD092B           (        basic.asm):00536                 JSR     TSTEOL
-078C 3410             (        basic.asm):00537                 PSHS    X
-078E E7F802           (        basic.asm):00538                 STB     [2,S]
-0791 3510             (        basic.asm):00539                 PULS    X
-0793 3262             (        basic.asm):00540                 LEAS    2,S
-0795 7E05F4           (        basic.asm):00541                 JMP     ENDS02
-                      (        basic.asm):00542         ******************************
+                      (        basic.asm):00528         ******************************
+0772 BD08F4           (        basic.asm):00529         POKE    JSR     PAREXP
+0775 3406             (        basic.asm):00530                 PSHS    D
+0777 BD0650           (        basic.asm):00531                 JSR     SKIPSP
+077A 813D             (        basic.asm):00532                 CMPA    #'=
+077C 2703             (        basic.asm):00533                 BEQ     POKE05
+077E 7E054C           (        basic.asm):00534                 JMP     ERRORS
+0781 3001             (        basic.asm):00535         POKE05  LEAX    1,X
+0783 BD083A           (        basic.asm):00536                 JSR     EXPR
+0786 BD0928           (        basic.asm):00537                 JSR     TSTEOL
+0789 3410             (        basic.asm):00538                 PSHS    X
+078B E7F802           (        basic.asm):00539                 STB     [2,S]
+078E 3510             (        basic.asm):00540                 PULS    X
+0790 3262             (        basic.asm):00541                 LEAS    2,S
+0792 7E05F1           (        basic.asm):00542                 JMP     ENDS02
                       (        basic.asm):00543         ******************************
-0798 BD0653           (        basic.asm):00544         TSTFUN  JSR     SKIPSP
-079B 9F88             (        basic.asm):00545                 STX     CURSOR
-079D 8E07A8           (        basic.asm):00546                 LDX     #FUNT
-07A0 BD0619           (        basic.asm):00547                 JSR     FAN00
-07A3 2502             (        basic.asm):00548                 BCS     TSTF05
-07A5 3406             (        basic.asm):00549                 PSHS    D
-07A7 39               (        basic.asm):00550         TSTF05  RTS
-                      (        basic.asm):00551         ******************************
+                      (        basic.asm):00544         ******************************
+0795 BD0650           (        basic.asm):00545         TSTFUN  JSR     SKIPSP
+0798 9F88             (        basic.asm):00546                 STX     CURSOR
+079A 8E07A5           (        basic.asm):00547                 LDX     #FUNT
+079D BD0616           (        basic.asm):00548                 JSR     FAN00
+07A0 2502             (        basic.asm):00549                 BCS     TSTF05
+07A2 3406             (        basic.asm):00550                 PSHS    D
+07A4 39               (        basic.asm):00551         TSTF05  RTS
                       (        basic.asm):00552         ******************************
-07A8 555352           (        basic.asm):00553         FUNT    FCC     /USR/
-07AB 04               (        basic.asm):00554                 FCB     EOL
-07AC 069C             (        basic.asm):00555                 FDB     USER
-07AE 5045454B         (        basic.asm):00556                 FCC     /PEEK/
-07B2 04               (        basic.asm):00557                 FCB     EOL
-07B3 0765             (        basic.asm):00558                 FDB     PEEK
-07B5 4D454D           (        basic.asm):00559                 FCC     /MEM/
-07B8 04               (        basic.asm):00560                 FCB     EOL
-07B9 075A             (        basic.asm):00561                 FDB     TSTSTK
-07BB 04               (        basic.asm):00562                 FCB     EOL
-                      (        basic.asm):00563         ******************************
+                      (        basic.asm):00553         ******************************
+07A5 555352           (        basic.asm):00554         FUNT    FCC     /USR/
+07A8 04               (        basic.asm):00555                 FCB     EOL
+07A9 0699             (        basic.asm):00556                 FDB     USER
+07AB 5045454B         (        basic.asm):00557                 FCC     /PEEK/
+07AF 04               (        basic.asm):00558                 FCB     EOL
+07B0 0762             (        basic.asm):00559                 FDB     PEEK
+07B2 4D454D           (        basic.asm):00560                 FCC     /MEM/
+07B5 04               (        basic.asm):00561                 FCB     EOL
+07B6 0757             (        basic.asm):00562                 FDB     TSTSTK
+07B8 04               (        basic.asm):00563                 FCB     EOL
                       (        basic.asm):00564         ******************************
-07BC 9E80             (        basic.asm):00565         FLINE   LDX     USRBAS
-07BE 9C82             (        basic.asm):00566         FNDLIN  CMPX    USRTOP
-07C0 2603             (        basic.asm):00567                 BNE     FND03
-07C2 1A03             (        basic.asm):00568                 ORCC    #$03
-07C4 39               (        basic.asm):00569                 RTS
-07C5 10A300           (        basic.asm):00570         FND03   CMPD    0,X
-07C8 2603             (        basic.asm):00571                 BNE     FND05
-07CA 1CFC             (        basic.asm):00572                 ANDCC   #$FC
-07CC 39               (        basic.asm):00573                 RTS
-07CD 2405             (        basic.asm):00574         FND05   BCC     FND07
-07CF 1A01             (        basic.asm):00575                 ORCC    #$01
-07D1 1CFD             (        basic.asm):00576                 ANDCC   #$FD
-07D3 39               (        basic.asm):00577                 RTS
-07D4 3402             (        basic.asm):00578         FND07   PSHS    A
-07D6 8604             (        basic.asm):00579                 LDA     #EOL
-07D8 3001             (        basic.asm):00580                 LEAX    1,X
-07DA 3001             (        basic.asm):00581         FND09   LEAX    1,X
-07DC A100             (        basic.asm):00582                 CMPA    0,X
-07DE 26FA             (        basic.asm):00583                 BNE     FND09
-07E0 3502             (        basic.asm):00584                 PULS    A
-07E2 3001             (        basic.asm):00585                 LEAX    1,X
-07E4 20D8             (        basic.asm):00586                 BRA     FNDLIN
-                      (        basic.asm):00587         ******************************
+                      (        basic.asm):00565         ******************************
+07B9 9E80             (        basic.asm):00566         FLINE   LDX     USRBAS
+07BB 9C82             (        basic.asm):00567         FNDLIN  CMPX    USRTOP
+07BD 2603             (        basic.asm):00568                 BNE     FND03
+07BF 1A03             (        basic.asm):00569                 ORCC    #$03
+07C1 39               (        basic.asm):00570                 RTS
+07C2 10A300           (        basic.asm):00571         FND03   CMPD    0,X
+07C5 2603             (        basic.asm):00572                 BNE     FND05
+07C7 1CFC             (        basic.asm):00573                 ANDCC   #$FC
+07C9 39               (        basic.asm):00574                 RTS
+07CA 2405             (        basic.asm):00575         FND05   BCC     FND07
+07CC 1A01             (        basic.asm):00576                 ORCC    #$01
+07CE 1CFD             (        basic.asm):00577                 ANDCC   #$FD
+07D0 39               (        basic.asm):00578                 RTS
+07D1 3402             (        basic.asm):00579         FND07   PSHS    A
+07D3 8604             (        basic.asm):00580                 LDA     #EOL
+07D5 3001             (        basic.asm):00581                 LEAX    1,X
+07D7 3001             (        basic.asm):00582         FND09   LEAX    1,X
+07D9 A100             (        basic.asm):00583                 CMPA    0,X
+07DB 26FA             (        basic.asm):00584                 BNE     FND09
+07DD 3502             (        basic.asm):00585                 PULS    A
+07DF 3001             (        basic.asm):00586                 LEAX    1,X
+07E1 20D8             (        basic.asm):00587                 BRA     FNDLIN
                       (        basic.asm):00588         ******************************
-07E6 8D55             (        basic.asm):00589         RELEXP  BSR     EXPR
-07E8 3406             (        basic.asm):00590                 PSHS    D
-07EA 5F               (        basic.asm):00591                 CLRB
-07EB BD0653           (        basic.asm):00592                 JSR     SKIPSP
-07EE 813D             (        basic.asm):00593                 CMPA    #'=
-07F0 2723             (        basic.asm):00594                 BEQ     REL06
-07F2 813C             (        basic.asm):00595                 CMPA    #'<
-07F4 2610             (        basic.asm):00596                 BNE     REL03
-07F6 3001             (        basic.asm):00597                 LEAX    1,X
-07F8 5C               (        basic.asm):00598                 INCB
-07F9 BD0653           (        basic.asm):00599                 JSR     SKIPSP
-07FC 813E             (        basic.asm):00600                 CMPA    #'>
-07FE 2611             (        basic.asm):00601                 BNE     REL05
-0800 3001             (        basic.asm):00602                 LEAX    1,X
-0802 CB04             (        basic.asm):00603                 ADDB    #4
-0804 2013             (        basic.asm):00604                 BRA     REL07
-0806 813E             (        basic.asm):00605         REL03   CMPA    #'>
-0808 265F             (        basic.asm):00606                 BNE     EXPR06
-080A 3001             (        basic.asm):00607                 LEAX    1,X
-080C CB04             (        basic.asm):00608                 ADDB    #4
-080E BD0653           (        basic.asm):00609                 JSR     SKIPSP
-0811 813D             (        basic.asm):00610         REL05   CMPA    #'=
-0813 2604             (        basic.asm):00611                 BNE     REL07
-0815 3001             (        basic.asm):00612         REL06   LEAX    1,X
-0817 CB02             (        basic.asm):00613                 ADDB    #2
-0819 3404             (        basic.asm):00614         REL07   PSHS    B
-081B 8D20             (        basic.asm):00615                 BSR     EXPR
-081D 3410             (        basic.asm):00616                 PSHS    X
-081F A363             (        basic.asm):00617                 SUBD    3,S
-0821 1FA8             (        basic.asm):00618                 TFR     CC,A
-0823 44               (        basic.asm):00619                 LSRA
-0824 1F89             (        basic.asm):00620                 TFR     A,B
-0826 48               (        basic.asm):00621                 ASLA
-0827 48               (        basic.asm):00622                 ASLA
-0828 3404             (        basic.asm):00623                 PSHS    B
-082A ABE0             (        basic.asm):00624                 ADDA    ,S+
-082C 8406             (        basic.asm):00625                 ANDA    #$06
-082E 2601             (        basic.asm):00626                 BNE     REL08
-0830 4C               (        basic.asm):00627                 INCA
-0831 5F               (        basic.asm):00628         REL08   CLRB
-0832 A462             (        basic.asm):00629                 ANDA    2,S
-0834 2701             (        basic.asm):00630                 BEQ     REL09
-0836 53               (        basic.asm):00631                 COMB
-0837 4F               (        basic.asm):00632         REL09   CLRA
-0838 3510             (        basic.asm):00633                 PULS    X
-083A 3263             (        basic.asm):00634                 LEAS    3,S
-083C 39               (        basic.asm):00635                 RTS
-                      (        basic.asm):00636         ******************************
+                      (        basic.asm):00589         ******************************
+07E3 8D55             (        basic.asm):00590         RELEXP  BSR     EXPR
+07E5 3406             (        basic.asm):00591                 PSHS    D
+07E7 5F               (        basic.asm):00592                 CLRB
+07E8 BD0650           (        basic.asm):00593                 JSR     SKIPSP
+07EB 813D             (        basic.asm):00594                 CMPA    #'=
+07ED 2723             (        basic.asm):00595                 BEQ     REL06
+07EF 813C             (        basic.asm):00596                 CMPA    #'<
+07F1 2610             (        basic.asm):00597                 BNE     REL03
+07F3 3001             (        basic.asm):00598                 LEAX    1,X
+07F5 5C               (        basic.asm):00599                 INCB
+07F6 BD0650           (        basic.asm):00600                 JSR     SKIPSP
+07F9 813E             (        basic.asm):00601                 CMPA    #'>
+07FB 2611             (        basic.asm):00602                 BNE     REL05
+07FD 3001             (        basic.asm):00603                 LEAX    1,X
+07FF CB04             (        basic.asm):00604                 ADDB    #4
+0801 2013             (        basic.asm):00605                 BRA     REL07
+0803 813E             (        basic.asm):00606         REL03   CMPA    #'>
+0805 265F             (        basic.asm):00607                 BNE     EXPR06
+0807 3001             (        basic.asm):00608                 LEAX    1,X
+0809 CB04             (        basic.asm):00609                 ADDB    #4
+080B BD0650           (        basic.asm):00610                 JSR     SKIPSP
+080E 813D             (        basic.asm):00611         REL05   CMPA    #'=
+0810 2604             (        basic.asm):00612                 BNE     REL07
+0812 3001             (        basic.asm):00613         REL06   LEAX    1,X
+0814 CB02             (        basic.asm):00614                 ADDB    #2
+0816 3404             (        basic.asm):00615         REL07   PSHS    B
+0818 8D20             (        basic.asm):00616                 BSR     EXPR
+081A 3410             (        basic.asm):00617                 PSHS    X
+081C A363             (        basic.asm):00618                 SUBD    3,S
+081E 1FA8             (        basic.asm):00619                 TFR     CC,A
+0820 44               (        basic.asm):00620                 LSRA
+0821 1F89             (        basic.asm):00621                 TFR     A,B
+0823 48               (        basic.asm):00622                 ASLA
+0824 48               (        basic.asm):00623                 ASLA
+0825 3404             (        basic.asm):00624                 PSHS    B
+0827 ABE0             (        basic.asm):00625                 ADDA    ,S+
+0829 8406             (        basic.asm):00626                 ANDA    #$06
+082B 2601             (        basic.asm):00627                 BNE     REL08
+082D 4C               (        basic.asm):00628                 INCA
+082E 5F               (        basic.asm):00629         REL08   CLRB
+082F A462             (        basic.asm):00630                 ANDA    2,S
+0831 2701             (        basic.asm):00631                 BEQ     REL09
+0833 53               (        basic.asm):00632                 COMB
+0834 4F               (        basic.asm):00633         REL09   CLRA
+0835 3510             (        basic.asm):00634                 PULS    X
+0837 3263             (        basic.asm):00635                 LEAS    3,S
+0839 39               (        basic.asm):00636                 RTS
                       (        basic.asm):00637         ******************************
-083D 6FE2             (        basic.asm):00638         EXPR    CLR     ,-S
-083F 6FE2             (        basic.asm):00639                 CLR     ,-S
-0841 BD0653           (        basic.asm):00640                 JSR     SKIPSP
-0844 812D             (        basic.asm):00641                 CMPA    #'-
-0846 2717             (        basic.asm):00642                 BEQ     EXPR05
-0848 812B             (        basic.asm):00643                 CMPA    #'+
-084A 2602             (        basic.asm):00644                 BNE     EXPR03
-084C 3001             (        basic.asm):00645         EXPR02  LEAX    1,X
-084E 8D1C             (        basic.asm):00646         EXPR03  BSR     TERM
-0850 E360             (        basic.asm):00647         EXPR04  ADDD    0,S
-0852 ED60             (        basic.asm):00648                 STD     0,S
-0854 BD0653           (        basic.asm):00649                 JSR     SKIPSP
-0857 812B             (        basic.asm):00650                 CMPA    #'+
-0859 27F1             (        basic.asm):00651                 BEQ     EXPR02
-085B 812D             (        basic.asm):00652                 CMPA    #'-
-085D 260A             (        basic.asm):00653                 BNE     EXPR06
-085F 3001             (        basic.asm):00654         EXPR05  LEAX    1,X
-0861 8D09             (        basic.asm):00655                 BSR     TERM
-0863 40               (        basic.asm):00656                 NEGA
-0864 50               (        basic.asm):00657                 NEGB
-0865 8200             (        basic.asm):00658                 SBCA    #0
-0867 20E7             (        basic.asm):00659                 BRA     EXPR04
-0869 3506             (        basic.asm):00660         EXPR06  PULS    D
-086B 39               (        basic.asm):00661                 RTS
-                      (        basic.asm):00662         ******************************
+                      (        basic.asm):00638         ******************************
+083A 6FE2             (        basic.asm):00639         EXPR    CLR     ,-S
+083C 6FE2             (        basic.asm):00640                 CLR     ,-S
+083E BD0650           (        basic.asm):00641                 JSR     SKIPSP
+0841 812D             (        basic.asm):00642                 CMPA    #'-
+0843 2717             (        basic.asm):00643                 BEQ     EXPR05
+0845 812B             (        basic.asm):00644                 CMPA    #'+
+0847 2602             (        basic.asm):00645                 BNE     EXPR03
+0849 3001             (        basic.asm):00646         EXPR02  LEAX    1,X
+084B 8D1C             (        basic.asm):00647         EXPR03  BSR     TERM
+084D E360             (        basic.asm):00648         EXPR04  ADDD    0,S
+084F ED60             (        basic.asm):00649                 STD     0,S
+0851 BD0650           (        basic.asm):00650                 JSR     SKIPSP
+0854 812B             (        basic.asm):00651                 CMPA    #'+
+0856 27F1             (        basic.asm):00652                 BEQ     EXPR02
+0858 812D             (        basic.asm):00653                 CMPA    #'-
+085A 260A             (        basic.asm):00654                 BNE     EXPR06
+085C 3001             (        basic.asm):00655         EXPR05  LEAX    1,X
+085E 8D09             (        basic.asm):00656                 BSR     TERM
+0860 40               (        basic.asm):00657                 NEGA
+0861 50               (        basic.asm):00658                 NEGB
+0862 8200             (        basic.asm):00659                 SBCA    #0
+0864 20E7             (        basic.asm):00660                 BRA     EXPR04
+0866 3506             (        basic.asm):00661         EXPR06  PULS    D
+0868 39               (        basic.asm):00662                 RTS
                       (        basic.asm):00663         ******************************
-086C BD08DF           (        basic.asm):00664         TERM    JSR     FACT
-086F 3406             (        basic.asm):00665                 PSHS    D
-0871 BD0653           (        basic.asm):00666         TERM03  JSR     SKIPSP
-0874 812A             (        basic.asm):00667                 CMPA    #'*
-0876 2748             (        basic.asm):00668                 BEQ     TERM07
-0878 812F             (        basic.asm):00669                 CMPA    #'/
-087A 2703             (        basic.asm):00670                 BEQ     TERM05
-087C 3506             (        basic.asm):00671                 PULS    D
-087E 39               (        basic.asm):00672                 RTS
-087F 3001             (        basic.asm):00673         TERM05  LEAX    1,X
-0881 8D5C             (        basic.asm):00674                 BSR     FACT
-0883 3410             (        basic.asm):00675                 PSHS    X
-0885 3062             (        basic.asm):00676                 LEAX    2,S
-0887 3406             (        basic.asm):00677                 PSHS    D
-0889 A800             (        basic.asm):00678                 EORA    0,X
-088B BD091E           (        basic.asm):00679                 JSR     ABSX
-088E 3060             (        basic.asm):00680                 LEAX    0,S
-0890 BD091E           (        basic.asm):00681                 JSR     ABSX
-0893 3402             (        basic.asm):00682                 PSHS    A
-0895 8611             (        basic.asm):00683                 LDA     #17
-0897 3402             (        basic.asm):00684                 PSHS    A
-0899 4F               (        basic.asm):00685                 CLRA
-089A 5F               (        basic.asm):00686                 CLRB
-089B A362             (        basic.asm):00687         DIV05   SUBD    2,S
-089D 2406             (        basic.asm):00688                 BCC     DIV07
-089F E362             (        basic.asm):00689                 ADDD    2,S
-08A1 1CFE             (        basic.asm):00690                 ANDCC   #$FE
-08A3 2002             (        basic.asm):00691                 BRA     DIV09
-08A5 1A01             (        basic.asm):00692         DIV07   ORCC    #$01
-08A7 6967             (        basic.asm):00693         DIV09   ROL     7,S
-08A9 6966             (        basic.asm):00694                 ROL     6,S
-08AB 59               (        basic.asm):00695                 ROLB
-08AC 49               (        basic.asm):00696                 ROLA
-08AD 6A60             (        basic.asm):00697                 DEC     0,S
-08AF 26EA             (        basic.asm):00698                 BNE     DIV05
-08B1 A661             (        basic.asm):00699                 LDA     1,S
-08B3 3264             (        basic.asm):00700                 LEAS    4,S
-08B5 4D               (        basic.asm):00701                 TSTA
-08B6 2A04             (        basic.asm):00702                 BPL     TERM06
-08B8 3062             (        basic.asm):00703                 LEAX    2,S
-08BA 8D66             (        basic.asm):00704                 BSR     NEGX
-08BC 3510             (        basic.asm):00705         TERM06  PULS    X
-08BE 20B1             (        basic.asm):00706                 BRA     TERM03
-08C0 3001             (        basic.asm):00707         TERM07  LEAX    1,X
-08C2 8D1B             (        basic.asm):00708                 BSR     FACT
-08C4 3404             (        basic.asm):00709         MULT    PSHS    B
-08C6 E662             (        basic.asm):00710                 LDB     2,S
-08C8 3D               (        basic.asm):00711                 MUL
-08C9 A661             (        basic.asm):00712                 LDA     1,S
-08CB E761             (        basic.asm):00713                 STB     1,S
-08CD E660             (        basic.asm):00714                 LDB     0,S
-08CF 3D               (        basic.asm):00715                 MUL
-08D0 A662             (        basic.asm):00716                 LDA     2,S
-08D2 E762             (        basic.asm):00717                 STB     2,S
-08D4 3504             (        basic.asm):00718                 PULS    B
-08D6 3D               (        basic.asm):00719                 MUL
-08D7 AB60             (        basic.asm):00720                 ADDA    0,S
-08D9 AB61             (        basic.asm):00721                 ADDA    1,S
-08DB ED60             (        basic.asm):00722                 STD     0,S
-08DD 2092             (        basic.asm):00723                 BRA     TERM03
-                      (        basic.asm):00724         ******************************
+                      (        basic.asm):00664         ******************************
+0869 BD08DC           (        basic.asm):00665         TERM    JSR     FACT
+086C 3406             (        basic.asm):00666                 PSHS    D
+086E BD0650           (        basic.asm):00667         TERM03  JSR     SKIPSP
+0871 812A             (        basic.asm):00668                 CMPA    #'*
+0873 2748             (        basic.asm):00669                 BEQ     TERM07
+0875 812F             (        basic.asm):00670                 CMPA    #'/
+0877 2703             (        basic.asm):00671                 BEQ     TERM05
+0879 3506             (        basic.asm):00672                 PULS    D
+087B 39               (        basic.asm):00673                 RTS
+087C 3001             (        basic.asm):00674         TERM05  LEAX    1,X
+087E 8D5C             (        basic.asm):00675                 BSR     FACT
+0880 3410             (        basic.asm):00676                 PSHS    X
+0882 3062             (        basic.asm):00677                 LEAX    2,S
+0884 3406             (        basic.asm):00678                 PSHS    D
+0886 A800             (        basic.asm):00679                 EORA    0,X
+0888 BD091B           (        basic.asm):00680                 JSR     ABSX
+088B 3060             (        basic.asm):00681                 LEAX    0,S
+088D BD091B           (        basic.asm):00682                 JSR     ABSX
+0890 3402             (        basic.asm):00683                 PSHS    A
+0892 8611             (        basic.asm):00684                 LDA     #17
+0894 3402             (        basic.asm):00685                 PSHS    A
+0896 4F               (        basic.asm):00686                 CLRA
+0897 5F               (        basic.asm):00687                 CLRB
+0898 A362             (        basic.asm):00688         DIV05   SUBD    2,S
+089A 2406             (        basic.asm):00689                 BCC     DIV07
+089C E362             (        basic.asm):00690                 ADDD    2,S
+089E 1CFE             (        basic.asm):00691                 ANDCC   #$FE
+08A0 2002             (        basic.asm):00692                 BRA     DIV09
+08A2 1A01             (        basic.asm):00693         DIV07   ORCC    #$01
+08A4 6967             (        basic.asm):00694         DIV09   ROL     7,S
+08A6 6966             (        basic.asm):00695                 ROL     6,S
+08A8 59               (        basic.asm):00696                 ROLB
+08A9 49               (        basic.asm):00697                 ROLA
+08AA 6A60             (        basic.asm):00698                 DEC     0,S
+08AC 26EA             (        basic.asm):00699                 BNE     DIV05
+08AE A661             (        basic.asm):00700                 LDA     1,S
+08B0 3264             (        basic.asm):00701                 LEAS    4,S
+08B2 4D               (        basic.asm):00702                 TSTA
+08B3 2A04             (        basic.asm):00703                 BPL     TERM06
+08B5 3062             (        basic.asm):00704                 LEAX    2,S
+08B7 8D66             (        basic.asm):00705                 BSR     NEGX
+08B9 3510             (        basic.asm):00706         TERM06  PULS    X
+08BB 20B1             (        basic.asm):00707                 BRA     TERM03
+08BD 3001             (        basic.asm):00708         TERM07  LEAX    1,X
+08BF 8D1B             (        basic.asm):00709                 BSR     FACT
+08C1 3404             (        basic.asm):00710         MULT    PSHS    B
+08C3 E662             (        basic.asm):00711                 LDB     2,S
+08C5 3D               (        basic.asm):00712                 MUL
+08C6 A661             (        basic.asm):00713                 LDA     1,S
+08C8 E761             (        basic.asm):00714                 STB     1,S
+08CA E660             (        basic.asm):00715                 LDB     0,S
+08CC 3D               (        basic.asm):00716                 MUL
+08CD A662             (        basic.asm):00717                 LDA     2,S
+08CF E762             (        basic.asm):00718                 STB     2,S
+08D1 3504             (        basic.asm):00719                 PULS    B
+08D3 3D               (        basic.asm):00720                 MUL
+08D4 AB60             (        basic.asm):00721                 ADDA    0,S
+08D6 AB61             (        basic.asm):00722                 ADDA    1,S
+08D8 ED60             (        basic.asm):00723                 STD     0,S
+08DA 2092             (        basic.asm):00724                 BRA     TERM03
                       (        basic.asm):00725         ******************************
-08DF BD0683           (        basic.asm):00726         FACT    JSR     TSTVAR
-08E2 2509             (        basic.asm):00727                 BCS     FACT03
-08E4 3410             (        basic.asm):00728                 PSHS    X
-08E6 1F01             (        basic.asm):00729                 TFR     D,X
-08E8 EC00             (        basic.asm):00730                 LDD     0,X
-08EA 3510             (        basic.asm):00731                 PULS    X
-08EC 39               (        basic.asm):00732         FACT02  RTS
-08ED BD06E2           (        basic.asm):00733         FACT03  JSR     TSTNBR
-08F0 24FA             (        basic.asm):00734                 BCC     FACT02
-08F2 BD0798           (        basic.asm):00735                 JSR     TSTFUN
-08F5 24F5             (        basic.asm):00736                 BCC     FACT02
-08F7 8D11             (        basic.asm):00737         PAREXP  BSR     ARGONE
-08F9 3402             (        basic.asm):00738                 PSHS    A
-08FB BD0653           (        basic.asm):00739                 JSR     SKIPSP
-08FE 8129             (        basic.asm):00740                 CMPA    #')
-0900 3502             (        basic.asm):00741                 PULS    A
-0902 2603             (        basic.asm):00742                 BNE     FACT05
-0904 3001             (        basic.asm):00743                 LEAX    1,X
-0906 39               (        basic.asm):00744                 RTS
-0907 7E054C           (        basic.asm):00745         FACT05  JMP     ERRORS
-                      (        basic.asm):00746         ******************************
+                      (        basic.asm):00726         ******************************
+08DC BD0680           (        basic.asm):00727         FACT    JSR     TSTVAR
+08DF 2509             (        basic.asm):00728                 BCS     FACT03
+08E1 3410             (        basic.asm):00729                 PSHS    X
+08E3 1F01             (        basic.asm):00730                 TFR     D,X
+08E5 EC00             (        basic.asm):00731                 LDD     0,X
+08E7 3510             (        basic.asm):00732                 PULS    X
+08E9 39               (        basic.asm):00733         FACT02  RTS
+08EA BD06DF           (        basic.asm):00734         FACT03  JSR     TSTNBR
+08ED 24FA             (        basic.asm):00735                 BCC     FACT02
+08EF BD0795           (        basic.asm):00736                 JSR     TSTFUN
+08F2 24F5             (        basic.asm):00737                 BCC     FACT02
+08F4 8D11             (        basic.asm):00738         PAREXP  BSR     ARGONE
+08F6 3402             (        basic.asm):00739                 PSHS    A
+08F8 BD0650           (        basic.asm):00740                 JSR     SKIPSP
+08FB 8129             (        basic.asm):00741                 CMPA    #')
+08FD 3502             (        basic.asm):00742                 PULS    A
+08FF 2603             (        basic.asm):00743                 BNE     FACT05
+0901 3001             (        basic.asm):00744                 LEAX    1,X
+0903 39               (        basic.asm):00745                 RTS
+0904 7E054C           (        basic.asm):00746         FACT05  JMP     ERRORS
                       (        basic.asm):00747         ******************************
-090A BD075A           (        basic.asm):00748         ARGONE  JSR     TSTSTK
-090D 2403             (        basic.asm):00749                 BCC     FACT04
-090F 7E0544           (        basic.asm):00750                 JMP     ERRORF
-0912 BD0653           (        basic.asm):00751         FACT04  JSR     SKIPSP
-0915 8128             (        basic.asm):00752                 CMPA    #'(
-0917 26EE             (        basic.asm):00753                 BNE     FACT05
-0919 3001             (        basic.asm):00754                 LEAX    1,X
-091B 7E083D           (        basic.asm):00755                 JMP     EXPR
-                      (        basic.asm):00756         ******************************
+                      (        basic.asm):00748         ******************************
+0907 BD0757           (        basic.asm):00749         ARGONE  JSR     TSTSTK
+090A 2403             (        basic.asm):00750                 BCC     FACT04
+090C 7E0544           (        basic.asm):00751                 JMP     ERRORF
+090F BD0650           (        basic.asm):00752         FACT04  JSR     SKIPSP
+0912 8128             (        basic.asm):00753                 CMPA    #'(
+0914 26EE             (        basic.asm):00754                 BNE     FACT05
+0916 3001             (        basic.asm):00755                 LEAX    1,X
+0918 7E083A           (        basic.asm):00756                 JMP     EXPR
                       (        basic.asm):00757         ******************************
-091E 6D00             (        basic.asm):00758         ABSX    TST     0,X
-0920 2A08             (        basic.asm):00759                 BPL     NEG05
-0922 6000             (        basic.asm):00760         NEGX    NEG     0,X
-0924 6001             (        basic.asm):00761                 NEG     1,X
-0926 2402             (        basic.asm):00762                 BCC     NEG05
-0928 6A00             (        basic.asm):00763                 DEC     0,X
-092A 39               (        basic.asm):00764         NEG05   RTS
-                      (        basic.asm):00765         ******************************
+                      (        basic.asm):00758         ******************************
+091B 6D00             (        basic.asm):00759         ABSX    TST     0,X
+091D 2A08             (        basic.asm):00760                 BPL     NEG05
+091F 6000             (        basic.asm):00761         NEGX    NEG     0,X
+0921 6001             (        basic.asm):00762                 NEG     1,X
+0923 2402             (        basic.asm):00763                 BCC     NEG05
+0925 6A00             (        basic.asm):00764                 DEC     0,X
+0927 39               (        basic.asm):00765         NEG05   RTS
                       (        basic.asm):00766         ******************************
-092B 3402             (        basic.asm):00767         TSTEOL  PSHS    A
-092D BD0653           (        basic.asm):00768                 JSR     SKIPSP
-0930 8104             (        basic.asm):00769                 CMPA    #EOL
-0932 2703             (        basic.asm):00770                 BEQ     TEOL03
-0934 7E054C           (        basic.asm):00771                 JMP     ERRORS
-0937 3001             (        basic.asm):00772         TEOL03  LEAX    1,X
-0939 3502             (        basic.asm):00773                 PULS    A
-093B 39               (        basic.asm):00774                 RTS
-                      (        basic.asm):00775         ******************************
+                      (        basic.asm):00767         ******************************
+0928 3402             (        basic.asm):00768         TSTEOL  PSHS    A
+092A BD0650           (        basic.asm):00769                 JSR     SKIPSP
+092D 8104             (        basic.asm):00770                 CMPA    #EOL
+092F 2703             (        basic.asm):00771                 BEQ     TEOL03
+0931 7E054C           (        basic.asm):00772                 JMP     ERRORS
+0934 3001             (        basic.asm):00773         TEOL03  LEAX    1,X
+0936 3502             (        basic.asm):00774                 PULS    A
+0938 39               (        basic.asm):00775                 RTS
                       (        basic.asm):00776         ******************************
-093C BD0683           (        basic.asm):00777         LET     JSR     TSTVAR
-093F 2403             (        basic.asm):00778                 BCC     LET03
-0941 7E054C           (        basic.asm):00779                 JMP     ERRORS
-0944 3406             (        basic.asm):00780         LET03   PSHS    D
-0946 BD0653           (        basic.asm):00781                 JSR     SKIPSP
-0949 813D             (        basic.asm):00782                 CMPA    #'=
-094B 2703             (        basic.asm):00783                 BEQ     LET05
-094D 7E054C           (        basic.asm):00784                 JMP     ERRORS
-0950 3001             (        basic.asm):00785         LET05   LEAX    1,X
-0952 BD083D           (        basic.asm):00786                 JSR     EXPR
-0955 8DD4             (        basic.asm):00787                 BSR     TSTEOL
-0957 9F88             (        basic.asm):00788                 STX     CURSOR
-0959 3510             (        basic.asm):00789                 PULS    X
-095B ED00             (        basic.asm):00790                 STD     0,X
-095D 9E88             (        basic.asm):00791                 LDX     CURSOR
-095F 7E05F4           (        basic.asm):00792                 JMP     ENDS02
-                      (        basic.asm):00793         ******************************
+                      (        basic.asm):00777         ******************************
+0939 BD0680           (        basic.asm):00778         LET     JSR     TSTVAR
+093C 2403             (        basic.asm):00779                 BCC     LET03
+093E 7E054C           (        basic.asm):00780                 JMP     ERRORS
+0941 3406             (        basic.asm):00781         LET03   PSHS    D
+0943 BD0650           (        basic.asm):00782                 JSR     SKIPSP
+0946 813D             (        basic.asm):00783                 CMPA    #'=
+0948 2703             (        basic.asm):00784                 BEQ     LET05
+094A 7E054C           (        basic.asm):00785                 JMP     ERRORS
+094D 3001             (        basic.asm):00786         LET05   LEAX    1,X
+094F BD083A           (        basic.asm):00787                 JSR     EXPR
+0952 8DD4             (        basic.asm):00788                 BSR     TSTEOL
+0954 9F88             (        basic.asm):00789                 STX     CURSOR
+0956 3510             (        basic.asm):00790                 PULS    X
+0958 ED00             (        basic.asm):00791                 STD     0,X
+095A 9E88             (        basic.asm):00792                 LDX     CURSOR
+095C 7E05F1           (        basic.asm):00793                 JMP     ENDS02
                       (        basic.asm):00794         ******************************
-0962 BD07E6           (        basic.asm):00795         IF      JSR     RELEXP
-0965 5D               (        basic.asm):00796                 TSTB
-0966 2703             (        basic.asm):00797                 BEQ     IF03
-0968 7E0605           (        basic.asm):00798                 JMP     MSLINE
-096B 7E05EB           (        basic.asm):00799         IF03    JMP     REM
-                      (        basic.asm):00800         ******************************
+                      (        basic.asm):00795         ******************************
+095F BD07E3           (        basic.asm):00796         IF      JSR     RELEXP
+0962 5D               (        basic.asm):00797                 TSTB
+0963 2703             (        basic.asm):00798                 BEQ     IF03
+0965 7E0602           (        basic.asm):00799                 JMP     MSLINE
+0968 7E05E8           (        basic.asm):00800         IF03    JMP     REM
                       (        basic.asm):00801         ******************************
-096E BD083D           (        basic.asm):00802         GOTO    JSR     EXPR
-0971 8DB8             (        basic.asm):00803                 BSR     TSTEOL
-0973 BD07BC           (        basic.asm):00804                 JSR     FLINE
-0976 250F             (        basic.asm):00805                 BCS     GOSB04
-0978 7E0601           (        basic.asm):00806                 JMP     NXTLIN
-                      (        basic.asm):00807         ******************************
+                      (        basic.asm):00802         ******************************
+096B BD083A           (        basic.asm):00803         GOTO    JSR     EXPR
+096E 8DB8             (        basic.asm):00804                 BSR     TSTEOL
+0970 BD07B9           (        basic.asm):00805                 JSR     FLINE
+0973 250F             (        basic.asm):00806                 BCS     GOSB04
+0975 7E05FE           (        basic.asm):00807                 JMP     NXTLIN
                       (        basic.asm):00808         ******************************
-097B BD083D           (        basic.asm):00809         GOSUB   JSR     EXPR
-097E 8DAB             (        basic.asm):00810                 BSR     TSTEOL
-0980 9F88             (        basic.asm):00811                 STX     CURSOR
-0982 BD07BC           (        basic.asm):00812                 JSR     FLINE
-0985 2403             (        basic.asm):00813                 BCC     GOSB03
-0987 7E0555           (        basic.asm):00814         GOSB04  JMP     ERRORR
-098A BD075A           (        basic.asm):00815         GOSB03  JSR     TSTSTK
-098D 2403             (        basic.asm):00816                 BCC     GOSB05
-098F 7E0544           (        basic.asm):00817                 JMP     ERRORF
-0992 DC88             (        basic.asm):00818         GOSB05  LDD     CURSOR
-0994 3406             (        basic.asm):00819                 PSHS    D
-0996 DC8C             (        basic.asm):00820                 LDD     LINENB
-0998 3406             (        basic.asm):00821                 PSHS    D
-099A BD0601           (        basic.asm):00822                 JSR     NXTLIN
-099D 3506             (        basic.asm):00823                 PULS    D
-099F DD8C             (        basic.asm):00824                 STD     LINENB
-09A1 3510             (        basic.asm):00825                 PULS    X
-09A3 7E05F4           (        basic.asm):00826                 JMP     ENDS02
-                      (        basic.asm):00827         ******************************
+                      (        basic.asm):00809         ******************************
+0978 BD083A           (        basic.asm):00810         GOSUB   JSR     EXPR
+097B 8DAB             (        basic.asm):00811                 BSR     TSTEOL
+097D 9F88             (        basic.asm):00812                 STX     CURSOR
+097F BD07B9           (        basic.asm):00813                 JSR     FLINE
+0982 2403             (        basic.asm):00814                 BCC     GOSB03
+0984 7E0555           (        basic.asm):00815         GOSB04  JMP     ERRORR
+0987 BD0757           (        basic.asm):00816         GOSB03  JSR     TSTSTK
+098A 2403             (        basic.asm):00817                 BCC     GOSB05
+098C 7E0544           (        basic.asm):00818                 JMP     ERRORF
+098F DC88             (        basic.asm):00819         GOSB05  LDD     CURSOR
+0991 3406             (        basic.asm):00820                 PSHS    D
+0993 DC8C             (        basic.asm):00821                 LDD     LINENB
+0995 3406             (        basic.asm):00822                 PSHS    D
+0997 BD05FE           (        basic.asm):00823                 JSR     NXTLIN
+099A 3506             (        basic.asm):00824                 PULS    D
+099C DD8C             (        basic.asm):00825                 STD     LINENB
+099E 3510             (        basic.asm):00826                 PULS    X
+09A0 7E05F1           (        basic.asm):00827                 JMP     ENDS02
                       (        basic.asm):00828         ******************************
-     092B             (        basic.asm):00829         RETURN  EQU     TSTEOL
-                      (        basic.asm):00830         ******************************
+                      (        basic.asm):00829         ******************************
+     0928             (        basic.asm):00830         RETURN  EQU     TSTEOL
                       (        basic.asm):00831         ******************************
-09A6 BD0653           (        basic.asm):00832         PRINT   JSR     SKIPSP
-09A9 812C             (        basic.asm):00833         PR01    CMPA    #',
-09AB 2736             (        basic.asm):00834                 BEQ     PR05
-09AD 813B             (        basic.asm):00835                 CMPA    #';
-09AF 273D             (        basic.asm):00836                 BEQ     PR07
-09B1 8104             (        basic.asm):00837                 CMPA    #EOL
-09B3 2725             (        basic.asm):00838                 BEQ     PR04
-09B5 8122             (        basic.asm):00839                 CMPA    #'"
-09B7 2606             (        basic.asm):00840                 BNE     PR02
-09B9 3001             (        basic.asm):00841                 LEAX    1,X
-09BB 8D42             (        basic.asm):00842                 BSR     PRNTQS
-09BD 2009             (        basic.asm):00843                 BRA     PR03
-09BF BD083D           (        basic.asm):00844         PR02    JSR     EXPR
-09C2 3410             (        basic.asm):00845                 PSHS    X
-09C4 8D47             (        basic.asm):00846                 BSR     PRNTN
-09C6 3510             (        basic.asm):00847                 PULS    X
-09C8 BD0653           (        basic.asm):00848         PR03    JSR     SKIPSP
-09CB 812C             (        basic.asm):00849                 CMPA    #',
-09CD 2714             (        basic.asm):00850                 BEQ     PR05
-09CF 813B             (        basic.asm):00851                 CMPA    #';
-09D1 271B             (        basic.asm):00852                 BEQ     PR07
-09D3 8104             (        basic.asm):00853                 CMPA    #EOL
-09D5 2703             (        basic.asm):00854                 BEQ     PR04
-09D7 7E054C           (        basic.asm):00855                 JMP     ERRORS
-09DA 3410             (        basic.asm):00856         PR04    PSHS    X
-09DC BD0535           (        basic.asm):00857                 JSR     CRLF
-09DF 3510             (        basic.asm):00858                 PULS    X
-09E1 2014             (        basic.asm):00859                 BRA     PR08
-09E3 C607             (        basic.asm):00860         PR05    LDB     #$7
-09E5 8620             (        basic.asm):00861         PR06    LDA     #SPACE
-09E7 BD0BA0           (        basic.asm):00862                 JSR     PUTCHR
-09EA D592             (        basic.asm):00863                 BITB    ZONE
-09EC 26F7             (        basic.asm):00864                 BNE     PR06
-09EE 3001             (        basic.asm):00865         PR07    LEAX    1,X
-09F0 BD0653           (        basic.asm):00866                 JSR     SKIPSP
-09F3 8104             (        basic.asm):00867                 CMPA    #EOL
-09F5 26B2             (        basic.asm):00868                 BNE     PR01
-09F7 3001             (        basic.asm):00869         PR08    LEAX    1,X
-09F9 7E05F4           (        basic.asm):00870                 JMP     ENDS02
-                      (        basic.asm):00871         *
+                      (        basic.asm):00832         ******************************
+09A3 BD0650           (        basic.asm):00833         PRINT   JSR     SKIPSP
+09A6 812C             (        basic.asm):00834         PR01    CMPA    #',
+09A8 2736             (        basic.asm):00835                 BEQ     PR05
+09AA 813B             (        basic.asm):00836                 CMPA    #';
+09AC 273D             (        basic.asm):00837                 BEQ     PR07
+09AE 8104             (        basic.asm):00838                 CMPA    #EOL
+09B0 2725             (        basic.asm):00839                 BEQ     PR04
+09B2 8122             (        basic.asm):00840                 CMPA    #'"
+09B4 2606             (        basic.asm):00841                 BNE     PR02
+09B6 3001             (        basic.asm):00842                 LEAX    1,X
+09B8 8D42             (        basic.asm):00843                 BSR     PRNTQS
+09BA 2009             (        basic.asm):00844                 BRA     PR03
+09BC BD083A           (        basic.asm):00845         PR02    JSR     EXPR
+09BF 3410             (        basic.asm):00846                 PSHS    X
+09C1 8D47             (        basic.asm):00847                 BSR     PRNTN
+09C3 3510             (        basic.asm):00848                 PULS    X
+09C5 BD0650           (        basic.asm):00849         PR03    JSR     SKIPSP
+09C8 812C             (        basic.asm):00850                 CMPA    #',
+09CA 2714             (        basic.asm):00851                 BEQ     PR05
+09CC 813B             (        basic.asm):00852                 CMPA    #';
+09CE 271B             (        basic.asm):00853                 BEQ     PR07
+09D0 8104             (        basic.asm):00854                 CMPA    #EOL
+09D2 2703             (        basic.asm):00855                 BEQ     PR04
+09D4 7E054C           (        basic.asm):00856                 JMP     ERRORS
+09D7 3410             (        basic.asm):00857         PR04    PSHS    X
+09D9 BD0535           (        basic.asm):00858                 JSR     CRLF
+09DC 3510             (        basic.asm):00859                 PULS    X
+09DE 2014             (        basic.asm):00860                 BRA     PR08
+09E0 C607             (        basic.asm):00861         PR05    LDB     #$7
+09E2 8620             (        basic.asm):00862         PR06    LDA     #SPACE
+09E4 BD0B9D           (        basic.asm):00863                 JSR     PUTCHR
+09E7 D592             (        basic.asm):00864                 BITB    ZONE
+09E9 26F7             (        basic.asm):00865                 BNE     PR06
+09EB 3001             (        basic.asm):00866         PR07    LEAX    1,X
+09ED BD0650           (        basic.asm):00867                 JSR     SKIPSP
+09F0 8104             (        basic.asm):00868                 CMPA    #EOL
+09F2 26B2             (        basic.asm):00869                 BNE     PR01
+09F4 3001             (        basic.asm):00870         PR08    LEAX    1,X
+09F6 7E05F1           (        basic.asm):00871                 JMP     ENDS02
                       (        basic.asm):00872         *
-09FC BD0BA0           (        basic.asm):00873         PRQ01   JSR     PUTCHR
-09FF A680             (        basic.asm):00874         PRNTQS  LDA     ,X+
-0A01 8104             (        basic.asm):00875                 CMPA    #EOL
-0A03 2603             (        basic.asm):00876                 BNE     PRQ03
-0A05 7E054C           (        basic.asm):00877                 JMP     ERRORS
-0A08 8122             (        basic.asm):00878         PRQ03   CMPA    #'"
-0A0A 26F0             (        basic.asm):00879                 BNE     PRQ01
-0A0C 39               (        basic.asm):00880                 RTS
-                      (        basic.asm):00881         *
-0A0D 4D               (        basic.asm):00882         PRNTN   TSTA
-0A0E 2A0D             (        basic.asm):00883                 BPL     PRN03
-0A10 40               (        basic.asm):00884                 NEGA
-0A11 50               (        basic.asm):00885                 NEGB
-0A12 8200             (        basic.asm):00886                 SBCA    #0
-0A14 3402             (        basic.asm):00887                 PSHS    A
-0A16 862D             (        basic.asm):00888                 LDA     #'-
-0A18 BD0BA0           (        basic.asm):00889                 JSR     PUTCHR
-0A1B 3502             (        basic.asm):00890                 PULS    A
-0A1D 8E0A4C           (        basic.asm):00891         PRN03   LDX     #PRNPT-2
-0A20 3002             (        basic.asm):00892         PRN05   LEAX    2,X
-0A22 10A300           (        basic.asm):00893                 CMPD    0,X
-0A25 2405             (        basic.asm):00894                 BCC     PRN07
-0A27 8C0A56           (        basic.asm):00895                 CMPX    #PRNPTO
-0A2A 26F4             (        basic.asm):00896                 BNE     PRN05
-0A2C 0F90             (        basic.asm):00897         PRN07   CLR     CHAR
-0A2E 10A300           (        basic.asm):00898         PRN09   CMPD    0,X
-0A31 2506             (        basic.asm):00899                 BCS     PRN11
-0A33 A300             (        basic.asm):00900                 SUBD    0,X
-0A35 0C90             (        basic.asm):00901                 INC     CHAR
-0A37 20F5             (        basic.asm):00902                 BRA     PRN09
-0A39 3402             (        basic.asm):00903         PRN11   PSHS    A
-0A3B 8630             (        basic.asm):00904                 LDA     #'0
-0A3D 9B90             (        basic.asm):00905                 ADDA    CHAR
-0A3F BD0BA0           (        basic.asm):00906                 JSR     PUTCHR
-0A42 3502             (        basic.asm):00907                 PULS    A
-0A44 8C0A56           (        basic.asm):00908                 CMPX    #PRNPTO
-0A47 2704             (        basic.asm):00909                 BEQ     PRN13
-0A49 3002             (        basic.asm):00910                 LEAX    2,X
-0A4B 20DF             (        basic.asm):00911                 BRA     PRN07
-0A4D 39               (        basic.asm):00912         PRN13   RTS
-0A4E 2710             (        basic.asm):00913         PRNPT   FDB     10000
-0A50 03E8             (        basic.asm):00914                 FDB     1000
-0A52 0064             (        basic.asm):00915                 FDB     100
-0A54 000A             (        basic.asm):00916                 FDB     10
-0A56 0001             (        basic.asm):00917         PRNPTO  FDB     1
-                      (        basic.asm):00918         *
-0A58 8E0A50           (        basic.asm):00919         PRNT4   LDX     #PRNPT+2
-0A5B 20CF             (        basic.asm):00920                 BRA     PRN07
-                      (        basic.asm):00921         ******************************
+                      (        basic.asm):00873         *
+09F9 BD0B9D           (        basic.asm):00874         PRQ01   JSR     PUTCHR
+09FC A680             (        basic.asm):00875         PRNTQS  LDA     ,X+
+09FE 8104             (        basic.asm):00876                 CMPA    #EOL
+0A00 2603             (        basic.asm):00877                 BNE     PRQ03
+0A02 7E054C           (        basic.asm):00878                 JMP     ERRORS
+0A05 8122             (        basic.asm):00879         PRQ03   CMPA    #'"
+0A07 26F0             (        basic.asm):00880                 BNE     PRQ01
+0A09 39               (        basic.asm):00881                 RTS
+                      (        basic.asm):00882         *
+0A0A 4D               (        basic.asm):00883         PRNTN   TSTA
+0A0B 2A0D             (        basic.asm):00884                 BPL     PRN03
+0A0D 40               (        basic.asm):00885                 NEGA
+0A0E 50               (        basic.asm):00886                 NEGB
+0A0F 8200             (        basic.asm):00887                 SBCA    #0
+0A11 3402             (        basic.asm):00888                 PSHS    A
+0A13 862D             (        basic.asm):00889                 LDA     #'-
+0A15 BD0B9D           (        basic.asm):00890                 JSR     PUTCHR
+0A18 3502             (        basic.asm):00891                 PULS    A
+0A1A 8E0A49           (        basic.asm):00892         PRN03   LDX     #PRNPT-2
+0A1D 3002             (        basic.asm):00893         PRN05   LEAX    2,X
+0A1F 10A300           (        basic.asm):00894                 CMPD    0,X
+0A22 2405             (        basic.asm):00895                 BCC     PRN07
+0A24 8C0A53           (        basic.asm):00896                 CMPX    #PRNPTO
+0A27 26F4             (        basic.asm):00897                 BNE     PRN05
+0A29 0F90             (        basic.asm):00898         PRN07   CLR     CHAR
+0A2B 10A300           (        basic.asm):00899         PRN09   CMPD    0,X
+0A2E 2506             (        basic.asm):00900                 BCS     PRN11
+0A30 A300             (        basic.asm):00901                 SUBD    0,X
+0A32 0C90             (        basic.asm):00902                 INC     CHAR
+0A34 20F5             (        basic.asm):00903                 BRA     PRN09
+0A36 3402             (        basic.asm):00904         PRN11   PSHS    A
+0A38 8630             (        basic.asm):00905                 LDA     #'0
+0A3A 9B90             (        basic.asm):00906                 ADDA    CHAR
+0A3C BD0B9D           (        basic.asm):00907                 JSR     PUTCHR
+0A3F 3502             (        basic.asm):00908                 PULS    A
+0A41 8C0A53           (        basic.asm):00909                 CMPX    #PRNPTO
+0A44 2704             (        basic.asm):00910                 BEQ     PRN13
+0A46 3002             (        basic.asm):00911                 LEAX    2,X
+0A48 20DF             (        basic.asm):00912                 BRA     PRN07
+0A4A 39               (        basic.asm):00913         PRN13   RTS
+0A4B 2710             (        basic.asm):00914         PRNPT   FDB     10000
+0A4D 03E8             (        basic.asm):00915                 FDB     1000
+0A4F 0064             (        basic.asm):00916                 FDB     100
+0A51 000A             (        basic.asm):00917                 FDB     10
+0A53 0001             (        basic.asm):00918         PRNPTO  FDB     1
+                      (        basic.asm):00919         *
+0A55 8E0A4D           (        basic.asm):00920         PRNT4   LDX     #PRNPT+2
+0A58 20CF             (        basic.asm):00921                 BRA     PRN07
                       (        basic.asm):00922         ******************************
-0A5D BD0683           (        basic.asm):00923         INPUT   JSR     TSTVAR
-0A60 253C             (        basic.asm):00924                 BCS     IN11
-0A62 3406             (        basic.asm):00925                 PSHS    D
-0A64 9F88             (        basic.asm):00926                 STX     CURSOR
-0A66 863F             (        basic.asm):00927         IN03    LDA     #'?
-0A68 BD0BA0           (        basic.asm):00928                 JSR     PUTCHR
-0A6B BD0588           (        basic.asm):00929                 JSR     GETLIN
-0A6E BD0653           (        basic.asm):00930         IN05    JSR     SKIPSP
-0A71 8104             (        basic.asm):00931                 CMPA    #EOL
-0A73 27F1             (        basic.asm):00932                 BEQ     IN03
-0A75 BD06CE           (        basic.asm):00933                 JSR     TSTSNB
-0A78 240B             (        basic.asm):00934                 BCC     IN07
-0A7A 8E0AB2           (        basic.asm):00935                 LDX     #RMESS
-0A7D BD052E           (        basic.asm):00936                 JSR     PUTSTR
-0A80 BD0535           (        basic.asm):00937                 JSR     CRLF
-0A83 20E1             (        basic.asm):00938                 BRA     IN03
-0A85 9F8E             (        basic.asm):00939         IN07    STX     SCRTCH
-0A87 3510             (        basic.asm):00940                 PULS    X
-0A89 ED00             (        basic.asm):00941                 STD     0,X
-0A8B 9E88             (        basic.asm):00942                 LDX     CURSOR
-0A8D BD0653           (        basic.asm):00943                 JSR     SKIPSP
-0A90 812C             (        basic.asm):00944                 CMPA    #',
-0A92 2703             (        basic.asm):00945                 BEQ     IN09
-0A94 7E05F1           (        basic.asm):00946                 JMP     ENDSMT
-0A97 3001             (        basic.asm):00947         IN09    LEAX    1,X
-0A99 BD0683           (        basic.asm):00948                 JSR     TSTVAR
-0A9C 2403             (        basic.asm):00949                 BCC     IN13
-0A9E 7E054C           (        basic.asm):00950         IN11    JMP     ERRORS
-0AA1 3406             (        basic.asm):00951         IN13    PSHS    D
-0AA3 3410             (        basic.asm):00952                 PSHS    X
-0AA5 9E8E             (        basic.asm):00953                 LDX     SCRTCH
-0AA7 BD0653           (        basic.asm):00954                 JSR     SKIPSP
-0AAA 812C             (        basic.asm):00955                 CMPA    #',
-0AAC 26C0             (        basic.asm):00956                 BNE     IN05
-0AAE 3001             (        basic.asm):00957                 LEAX    1,X
-0AB0 20BC             (        basic.asm):00958                 BRA     IN05
-0AB2 52452D454E544552 (        basic.asm):00959         RMESS   FCC     /RE-ENTER/
-0ABA 04               (        basic.asm):00960                 FCB     EOL
-                      (        basic.asm):00961         ******************************
+                      (        basic.asm):00923         ******************************
+0A5A BD0680           (        basic.asm):00924         INPUT   JSR     TSTVAR
+0A5D 253C             (        basic.asm):00925                 BCS     IN11
+0A5F 3406             (        basic.asm):00926                 PSHS    D
+0A61 9F88             (        basic.asm):00927                 STX     CURSOR
+0A63 863F             (        basic.asm):00928         IN03    LDA     #'?
+0A65 BD0B9D           (        basic.asm):00929                 JSR     PUTCHR
+0A68 BD0588           (        basic.asm):00930                 JSR     GETLIN
+0A6B BD0650           (        basic.asm):00931         IN05    JSR     SKIPSP
+0A6E 8104             (        basic.asm):00932                 CMPA    #EOL
+0A70 27F1             (        basic.asm):00933                 BEQ     IN03
+0A72 BD06CB           (        basic.asm):00934                 JSR     TSTSNB
+0A75 240B             (        basic.asm):00935                 BCC     IN07
+0A77 8E0AAF           (        basic.asm):00936                 LDX     #RMESS
+0A7A BD052E           (        basic.asm):00937                 JSR     PUTSTR
+0A7D BD0535           (        basic.asm):00938                 JSR     CRLF
+0A80 20E1             (        basic.asm):00939                 BRA     IN03
+0A82 9F8E             (        basic.asm):00940         IN07    STX     SCRTCH
+0A84 3510             (        basic.asm):00941                 PULS    X
+0A86 ED00             (        basic.asm):00942                 STD     0,X
+0A88 9E88             (        basic.asm):00943                 LDX     CURSOR
+0A8A BD0650           (        basic.asm):00944                 JSR     SKIPSP
+0A8D 812C             (        basic.asm):00945                 CMPA    #',
+0A8F 2703             (        basic.asm):00946                 BEQ     IN09
+0A91 7E05EE           (        basic.asm):00947                 JMP     ENDSMT
+0A94 3001             (        basic.asm):00948         IN09    LEAX    1,X
+0A96 BD0680           (        basic.asm):00949                 JSR     TSTVAR
+0A99 2403             (        basic.asm):00950                 BCC     IN13
+0A9B 7E054C           (        basic.asm):00951         IN11    JMP     ERRORS
+0A9E 3406             (        basic.asm):00952         IN13    PSHS    D
+0AA0 3410             (        basic.asm):00953                 PSHS    X
+0AA2 9E8E             (        basic.asm):00954                 LDX     SCRTCH
+0AA4 BD0650           (        basic.asm):00955                 JSR     SKIPSP
+0AA7 812C             (        basic.asm):00956                 CMPA    #',
+0AA9 26C0             (        basic.asm):00957                 BNE     IN05
+0AAB 3001             (        basic.asm):00958                 LEAX    1,X
+0AAD 20BC             (        basic.asm):00959                 BRA     IN05
+0AAF 52452D454E544552 (        basic.asm):00960         RMESS   FCC     /RE-ENTER/
+0AB7 04               (        basic.asm):00961                 FCB     EOL
                       (        basic.asm):00962         ******************************
-0ABB 9E86             (        basic.asm):00963         RUN     LDX     STKTOP
-0ABD 8634             (        basic.asm):00964                 LDA     #52
-0ABF 6F80             (        basic.asm):00965         RUN01   CLR     ,X+
-0AC1 4A               (        basic.asm):00966                 DECA
-0AC2 26FB             (        basic.asm):00967                 BNE     RUN01
-0AC4 9E80             (        basic.asm):00968                 LDX     USRBAS
-0AC6 7E05FA           (        basic.asm):00969                 JMP     REM05
-                      (        basic.asm):00970         ******************************
+                      (        basic.asm):00963         ******************************
+0AB8 9E86             (        basic.asm):00964         RUN     LDX     STKTOP
+0ABA 8634             (        basic.asm):00965                 LDA     #52
+0ABC 6F80             (        basic.asm):00966         RUN01   CLR     ,X+
+0ABE 4A               (        basic.asm):00967                 DECA
+0ABF 26FB             (        basic.asm):00968                 BNE     RUN01
+0AC1 9E80             (        basic.asm):00969                 LDX     USRBAS
+0AC3 7E05F7           (        basic.asm):00970                 JMP     REM05
                       (        basic.asm):00971         ******************************
-0AC9 BD06E2           (        basic.asm):00972         LIST    JSR     TSTNBR
-0ACC 2408             (        basic.asm):00973                 BCC     LIST03
-0ACE 4F               (        basic.asm):00974                 CLRA
-0ACF 5F               (        basic.asm):00975                 CLRB
-0AD0 DD88             (        basic.asm):00976                 STD     CURSOR
-0AD2 867F             (        basic.asm):00977                 LDA     #$7F
-0AD4 2017             (        basic.asm):00978                 BRA     LIST07
-0AD6 DD88             (        basic.asm):00979         LIST03  STD     CURSOR
-0AD8 BD0653           (        basic.asm):00980                 JSR     SKIPSP
-0ADB 812C             (        basic.asm):00981                 CMPA    #',
-0ADD 2704             (        basic.asm):00982                 BEQ     LIST05
-0ADF 9688             (        basic.asm):00983                 LDA     CURSOR
-0AE1 200A             (        basic.asm):00984                 BRA     LIST07
-0AE3 3001             (        basic.asm):00985         LIST05  LEAX    1,X
-0AE5 BD06E2           (        basic.asm):00986                 JSR     TSTNBR
-0AE8 2403             (        basic.asm):00987                 BCC     LIST07
-0AEA 7E054C           (        basic.asm):00988                 JMP     ERRORS
-0AED BD092B           (        basic.asm):00989         LIST07  JSR     TSTEOL
-0AF0 3406             (        basic.asm):00990                 PSHS    D
-0AF2 DC88             (        basic.asm):00991                 LDD     CURSOR
-0AF4 9F88             (        basic.asm):00992                 STX     CURSOR
-0AF6 BD07BC           (        basic.asm):00993                 JSR     FLINE
-0AF9 9C82             (        basic.asm):00994         LIST09  CMPX    USRTOP
-0AFB 2728             (        basic.asm):00995                 BEQ     LIST10
-0AFD 3506             (        basic.asm):00996                 PULS    D
-0AFF 10A300           (        basic.asm):00997                 CMPD    0,X
-0B02 2528             (        basic.asm):00998                 BCS     LIST11
-0B04 3406             (        basic.asm):00999                 PSHS    D
-0B06 EC81             (        basic.asm):01000                 LDD     ,X++
-0B08 3410             (        basic.asm):01001                 PSHS    X
-0B0A BD0A58           (        basic.asm):01002                 JSR     PRNT4
-0B0D 3510             (        basic.asm):01003                 PULS    X
-0B0F 8620             (        basic.asm):01004                 LDA     #SPACE
-0B11 BD0BA0           (        basic.asm):01005                 JSR     PUTCHR
-0B14 BD052E           (        basic.asm):01006                 JSR     PUTSTR
-0B17 3001             (        basic.asm):01007                 LEAX    1,X
-0B19 3410             (        basic.asm):01008                 PSHS    X
-0B1B BD0535           (        basic.asm):01009                 JSR     CRLF
-0B1E 3510             (        basic.asm):01010                 PULS    X
-0B20 BD0B97           (        basic.asm):01011                 JSR     TSTBRK
-0B23 20D4             (        basic.asm):01012                 BRA     LIST09
-0B25 3262             (        basic.asm):01013         LIST10  LEAS    2,S
-0B27 8603             (        basic.asm):01014                 LDA     #ETX
-0B29 BD0BA0           (        basic.asm):01015                 JSR     PUTCHR
-0B2C 9E88             (        basic.asm):01016         LIST11  LDX     CURSOR
-0B2E 7E05F4           (        basic.asm):01017                 JMP     ENDS02
-                      (        basic.asm):01018         ******************************
+                      (        basic.asm):00972         ******************************
+0AC6 BD06DF           (        basic.asm):00973         LIST    JSR     TSTNBR
+0AC9 2408             (        basic.asm):00974                 BCC     LIST03
+0ACB 4F               (        basic.asm):00975                 CLRA
+0ACC 5F               (        basic.asm):00976                 CLRB
+0ACD DD88             (        basic.asm):00977                 STD     CURSOR
+0ACF 867F             (        basic.asm):00978                 LDA     #$7F
+0AD1 2017             (        basic.asm):00979                 BRA     LIST07
+0AD3 DD88             (        basic.asm):00980         LIST03  STD     CURSOR
+0AD5 BD0650           (        basic.asm):00981                 JSR     SKIPSP
+0AD8 812C             (        basic.asm):00982                 CMPA    #',
+0ADA 2704             (        basic.asm):00983                 BEQ     LIST05
+0ADC 9688             (        basic.asm):00984                 LDA     CURSOR
+0ADE 200A             (        basic.asm):00985                 BRA     LIST07
+0AE0 3001             (        basic.asm):00986         LIST05  LEAX    1,X
+0AE2 BD06DF           (        basic.asm):00987                 JSR     TSTNBR
+0AE5 2403             (        basic.asm):00988                 BCC     LIST07
+0AE7 7E054C           (        basic.asm):00989                 JMP     ERRORS
+0AEA BD0928           (        basic.asm):00990         LIST07  JSR     TSTEOL
+0AED 3406             (        basic.asm):00991                 PSHS    D
+0AEF DC88             (        basic.asm):00992                 LDD     CURSOR
+0AF1 9F88             (        basic.asm):00993                 STX     CURSOR
+0AF3 BD07B9           (        basic.asm):00994                 JSR     FLINE
+0AF6 9C82             (        basic.asm):00995         LIST09  CMPX    USRTOP
+0AF8 2728             (        basic.asm):00996                 BEQ     LIST10
+0AFA 3506             (        basic.asm):00997                 PULS    D
+0AFC 10A300           (        basic.asm):00998                 CMPD    0,X
+0AFF 2528             (        basic.asm):00999                 BCS     LIST11
+0B01 3406             (        basic.asm):01000                 PSHS    D
+0B03 EC81             (        basic.asm):01001                 LDD     ,X++
+0B05 3410             (        basic.asm):01002                 PSHS    X
+0B07 BD0A55           (        basic.asm):01003                 JSR     PRNT4
+0B0A 3510             (        basic.asm):01004                 PULS    X
+0B0C 8620             (        basic.asm):01005                 LDA     #SPACE
+0B0E BD0B9D           (        basic.asm):01006                 JSR     PUTCHR
+0B11 BD052E           (        basic.asm):01007                 JSR     PUTSTR
+0B14 3001             (        basic.asm):01008                 LEAX    1,X
+0B16 3410             (        basic.asm):01009                 PSHS    X
+0B18 BD0535           (        basic.asm):01010                 JSR     CRLF
+0B1B 3510             (        basic.asm):01011                 PULS    X
+0B1D BD0B94           (        basic.asm):01012                 JSR     TSTBRK
+0B20 20D4             (        basic.asm):01013                 BRA     LIST09
+0B22 3262             (        basic.asm):01014         LIST10  LEAS    2,S
+0B24 8603             (        basic.asm):01015                 LDA     #ETX
+0B26 BD0B9D           (        basic.asm):01016                 JSR     PUTCHR
+0B29 9E88             (        basic.asm):01017         LIST11  LDX     CURSOR
+0B2B 7E05F1           (        basic.asm):01018                 JMP     ENDS02
                       (        basic.asm):01019         ******************************
-0B31 4C4554           (        basic.asm):01020         VERBT   FCC     /LET/
-0B34 04               (        basic.asm):01021                 FCB     EOL
-0B35 093C             (        basic.asm):01022                 FDB     LET
-0B37 4946             (        basic.asm):01023                 FCC     /IF/
-0B39 04               (        basic.asm):01024                 FCB     EOL
-0B3A 0962             (        basic.asm):01025                 FDB     IF
-0B3C 474F544F         (        basic.asm):01026                 FCC     /GOTO/
-0B40 04               (        basic.asm):01027                 FCB     EOL
-0B41 096E             (        basic.asm):01028                 FDB     GOTO
-0B43 474F535542       (        basic.asm):01029                 FCC     /GOSUB/
-0B48 04               (        basic.asm):01030                 FCB     EOL
-0B49 097B             (        basic.asm):01031                 FDB     GOSUB
-0B4B 52455455524E     (        basic.asm):01032                 FCC     /RETURN/
-0B51 04               (        basic.asm):01033                 FCB     EOL
-0B52 092B             (        basic.asm):01034                 FDB     RETURN
-0B54 504F4B45         (        basic.asm):01035                 FCC     /POKE/
-0B58 04               (        basic.asm):01036                 FCB     EOL
-0B59 0775             (        basic.asm):01037                 FDB     POKE
-0B5B 5052494E54       (        basic.asm):01038                 FCC     /PRINT/
-0B60 04               (        basic.asm):01039                 FCB     EOL
-0B61 09A6             (        basic.asm):01040                 FDB     PRINT
-0B63 494E505554       (        basic.asm):01041                 FCC     /INPUT/
-0B68 04               (        basic.asm):01042                 FCB     EOL
-0B69 0A5D             (        basic.asm):01043                 FDB     INPUT
-0B6B 52454D           (        basic.asm):01044                 FCC     /REM/
-0B6E 04               (        basic.asm):01045                 FCB     EOL
-0B6F 05EB             (        basic.asm):01046                 FDB     REM
-0B71 53544F50         (        basic.asm):01047                 FCC     /STOP/
-0B75 04               (        basic.asm):01048                 FCB     EOL
-0B76 0565             (        basic.asm):01049                 FDB     END
-0B78 454E44           (        basic.asm):01050                 FCC     /END/
-0B7B 04               (        basic.asm):01051                 FCB     EOL
-0B7C 0565             (        basic.asm):01052                 FDB     END
-0B7E 52554E           (        basic.asm):01053                 FCC     /RUN/
-0B81 04               (        basic.asm):01054                 FCB     EOL
-0B82 0ABB             (        basic.asm):01055                 FDB     RUN
-0B84 4C495354         (        basic.asm):01056                 FCC     /LIST/
-0B88 04               (        basic.asm):01057                 FCB     EOL
-0B89 0AC9             (        basic.asm):01058                 FDB     LIST
-0B8B 4E4557           (        basic.asm):01059                 FCC     /NEW/
-0B8E 04               (        basic.asm):01060                 FCB     EOL
-0B8F 0415             (        basic.asm):01061                 FDB     CLEAR
-0B91 3F               (        basic.asm):01062                 FCC     /?/
-0B92 04               (        basic.asm):01063                 FCB     EOL
-0B93 09A6             (        basic.asm):01064                 FDB     PRINT
-0B95 04               (        basic.asm):01065                 FCB     EOL
-                      (        basic.asm):01066             
-                      (        basic.asm):01067         ******************************
-                      (        basic.asm):01068         * I/O Functions
-                      (        basic.asm):01069         ******************************
-                      (        basic.asm):01070         
-                      (        basic.asm):01071         * Externally accessed functions
-                      (        basic.asm):01072         * are:
-                      (        basic.asm):01073         *   TSTBRK
-                      (        basic.asm):01074         *   GETCHR  - Wait for input, return in A
-                      (        basic.asm):01075         *   PUTCHR  - Output char in A
-                      (        basic.asm):01076         *   INTEEE  - Initialize ACIA
-                      (        basic.asm):01077         
-0B96 39               (        basic.asm):01078         INTEEE RTS  ; Do nothing for now
-                      (        basic.asm):01079         
-0B97 8D00             (        basic.asm):01080         TSTBRK  BSR GETCHR   ; Maybe does the same?
-                      (        basic.asm):01081         
-0B99 BDFC06           (        basic.asm):01082         GETCHR  JSR getc     ; Need to loop until get char
-0B9C 4D               (        basic.asm):01083                 TSTA
-0B9D 27FA             (        basic.asm):01084                 BEQ GETCHR
-0B9F 39               (        basic.asm):01085                 RTS
-                      (        basic.asm):01086                 
-0BA0 BDFC00           (        basic.asm):01087         PUTCHR  JSR putc
-0BA3 39               (        basic.asm):01088                 RTS
-                      (        basic.asm):01089         
-                      (        basic.asm):01090         ; TSTBRK        bsr     BRKEEE
-                      (        basic.asm):01091         ;       beq     GETC05
-                      (        basic.asm):01092         ; GETCHR        bsr     INEEE
-                      (        basic.asm):01093         ;       CMPA    #ETX
-                      (        basic.asm):01094         ;       BNE     GETC05
-                      (        basic.asm):01095         ;       JMP     BREAK
-                      (        basic.asm):01096         ; GETC05        RTS
-                      (        basic.asm):01097         ; PUTCHR        INC     ZONE
-                      (        basic.asm):01098         ;       JMP     OUTEEE
-                      (        basic.asm):01099         ;
-                      (        basic.asm):01100         ; ******************************
-                      (        basic.asm):01101         ; ******************************
-                      (        basic.asm):01102         ; INEEE BSR     BRKEEE
-                      (        basic.asm):01103         ;       BEQ     INEEE
-                      (        basic.asm):01104         ;       LDA     RECEV
-                      (        basic.asm):01105         ;       ANDA    #$7F
-                      (        basic.asm):01106         ;       RTS
-                      (        basic.asm):01107         ; OUTEEE        PSHS    A
-                      (        basic.asm):01108         ; OUT01 LDA     TRCS
-                      (        basic.asm):01109         ;       BITA    #TDRE
-                      (        basic.asm):01110         ;       BEQ     OUT01
-                      (        basic.asm):01111         ;       PULS    A
-                      (        basic.asm):01112         ;       STA     TRANS
-                      (        basic.asm):01113         ;       RTS
-                      (        basic.asm):01114         ;
-                      (        basic.asm):01115         ; BRKEEE        PSHS    A
-                      (        basic.asm):01116         ; BRK03 LDA     TRCS
-                      (        basic.asm):01117         ;       BITA    #ORFE       ; Overrun?
-                      (        basic.asm):01118         ;       BEQ     BRK05
-                      (        basic.asm):01119         ;       LDA     RECEV
-                      (        basic.asm):01120         ;       BRA     BRK03
-                      (        basic.asm):01121         ; BRK05 BITA    #RDRF   ; Read data full?
-                      (        basic.asm):01122         ;       PULS    A
-                      (        basic.asm):01123         ;       RTS
-                      (        basic.asm):01124         ; *
-                      (        basic.asm):01125         ;       LDA     #CNTL1
-                      (        basic.asm):01126         ;       STA     RMCR
-                      (        basic.asm):01127         ;       LDA     #CNTL2
-                      (        basic.asm):01128         ;       STA     TRCS
-                      (        basic.asm):01129         ; INTEEE  EQU     *
-                      (        basic.asm):01130         ;       RTS
-                      (        basic.asm):01131         
-                      (        basic.asm):01132         
+                      (        basic.asm):01020         ******************************
+0B2E 4C4554           (        basic.asm):01021         VERBT   FCC     /LET/
+0B31 04               (        basic.asm):01022                 FCB     EOL
+0B32 0939             (        basic.asm):01023                 FDB     LET
+0B34 4946             (        basic.asm):01024                 FCC     /IF/
+0B36 04               (        basic.asm):01025                 FCB     EOL
+0B37 095F             (        basic.asm):01026                 FDB     IF
+0B39 474F544F         (        basic.asm):01027                 FCC     /GOTO/
+0B3D 04               (        basic.asm):01028                 FCB     EOL
+0B3E 096B             (        basic.asm):01029                 FDB     GOTO
+0B40 474F535542       (        basic.asm):01030                 FCC     /GOSUB/
+0B45 04               (        basic.asm):01031                 FCB     EOL
+0B46 0978             (        basic.asm):01032                 FDB     GOSUB
+0B48 52455455524E     (        basic.asm):01033                 FCC     /RETURN/
+0B4E 04               (        basic.asm):01034                 FCB     EOL
+0B4F 0928             (        basic.asm):01035                 FDB     RETURN
+0B51 504F4B45         (        basic.asm):01036                 FCC     /POKE/
+0B55 04               (        basic.asm):01037                 FCB     EOL
+0B56 0772             (        basic.asm):01038                 FDB     POKE
+0B58 5052494E54       (        basic.asm):01039                 FCC     /PRINT/
+0B5D 04               (        basic.asm):01040                 FCB     EOL
+0B5E 09A3             (        basic.asm):01041                 FDB     PRINT
+0B60 494E505554       (        basic.asm):01042                 FCC     /INPUT/
+0B65 04               (        basic.asm):01043                 FCB     EOL
+0B66 0A5A             (        basic.asm):01044                 FDB     INPUT
+0B68 52454D           (        basic.asm):01045                 FCC     /REM/
+0B6B 04               (        basic.asm):01046                 FCB     EOL
+0B6C 05E8             (        basic.asm):01047                 FDB     REM
+0B6E 53544F50         (        basic.asm):01048                 FCC     /STOP/
+0B72 04               (        basic.asm):01049                 FCB     EOL
+0B73 0565             (        basic.asm):01050                 FDB     END
+0B75 454E44           (        basic.asm):01051                 FCC     /END/
+0B78 04               (        basic.asm):01052                 FCB     EOL
+0B79 0565             (        basic.asm):01053                 FDB     END
+0B7B 52554E           (        basic.asm):01054                 FCC     /RUN/
+0B7E 04               (        basic.asm):01055                 FCB     EOL
+0B7F 0AB8             (        basic.asm):01056                 FDB     RUN
+0B81 4C495354         (        basic.asm):01057                 FCC     /LIST/
+0B85 04               (        basic.asm):01058                 FCB     EOL
+0B86 0AC6             (        basic.asm):01059                 FDB     LIST
+0B88 4E4557           (        basic.asm):01060                 FCC     /NEW/
+0B8B 04               (        basic.asm):01061                 FCB     EOL
+0B8C 0415             (        basic.asm):01062                 FDB     CLEAR
+0B8E 3F               (        basic.asm):01063                 FCC     /?/
+0B8F 04               (        basic.asm):01064                 FCB     EOL
+0B90 09A3             (        basic.asm):01065                 FDB     PRINT
+0B92 04               (        basic.asm):01066                 FCB     EOL
+                      (        basic.asm):01067             
+                      (        basic.asm):01068         ******************************
+                      (        basic.asm):01069         * I/O Functions
+                      (        basic.asm):01070         ******************************
+                      (        basic.asm):01071         
+                      (        basic.asm):01072         * Externally accessed functions
+                      (        basic.asm):01073         * are:
+                      (        basic.asm):01074         *   TSTBRK
+                      (        basic.asm):01075         *   GETCHR  - Wait for input, return in A
+                      (        basic.asm):01076         *   PUTCHR  - Output char in A
+                      (        basic.asm):01077         *   INTEEE  - Initialize ACIA
+                      (        basic.asm):01078         
+0B93 39               (        basic.asm):01079         INTEEE RTS  ; Do nothing for now
+                      (        basic.asm):01080         
+0B94 8D00             (        basic.asm):01081         TSTBRK  BSR GETCHR   ; Maybe does the same?
+                      (        basic.asm):01082         
+0B96 BDFC06           (        basic.asm):01083         GETCHR  JSR getc     ; Need to loop until get char
+0B99 4D               (        basic.asm):01084                 TSTA
+0B9A 27FA             (        basic.asm):01085                 BEQ GETCHR
+0B9C 39               (        basic.asm):01086                 RTS
+                      (        basic.asm):01087                 
+0B9D 0C92             (        basic.asm):01088         PUTCHR  INC     ZONE
+0B9F BDFC00           (        basic.asm):01089                 JSR putc
+0BA2 39               (        basic.asm):01090                 RTS
+                      (        basic.asm):01091         
+                      (        basic.asm):01092         ; TSTBRK        bsr     BRKEEE
+                      (        basic.asm):01093         ;       beq     GETC05
+                      (        basic.asm):01094         ; GETCHR        bsr     INEEE
+                      (        basic.asm):01095         ;       CMPA    #ETX
+                      (        basic.asm):01096         ;       BNE     GETC05
+                      (        basic.asm):01097         ;       JMP     BREAK
+                      (        basic.asm):01098         ; GETC05        RTS
+                      (        basic.asm):01099         ; PUTCHR        INC     ZONE
+                      (        basic.asm):01100         ;       JMP     OUTEEE
+                      (        basic.asm):01101         ;
+                      (        basic.asm):01102         ; ******************************
+                      (        basic.asm):01103         ; ******************************
+                      (        basic.asm):01104         ; INEEE BSR     BRKEEE
+                      (        basic.asm):01105         ;       BEQ     INEEE
+                      (        basic.asm):01106         ;       LDA     RECEV
+                      (        basic.asm):01107         ;       ANDA    #$7F
+                      (        basic.asm):01108         ;       RTS
+                      (        basic.asm):01109         ; OUTEEE        PSHS    A
+                      (        basic.asm):01110         ; OUT01 LDA     TRCS
+                      (        basic.asm):01111         ;       BITA    #TDRE
+                      (        basic.asm):01112         ;       BEQ     OUT01
+                      (        basic.asm):01113         ;       PULS    A
+                      (        basic.asm):01114         ;       STA     TRANS
+                      (        basic.asm):01115         ;       RTS
+                      (        basic.asm):01116         ;
+                      (        basic.asm):01117         ; BRKEEE        PSHS    A
+                      (        basic.asm):01118         ; BRK03 LDA     TRCS
+                      (        basic.asm):01119         ;       BITA    #ORFE       ; Overrun?
+                      (        basic.asm):01120         ;       BEQ     BRK05
+                      (        basic.asm):01121         ;       LDA     RECEV
+                      (        basic.asm):01122         ;       BRA     BRK03
+                      (        basic.asm):01123         ; BRK05 BITA    #RDRF   ; Read data full?
+                      (        basic.asm):01124         ;       PULS    A
+                      (        basic.asm):01125         ;       RTS
+                      (        basic.asm):01126         ; *
+                      (        basic.asm):01127         ;       LDA     #CNTL1
+                      (        basic.asm):01128         ;       STA     RMCR
+                      (        basic.asm):01129         ;       LDA     #CNTL2
+                      (        basic.asm):01130         ;       STA     TRCS
+                      (        basic.asm):01131         ; INTEEE  EQU     *
+                      (        basic.asm):01132         ;       RTS
                       (        basic.asm):01133         
-                      (        basic.asm):01134         ******************************
-                      (        basic.asm):01135         ******************************
-                      (        basic.asm):01136                 END ROMADR
+                      (        basic.asm):01134         
+                      (        basic.asm):01135         
+                      (        basic.asm):01136         ******************************
+                      (        basic.asm):01137         ******************************
+                      (        basic.asm):01138                 END ROMADR
