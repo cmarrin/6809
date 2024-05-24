@@ -395,6 +395,13 @@ bool Emulator::execute(RunState runState)
         
         firstTime = false;
         
+#ifdef TRACE
+        _traceBuffer[_traceBufferIndex++] = _pc;
+        if (_traceBufferIndex >= TraceBufferSize) {
+            _traceBufferIndex = 0;
+        }
+#endif
+        
         uint16_t ea = 0;
         uint8_t opIndex = next8();
         

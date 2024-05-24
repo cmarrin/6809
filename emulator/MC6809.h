@@ -21,6 +21,11 @@
 #include "srec.h"
 
 //#define COMPUTE_CYCLES
+#define TRACE
+
+#ifdef TRACE
+static constexpr uint32_t TraceBufferSize = 10;
+#endif
 
 namespace mc6809 {
 
@@ -197,6 +202,10 @@ public:
     {
         _ram = ram;
         _boss9 = boss9;
+        
+#ifdef TRACE
+        memset(_traceBuffer, 0, sizeof(_traceBuffer));
+#endif
     }
     
     ~Emulator() { }
@@ -479,6 +488,11 @@ private:
     bool _haveBreakpoints = false;
     uint32_t _subroutineDepth = 0; // Determines when we've returned from subroutine for Step Over and Step Out
     RunState _lastRunState = RunState::Running;
+    
+    #ifdef TRACE
+    uint16_t _traceBuffer[TraceBufferSize];
+    uint32_t _traceBufferIndex = 0;
+    #endif
 };
 
 }
