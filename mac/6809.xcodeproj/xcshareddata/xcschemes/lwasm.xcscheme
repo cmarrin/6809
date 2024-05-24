@@ -60,6 +60,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-I ../emulator -f srec -oexbasic.s19 -lexbasic.lst exbasic.asm"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-I ../emulator -f srec -operf.s19 -lperf.lst perf.asm"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -73,7 +77,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-I ../emulator -f srec -obasic.s19 -lbasic.lst basic.asm"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-f srec -o asmtest.s19 -l asmtest.asm"
