@@ -908,7 +908,7 @@ bool Emulator::execute(RunState runState)
 
 void Emulator::readOnlyAddr(uint16_t addr)
 {
-    _boss9->printf("Address %0x4 is read-only\n", addr);
+    _boss9->printf("Address $%04x is read-only\n", addr);
 }
 
 void Emulator::checkActiveBreakpoints()
