@@ -188,6 +188,32 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
 {
     assert(_runState == RunState::Cmd);
     
+    if (cmdElements[0] == "help" || cmdElements[0] == "h" || cmdElements[0] == "?") {
+        if (cmdElements[1].empty()) {
+            printf("BOSS9 Monitor Commands:\n");
+            printf("\n");
+            printf("    l           - Load SRecord file\n");
+            printf("    r           - run at start addr\n");
+            printf("    r (<addr>)  - run at <addr>, set start addr to <addr>\n");
+            printf("    c (<addr>)  - continue running at current addr\n");
+            printf("    b           - show current breakpoints\n");
+            printf("    b <addr>    - set breakpoint at <addr>\n");
+            printf("    bc          - clear all breakpoints\n");
+            printf("    bc <n>      - clear breakpoint <n>\n");
+            printf("    be          - enable all breakpoints\n");
+            printf("    be <n>      - enable breakpoint <n>\n");
+            printf("    bd          - disable all breakpoints\n");
+            printf("    bd <n>      - disable breakpoint <n>\n");
+            printf("    n           - step over, execute next instruction, step over if at function\n");
+            printf("    s           - step into, if at function (same as 'n' if not at function\n");
+            printf("    o           - step out, continue until current function returns\n");
+
+            return true;
+        }
+        printf("Individual command help not yet available\n");
+        return false;
+    }
+    
     // Load file
     if (cmdElements[0] == "l") {
         if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
