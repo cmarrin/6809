@@ -7,3 +7,6 @@ Breakpoints_v2.xcbkptlist
 *.sym
 Fwd_refs
 a.out
+arduino.json
+c_cpp_properties.json
+launch.json
