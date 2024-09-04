@@ -1,6 +1,3 @@
 [submodule "m6809pm"]
 	path = m6809pm
 url=git@github.com:M6809-Docs/m6809pm.git
-[submodule "LucidVM"]
-	path = LucidVM
-	url = git@github.com:cmarrin/LucidVM.git

@@ -185,13 +185,6 @@
 			name = test;
 			sourceTree = "<group>";
 		};
-		49279C042C0135A400294992 /* clover */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = clover;
-			sourceTree = "<group>";
-		};
 		494B149E2BF7D35500DD338B /* esp */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,7 +242,6 @@
 			isa = PBXGroup;
 			children = (
 				494B149E2BF7D35500DD338B /* esp */,
-				49279C042C0135A400294992 /* clover */,
 				49750B172BE6D40A00B7C3CF /* BOSS9 */,
 			);
 			name = emulator;
