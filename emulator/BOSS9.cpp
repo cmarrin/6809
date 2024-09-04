@@ -404,6 +404,7 @@ bool BOSS9Base::call(Emulator* engine, uint16_t ea)
         case Func::exit:
             printf("Program exited with code %d\n", int32_t(engine->getA()));
             enterMonitor();
+            _emu.setPC(_startAddr);
             return false;
         default: return false;
     }
