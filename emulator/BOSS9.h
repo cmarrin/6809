@@ -97,7 +97,7 @@ class BOSS9Base
     void promptIfNeeded()
     {
         if (_needPrompt) {
-            _emu.printInstruction(_emu.getPC());
+            _emu.printInstructions(_emu.getPC(), 1);
             puts((_runState == RunState::Loading) ? LoadingPromptString : MainPromptString);
             _cursor = 0;
             _needPrompt = false;

@@ -220,6 +220,7 @@ public:
     void setA(uint8_t v) { _a = v; }
     void setB(uint8_t v) { _b = v; }
     void setDP(uint8_t v) { _dp = v; }
+    void setCC(uint8_t v) { _ccByte = v; }
     void setD(uint16_t v) { _d = v; }
     void setX(uint16_t v) { _x = v; }
     void setY(uint16_t v) { _y = v; }
@@ -265,7 +266,7 @@ public:
         return false;
     }
 
-    void printInstruction(uint16_t addr);
+    void printInstructions(uint16_t addr, uint16_t n);
     
 private:
     uint16_t getReg(Reg reg)

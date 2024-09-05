@@ -192,21 +192,30 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         if (cmdElements[1].empty()) {
             printf("BOSS9 Monitor Commands:\n");
             printf("\n");
-            printf("    l           - Load SRecord file\n");
-            printf("    r           - run at start addr\n");
-            printf("    r (<addr>)  - run at <addr>, set start addr to <addr>\n");
-            printf("    c (<addr>)  - continue running at current addr\n");
-            printf("    b           - show current breakpoints\n");
-            printf("    b <addr>    - set breakpoint at <addr>\n");
-            printf("    bc          - clear all breakpoints\n");
-            printf("    bc <n>      - clear breakpoint <n>\n");
-            printf("    be          - enable all breakpoints\n");
-            printf("    be <n>      - enable breakpoint <n>\n");
-            printf("    bd          - disable all breakpoints\n");
-            printf("    bd <n>      - disable breakpoint <n>\n");
-            printf("    n           - step over, execute next instruction, step over if at function\n");
-            printf("    s           - step into, if at function (same as 'n' if not at function\n");
-            printf("    o           - step out, continue until current function returns\n");
+            printf("    ld            - Load SRecord file from serial port\n");
+            printf("    r             - run at start addr\n");
+            printf("    r (<addr>)    - run at <addr>, set start addr to <addr>\n");
+            printf("    c (<addr>)    - continue running at current addr\n");
+            printf("    b             - show current breakpoints\n");
+            printf("    b <addr>      - set breakpoint at <addr>\n");
+            printf("    bc            - clear all breakpoints\n");
+            printf("    bc <n>        - clear breakpoint <n>\n");
+            printf("    be            - enable all breakpoints\n");
+            printf("    be <n>        - enable breakpoint <n>\n");
+            printf("    bd            - disable all breakpoints\n");
+            printf("    bd <n>        - disable breakpoint <n>\n");
+            printf("    n             - step over, execute next instruction, step over if at function\n");
+            printf("    s             - step into, if at function (same as 'n' if not at function\n");
+            printf("    o             - step out, continue until current function returns\n");
+            printf("    l             - list next 5 instructions from current addr\n");
+            printf("    l <n>         - list next <n> instructions from current addr\n");
+            printf("    la <addr>     - list next 5 instructions starting at <addr>\n");
+            printf("    la <addr> <n> - list next <n> instructions starting at <addr>\n");
+            printf("    a             - show instruction at current addr\n");
+            printf("    a <addr>      - set current addr to <addr> and show instruction\n");
+            printf("    regs          - show all regs\n");
+            printf("    reg <reg>     - show reg <reg> (<reg> = A|B|D|X|Y|U|S|CC|PC|DP)\n");
+            printf("    reg <reg> <v> - set reg <reg> to <v>\n");
 
             return true;
         }
@@ -215,7 +224,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
     
     // Load file
-    if (cmdElements[0] == "l") {
+    if (cmdElements[0] == "ld") {
         if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
             return false;
         }
@@ -378,6 +387,160 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         _runState = RunState::StepOut;
     }
     
+    // list next 5 or <n> instructions from current addr
+    if(cmdElements[0] == "l") {
+        if (!cmdElements[2].empty()) {
+            return false;
+        }
+
+        uint32_t num = 5;
+        if (!cmdElements[1].empty()) {
+            if (!toNum(cmdElements[1], num)) {
+                return false;
+            }
+        }
+        _emu.printInstructions(_emu.getPC(), num);
+        return true;
+    }
+
+    // list next 5 or <n> instructions at <addr>
+    if(cmdElements[0] == "la") {
+        if (cmdElements[1].empty()) {
+            return false;
+        }
+
+        uint32_t addr;
+        if (!toNum(cmdElements[1], addr)) {
+            return false;
+        }
+        
+        if (addr > 65535) {
+            return false;
+        }
+
+        uint32_t num = 5;
+        if (!cmdElements[2].empty()) {        
+            if (!toNum(cmdElements[1], num)) {
+                return false;
+            }
+        }
+        _emu.printInstructions(addr, num);
+        return true;
+    }
+
+    // show current addr or set it to <addr>
+    if(cmdElements[0] == "a") {
+        if (cmdElements[1].empty()) {
+            _emu.printInstructions(_emu.getPC(), 1);
+            return true;
+        }
+
+        uint32_t addr;
+        if (!toNum(cmdElements[1], addr)) {
+            return false;
+        }
+        
+        if (addr > 65535) {
+            return false;
+        }
+        _emu.setPC(addr);
+        _emu.printInstructions(_emu.getPC(), 1);
+        return true;
+    }
+
+    // show all regs
+    if(cmdElements[0] == "regs") {
+        if (!cmdElements[1].empty()) {
+            return true;
+        }
+        
+        printf("    A:%02x B:%02x D:%04x X:%04x Y:%04x\n",
+            _emu.getA(), _emu.getB(), _emu.getD(), _emu.getX(), _emu.getY());
+        printf("    U:%04x S:%04x PC:%04x CC:%02x DP:%02x\n",
+            _emu.getU(), _emu.getS(), _emu.getPC(), _emu.getCC(), _emu.getDP());
+        return true;
+    }
+
+    // show or set reg
+    if(cmdElements[0] == "reg") {
+        if (cmdElements[1].empty()) {
+            return false;
+        }
+        
+        const m8r::string& reg = cmdElements[1].tolower();
+        
+        bool setReg = false;
+        uint32_t v = 0;
+        if (!cmdElements[2].empty()) {
+           if (!toNum(cmdElements[2], v)) {
+                return false;
+            }
+            return false;
+        }
+        
+        if (reg == "a") {
+            if (setReg) {
+                _emu.setA(v);
+            }
+            printf("    A:%02x\n", _emu.getA());
+        }
+        if (reg == "b") {
+            if (setReg) {
+                _emu.setB(v);
+            }
+            printf("    B:%02x\n", _emu.getB());
+        }
+        if (reg == "d") {
+            if (setReg) {
+                _emu.setD(v);
+            }
+            printf("    D:%02x\n", _emu.getD());
+        }
+        if (reg == "x") {
+            if (setReg) {
+                _emu.setX(v);
+            }
+            printf("    X:%02x\n", _emu.getX());
+        }
+        if (reg == "y") {
+            if (setReg) {
+                _emu.setY(v);
+            }
+            printf("    Y:%02x\n", _emu.getY());
+        }
+        if (reg == "u") {
+            if (setReg) {
+                _emu.setU(v);
+            }
+            printf("    U:%02x\n", _emu.getU());
+        }
+        if (reg == "s") {
+            if (setReg) {
+                _emu.setS(v);
+            }
+            printf("    S:%02x\n", _emu.getS());
+        }
+        if (reg == "cc") {
+            if (setReg) {
+                _emu.setCC(v);
+            }
+            printf("    CC:%02x\n", _emu.getCC());
+        }
+        if (reg == "pc") {
+            if (setReg) {
+                _emu.setPC(v);
+            }
+            printf("    PC:%02x\n", _emu.getPC());
+        }
+        if (reg == "dp") {
+            if (setReg) {
+                _emu.setDP(v);
+            }
+            printf("    DP:%02x\n", _emu.getDP());
+        }
+        return true;
+    }
+
     if (_runState != RunState::Cmd) {
         return cmdElements[1].empty() && cmdElements[2].empty();
     }

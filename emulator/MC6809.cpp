@@ -433,10 +433,13 @@ void SRecordInfo::ParseError(unsigned linenum, const char *fmt, va_list args)
 }
 
 void
-Emulator::printInstruction(uint16_t addr)
+Emulator::printInstructions(uint16_t addr, uint16_t n)
 {
-    const Opcode* opcode = &(opcodeTable[load8(addr)]);
-    _boss9->printf("[%04x]    %s\n", addr, opToString(opcode->op));
+    while (n-- > 0) {
+        uint16_t instAddr = addr;
+        const Opcode* opcode = &(opcodeTable[load8(addr++)]);
+        _boss9->printf("[%04x]    %s\n", instAddr, opToString(opcode->op));
+    }
 }
     
 void Emulator::loadStart()
