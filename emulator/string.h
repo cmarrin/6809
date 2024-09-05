@@ -196,6 +196,15 @@ public:
     bool operator==(const string& other) const { return compare(*this, other) == 0; }
     bool operator!=(const string& other) const { return compare(*this, other) != 0; }
     
+    string tolower()
+    {
+        string s = *this;
+        for (int i = 0; s.c_str()[i]; ++i) {
+            s[i] = ::tolower(s[i]);
+        }
+        return s;
+    }
+    
     friend int compare(const string& a, const string& b)
     {
         return strcmp(a.c_str(), b.c_str());
