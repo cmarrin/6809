@@ -90,7 +90,8 @@ enum class Adr : uint8_t { None, Direct, Inherent, Rel, RelL, RelP, Immed8, Imme
 enum class Reg : uint8_t {
     D = 0x0, X = 0x1, Y = 0x2, U = 0x3, S = 0x4, PC = 0X5,
     A = 0x8, B = 0x9, CC = 0xa, DP = 0xb,
-    M8 = 0xd, M16 = 0xe, None = 0xf
+    M8 = 0xd, M16 = 0xe, None = 0xf,
+    DDU = 0x10, XYS = 0x11, XY = 0x12, US = 0x13,
 };
 
 // Determines what type of load and/or store is done with reg
@@ -107,8 +108,6 @@ struct Opcode
     Right right : 3;
     Adr adr : 4;
     Reg reg : 4;
-    Reg page2Reg : 4;
-    Reg page3Reg : 4;
 };
 
 struct CC
@@ -281,22 +280,14 @@ private:
             case Reg::CC:   return _ccByte;
             case Reg::PC:   return _pc;
             case Reg::DP:   return _dp;
+            case Reg::DDU:  return (_prevOp == Op::Page2) ? _d : ((_prevOp == Op::Page3) ? _u : _d);
+            case Reg::XYS:  return (_prevOp == Op::Page2) ? _y : ((_prevOp == Op::Page3) ? _s : _x);
+            case Reg::XY:   return (_prevOp == Op::Page2) ? _y : ((_prevOp == Op::Page3) ?  0 : _x);
+            case Reg::US:   return (_prevOp == Op::Page2) ? _s : ((_prevOp == Op::Page3) ?  0 : _u);
         }
     }
 
-    uint16_t getReg(const Opcode* op)
-    {
-        Reg reg;
-        
-        if (_prevOp == Op::Page2) {
-            reg = op->page2Reg;
-        } else if (_prevOp == Op::Page3) {
-            reg = op->page3Reg;
-        } else {
-            reg = op->reg;
-        }
-        return getReg(reg);
-    }
+    uint16_t getReg(const Opcode* op) { return getReg(op->reg); }
 
     void setReg(Reg reg, uint16_t v)
     {
@@ -312,22 +303,14 @@ private:
             case Reg::CC:   _ccByte = v; break;
             case Reg::PC:   _pc = v; break;
             case Reg::DP:   _dp = v; break;
+            case Reg::DDU:  if (_prevOp == Op::Page2) _d = v; else if (_prevOp == Op::Page3) _u = v; else _d = v;
+            case Reg::XYS:  if (_prevOp == Op::Page2) _y = v; else if (_prevOp == Op::Page3) _s = v; else _x = v;
+            case Reg::XY:   if (_prevOp == Op::Page2) _y = v; else if (_prevOp != Op::Page3) _x = v;
+            case Reg::US:   if (_prevOp == Op::Page2) _s = v; else if (_prevOp != Op::Page3) _u = v;
         }
     }
 
-    void setReg(const Opcode* op, uint16_t v)
-    {
-        Reg reg;
-        
-        if (_prevOp == Op::Page2) {
-            reg = op->page2Reg;
-        } else if (_prevOp == Op::Page3) {
-            reg = op->page3Reg;
-        } else {
-            reg = op->reg;
-        }
-        setReg(reg, v);
-    }
+    void setReg(const Opcode* op, uint16_t v) { setReg(op->reg, v); }
 
     void push8(uint16_t& s, uint8_t v)
     {
