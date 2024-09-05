@@ -20,6 +20,84 @@ using namespace mc6809;
 
 static_assert (sizeof(Opcode) == 3, "Opcode is wrong size");
 
+static inline const char* opToString(Op op)
+{
+    switch (op) {
+        default: return "???";
+        
+        case Op::ILL    : return "ILL";
+        case Op::ABX    : return "ABX";
+        case Op::ADC    : return "ADC";
+        case Op::ADD8   :
+        case Op::ADD16  : return "ADD";
+        case Op::AND    : return "AND";
+        case Op::ANDCC  : return "ANDCC";
+        case Op::ASL    : return "ASL";
+        case Op::ASR    : return "ASR";
+        case Op::BCC    : return "BCC";
+        case Op::BCS    : return "BCS"; 
+        case Op::BEQ    : return "BEQ";
+        case Op::BGE    : return "BGE";
+        case Op::BGT    : return "BGT";
+        case Op::BHI    : return "BHI";
+        case Op::BHS    : return "BHS";
+        case Op::BIT    : return "BIT";
+        case Op::BLE    : return "BLE";
+        case Op::BLO    : return "BLO"; 
+        case Op::BLS    : return "BLS";
+        case Op::BLT    : return "BLT";
+        case Op::BMI    : return "BMI";
+        case Op::BNE    : return "BNE";
+        case Op::BPL    : return "BPL";
+        case Op::BRA    : return "BRA";
+        case Op::BRN    : return "BRN";
+        case Op::BSR    : return "BSR"; 
+        case Op::BVC    : return "BVC";
+        case Op::BVS    : return "BVS";
+        case Op::CLR    : return "CLR";
+        case Op::CMP8   :
+        case Op::CMP16  : return "CMP";
+        case Op::COM    : return "COM";
+        case Op::CWAI   : return "CWAI";
+        case Op::DAA    : return "DAA";
+        case Op::DEC    : return "DEC"; 
+        case Op::EOR    : return "EOR";
+        case Op::EXG    : return "EXG";
+        case Op::INC    : return "INC";
+        case Op::JMP    : return "JMP";
+        case Op::JSR    : return "JSR";
+        case Op::LD8    :
+        case Op::LD16   : return "LD";
+        case Op::LEA    : return "LEA"; 
+        case Op::LSR    : return "LSR";
+        case Op::MUL    : return "MUL";
+        case Op::NEG    : return "NEG";
+        case Op::NOP    : return "NOP";
+        case Op::OR     : return "OR";
+        case Op::ORCC   : return "ORCC";
+        case Op::PSH    : return "PSH";
+        case Op::PUL    : return "PUL";
+        case Op::ROL    : return "ROL"; 
+        case Op::ROR    : return "ROR";
+        case Op::RTI    : return "RTI";
+        case Op::RTS    : return "RTS";
+        case Op::SBC    : return "SBC";
+        case Op::SEX    : return "SEX";
+        case Op::ST8    :
+        case Op::ST16   : return "ST";
+        case Op::SUB8   :
+        case Op::SUB16  : return "SUB";
+        case Op::SWI    : return "SWI";
+        case Op::SYNC   : return "SYNC";
+        case Op::TFR    : return "TFR";
+        case Op::TST    : return "TST"; 
+        case Op::FIRQ   : return "FIRQ"; 
+        case Op::IRQ    : return "IRQ"; 
+        case Op::NMI    : return "NMI"; 
+        case Op::RESTART: return "RESTART";
+    }
+}
+
 static constexpr Opcode opcodeTable[ ] = {
     /*00*/  	{ Op::NEG	  , Left::LdSt, Right::None , Adr::Direct	, Reg::M8   },
     /*01*/  	{ Op::ILL	  , Left::None, Right::None , Adr::None     , Reg::None },
@@ -352,6 +430,13 @@ void SRecordInfo::ParseError(unsigned linenum, const char *fmt, va_list args)
     }
     _boss9->vprintf(fmt, args);
     _boss9->printf("\n");
+}
+
+void
+Emulator::printInstruction(uint16_t addr)
+{
+    const Opcode* opcode = &(opcodeTable[load8(addr)]);
+    _boss9->printf("[%04x]    %s\n", addr, opToString(opcode->op));
 }
     
 void Emulator::loadStart()

@@ -264,6 +264,8 @@ public:
         }
         return false;
     }
+
+    void printInstruction(uint16_t addr);
     
 private:
     uint16_t getReg(Reg reg)
