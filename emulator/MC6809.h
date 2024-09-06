@@ -104,10 +104,10 @@ enum class Right : uint8_t { None, Ld8, Ld16, St8, St16 };
 struct Opcode
 {
     Op op : 7;
+    Reg reg : 5;
     Left left : 3;
     Right right : 3;
     Adr adr : 4;
-    Reg reg : 4;
 };
 
 struct CC
