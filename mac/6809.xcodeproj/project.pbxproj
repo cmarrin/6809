@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		494B14A02BF7D39C00DD338B /* emulator.ino in Sources */ = {isa = PBXBuildFile; fileRef = 494B149F2BF7D39C00DD338B /* emulator.ino */; };
 		495775792BD5BF5E00755E8A /* as9.c in Sources */ = {isa = PBXBuildFile; fileRef = 495775592BD5BE4400755E8A /* as9.c */; };
 		49750B152BE412BA00B7C3CF /* MC6809.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B142BE410C600B7C3CF /* MC6809.cpp */; };
 		49750B1F2BE6E40600B7C3CF /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49750B1C2BE6E3FE00B7C3CF /* string.cpp */; };
@@ -480,7 +479,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				494B14A02BF7D39C00DD338B /* emulator.ino in Sources */,
 				495775792BD5BF5E00755E8A /* as9.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
