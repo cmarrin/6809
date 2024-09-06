@@ -85,6 +85,8 @@ class BOSS9Base
         _needPrompt = true;
     }
     
+    Emulator::Error error() const { return _emu.error(); }
+    
   protected:
     // Methods to override
     virtual void putc(char c) const = 0;

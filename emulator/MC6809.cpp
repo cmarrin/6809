@@ -607,6 +607,7 @@ bool Emulator::execute(RunState runState)
         
         switch(op) {
             case Op::ILL:
+                _error = Error::Illegal;
                 return false;
             case Op::Page2:
             case Op::Page3:

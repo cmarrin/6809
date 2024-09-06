@@ -197,6 +197,11 @@ class SRecordInfo : public SRecordParser
 class Emulator
 {
 public:
+    enum class Error {
+        None,
+        Illegal,
+    };
+    
     Emulator(uint8_t* ram, BOSS9Base* boss9) : sRecInfo(ram, boss9)
     {
         _ram = ram;
@@ -267,6 +272,8 @@ public:
     }
 
     void printInstructions(uint16_t addr, uint16_t n);
+    
+    Error error() const { return _error; }
     
 private:
     uint16_t getReg(Reg reg)
@@ -468,6 +475,8 @@ private:
     
     SRecordInfo sRecInfo;
     unsigned _lineNum = 0;
+    
+    Error _error = Error::None;
 
     // Breakpoint support
     BreakpointEntry _breakpoints[NumBreakpoints];
