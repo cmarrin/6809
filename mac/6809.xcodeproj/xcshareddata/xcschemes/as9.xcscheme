@@ -62,11 +62,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "test09.asm -l c s s19"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "asmtest.asm -l c s s19"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "HelloWorld.asm -l c s s19"

@@ -15,7 +15,7 @@ error   ldx #errmsg
         bsr outhex
         lda #newline
         jsr putc
-eloop   bra eloop
+        jmp exit
 
 errmsg  fcn "ERROR  "
 
