@@ -98,6 +98,27 @@ static inline const char* opToString(Op op)
     }
 }
 
+static inline const char* regToString(Reg op, Op prevOp)
+{
+    switch (op) {
+        default:        return "";
+        case Reg::A:    return "A";
+        case Reg::B:    return "B";
+        case Reg::D:    return "D";
+        case Reg::X:    return "X";
+        case Reg::Y:    return "Y";
+        case Reg::U:    return "U";
+        case Reg::S:    return "S";
+        case Reg::CC:   return "CC";
+        case Reg::PC:   return "PC";
+        case Reg::DP:   return "DP";
+        case Reg::DDU:  return (prevOp == Op::Page2) ? "D" : ((prevOp == Op::Page3) ? "U" : "D");
+        case Reg::XYS:  return (prevOp == Op::Page2) ? "Y" : ((prevOp == Op::Page3) ? "S" : "X");
+        case Reg::XY:   return (prevOp == Op::Page2) ? "Y" : ((prevOp == Op::Page3) ?  "" : "X");
+        case Reg::US:   return (prevOp == Op::Page2) ? "S" : ((prevOp == Op::Page3) ?  "" : "U");
+    }
+}
+
 static constexpr Opcode opcodeTable[ ] = {
     /*00*/  	{ Op::NEG	  , Reg::M8   , Left::LdSt, Right::None , Adr::Direct	},
     /*01*/  	{ Op::ILL	  , Reg::None , Left::None, Right::None , Adr::None     },
@@ -438,7 +459,188 @@ Emulator::printInstructions(uint16_t addr, uint16_t n)
     while (n-- > 0) {
         uint16_t instAddr = addr;
         const Opcode* opcode = &(opcodeTable[load8(addr++)]);
-        _boss9->printf("[%04x]    %s\n", instAddr, opToString(opcode->op));
+        Op prevOp = Op::NOP;
+        Op op = opcode->op;
+        
+        if (op == Op::Page2 || op == Op::Page3) {
+            prevOp = op;
+            opcode = &(opcodeTable[load8(addr++)]);
+        }
+        
+        // Do the addr mode
+        uint16_t ea = 0;
+        int16_t relAddr = 0;
+        uint16_t value = 0;
+        int16_t offset = 0;
+        const char* longBranch = "";
+        const char* indexReg = nullptr;
+        const char* offsetReg = nullptr;
+        bool indirect = false;
+        int8_t autoInc = 0;
+        Adr addrMode = opcode->adr;
+        
+        switch(addrMode) {
+            case Adr::None:
+            case Adr::Inherent:
+                break;
+            case Adr::Direct:
+                ea = load8(addr++);
+                break;
+            case Adr::Extended:
+                ea = load16(addr);
+                addr += 2;
+                break;
+            case Adr::Immed8:
+                value = load8(addr++);
+                break;
+            case Adr::Immed16:
+                value = load16(addr);
+                addr += 2;
+                break;
+                
+            case Adr::RelL:
+                relAddr = int16_t(load16(addr));
+                addr += 2;
+                longBranch = "l";
+                break;
+            case Adr::Rel:
+                relAddr = int8_t(load8(addr++));
+                break;
+          case Adr::RelP:
+                if (prevOp == Op::Page2) {
+                    relAddr = int16_t(load16(addr));
+                    addr += 2;
+                    longBranch = "l";
+                    addrMode = Adr::RelL;
+                } else {
+                    relAddr = int8_t(load8(addr++));
+                    addrMode = Adr::Rel;
+                }
+                break;
+            case Adr::Indexed: {
+                uint8_t postbyte = load8(addr++);
+                
+                // Load value of RR reg in ea
+                switch (RR(postbyte & 0b01100000)) {
+                    case RR::X: indexReg = "X"; break;
+                    case RR::Y: indexReg = "Y"; break;
+                    case RR::U: indexReg = "U"; break;
+                    case RR::S: indexReg = "S"; break;
+                }
+                
+                if ((postbyte & 0x80) == 0) {
+                    // Constant offset direct (5 bit signed)
+                    offset = postbyte & 0x1f;
+                    if (offset & 0x10) {
+                        offset |= 0xe0;
+                    }
+                } else {
+                    switch(IdxMode(postbyte & IdxModeMask)) {
+                        case IdxMode::ConstRegNoOff   : offset = 0; break;
+                        case IdxMode::ConstReg8Off    : offset = int8_t(load8(addr)); addr += 1; break;
+                        case IdxMode::ConstReg16Off   : offset = int16_t(load16(addr)); addr += 2; break;
+                        case IdxMode::AccAOffReg      : offsetReg = "A"; break;
+                        case IdxMode::AccBOffReg      : offsetReg = "B"; break;
+                        case IdxMode::AccDOffReg      : offsetReg = "D"; break;
+                        case IdxMode::Inc1Reg         : autoInc = 1; break;
+                        case IdxMode::Inc2Reg         : autoInc = 2; break;
+                        case IdxMode::Dec1Reg         : autoInc = -1; break;
+                        case IdxMode::Dec2Reg         : autoInc = -2; break;
+                        case IdxMode::ConstPC8Off     : offset = int8_t(load8(addr)); addr += 1; indexReg = "PC"; break;
+                        case IdxMode::ConstPC16Off    : offset = _pc + int16_t(load16(addr)); addr += 2; indexReg = "PC"; break;
+                        case IdxMode::Extended:
+                            offset = load16(addr);
+                            addr += 2;
+                            indexReg = nullptr;
+                            break;
+                    }
+                    
+                    if (postbyte & IndexedIndMask) {
+                        // indirect
+                        indirect = true;
+                    }
+                }
+                    
+                break;
+            }
+        }
+        
+        _boss9->printf("[$%04x]    %s%s%s", instAddr, longBranch, opToString(op), regToString(opcode->reg, prevOp));
+
+        switch(addrMode) {
+            case Adr::None:
+            case Adr::Inherent: break;
+            case Adr::Direct:   _boss9->printf("  <$%02x", ea); break;
+            case Adr::Extended: _boss9->printf("  >$%04x", ea); break;
+            case Adr::Immed16:  _boss9->printf("  #$%04x", value); break;
+            case Adr::Rel:      _boss9->printf("  %d", relAddr); break;
+            case Adr::RelL:     _boss9->printf("  %d", relAddr); break;
+            case Adr::RelP:     break;
+            case Adr::Immed8:
+                if (op == Op::TFR || op == Op::EXG) {
+                    _boss9->printf("  %s,%s", regToString(Reg(uint8_t(value) >> 4), prevOp),
+                                              regToString(Reg(uint8_t(value) & 0xf), prevOp));
+                } else if (op == Op::PSH || op == Op::PUL) {
+                    _boss9->printf("  ");
+                    
+                    const char* pushRegs[8] = { "CC", "A", "B", "DP", "X", "Y", "S", "PC" };
+                    bool first = true;
+                    
+                    for (int i = 0; i < 8; ++i) {
+                        if ((value & (0x01 << i)) != 0) {
+                            const char* r = pushRegs[i];
+                            if (r[0] == 'S' && opcode->reg == Reg::S) {
+                                r = "U";
+                            }
+                            if (!first) {
+                                _boss9->printf(",");
+                            }
+                            _boss9->printf("%s", r);
+                            first = false;
+                        }
+                    }
+                } else {
+                    _boss9->printf("  #$%02x", value);
+                }
+                break;
+            case Adr::Indexed:
+                if (indexReg) {
+                    if (offsetReg) {
+                        if (indirect) {
+                            _boss9->printf("  %s,%s", offsetReg, indexReg); break;
+                        } else {
+                            _boss9->printf("  [%s,%s]", offsetReg, indexReg); break;
+                        }
+                    } else if (autoInc != 0) {
+                        if (indirect) {
+                            if (autoInc > 0) {
+                                _boss9->printf("  [,%s%s]", (autoInc == 1) ? "+" : "++", indexReg); break;
+                            } else {
+                                _boss9->printf("  [,%s%s]", indexReg, (autoInc == -1) ? "-" : "--"); break;
+                            }
+                        } else {
+                            if (autoInc > 0) {
+                                _boss9->printf("  ,%s%s", (autoInc == 1) ? "+" : "++", indexReg); break;
+                            } else {
+                                _boss9->printf("  ,%s%s", indexReg, (autoInc == -1) ? "-" : "--"); break;
+                            }
+                        }
+                    } else {
+                        if (indirect) {
+                            _boss9->printf("  [%d,%s]", offset, indexReg); break;
+                        } else {
+                            _boss9->printf("  %d,%s", offset, indexReg); break;
+                        }
+                    }
+                } else {
+                    // Must be extended indirect
+                    _boss9->printf("  [$%04x]", offset, indexReg); break;
+                }
+                break;
+
+        }
+        
+        _boss9->printf("\n");
     }
 }
     
