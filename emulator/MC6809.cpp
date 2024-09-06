@@ -761,8 +761,6 @@ bool Emulator::execute(RunState runState)
                 _cc.V = _left == 0x7f;
                 break;
             case Op::JMP:
-                _pc = ea;
-                break;
             case Op::JSR:
                 if (ea >= SystemAddrStart) {
                     // This is possibly a system call
@@ -770,9 +768,13 @@ bool Emulator::execute(RunState runState)
                         return true;
                     }
                 } else {
-                    push16(_s, _pc);
+                    if (op == Op::JSR) {
+                        push16(_s, _pc);
+                    }
                     _pc = ea;
-                    _subroutineDepth += 1;
+                    if (op == Op::JSR) {
+                        _subroutineDepth += 1;
+                    }
                 }
                 break;
             case Op::LD8:
