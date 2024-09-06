@@ -616,6 +616,7 @@ bool Emulator::execute(RunState runState)
                 // Since we do the check for whether or not to leave the
                 // loop at the end we can ensure that simply by doing
                 // a continue to skip that test
+                _prevOp = op;
                 continue;
 
             case Op::BHS:
