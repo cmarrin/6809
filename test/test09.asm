@@ -15,6 +15,7 @@ error   ldx #errmsg
         bsr outhex
         lda #newline
         jsr putc
+        lda #1
         jmp exit
 
 errmsg  fcn "ERROR  "
@@ -479,7 +480,7 @@ here    cmpx #here
         lda #newline
         jsr putc
         clra
-        jsr exit
+        jmp exit
 
 testdat	fcb 1,2,3,4,5,6,7,8,9,10
 td1	fdb testdat+2
