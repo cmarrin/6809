@@ -313,10 +313,10 @@ private:
             case Reg::CC:   _ccByte = v; break;
             case Reg::PC:   _pc = v; break;
             case Reg::DP:   _dp = v; break;
-            case Reg::DDU:  if (_prevOp == Op::Page2) _d = v; else if (_prevOp == Op::Page3) _u = v; else _d = v;
-            case Reg::XYS:  if (_prevOp == Op::Page2) _y = v; else if (_prevOp == Op::Page3) _s = v; else _x = v;
-            case Reg::XY:   if (_prevOp == Op::Page2) _y = v; else if (_prevOp != Op::Page3) _x = v;
-            case Reg::US:   if (_prevOp == Op::Page2) _s = v; else if (_prevOp != Op::Page3) _u = v;
+            case Reg::DDU:  if (_prevOp == Op::Page2) _d = v; else if (_prevOp == Op::Page3) _u = v; else _d = v; break;
+            case Reg::XYS:  if (_prevOp == Op::Page2) _y = v; else if (_prevOp == Op::Page3) _s = v; else _x = v; break;
+            case Reg::XY:   if (_prevOp == Op::Page2) _y = v; else if (_prevOp != Op::Page3) _x = v; break;
+            case Reg::US:   if (_prevOp == Op::Page2) _s = v; else if (_prevOp != Op::Page3) _u = v; break;
         }
     }
 
