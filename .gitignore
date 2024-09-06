@@ -10,3 +10,7 @@ a.out
 arduino.json
 c_cpp_properties.json
 launch.json
+lwtools/*/*.d
+lwtools/*/*.o
+lwasm
+lwtools/*/*.a

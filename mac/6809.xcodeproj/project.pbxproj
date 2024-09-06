@@ -394,7 +394,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					490F11112BF3D05500AC1440 = {
 						CreatedOnToolsVersion = 13.4;
@@ -450,6 +450,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		49750B132BE30E3000B7C3CF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -463,7 +464,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+			shellScript = "cd $PROJECT_DIR/../lwtools ; make lwasm\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -652,6 +653,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
 		};
