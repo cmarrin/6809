@@ -20,8 +20,6 @@
 
 namespace mc6809 {
 
-using ConsoleCB = std::function<void(const char*)>;
-
 static constexpr const char* MainPromptString = "BOSS9> ";
 static constexpr const char* LoadingPromptString = "Loading> ";
 static constexpr uint16_t CmdBufSize = 80;
