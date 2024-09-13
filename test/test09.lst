@@ -30,12 +30,16 @@
                       (        BOSS9.inc):00027                                 ; If available return length of line in Y
                       (        BOSS9.inc):00028         
      FC0E             (        BOSS9.inc):00029         exit    equ     $FC0E   ; Exit program. A ccontains exit code
-                      (        BOSS9.inc):00030         
-                      (        BOSS9.inc):00031         * Misc equates
-                      (        BOSS9.inc):00032         
-     000A             (        BOSS9.inc):00033         newline equ     $0a
-                      (        BOSS9.inc):00034                                 
-                      (        BOSS9.inc):00035         
+     FC10             (        BOSS9.inc):00030         mon     equ     $FC10   ; Enter monitor
+     FC12             (        BOSS9.inc):00031         ldStart equ     $FC12   ; Start loading s-records
+     FC14             (        BOSS9.inc):00032         ldLine  equ     $FC14   ; Load an s-record line
+     FC16             (        BOSS9.inc):00033         ldEnd   equ     $FC16   ; End loading s-records
+                      (        BOSS9.inc):00034         
+                      (        BOSS9.inc):00035         * Misc equates
+                      (        BOSS9.inc):00036         
+     000A             (        BOSS9.inc):00037         newline equ     $0a
+                      (        BOSS9.inc):00038                                 
+                      (        BOSS9.inc):00039         
                       (       test09.asm):00004         
      0080             (       test09.asm):00005         testnr  equ 128
                       (       test09.asm):00006         
