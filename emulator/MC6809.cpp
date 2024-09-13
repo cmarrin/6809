@@ -794,7 +794,7 @@ bool Emulator::execute(RunState runState)
             } else if (opcode->reg == Reg::M16) {
                 _left = load16(ea);
             } else {
-                _left = getReg(opcode);
+                _left = getReg(opcode->reg);
             }
         }
         
@@ -1149,7 +1149,7 @@ bool Emulator::execute(RunState runState)
             } else if (opcode->right == Right::St16 || opcode->reg == Reg::M16) {
                 store16(ea, _result);
             } else {
-                setReg(opcode, _result);
+                setReg(opcode->reg, _result);
             }
         }
         
