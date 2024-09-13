@@ -36,10 +36,11 @@
 //            end main
 
 char simpleTest[ ] =
-    "S01C00005B6C77746F6F6C7320342E32325D2073696D706C652E61736D18\n"
-    "S11302008E020FBDFC02860ABDFC00121220F148CA\n"
-    "S1070210656C6C6F3A\n"
-    "S5030002FA\n"
+    "S02000005B6C77746F6F6C7320342E32325D2048656C6C6F576F726C642E61736DA2\n"
+    "S1130200860AB702298E0219BDFC02860ABDFC00CB\n"
+    "S11302107A02292EF04FBDFC0E48656C6C6F206687\n"
+    "S10C0220726F6D2036383039008C\n"
+    "S5030003F9\n"
     "S9030200FA\n"
 ;
 
@@ -74,14 +75,14 @@ class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
         Serial.println("\n\n++++++++++++++ Emulator ************************\n\n");
 
         uint16_t startAddr = 0;
-        setStack(0x6000);
+        emulator().setStack(0x6000);
 
         char* fileString = simpleTest;
         
-        loadStart();
+        emulator().loadStart();
         while (true) {
             bool finished;
-            if (!loadLine(fileString, finished)) {
+            if (!emulator().loadLine(fileString, finished)) {
                 Serial.println("Unable to load file\n");
                 break;
             }
@@ -92,7 +93,7 @@ class ESPBOSS9 : public mc6809::BOSS9<MemorySize>
             }
         }
     
-        startAddr = loadFinish();
+        startAddr = emulator().loadEnd();
 
         startExecution(startAddr, StartInMonitor);
     }
