@@ -22,6 +22,9 @@
 
 using namespace mc6809;
 
+static Reg regsToPrint[ ] = { Reg::A, Reg::B, Reg::D, Reg::X, Reg::Y,
+                              Reg::U, Reg::S, Reg::PC, Reg::CC, Reg::DP };
+                                            
 void BOSS9Base::getCommand()
 {
     bool haveCmd = false;
@@ -455,10 +458,15 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             return true;
         }
         
-        printf("    A:%02x B:%02x D:%04x X:%04x Y:%04x\n",
-            _emu.getA(), _emu.getB(), _emu.getD(), _emu.getX(), _emu.getY());
-        printf("    U:%04x S:%04x PC:%04x CC:%02x DP:%02x\n",
-            _emu.getU(), _emu.getS(), _emu.getPC(), _emu.getCC(), _emu.getDP());
+        printf("    ");
+
+        for (Reg reg : regsToPrint) {
+            if (reg == Reg::U) {
+                printf("\n");
+            }
+            printf("%s:$%02x ", emulator().regToString(reg), emulator().getReg(reg));
+        }
+        printf("\n");
         return true;
     }
 
