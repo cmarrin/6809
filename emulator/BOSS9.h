@@ -93,7 +93,7 @@ class BOSS9Base
     void promptIfNeeded()
     {
         if (_needPrompt) {
-            _emu.printInstructions(_emu.getPC(), 1);
+            emulator().printInstructions(emulator().getReg(Reg::PC), 1);
             puts((_runState == RunState::Loading) ? LoadingPromptString : MainPromptString);
             _cursor = 0;
             _needPrompt = false;

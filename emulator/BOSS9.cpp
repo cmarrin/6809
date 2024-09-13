@@ -254,7 +254,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         // run
         leaveMonitor();
         printf("Running at address $%04x\n", _startAddr);
-        _emu.setPC(_startAddr);
+        emulator().setReg(Reg::PC, _startAddr);
         return true;
     }
     
@@ -267,7 +267,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         // run from current PC
         leaveMonitor();
         _runState = RunState::Continuing;
-        printf("Continuing at address $%04x\n", _emu.getPC());
+        printf("Continuing at address $%04x\n", emulator().getReg(Reg::PC));
         return true;
     }
     
@@ -400,7 +400,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
                 return false;
             }
         }
-        _emu.printInstructions(_emu.getPC(), num);
+        emulator().printInstructions(emulator().getReg(Reg::PC), num);
         return true;
     }
 
@@ -432,7 +432,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     // show current addr or set it to <addr>
     if(cmdElements[0] == "a") {
         if (cmdElements[1].empty()) {
-            _emu.printInstructions(_emu.getPC(), 1);
+            emulator().printInstructions(emulator().getReg(Reg::PC), 1);
             return true;
         }
 
@@ -444,8 +444,8 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         if (addr > 65535) {
             return false;
         }
-        _emu.setPC(addr);
-        _emu.printInstructions(_emu.getPC(), 1);
+        emulator().setReg(Reg::PC, addr);
+        emulator().printInstructions(emulator().getReg(Reg::PC), 1);
         return true;
     }
 
@@ -568,9 +568,9 @@ bool BOSS9Base::call(Func func)
         case Func::exit:
             printf("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
             enterMonitor();
-            _emu.setPC(_startAddr);
-            return false;
-        default: return false;
+            emulator().setReg(Reg::PC, _startAddr);
+            break;
+        default: break;
     }
     return false;
 }
@@ -582,7 +582,7 @@ bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
     } else {
         leaveMonitor();
     }
-    _emu.setPC(addr);
+    emulator().setReg(Reg::PC, addr);
     _startAddr = addr;
     
     promptIfNeeded();
@@ -599,7 +599,7 @@ bool BOSS9Base::continueExecution()
     // See if we got an ESC
     int c = getc();
     if (checkEscape(c)) {
-        printf("*** Stopped at $%04x\n", _emu.getPC());
+        printf("*** Stopped at $%04x\n", emulator().getReg(Reg::PC));
         return true;
     }
     
