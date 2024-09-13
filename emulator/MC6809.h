@@ -33,18 +33,6 @@ static constexpr uint16_t SystemAddrStart = 0xFC00;
 static constexpr uint32_t InstructionsToExecutePerContinue = 1000;
 static constexpr uint8_t NumBreakpoints = 4;
 
-static inline void printf(const char* fmt, ...)
-{
-    va_list args;
-    va_start(args, fmt);
-    vprintf(fmt, args);
-}
-
-static inline void vprintf(const char* fmt, va_list args)
-{
-    puts(m8r::string::vformat(fmt, args).c_str());
-}
-
 // Opcode table
 
 // The 6809 has 2 extended opcodess Page2 (0x10) and Page3 (0x11). These

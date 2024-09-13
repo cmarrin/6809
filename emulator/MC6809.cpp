@@ -424,12 +424,12 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
 void SRecordInfo::ParseError(unsigned linenum, const char *fmt, va_list args)
 {
     if (linenum == 0) {
-        printf("Error: line %d: ", linenum);
+        _boss9->printF("Error: line %d: ", linenum);
     } else {
-        printf("Error: ");
+        _boss9->printF("Error: ");
     }
-    vprintf(fmt, args);
-    printf("\n");
+    _boss9->vprintF(fmt, args);
+    _boss9->printF("\n");
 }
 
 const char*
@@ -566,23 +566,23 @@ Emulator::printInstructions(uint16_t addr, uint16_t n)
             }
         }
         
-        printf("[$%04x]    %s%s%s", instAddr, longBranch, opToString(op), regToString(opcode->reg, prevOp));
+        _boss9->printF("[$%04x]    %s%s%s", instAddr, longBranch, opToString(op), regToString(opcode->reg, prevOp));
 
         switch(addrMode) {
             case Adr::None:
             case Adr::Inherent: break;
-            case Adr::Direct:   printf("  <$%02x", ea); break;
-            case Adr::Extended: printf("  >$%04x", ea); break;
-            case Adr::Immed16:  printf("  #$%04x", value); break;
-            case Adr::Rel:      printf("  %d", relAddr); break;
-            case Adr::RelL:     printf("  %d", relAddr); break;
+            case Adr::Direct:   _boss9->printF("  <$%02x", ea); break;
+            case Adr::Extended: _boss9->printF("  >$%04x", ea); break;
+            case Adr::Immed16:  _boss9->printF("  #$%04x", value); break;
+            case Adr::Rel:      _boss9->printF("  %d", relAddr); break;
+            case Adr::RelL:     _boss9->printF("  %d", relAddr); break;
             case Adr::RelP:     break;
             case Adr::Immed8:
                 if (op == Op::TFR || op == Op::EXG) {
-                    printf("  %s,%s", regToString(Reg(uint8_t(value) >> 4), prevOp),
+                    _boss9->printF("  %s,%s", regToString(Reg(uint8_t(value) >> 4), prevOp),
                                               regToString(Reg(uint8_t(value) & 0xf), prevOp));
                 } else if (op == Op::PSH || op == Op::PUL) {
-                    printf("  ");
+                    _boss9->printF("  ");
                     
                     const char* pushRegs[8] = { "CC", "A", "B", "DP", "X", "Y", "S", "PC" };
                     bool first = true;
@@ -594,54 +594,54 @@ Emulator::printInstructions(uint16_t addr, uint16_t n)
                                 r = "U";
                             }
                             if (!first) {
-                                printf(",");
+                                _boss9->printF(",");
                             }
-                            printf("%s", r);
+                            _boss9->printF("%s", r);
                             first = false;
                         }
                     }
                 } else {
-                    printf("  #$%02x", value);
+                    _boss9->printF("  #$%02x", value);
                 }
                 break;
             case Adr::Indexed:
                 if (indexReg) {
                     if (offsetReg) {
                         if (indirect) {
-                            printf("  %s,%s", offsetReg, indexReg); break;
+                            _boss9->printF("  %s,%s", offsetReg, indexReg); break;
                         } else {
-                            printf("  [%s,%s]", offsetReg, indexReg); break;
+                            _boss9->printF("  [%s,%s]", offsetReg, indexReg); break;
                         }
                     } else if (autoInc != 0) {
                         if (indirect) {
                             if (autoInc > 0) {
-                                printf("  [,%s%s]", (autoInc == 1) ? "+" : "++", indexReg); break;
+                                _boss9->printF("  [,%s%s]", (autoInc == 1) ? "+" : "++", indexReg); break;
                             } else {
-                                printf("  [,%s%s]", indexReg, (autoInc == -1) ? "-" : "--"); break;
+                                _boss9->printF("  [,%s%s]", indexReg, (autoInc == -1) ? "-" : "--"); break;
                             }
                         } else {
                             if (autoInc > 0) {
-                                printf("  ,%s%s", (autoInc == 1) ? "+" : "++", indexReg); break;
+                                _boss9->printF("  ,%s%s", (autoInc == 1) ? "+" : "++", indexReg); break;
                             } else {
-                                printf("  ,%s%s", indexReg, (autoInc == -1) ? "-" : "--"); break;
+                                _boss9->printF("  ,%s%s", indexReg, (autoInc == -1) ? "-" : "--"); break;
                             }
                         }
                     } else {
                         if (indirect) {
-                            printf("  [%d,%s]", offset, indexReg); break;
+                            _boss9->printF("  [%d,%s]", offset, indexReg); break;
                         } else {
-                            printf("  %d,%s", offset, indexReg); break;
+                            _boss9->printF("  %d,%s", offset, indexReg); break;
                         }
                     }
                 } else {
                     // Must be extended indirect
-                    printf("  [$%04x]", offset, indexReg); break;
+                    _boss9->printF("  [$%04x]", offset); break;
                 }
                 break;
 
         }
         
-        printf("\n");
+        _boss9->printF("\n");
     }
 }
     
@@ -678,7 +678,7 @@ bool Emulator::execute(RunState runState)
         // execute the first instruction they encounter
         if (!firstTime || runState == RunState::Running) {
             if (atBreakpoint(_pc)) {
-                printf("\n*** hit breakpoint at addr $%04x\n\n", _pc);
+                _boss9->printF("\n*** hit breakpoint at addr $%04x\n\n", _pc);
                 _boss9->call(Func::mon);
                 return true;
             }
@@ -1081,9 +1081,10 @@ bool Emulator::execute(RunState runState)
                 _pc = pop16(_s);
                 _subroutineDepth -= 1;
                 if (_lastRunState != RunState::Running && _subroutineDepth == 0) {
-                    printf("\n*** step %s, stopped at addr $%04x\n\n",
+                    _boss9->printF("\n*** step %s, stopped at addr $%04x\n\n",
                             (_lastRunState == RunState::StepOver) ? "over" : "out", _pc);
-                    _boss9->enterMonitor();
+                    // enter the monitor
+                    _boss9->call(Func::mon);
                     return true;
                 }
                 break;
@@ -1190,9 +1191,9 @@ bool Emulator::execute(RunState runState)
         }
         
         if (runState == RunState::StepIn || handleStepOverLikeStepIn) {
-            printf("\n*** step %s, stopped at addr $%04x\n\n",
+            _boss9->printF("\n*** step %s, stopped at addr $%04x\n\n",
                     (_lastRunState == RunState::StepIn) ? "in" : "over", _pc);
-            _boss9->enterMonitor();
+            _boss9->call(Func::mon);
             return true;
         }
         
@@ -1210,7 +1211,7 @@ bool Emulator::execute(RunState runState)
 
 void Emulator::readOnlyAddr(uint16_t addr)
 {
-    printf("Address $%04x is read-only\n", addr);
+    _boss9->printF("Address $%04x is read-only\n", addr);
 }
 
 void Emulator::checkActiveBreakpoints()

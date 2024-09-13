@@ -65,6 +65,25 @@ class BOSS9Base
     Emulator& emulator() { return _emu; }
     const Emulator& emulator() const { return _emu; }
     
+    void puts(const char* s) const
+    {
+        while (*s) {
+            putc(*s++);
+        }
+    }
+
+    void printF(const char* fmt, ...) const
+    {
+        va_list args;
+        va_start(args, fmt);
+        vprintF(fmt, args);
+    }
+
+    void vprintF(const char* fmt, va_list args) const
+    {
+        puts(m8r::string::vformat(fmt, args).c_str());
+    }
+
   protected:
     // Methods to override
     virtual void putc(char c) const = 0;

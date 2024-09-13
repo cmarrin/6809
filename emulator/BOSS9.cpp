@@ -36,7 +36,7 @@ void BOSS9Base::getCommand()
             break;
         }
         if (_cursor >= CmdBufSize - 1) {
-            printf("*** too many chars in cmdbuf\n");
+            printF("*** too many chars in cmdbuf\n");
             _cursor = 0;
             haveCmd = true;
             break;
@@ -66,7 +66,7 @@ void BOSS9Base::getCommand()
         
         if (c < 0x20 || c > 0x7f) {
             // Some other control character, for now error
-            printf("*** unrecognized control char '0x%02x'\n", uint8_t(c));
+            printF("*** unrecognized control char '0x%02x'\n", uint8_t(c));
             _cursor = 0;
             haveCmd = true;
             break;
@@ -89,7 +89,7 @@ bool BOSS9Base::checkEscape(int c)
         // Escape - go back  to command mode
         _runState = RunState::Cmd;
         enterMonitor();
-        printf("...ABORT...\n");
+        printF("...ABORT...\n");
         return true;
     }
     return false;
@@ -151,12 +151,12 @@ void BOSS9Base::processCommand()
         bool finished;
         if (!emulator().loadLine(_cmdBuf, finished)) {
             _runState = RunState::Cmd;
-            printf("Error loading\n");
+            printF("Error loading\n");
         }
         if (finished) {
             _startAddr = emulator().loadEnd();
             _runState = RunState::Cmd;
-            printf("Load complete, start addr = 0x%04x\n", _startAddr);
+            printF("Load complete, start addr = 0x%04x\n", _startAddr);
         }
     }
     _cursor = 0;
@@ -173,7 +173,7 @@ bool BOSS9Base::toNum(m8r::string& s, uint32_t& num)
     char* strend = nullptr;
     num = uint32_t(strtol(s.c_str() + i, &strend, ishex ? 16 : 10));
     if ((strend == s.c_str() + i) || (errno == ERANGE)) {
-        printf("%s is not a valid number\n", s.c_str());
+        printF("%s is not a valid number\n", s.c_str());
         return false;
     }
     return true;
@@ -183,7 +183,7 @@ void BOSS9Base::showBreakpoint(uint8_t i) const
 {
     BreakpointEntry entry;
     if (emulator().breakpoint(i, entry)) {
-        printf("    Breakpoint[%d] -> $%04x (%sabled)\n", i, entry.addr, (entry.status == BPStatus::Enabled) ? "en" : "dis");
+        printF("    Breakpoint[%d] -> $%04x (%sabled)\n", i, entry.addr, (entry.status == BPStatus::Enabled) ? "en" : "dis");
     }
 }
 
@@ -193,37 +193,37 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     
     if (cmdElements[0] == "help" || cmdElements[0] == "h" || cmdElements[0] == "?") {
         if (cmdElements[1].empty()) {
-            printf("BOSS9 Monitor Commands:\n");
-            printf("\n");
-            printf("\tld      - Load SRecords from serial\n");
-            printf("\tr       - run at start addr\n");
-            printf("\tr a     - run at addr a, set start to a\n");
-            printf("\tc       - cont at current addr\n");
-            printf("\tc a     - cont at addr a\n");
-            printf("\tb       - show cur brkpts\n");
-            printf("\tb a     - set brkpt at addr a\n");
-            printf("\tbc      - clear all brkpts\n");
-            printf("\tbc n    - clear brkpt <n>\n");
-            printf("\tbe      - enable all brkpts\n");
-            printf("\tbe n    - enable brkpt <n>\n");
-            printf("\tbd      - disable all brkpts\n");
-            printf("\tbd n    - disable brkpt <n>\n");
-            printf("\tn       - next, if at func step over\n");
-            printf("\ts       - step, if at func step in\n");
-            printf("\to       - step out of cur func\n");
-            printf("\tl       - list next 5 insts at cur addr\n");
-            printf("\tl n     - list next n insts at cur addr\n");
-            printf("\tla a    - list next 5 insts at addr a\n");
-            printf("\tla a n  - list next n insts at addr a\n");
-            printf("\ta       - show inst at cur addr\n");
-            printf("\ta a     - set cur addr to a and show inst\n");
-            printf("\tregs    - show all regs\n");
-            printf("\treg r   - show reg r\n");
-            printf("\treg r v - set reg r to v\n");
+            printF("BOSS9 Monitor Commands:\n");
+            printF("\n");
+            printF("\tld      - Load SRecords from serial\n");
+            printF("\tr       - run at start addr\n");
+            printF("\tr a     - run at addr a, set start to a\n");
+            printF("\tc       - cont at current addr\n");
+            printF("\tc a     - cont at addr a\n");
+            printF("\tb       - show cur brkpts\n");
+            printF("\tb a     - set brkpt at addr a\n");
+            printF("\tbc      - clear all brkpts\n");
+            printF("\tbc n    - clear brkpt <n>\n");
+            printF("\tbe      - enable all brkpts\n");
+            printF("\tbe n    - enable brkpt <n>\n");
+            printF("\tbd      - disable all brkpts\n");
+            printF("\tbd n    - disable brkpt <n>\n");
+            printF("\tn       - next, if at func step over\n");
+            printF("\ts       - step, if at func step in\n");
+            printF("\to       - step out of cur func\n");
+            printF("\tl       - list next 5 insts at cur addr\n");
+            printF("\tl n     - list next n insts at cur addr\n");
+            printF("\tla a    - list next 5 insts at addr a\n");
+            printF("\tla a n  - list next n insts at addr a\n");
+            printF("\ta       - show inst at cur addr\n");
+            printF("\ta a     - set cur addr to a and show inst\n");
+            printF("\tregs    - show all regs\n");
+            printF("\treg r   - show reg r\n");
+            printF("\treg r v - set reg r to v\n");
 
             return true;
         }
-        printf("Individual command help not yet available\n");
+        printF("Individual command help not yet available\n");
         return false;
     }
     
@@ -234,7 +234,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
         
         // Load s19 file
-        printf("Ready to start loading. ESC to abort\n");
+        printF("Ready to start loading. ESC to abort\n");
         _runState = RunState::Loading;
         emulator().loadStart();
         return true;
@@ -256,7 +256,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         
         // run
         leaveMonitor();
-        printf("Running at address $%04x\n", _startAddr);
+        printF("Running at address $%04x\n", _startAddr);
         emulator().setReg(Reg::PC, _startAddr);
         return true;
     }
@@ -270,7 +270,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         // run from current PC
         leaveMonitor();
         _runState = RunState::Continuing;
-        printf("Continuing at address $%04x\n", emulator().getReg(Reg::PC));
+        printF("Continuing at address $%04x\n", emulator().getReg(Reg::PC));
         return true;
     }
     
@@ -292,7 +292,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
                 }
             }
             if (!haveBreakpoints) {
-                printf("    No breakpoints\n");
+                printF("    No breakpoints\n");
             }
             return true;
         }
@@ -305,7 +305,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         
         uint8_t breakpointNum;
         if (!emulator().setBreakpoint(num, breakpointNum)) {
-            printf("too many breakpoints\n");
+            printF("too many breakpoints\n");
             return false;
         }
         
@@ -330,7 +330,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
 
         if (!emulator().clearBreakpoint(num)) {
-            printf("invalid breakpoint index\n");
+            printF("invalid breakpoint index\n");
             return false;
         }
         return true;
@@ -353,7 +353,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
 
         if (!emulator().enableBreakpoint(num)) {
-            printf("invalid breakpoint index\n");
+            printF("invalid breakpoint index\n");
             return false;
         }
         return true;
@@ -376,7 +376,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
 
         if (!emulator().disableBreakpoint(num)) {
-            printf("invalid breakpoint index\n");
+            printF("invalid breakpoint index\n");
             return false;
         }
         return true;
@@ -458,15 +458,15 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             return true;
         }
         
-        printf("    ");
+        printF("    ");
 
         for (Reg reg : regsToPrint) {
             if (reg == Reg::U) {
-                printf("\n");
+                printF("\n");
             }
-            printf("%s:$%02x ", emulator().regToString(reg), emulator().getReg(reg));
+            printF("%s:$%02x ", emulator().regToString(reg), emulator().getReg(reg));
         }
-        printf("\n");
+        printF("\n");
         return true;
     }
 
@@ -495,9 +495,9 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
                     emulator().setReg(reg, v);
                 }
                 if (emulator().regSizeInBytes(reg) == 1) {
-                    printf("    %s:%02x\n", regStr.c_str(), emulator().getReg(reg));
+                    printF("    %s:%02x\n", regStr.c_str(), emulator().getReg(reg));
                 } else {
-                    printf("    %s:%04x\n", regStr.c_str(), emulator().getReg(reg));
+                    printF("    %s:%04x\n", regStr.c_str(), emulator().getReg(reg));
                 }
             }
         }
@@ -509,7 +509,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return cmdElements[1].empty() && cmdElements[2].empty();
     }
     
-    printf("Invalid command\n");
+    printF("Invalid command\n");
     return false;
 }
 
@@ -529,7 +529,7 @@ bool BOSS9Base::call(Func func)
             break;
         }
         case Func::exit:
-            printf("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
+            printF("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
             enterMonitor();
             emulator().setReg(Reg::PC, _startAddr);
             break;
@@ -581,7 +581,7 @@ bool BOSS9Base::continueExecution()
     // See if we got an ESC
     int c = getc();
     if (checkEscape(c)) {
-        printf("*** Stopped at $%04x\n", emulator().getReg(Reg::PC));
+        printF("*** Stopped at $%04x\n", emulator().getReg(Reg::PC));
         return true;
     }
     
