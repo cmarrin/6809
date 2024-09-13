@@ -966,7 +966,7 @@ bool Emulator::execute(RunState runState)
             case Op::JSR:
                 if (ea >= SystemAddrStart) {
                     // This is possibly a system call
-                    if (!_boss9->call(this, ea)) {
+                    if (!_boss9->call(Func(ea))) {
                         return true;
                     }
                 } else {

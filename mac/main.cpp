@@ -158,10 +158,10 @@ int main(int argc, char * const argv[])
     
     while (boss9.continueExecution()) { }
     
-    if (boss9.error() != mc6809::Emulator::Error::None) {
-        boss9.printf("*** finished with error: %d\n", int32_t(boss9.error()));
+    if (boss9.emulator().error() != mc6809::Emulator::Error::None) {
+        printf("*** finished with error: %d\n", int32_t(boss9.emulator().error()));
     } else {
-        boss9.printf("    finished successfully\n");
+        printf("    finished successfully\n");
     }
     return 0;
 }

@@ -553,19 +553,19 @@ bool BOSS9Base::call(Func func)
 {
     switch (func) {
         case Func::putc:
-            putc(engine->getA());
+            putc(emulator().getReg(Reg::A));
             return true;
         case Func::puts: {
-            const char* s = reinterpret_cast<const char*>(engine->getAddr(engine->getX()));
+            const char* s = reinterpret_cast<const char*>(emulator().getAddr(emulator().getReg(Reg::X)));
             puts(s);
             return true;
         }
         case Func::getc: {
-            engine->setA(getc());
+            emulator().setReg(Reg::A, getc());
             break;
         }
         case Func::exit:
-            printf("Program exited with code %d\n", int32_t(engine->getA()));
+            printf("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
             enterMonitor();
             _emu.setPC(_startAddr);
             return false;
