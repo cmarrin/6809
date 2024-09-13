@@ -275,7 +275,6 @@ public:
     
     Error error() const { return _error; }
     
-private:
     uint16_t getReg(Reg reg)
     {
         switch(reg) {
@@ -322,6 +321,7 @@ private:
 
     void setReg(const Opcode* op, uint16_t v) { setReg(op->reg, v); }
 
+  private:
     void push8(uint16_t& s, uint8_t v)
     {
         _ram[--s] = v;
