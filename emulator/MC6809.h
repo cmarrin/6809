@@ -222,30 +222,8 @@ public:
     
     void setStack(uint16_t stack) { _s = stack; }
     
-    void setA(uint8_t v) { _a = v; }
-    void setB(uint8_t v) { _b = v; }
-    void setDP(uint8_t v) { _dp = v; }
-    void setCC(uint8_t v) { _ccByte = v; }
-    void setD(uint16_t v) { _d = v; }
-    void setX(uint16_t v) { _x = v; }
-    void setY(uint16_t v) { _y = v; }
-    void setU(uint16_t v) { _u = v; }
-    void setS(uint16_t v) { _s = v; }
-    void setPC(uint16_t v) { _pc = v; }
-    
     bool execute(RunState);
-    
-    uint8_t getA() const { return _a; }
-    uint8_t getB() const { return _b; }
-    uint8_t getDP() const { return _dp; }
-    uint8_t getCC() const { return _ccByte; }
-    uint16_t getD() const { return _d; }
-    uint16_t getX() const { return _x; }
-    uint16_t getY() const { return _y; }
-    uint16_t getU() const { return _u; }
-    uint16_t getS() const { return _s; }
-    uint16_t getPC() const { return _pc; }
-    
+
     uint8_t* getAddr(uint16_t ea) { return _ram + ea; }
     
     // Breakpoint support
