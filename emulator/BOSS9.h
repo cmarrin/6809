@@ -51,26 +51,6 @@ class BOSS9Base
     
     virtual ~BOSS9Base() { }
         
-    
-    void puts(const char* s) const
-    {
-        while (*s) {
-            putc(*s++);
-        }
-    }
-        
-    void printf(const char* fmt, ...) const
-    {
-        va_list args;
-        va_start(args, fmt);
-        vprintf(fmt, args);
-    }
-
-    void vprintf(const char* fmt, va_list args) const
-    {
-        puts(m8r::string::vformat(fmt, args).c_str());
-    }
-
     bool call(Func);
     
     bool startExecution(uint16_t addr, bool startInMonitor = false);
