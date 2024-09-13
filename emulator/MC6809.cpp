@@ -660,7 +660,7 @@ bool Emulator::loadLine(const char* data, bool& finished)
     return true;
 }
 
-uint16_t Emulator::loadFinish()
+uint16_t Emulator::loadEnd()
 {
     sRecInfo.Flush();
     return sRecInfo.startAddr();

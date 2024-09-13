@@ -218,7 +218,7 @@ public:
     // Returns the start addr of the program
     void loadStart();
     bool loadLine(const char* data, bool& finished);
-    uint16_t loadFinish();
+    uint16_t loadEnd();
     
     void setStack(uint16_t stack) { _s = stack; }
     

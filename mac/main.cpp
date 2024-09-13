@@ -148,7 +148,7 @@ int main(int argc, char * const argv[])
         }
     }
     
-    startAddr = boss9.loadFinish();
+    startAddr = boss9.emulator().loadEnd();
     
     if (isFileStringAllocated) {
         delete [ ] fileString;
