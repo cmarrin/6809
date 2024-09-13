@@ -549,9 +549,9 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     return false;
 }
 
-bool BOSS9Base::call(Emulator* engine, uint16_t ea)
+bool BOSS9Base::call(Func func)
 {
-    switch (Func(ea)) {
+    switch (func) {
         case Func::putc:
             putc(engine->getA());
             return true;
