@@ -68,10 +68,6 @@ class BOSS9Base
         puts(m8r::string::vformat(fmt, args).c_str());
     }
 
-    // Calls to emulator
-    void loadStart() { _emu.loadStart(); }
-    bool loadLine(const char* data, bool& finished) { return _emu.loadLine(data, finished); }
-    uint16_t loadFinish() { return _emu.loadFinish(); }
     void setStack(uint16_t stack) { _emu.setStack(stack); }
     
     bool startExecution(uint16_t addr, bool startInMonitor = false);
@@ -84,6 +80,8 @@ class BOSS9Base
     }
     
     Emulator::Error error() const { return _emu.error(); }
+    Emulator& emulator() { return _emu; }
+    const Emulator& emulator() const { return _emu; }
     
   protected:
     // Methods to override

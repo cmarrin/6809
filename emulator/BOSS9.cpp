@@ -146,12 +146,12 @@ void BOSS9Base::processCommand()
         
     if (_runState == RunState::Loading) {
         bool finished;
-        if (!loadLine(_cmdBuf, finished)) {
+        if (!emulator().loadLine(_cmdBuf, finished)) {
             _runState = RunState::Cmd;
             printf("Error loading\n");
         }
         if (finished) {
-            _startAddr = loadFinish();
+            _startAddr = emulator().loadEnd();
             _runState = RunState::Cmd;
             printf("Load complete, start addr = 0x%04x\n", _startAddr);
         }
@@ -232,7 +232,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         // Load s19 file
         printf("Ready to start loading. ESC to abort\n");
         _runState = RunState::Loading;
-        loadStart();
+        emulator().loadStart();
         return true;
     }
 
