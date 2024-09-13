@@ -476,7 +476,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             return false;
         }
         
-        const m8r::string& reg = cmdElements[1].tolower();
+        const m8r::string& testRegStr = cmdElements[1].tolower();
         
         bool setReg = false;
         uint32_t v = 0;
@@ -484,69 +484,24 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
            if (!toNum(cmdElements[2], v)) {
                 return false;
             }
-            return false;
+            setReg = true;
         }
         
-        if (reg == "a") {
-            if (setReg) {
-                _emu.setA(v);
+        for (Reg reg : regsToPrint) {
+            m8r::string regStr(emulator().regToString(reg));
+            m8r::string regStrLower = regStr.tolower();
+            if (testRegStr == regStrLower) {
+                if (setReg) {
+                    emulator().setReg(reg, v);
+                }
+                if (emulator().regSizeInBytes(reg) == 1) {
+                    printf("    %s:%02x\n", regStr.c_str(), emulator().getReg(reg));
+                } else {
+                    printf("    %s:%04x\n", regStr.c_str(), emulator().getReg(reg));
+                }
             }
-            printf("    A:%02x\n", _emu.getA());
         }
-        if (reg == "b") {
-            if (setReg) {
-                _emu.setB(v);
-            }
-            printf("    B:%02x\n", _emu.getB());
-        }
-        if (reg == "d") {
-            if (setReg) {
-                _emu.setD(v);
-            }
-            printf("    D:%02x\n", _emu.getD());
-        }
-        if (reg == "x") {
-            if (setReg) {
-                _emu.setX(v);
-            }
-            printf("    X:%02x\n", _emu.getX());
-        }
-        if (reg == "y") {
-            if (setReg) {
-                _emu.setY(v);
-            }
-            printf("    Y:%02x\n", _emu.getY());
-        }
-        if (reg == "u") {
-            if (setReg) {
-                _emu.setU(v);
-            }
-            printf("    U:%02x\n", _emu.getU());
-        }
-        if (reg == "s") {
-            if (setReg) {
-                _emu.setS(v);
-            }
-            printf("    S:%02x\n", _emu.getS());
-        }
-        if (reg == "cc") {
-            if (setReg) {
-                _emu.setCC(v);
-            }
-            printf("    CC:%02x\n", _emu.getCC());
-        }
-        if (reg == "pc") {
-            if (setReg) {
-                _emu.setPC(v);
-            }
-            printf("    PC:%02x\n", _emu.getPC());
-        }
-        if (reg == "dp") {
-            if (setReg) {
-                _emu.setDP(v);
-            }
-            printf("    DP:%02x\n", _emu.getDP());
-        }
+        
         return true;
     }
 

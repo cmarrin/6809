@@ -321,6 +321,10 @@ public:
 
     void setReg(const Opcode* op, uint16_t v) { setReg(op->reg, v); }
     const char* regToString(Reg, Op prevOp = Op::NOP);
+    uint8_t regSizeInBytes(Reg reg)
+    {
+        return (reg == Reg::A || reg == Reg::B || reg == Reg::CC || reg == Reg::DP) ? 1 : 2;
+    }
 
   private:
     void push8(uint16_t& s, uint8_t v)
