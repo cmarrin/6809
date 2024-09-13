@@ -134,10 +134,10 @@ int main(int argc, char * const argv[])
         }
     }
     
-    boss9.loadStart();
+    boss9.emulator().loadStart();
     while (true) {
         bool finished;
-        if (!boss9.loadLine(fileString, finished)) {
+        if (!boss9.emulator().loadLine(fileString, finished)) {
             std::cout << "Unable to load file\n";
             return -1;
         }
