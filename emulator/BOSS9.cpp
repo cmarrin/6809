@@ -533,6 +533,25 @@ bool BOSS9Base::call(Func func)
             enterMonitor();
             emulator().setReg(Reg::PC, _startAddr);
             break;
+        case Func::mon:
+            enterMonitor();
+            break;
+        case Func::ldStart:
+            emulator().loadStart();
+            break;
+        case Func::ldLine: {
+            // X has pointer to data.
+            // Return bool success in A, bool finished in B
+            const char* s = reinterpret_cast<const char*>(emulator().getAddr(emulator().getReg(Reg::X)));
+            bool finished;
+            bool result = emulator().loadLine(s, finished);
+            emulator().setReg(Reg::A, result);
+            emulator().setReg(Reg::B, finished);
+            break;
+        }
+        case Func::ldEnd:
+            emulator().loadEnd();
+            break;
         default: break;
     }
     return false;

@@ -38,6 +38,10 @@ enum class Func : uint16_t {
     peeks = 0xFC0C,   // Return in A a 1 if a line is available and 0 otherwise.
                                             // If available return length of line in Y
     exit = 0xFC0E,    // Exit program. A contains exit code
+    mon = 0xFC10,     // Enter monitor
+    ldStart = 0xFC12, // Start loading s-records
+    ldLine = 0xFC14,  // Load an s-record line
+    ldEnd = 0xFC16,   // End loading s-records
 };
 
 class BOSS9Base

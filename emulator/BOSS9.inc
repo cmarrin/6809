@@ -27,6 +27,10 @@ peeks   equ     $FC0C   ; Return in A a 1 if a line is available and 0 otherwise
                         ; If available return length of line in Y
 
 exit    equ     $FC0E   ; Exit program. A ccontains exit code
+mon     equ     $FC10   ; Enter monitor
+ldStart equ     $FC12   ; Start loading s-records
+ldLine  equ     $FC14   ; Load an s-record line
+ldEnd   equ     $FC16   ; End loading s-records
 
 * Misc equates
 
