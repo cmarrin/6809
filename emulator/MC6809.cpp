@@ -98,27 +98,6 @@ static inline const char* opToString(Op op)
     }
 }
 
-static inline const char* regToString(Reg op, Op prevOp)
-{
-    switch (op) {
-        default:        return "";
-        case Reg::A:    return "A";
-        case Reg::B:    return "B";
-        case Reg::D:    return "D";
-        case Reg::X:    return "X";
-        case Reg::Y:    return "Y";
-        case Reg::U:    return "U";
-        case Reg::S:    return "S";
-        case Reg::CC:   return "CC";
-        case Reg::PC:   return "PC";
-        case Reg::DP:   return "DP";
-        case Reg::DDU:  return (prevOp == Op::Page2) ? "D" : ((prevOp == Op::Page3) ? "U" : "D");
-        case Reg::XYS:  return (prevOp == Op::Page2) ? "Y" : ((prevOp == Op::Page3) ? "S" : "X");
-        case Reg::XY:   return (prevOp == Op::Page2) ? "Y" : ((prevOp == Op::Page3) ?  "" : "X");
-        case Reg::US:   return (prevOp == Op::Page2) ? "S" : ((prevOp == Op::Page3) ?  "" : "U");
-    }
-}
-
 static constexpr Opcode opcodeTable[ ] = {
     /*00*/  	{ Op::NEG	  , Reg::M8   , Left::LdSt, Right::None , Adr::Direct	},
     /*01*/  	{ Op::ILL	  , Reg::None , Left::None, Right::None , Adr::None     },
@@ -445,12 +424,34 @@ static inline uint16_t concat(uint8_t a, uint8_t b)
 void SRecordInfo::ParseError(unsigned linenum, const char *fmt, va_list args)
 {
     if (linenum == 0) {
-        _boss9->printf("Error: line %d: ", linenum);
+        printf("Error: line %d: ", linenum);
     } else {
-        _boss9->printf("Error: ");
+        printf("Error: ");
     }
-    _boss9->vprintf(fmt, args);
-    _boss9->printf("\n");
+    vprintf(fmt, args);
+    printf("\n");
+}
+
+const char*
+Emulator::regToString(Reg op, Op prevOp)
+{
+    switch (op) {
+        default:        return "";
+        case Reg::A:    return "A";
+        case Reg::B:    return "B";
+        case Reg::D:    return "D";
+        case Reg::X:    return "X";
+        case Reg::Y:    return "Y";
+        case Reg::U:    return "U";
+        case Reg::S:    return "S";
+        case Reg::CC:   return "CC";
+        case Reg::PC:   return "PC";
+        case Reg::DP:   return "DP";
+        case Reg::DDU:  return (prevOp == Op::Page2) ? "D" : ((prevOp == Op::Page3) ? "U" : "D");
+        case Reg::XYS:  return (prevOp == Op::Page2) ? "Y" : ((prevOp == Op::Page3) ? "S" : "X");
+        case Reg::XY:   return (prevOp == Op::Page2) ? "Y" : ((prevOp == Op::Page3) ?  "" : "X");
+        case Reg::US:   return (prevOp == Op::Page2) ? "S" : ((prevOp == Op::Page3) ?  "" : "U");
+    }
 }
 
 void
