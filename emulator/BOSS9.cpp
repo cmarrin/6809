@@ -179,7 +179,7 @@ bool BOSS9Base::toNum(m8r::string& s, uint32_t& num)
 void BOSS9Base::showBreakpoint(uint8_t i) const
 {
     BreakpointEntry entry;
-    if (_emu.breakpoint(i, entry)) {
+    if (emulator().breakpoint(i, entry)) {
         printf("    Breakpoint[%d] -> $%04x (%sabled)\n", i, entry.addr, (entry.status == BPStatus::Enabled) ? "en" : "dis");
     }
 }
@@ -282,7 +282,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         
             for (auto i = 0; i < NumBreakpoints; ++i) {
                 BreakpointEntry entry;
-                if (_emu.breakpoint(i, entry)) {
+                if (emulator().breakpoint(i, entry)) {
                     showBreakpoint(i);
                     haveBreakpoints = true;
                 }
@@ -300,7 +300,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
         
         uint8_t breakpointNum;
-        if (!_emu.setBreakpoint(num, breakpointNum)) {
+        if (!emulator().setBreakpoint(num, breakpointNum)) {
             printf("too many breakpoints\n");
             return false;
         }
@@ -316,7 +316,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
 
         if (cmdElements[1].empty()) {
-            _emu.clearAllBreakpoints();
+            emulator().clearAllBreakpoints();
             return true;
         }
         
@@ -325,7 +325,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             return false;
         }
 
-        if (!_emu.clearBreakpoint(num)) {
+        if (!emulator().clearBreakpoint(num)) {
             printf("invalid breakpoint index\n");
             return false;
         }
@@ -339,7 +339,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
 
         if (cmdElements[1].empty()) {
-            _emu.enableAllBreakpoints();
+            emulator().enableAllBreakpoints();
             return true;
         }
         
@@ -348,7 +348,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             return false;
         }
 
-        if (!_emu.enableBreakpoint(num)) {
+        if (!emulator().enableBreakpoint(num)) {
             printf("invalid breakpoint index\n");
             return false;
         }
@@ -362,7 +362,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
 
         if (cmdElements[1].empty()) {
-            _emu.disableAllBreakpoints();
+            emulator().disableAllBreakpoints();
             return true;
         }
         
@@ -371,7 +371,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             return false;
         }
 
-        if (!_emu.disableBreakpoint(num)) {
+        if (!emulator().disableBreakpoint(num)) {
             printf("invalid breakpoint index\n");
             return false;
         }
@@ -424,7 +424,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
                 return false;
             }
         }
-        _emu.printInstructions(addr, num);
+        emulator().printInstructions(addr, num);
         return true;
     }
 
@@ -611,7 +611,7 @@ bool BOSS9Base::continueExecution()
     // to change the state to Running after execute() so we run normally
     // the next time through. The other states are for stepping through
     // the code which execute() will deal with.
-    bool retval = _emu.execute(_runState);
+    bool retval = emulator().execute(_runState);
     if (_runState == RunState::Continuing) {
         _runState = RunState::Running;
     }

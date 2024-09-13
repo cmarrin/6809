@@ -47,7 +47,6 @@ class BOSS9Base
     
     virtual ~BOSS9Base() { }
         
-    bool call(Emulator*, uint16_t ea);
     
     void puts(const char* s) const
     {
@@ -68,7 +67,7 @@ class BOSS9Base
         puts(m8r::string::vformat(fmt, args).c_str());
     }
 
-    void setStack(uint16_t stack) { _emu.setStack(stack); }
+    bool call(Func);
     
     bool startExecution(uint16_t addr, bool startInMonitor = false);
     bool continueExecution();
@@ -79,7 +78,6 @@ class BOSS9Base
         _needPrompt = true;
     }
     
-    Emulator::Error error() const { return _emu.error(); }
     Emulator& emulator() { return _emu; }
     const Emulator& emulator() const { return _emu; }
     

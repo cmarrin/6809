@@ -94,7 +94,7 @@ int main(int argc, char * const argv[])
     
     MacBOSS9 boss9;
     
-    boss9.setStack(0xe000);
+    boss9.emulator().setStack(0xe000);
     
     uint16_t startAddr = 0;
     bool startInMonitor = false;
