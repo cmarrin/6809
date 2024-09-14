@@ -3,7 +3,7 @@
 
     include BOSS9.inc
 
-NumPrints equ 10
+NumPrints equ 10 
         org $200
 
 main    lda #NumPrints
@@ -21,6 +21,6 @@ loop
 text3   fcn "Hello from 6809"
 
 count   rmb 1
-
+ 
 	end main
 
