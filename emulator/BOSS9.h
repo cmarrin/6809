@@ -60,6 +60,7 @@ class BOSS9Base
     {
         _runState = RunState::Cmd;
         _needPrompt = true;
+        _needInstPrint = true;
     }
     
     Emulator& emulator() { return _emu; }
@@ -96,10 +97,14 @@ class BOSS9Base
     void promptIfNeeded()
     {
         if (_needPrompt) {
-            emulator().printInstructions(emulator().getReg(Reg::PC), 1);
+            if (_needInstPrint) {
+                emulator().printInstructions(emulator().getReg(Reg::PC), 1);
+            }
             puts((_runState == RunState::Loading) ? LoadingPromptString : MainPromptString);
             _cursor = 0;
             _needPrompt = false;
+            _needInstPrint = false;
+
         }
     }
     
@@ -107,6 +112,7 @@ class BOSS9Base
     {
         _runState = RunState::Running;
         _needPrompt = false;
+        _needInstPrint = false;
     }
     
     void getCommand();
@@ -120,6 +126,7 @@ class BOSS9Base
     bool toNum(m8r::string& s, uint32_t& num);
 
     bool _needPrompt = false;
+    bool _needInstPrint = false;
     
     char _cmdBuf[CmdBufSize];
     uint32_t _cursor = 0;

@@ -77,6 +77,7 @@ void BOSS9Base::getCommand()
         
     if (haveCmd) {
         _needPrompt = true;
+        _needInstPrint = true;
         if (_cursor > 0) {
             processCommand();
         }
@@ -404,6 +405,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             }
         }
         emulator().printInstructions(emulator().getReg(Reg::PC), num);
+        _needInstPrint = false;
         return true;
     }
 
@@ -429,6 +431,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             }
         }
         emulator().printInstructions(addr, num);
+        _needInstPrint = false;
         return true;
     }
 
@@ -436,6 +439,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     if(cmdElements[0] == "a") {
         if (cmdElements[1].empty()) {
             emulator().printInstructions(emulator().getReg(Reg::PC), 1);
+            _needInstPrint = false;
             return true;
         }
 
@@ -449,6 +453,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
         emulator().setReg(Reg::PC, addr);
         emulator().printInstructions(emulator().getReg(Reg::PC), 1);
+        _needInstPrint = false;
         return true;
     }
 
