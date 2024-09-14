@@ -426,7 +426,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
 
         uint32_t num = 5;
         if (!cmdElements[2].empty()) {        
-            if (!toNum(cmdElements[1], num)) {
+            if (!toNum(cmdElements[2], num)) {
                 return false;
             }
         }
