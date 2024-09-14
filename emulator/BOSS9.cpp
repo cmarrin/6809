@@ -467,9 +467,14 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
 
         for (Reg reg : regsToPrint) {
             if (reg == Reg::U) {
-                printF("\n");
+                printF("\n    ");
             }
-            printF("%s:$%02x ", emulator().regToString(reg), emulator().getReg(reg));
+
+            if (emulator().regSizeInBytes(reg) == 1) {
+                printF("%s:$%02x ", emulator().regToString(reg), emulator().getReg(reg));
+            } else {
+                printF("%s:$%04x ", emulator().regToString(reg), emulator().getReg(reg));
+            }
         }
         printF("\n");
         return true;
@@ -500,9 +505,9 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
                     emulator().setReg(reg, v);
                 }
                 if (emulator().regSizeInBytes(reg) == 1) {
-                    printF("    %s:%02x\n", regStr.c_str(), emulator().getReg(reg));
+                    printF("    %s:$%02x\n", regStr.c_str(), emulator().getReg(reg));
                 } else {
-                    printF("    %s:%04x\n", regStr.c_str(), emulator().getReg(reg));
+                    printF("    %s:$%04x\n", regStr.c_str(), emulator().getReg(reg));
                 }
             }
         }
