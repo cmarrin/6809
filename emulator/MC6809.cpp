@@ -466,6 +466,10 @@ Emulator::printInstructions(uint16_t addr, uint16_t n)
         if (op == Op::Page2 || op == Op::Page3) {
             prevOp = op;
             opcode = &(opcodeTable[load8(addr++)]);
+            op = opcode->op;
+            if (op == Op::SUB16) {
+                op = Op::CMP16;
+            }
         }
         
         // Do the addr mode
