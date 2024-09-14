@@ -566,24 +566,22 @@ Emulator::printInstructions(uint16_t addr, uint16_t n)
             }
         }
         
-        _boss9->printF("[$%04x]    %s%s%s", instAddr, longBranch, opToString(op), regToString(opcode->reg, prevOp));
+        _boss9->printF("[$%04x]    %s%s%s  ", instAddr, longBranch, opToString(op), regToString(opcode->reg, prevOp));
 
         switch(addrMode) {
             case Adr::None:
             case Adr::Inherent: break;
-            case Adr::Direct:   _boss9->printF("  <$%02x", ea); break;
-            case Adr::Extended: _boss9->printF("  >$%04x", ea); break;
-            case Adr::Immed16:  _boss9->printF("  #$%04x", value); break;
-            case Adr::Rel:      _boss9->printF("  %d", relAddr); break;
-            case Adr::RelL:     _boss9->printF("  %d", relAddr); break;
+            case Adr::Direct:   _boss9->printF("<$%02x", ea); break;
+            case Adr::Extended: _boss9->printF("$%04x", ea); break;
+            case Adr::Immed16:  _boss9->printF("#$%04x", value); break;
+            case Adr::Rel:      _boss9->printF("%d", relAddr); break;
+            case Adr::RelL:     _boss9->printF("%d", relAddr); break;
             case Adr::RelP:     break;
             case Adr::Immed8:
                 if (op == Op::TFR || op == Op::EXG) {
-                    _boss9->printF("  %s,%s", regToString(Reg(uint8_t(value) >> 4), prevOp),
+                    _boss9->printF("%s,%s", regToString(Reg(uint8_t(value) >> 4), prevOp),
                                               regToString(Reg(uint8_t(value) & 0xf), prevOp));
                 } else if (op == Op::PSH || op == Op::PUL) {
-                    _boss9->printF("  ");
-                    
                     const char* pushRegs[8] = { "CC", "A", "B", "DP", "X", "Y", "S", "PC" };
                     bool first = true;
                     
@@ -601,41 +599,28 @@ Emulator::printInstructions(uint16_t addr, uint16_t n)
                         }
                     }
                 } else {
-                    _boss9->printF("  #$%02x", value);
+                    _boss9->printF("#$%02x", value);
                 }
                 break;
             case Adr::Indexed:
                 if (indexReg) {
+                    const char* indIn = indirect ? "[" : "";
+                    const char* indOut = indirect ? "]" : "";
+                    
                     if (offsetReg) {
-                        if (indirect) {
-                            _boss9->printF("  %s,%s", offsetReg, indexReg); break;
-                        } else {
-                            _boss9->printF("  [%s,%s]", offsetReg, indexReg); break;
-                        }
+                        _boss9->printF("%s%s,%s%s", indIn, offsetReg, indexReg, indOut); break;
                     } else if (autoInc != 0) {
-                        if (indirect) {
-                            if (autoInc > 0) {
-                                _boss9->printF("  [,%s%s]", (autoInc == 1) ? "+" : "++", indexReg); break;
-                            } else {
-                                _boss9->printF("  [,%s%s]", indexReg, (autoInc == -1) ? "-" : "--"); break;
-                            }
+                        if (autoInc > 0) {
+                            _boss9->printF("%s,%s%s%s", indIn, (autoInc == 1) ? "+" : "++", indexReg, indOut); break;
                         } else {
-                            if (autoInc > 0) {
-                                _boss9->printF("  ,%s%s", (autoInc == 1) ? "+" : "++", indexReg); break;
-                            } else {
-                                _boss9->printF("  ,%s%s", indexReg, (autoInc == -1) ? "-" : "--"); break;
-                            }
+                            _boss9->printF("%s,%s%s%s", indIn, indexReg, (autoInc == -1) ? "-" : "--", indOut); break;
                         }
                     } else {
-                        if (indirect) {
-                            _boss9->printF("  [%d,%s]", offset, indexReg); break;
-                        } else {
-                            _boss9->printF("  %d,%s", offset, indexReg); break;
-                        }
+                        _boss9->printF("%s%d,%s%s", indIn, offset, indexReg, indOut); break;
                     }
                 } else {
                     // Must be extended indirect
-                    _boss9->printF("  [$%04x]", offset); break;
+                    _boss9->printF("[$%04x]", offset); break;
                 }
                 break;
 
