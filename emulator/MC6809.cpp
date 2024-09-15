@@ -378,42 +378,6 @@ static constexpr uint8_t cyclesTable[ ] = {
 };
 #endif
 
-// Page2 & Page3
-//
-// All the 16 bit ops in Page2 and Page3 have the same addr modes as the
-// corresponding opcode in the first page. All the auxiliary cmp/sub ops
-// go with those in the base page. The same is true for all the LD16
-// and ST16 ops. So there are really only 3 ops that need to deal with
-// Page2 and Page3
-//
-// Some of the SUB16 ops have CMP16 ops in Page2 and Page3. So in the opcode table only
-// have the left operand be Left::Ld, so it doesn't get stored when we use the CMP16
-// variants. That means in the SUB16 handler we have to store the value. We do this
-// by calling setReg(opcode->reg, _result);
-//
-// 83 SUBD -> 1083 CMPD  -> 1183 CMPU       * SUB16/CMP16
-// 8C CMPX -> 108C CMPY  -> 118C CMPS       * SUB16/CMP16
-// 8E LDX  -> 108E LDY   ->
-// 93 SUBD -> 1093 CMPD  -> 1193 CMPU       * SUB16/CMP16
-// 9C CMPX -> 109C CMPY  -> 119C CMPS       * SUB16/CMP16
-// 9E LDX  -> 109E LDY   ->
-// 9F STX  -> 109F STY   ->
-// A3 SUBD -> 10A3 CMPD  -> 11A3 CMPU       * SUB16/CMP16
-// AC CMPX -> 10AC CMPY  -> 11AC CMPS       * SUB16/CMP16
-// AE LDX  -> 10AE LDY   ->
-// AF STX  -> 10AF STY   ->
-// B3 SUBD -> 10B3 CMPD  -> 11B3 CMPU       * SUB16/CMP16
-// BC CMPX -> 10BC CMPY  -> 11BC CMPS       * SUB16/CMP16
-// BE LDX  -> 10BE LDY   ->
-// BF STX  -> 10BF STY   ->
-// CE LDU  -> 10CE LDS   ->
-// DE LDU  -> 10DE LDS   ->
-// DF STU  -> 10DF STS   ->
-// EE LDU  -> 10EE LDS   ->
-// EF STU  -> 10EF STS   ->
-// FE LDU  -> 10FE LDS   -> 
-// FF STU  -> 10FF STS   ->
-
 static_assert (sizeof(opcodeTable) == 256 * sizeof(Opcode), "Opcode table is wrong size");
 
 static inline uint16_t concat(uint8_t a, uint8_t b)
@@ -804,10 +768,7 @@ bool Emulator::execute(RunState runState)
             case Op::Page2:
             case Op::Page3:
                 // We never want to leave execution after a Page2 or Page3.
-                // They are basically just part of the next instruction.
-                // Since we do the check for whether or not to leave the
-                // loop at the end we can ensure that simply by doing
-                // a continue to skip that test
+                // Do a continue to skip leave test.
                 _prevOp = op;
                 continue;
 
@@ -962,11 +923,9 @@ bool Emulator::execute(RunState runState)
                 } else {
                     if (op == Op::JSR) {
                         push16(_s, _pc);
-                    }
-                    _pc = ea;
-                    if (op == Op::JSR) {
                         _subroutineDepth += 1;
                     }
+                    _pc = ea;
                 }
                 break;
             case Op::LD8:
@@ -1311,10 +1270,3 @@ bool Emulator::enableAllBreakpoints()
 //
 // - Handle SYNC and CWAI waiting for interrupt
 // - Handle firing of IRQ, FIRQ, NMI and RESTART
-// - Handle CC. Have a post op deal with most of it, based on value in Opcode
-// - Op handling has zero or more of left, right and ea set in addr handling and reg pre op sections.
-//      Do proper setting of these in all cases. Need more than op.reg to do this. Need leftReg, rightReg, etc.
-// - Add a Reg.M which uses ea to load data at ea (8 and 16 bit version)
-// - Add store Reg value to opcode to store value in post op
-
-// - Did I get ROR and ROL right WRT C flag?

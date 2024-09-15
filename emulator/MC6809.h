@@ -53,6 +53,42 @@ enum class Op : uint8_t {
     SWI, SYNC, TFR, TST, FIRQ, IRQ, NMI, RESTART
 };
 
+// Page2 & Page3
+//
+// All the 16 bit ops in Page2 and Page3 have the same addr modes as the
+// corresponding opcode in the first page. All the auxiliary cmp/sub ops
+// go with those in the base page. The same is true for all the LD16
+// and ST16 ops. So there are really only 3 ops that need to deal with
+// Page2 and Page3
+//
+// Some of the SUB16 ops have CMP16 ops in Page2 and Page3. So in the opcode table only
+// have the left operand be Left::Ld, so it doesn't get stored when we use the CMP16
+// variants. That means in the SUB16 handler we have to store the value. We do this
+// by calling setReg(opcode->reg, _result);
+//
+// 83 SUBD -> 1083 CMPD  -> 1183 CMPU       * SUB16/CMP16
+// 8C CMPX -> 108C CMPY  -> 118C CMPS       * SUB16/CMP16
+// 8E LDX  -> 108E LDY   ->
+// 93 SUBD -> 1093 CMPD  -> 1193 CMPU       * SUB16/CMP16
+// 9C CMPX -> 109C CMPY  -> 119C CMPS       * SUB16/CMP16
+// 9E LDX  -> 109E LDY   ->
+// 9F STX  -> 109F STY   ->
+// A3 SUBD -> 10A3 CMPD  -> 11A3 CMPU       * SUB16/CMP16
+// AC CMPX -> 10AC CMPY  -> 11AC CMPS       * SUB16/CMP16
+// AE LDX  -> 10AE LDY   ->
+// AF STX  -> 10AF STY   ->
+// B3 SUBD -> 10B3 CMPD  -> 11B3 CMPU       * SUB16/CMP16
+// BC CMPX -> 10BC CMPY  -> 11BC CMPS       * SUB16/CMP16
+// BE LDX  -> 10BE LDY   ->
+// BF STX  -> 10BF STY   ->
+// CE LDU  -> 10CE LDS   ->
+// DE LDU  -> 10DE LDS   ->
+// DF STU  -> 10DF STS   ->
+// EE LDU  -> 10EE LDS   ->
+// EF STU  -> 10EF STS   ->
+// FE LDU  -> 10FE LDS   -> 
+// FF STU  -> 10FF STS   ->
+
 // Indexed mode
 //
 // See doc/m6809pm/sections.htm#sec2 for info about indexed mode
