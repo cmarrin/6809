@@ -404,7 +404,13 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
                 return false;
             }
         }
-        emulator().printInstructions(emulator().getReg(Reg::PC), num);
+        
+        m8r::string s;
+        uint16_t addr = emulator().getReg(Reg::PC);
+        for (uint32_t i = 0; i < num; ++i) {
+            addr = DisplayInst::instToString(emulator(), s, addr);
+            printF("%s", s.c_str());
+        }
         _needInstPrint = false;
         return true;
     }
@@ -430,7 +436,13 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
                 return false;
             }
         }
-        emulator().printInstructions(addr, num);
+        
+        m8r::string s;
+        uint16_t printAddr = emulator().getReg(Reg::PC);
+        for (uint32_t i = 0; i < num; ++i) {
+            printAddr = DisplayInst::instToString(emulator(), s, printAddr);
+            printF("%s", s.c_str());
+        }
         _needInstPrint = false;
         return true;
     }
@@ -438,7 +450,9 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     // show current addr or set it to <addr>
     if(cmdElements[0] == "a") {
         if (cmdElements[1].empty()) {
-            emulator().printInstructions(emulator().getReg(Reg::PC), 1);
+            m8r::string s;
+            DisplayInst::instToString(emulator(), s, emulator().getReg(Reg::PC));
+            printF("%s", s.c_str());
             _needInstPrint = false;
             return true;
         }
@@ -452,7 +466,9 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             return false;
         }
         emulator().setReg(Reg::PC, addr);
-        emulator().printInstructions(emulator().getReg(Reg::PC), 1);
+        m8r::string s;
+        DisplayInst::instToString(emulator(), s, emulator().getReg(Reg::PC));
+        printF("%s", s.c_str());
         _needInstPrint = false;
         return true;
     }
@@ -471,9 +487,9 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             }
 
             if (emulator().regSizeInBytes(reg) == 1) {
-                printF("%s:$%02x ", emulator().regToString(reg), emulator().getReg(reg));
+                printF("%s:$%02x ", DisplayInst::regToString(reg), emulator().getReg(reg));
             } else {
-                printF("%s:$%04x ", emulator().regToString(reg), emulator().getReg(reg));
+                printF("%s:$%04x ", DisplayInst::regToString(reg), emulator().getReg(reg));
             }
         }
         printF("\n");
@@ -498,7 +514,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
         
         for (Reg reg : regsToPrint) {
-            m8r::string regStr(emulator().regToString(reg));
+            m8r::string regStr(DisplayInst::regToString(reg));
             m8r::string regStrLower = regStr.tolower();
             if (testRegStr == regStrLower) {
                 if (setReg) {

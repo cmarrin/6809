@@ -285,11 +285,9 @@ public:
         return false;
     }
 
-    void printInstructions(uint16_t addr, uint16_t n);
-    
     Error error() const { return _error; }
     
-    uint16_t getReg(Reg reg)
+    uint16_t getReg(Reg reg) const
     {
         switch(reg) {
             default:        return 0;
@@ -331,12 +329,23 @@ public:
         }
     }
 
-    const char* regToString(Reg, Op prevOp = Op::NOP);
     uint8_t regSizeInBytes(Reg reg)
     {
         return (reg == Reg::A || reg == Reg::B || reg == Reg::CC || reg == Reg::DP) ? 1 : 2;
     }
 
+    static const Opcode* opcode(uint8_t i);
+
+    uint8_t load8(uint16_t ea) const
+    {
+        return _ram[ea];
+    }
+    
+    uint16_t load16(uint16_t ea) const
+    {
+        return (uint16_t(_ram[ea]) << 8) | uint16_t(_ram[ea + 1]);
+    }
+    
   private:
     void push8(uint16_t& s, uint8_t v)
     {
@@ -374,16 +383,6 @@ public:
         uint16_t v = (uint16_t(_ram[_pc]) << 8) | uint16_t(_ram[_pc + 1]);
         _pc += 2;
         return v;
-    }
-    
-    uint8_t load8(uint16_t ea)
-    {
-        return _ram[ea];
-    }
-    
-    uint16_t load16(uint16_t ea)
-    {
-        return (uint16_t(_ram[ea]) << 8) | uint16_t(_ram[ea + 1]);
     }
     
     void store8(uint16_t ea, uint8_t v)

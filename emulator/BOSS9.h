@@ -17,6 +17,7 @@
 
 #include "string.h"
 #include "MC6809.h"
+#include "DisplayInst.h"
 
 namespace mc6809 {
 
@@ -98,7 +99,9 @@ class BOSS9Base
     {
         if (_needPrompt) {
             if (_needInstPrint) {
-                emulator().printInstructions(emulator().getReg(Reg::PC), 1);
+                m8r::string s;
+                DisplayInst::instToString(emulator(), s, emulator().getReg(Reg::PC));
+                printF("%s", s.c_str());
             }
             puts((_runState == RunState::Loading) ? LoadingPromptString : MainPromptString);
             _cursor = 0;
