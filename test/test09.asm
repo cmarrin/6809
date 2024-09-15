@@ -370,21 +370,34 @@ here    cmpx #here
         lbcc error
         cmpa #$54
         lbne error
-        lda #$0
+        lda #$0     ; test that cc=0 gets shifted in on rol
         andcc #254
         rola
         lbne error
+        lbcs error
+        
+        lda #$80    ; test that cc=1 gets shifted in on rol
+        andcc #$fe
+        rola
+        lbne error
+        lbcc error
         orcc #1
         rola
         deca
         lbne error
-        andcc #254
+        
+        andcc #$fe  ; test that cc=0 gets shifted in on ror
         rora
         lbne error
+        lbcs error
+        
+        lda  #1     ; test that cc=1 gets shifted in on ror
         orcc #1
         rora
-        cmpa #128
+        lbcc error
+        cmpa #$80
         lbne error
+        
         asra
         cmpa #192
         lbne error

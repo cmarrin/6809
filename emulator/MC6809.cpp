@@ -1045,16 +1045,16 @@ bool Emulator::execute(RunState runState)
                 xNZxC8();
                 _cc.V = (((_left & 0x40) >> 6) ^ ((_left & 0x80) >> 7)) != 0;
                 break;
-            case Op::ROR:
+            case Op::ROR: {
+                bool tmpC = _left & 0x01;
                 _result = _left >> 1;
                 xNZxx8();
                 if (_cc.C) {
                     _result |= 0x80;
                 }
-                if (_left & 0x01) {
-                    _cc.C = true;
-                }
+                _cc.C = tmpC;
                 break;
+            }
             case Op::RTI:
                 if (_cc.E) {
                     _a = pop8(_s);
