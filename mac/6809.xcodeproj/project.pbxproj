@@ -471,7 +471,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd $PROJECT_DIR/../lwtools ; make lwasm\n";
+			shellScript = "cd $PROJECT_DIR/../lwtools ; make lwasm ; cp lwasm/lwasm /usr/local/bin\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
