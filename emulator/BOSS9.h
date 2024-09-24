@@ -43,6 +43,16 @@ enum class Func : uint16_t {
     ldStart = 0xFC12, // Start loading s-records
     ldLine = 0xFC14,  // Load an s-record line
     ldEnd = 0xFC16,   // End loading s-records
+
+    printf   = 0xFC18, // Formatted print: TOS=fmt, (varargs)
+    format   = 0xFC1a, // Format string
+    memset   = 0xFC1c, // Set memory: TOS=
+    irand    = 0xFC1e, //
+    imin     = 0xFC20, //
+    imax     = 0xFC22, //
+    initargs = 0xFC24, //
+    argint8  = 0xFC26, //
+    argint16 = 0xFC28, //
 };
 
 class BOSS9Base

@@ -578,6 +578,10 @@ bool BOSS9Base::call(Func func)
         case Func::ldEnd:
             emulator().loadEnd();
             break;
+        case Func::printf:
+            
+            emulator().loadEnd();
+            break;
         default: break;
     }
     return false;

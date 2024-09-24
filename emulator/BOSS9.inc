@@ -32,6 +32,20 @@ ldStart equ     $FC12   ; Start loading s-records
 ldLine  equ     $FC14   ; Load an s-record line
 ldEnd   equ     $FC16   ; End loading s-records
 
+*
+* Core functions
+*
+printf   equ    $FC18   ; Formatted print: TOS=fmt, (varargs)
+format   equ    $FC1a   ; Format string
+memset   equ    $FC1c   ; Set memory: TOS=
+irand    equ    $FC1e   ;
+imin     equ    $FC20   ;
+imax     equ    $FC22   ;
+initargs equ    $FC24   ;
+argint8  equ    $FC26   ;
+argint16 equ    $FC28   ;
+
+
 * Misc equates
 
 newline equ     $0a
