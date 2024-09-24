@@ -222,6 +222,12 @@ static Reg regsToPrint[ ] = { Reg::A, Reg::B, Reg::D, Reg::X, Reg::Y,
                                             
 void BOSS9Base::getCommand()
 {
+    if (emulator().error() != Emulator::Error::None) {
+        // FIXME: One day we will have more errors
+        printF("*** Illegal Instruction error at addr: $%04x\n", emulator().getReg(Reg::PC));
+        emulator().resetError();
+    }
+        
     bool haveCmd = false;
     promptIfNeeded();
     

@@ -286,6 +286,7 @@ public:
     }
 
     Error error() const { return _error; }
+    void resetError() { _error = Error::None; }
     
     uint16_t getReg(Reg reg) const
     {
