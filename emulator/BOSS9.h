@@ -77,6 +77,8 @@ class BOSS9Base
     Emulator& emulator() { return _emu; }
     const Emulator& emulator() const { return _emu; }
     
+    virtual void putc(char c) const = 0;
+
     void puts(const char* s) const
     {
         while (*s) {
@@ -98,7 +100,6 @@ class BOSS9Base
 
   protected:
     // Methods to override
-    virtual void putc(char c) const = 0;
     virtual int getc() = 0;
     virtual bool handleRunLoop() = 0;
 

@@ -18,9 +18,204 @@
 #include <cctype>
 
 #include "BOSS9.h"
+#include "Format.h"
 #include "MC6809.h"
 
 using namespace mc6809;
+
+static inline uint8_t typeToBytes(fmt::Type t)
+{
+    // flt and i32 are not supported on 6809. Return 1 for them
+    if (t == fmt::Type::i8 || t == fmt::Type::i32 || t == fmt::Type::flt) {
+        return 1;
+    }
+    return 2;
+}
+
+// Args start at U+6 (3 pointers:self, retaddr, prevU)
+// _nextAddr and _initialAddr are relative to arg start
+class VarArg
+{
+  public:
+    VarArg(BOSS9Base* boss9, uint16_t lastArgOffset, fmt::Type lastArgType)
+        : _boss9(boss9)
+    {
+        initialize(lastArgOffset, lastArgType);
+    }
+    
+    VarArg(BOSS9Base* boss9)
+        : _boss9(boss9)
+    {
+        initialize();
+    }
+    
+    // Type returned is always ArgUNativeType. Use reinterpret_cast to convert to the proper type
+    uint16_t arg(uint8_t bytes)
+    {
+        uint16_t argAddr = _nextAddr;
+        _nextAddr += bytes;
+        return _boss9->emulator().getArg(argAddr, bytes);
+    }
+
+    void initialize()
+    {
+        _nextAddr = 0;
+        _initialAddr = _nextAddr;
+    }
+
+    void initialize(uint16_t lastArgOffset, fmt::Type lastArgType)
+    {
+        _nextAddr = lastArgOffset + typeToBytes(lastArgType);
+        _initialAddr = _nextAddr;
+    }
+    
+    void reset() { _nextAddr = _initialAddr; }
+    
+    void putChar(uint16_t addr, uint8_t c) { _boss9->emulator().store8(addr, c); }
+    
+    uint16_t getAbs(uint16_t addr, uint8_t size)
+    {
+        if (size == 1) {
+            return _boss9->emulator().load8(addr);
+        }
+        return _boss9->emulator().load16(addr);
+    }
+    
+    BOSS9Base* boss9() const { return _boss9; }
+    
+  private:
+    uint16_t _nextAddr = 0;
+    uint16_t _initialAddr = 0;
+    BOSS9Base* _boss9 = nullptr;
+};
+class InterpPrintArgs : public fmt::FormatterArgs
+{
+  public:
+    InterpPrintArgs(uint16_t fmt, VarArg& args)
+        : _fmt(fmt)
+        , _args(&args)
+    { }
+        
+    virtual ~InterpPrintArgs() { }
+    virtual uint8_t getChar(uint32_t i) const override { return getStringChar(uintptr_t(_fmt + i)); }
+    virtual void putChar(uint8_t c) override { _args->boss9()->putc(c); }
+    virtual uintptr_t getArg(fmt::Type type) override
+    {
+        // varargs are always the same size
+        return _args->arg(2);
+    }
+
+    // The interpreter keeps strings in ROM. The p pointer is actually an offset in the rom
+    virtual uint8_t getStringChar(uintptr_t p) const override
+    {
+        return _args->boss9()->emulator().load8(p);
+    }
+    
+    VarArg* args() { return _args; }
+
+  private:
+    uint16_t _fmt;
+    VarArg* _args;
+};
+
+class InterpFormatArgs : public InterpPrintArgs
+{
+  public:
+    InterpFormatArgs(uint16_t s, uint16_t n, uint16_t fmt, VarArg& args)
+        : InterpPrintArgs(fmt, args)
+        , _buf(s)
+        , _size(n)
+        , _index(0)
+    { }
+        
+    virtual ~InterpFormatArgs() { }
+
+    virtual void putChar(uint8_t c) override
+    {
+        if (_index < _size - 1) {
+            args()->putChar(_buf + _index++, c);
+        }
+    }
+
+    virtual void end() override { putChar('\0'); }
+
+  private:
+    uint16_t _buf;
+    uint16_t _size;
+    uint16_t _index;
+};
+
+static inline int32_t
+printf(uint16_t fmt, VarArg& args)
+{
+    InterpPrintArgs f(fmt, args);
+    return fmt::doprintf(&f);
+}
+
+static inline int32_t
+format(uint16_t s, uint16_t n, uint16_t fmt, VarArg& args)
+{
+    InterpFormatArgs f(s, n, fmt, args);
+    return fmt::doprintf(&f);
+}
+
+bool BOSS9Base::call(Func func)
+{
+    switch (func) {
+        case Func::putc:
+            putc(emulator().getReg(Reg::A));
+            return true;
+        case Func::puts: {
+            const char* s = reinterpret_cast<const char*>(emulator().getAddr(emulator().getReg(Reg::X)));
+            puts(s);
+            return true;
+        }
+        case Func::getc: {
+            emulator().setReg(Reg::A, getc());
+            break;
+        }
+        case Func::exit:
+            printF("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
+            enterMonitor();
+            emulator().setReg(Reg::PC, _startAddr);
+            break;
+        case Func::mon:
+            enterMonitor();
+            break;
+        case Func::ldStart:
+            emulator().loadStart();
+            break;
+        case Func::ldLine: {
+            // X has pointer to data.
+            // Return bool success in A, bool finished in B
+            const char* s = reinterpret_cast<const char*>(emulator().getAddr(emulator().getReg(Reg::X)));
+            bool finished;
+            bool result = emulator().loadLine(s, finished);
+            emulator().setReg(Reg::A, result);
+            emulator().setReg(Reg::B, finished);
+            break;
+        }
+        case Func::ldEnd:
+            emulator().loadEnd();
+            break;
+        case Func::printf: {
+            VarArg va(this, 0, fmt::Type::str);
+            uint16_t fmt = emulator().getArg(0, 2);
+            printf(fmt, va);
+            break;
+        }
+        case Func::format: {
+            VarArg va(this, 4, fmt::Type::str);
+            uint16_t s = emulator().getArg(0, 2);
+            uint16_t n = emulator().getArg(2, 2);
+            uint16_t fmt = emulator().getArg(4, 2);
+            format(s, n, fmt, va);
+            break;
+        }
+        default: break;
+    }
+    return false;
+}
 
 static Reg regsToPrint[ ] = { Reg::A, Reg::B, Reg::D, Reg::X, Reg::Y,
                               Reg::U, Reg::S, Reg::PC, Reg::CC, Reg::DP };
@@ -536,54 +731,6 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
     
     printF("Invalid command\n");
-    return false;
-}
-
-bool BOSS9Base::call(Func func)
-{
-    switch (func) {
-        case Func::putc:
-            putc(emulator().getReg(Reg::A));
-            return true;
-        case Func::puts: {
-            const char* s = reinterpret_cast<const char*>(emulator().getAddr(emulator().getReg(Reg::X)));
-            puts(s);
-            return true;
-        }
-        case Func::getc: {
-            emulator().setReg(Reg::A, getc());
-            break;
-        }
-        case Func::exit:
-            printF("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
-            enterMonitor();
-            emulator().setReg(Reg::PC, _startAddr);
-            break;
-        case Func::mon:
-            enterMonitor();
-            break;
-        case Func::ldStart:
-            emulator().loadStart();
-            break;
-        case Func::ldLine: {
-            // X has pointer to data.
-            // Return bool success in A, bool finished in B
-            const char* s = reinterpret_cast<const char*>(emulator().getAddr(emulator().getReg(Reg::X)));
-            bool finished;
-            bool result = emulator().loadLine(s, finished);
-            emulator().setReg(Reg::A, result);
-            emulator().setReg(Reg::B, finished);
-            break;
-        }
-        case Func::ldEnd:
-            emulator().loadEnd();
-            break;
-        case Func::printf:
-            
-            emulator().loadEnd();
-            break;
-        default: break;
-    }
     return false;
 }
 

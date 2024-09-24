@@ -13,6 +13,7 @@
 #include <sys/ioctl.h>
 
 #include "BOSS9.h"
+#include "Format.h"
 
 // Test data
 char simpleTest[ ] =
@@ -159,9 +160,9 @@ int main(int argc, char * const argv[])
     while (boss9.continueExecution()) { }
     
     if (boss9.emulator().error() != mc6809::Emulator::Error::None) {
-        printf("*** finished with error: %d\n", int32_t(boss9.emulator().error()));
+        fmt::printf("*** finished with error: %d\n", int32_t(boss9.emulator().error()));
     } else {
-        printf("    finished successfully\n");
+        fmt::printf("    finished successfully\n");
     }
     return 0;
 }

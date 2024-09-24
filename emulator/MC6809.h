@@ -336,6 +336,16 @@ public:
 
     static const Opcode* opcode(uint8_t i);
 
+    uint16_t getArg(int32_t offset, uint8_t size)
+    {
+        uint16_t addr = getReg(Reg::U) + 6 + offset;
+        uint16_t v = load8(addr);
+        if (size == 2) {
+            v = (v << 8) + load8(addr + 1);
+        }
+        return v;
+    }
+
     uint8_t load8(uint16_t ea) const
     {
         return _ram[ea];
@@ -344,6 +354,25 @@ public:
     uint16_t load16(uint16_t ea) const
     {
         return (uint16_t(_ram[ea]) << 8) | uint16_t(_ram[ea + 1]);
+    }
+    
+    void store8(uint16_t ea, uint8_t v)
+    {
+        if (ea >= SystemAddrStart) {
+            readOnlyAddr(ea);
+        } else {
+            _ram[ea] = v;
+        }
+    }
+    
+    void store16(uint16_t ea, uint16_t v)
+    {
+        if (ea >= SystemAddrStart) {
+            readOnlyAddr(ea);
+        } else {
+            _ram[ea] = v >> 8;
+            _ram[ea + 1] = v;
+        }
     }
     
   private:
@@ -383,25 +412,6 @@ public:
         uint16_t v = (uint16_t(_ram[_pc]) << 8) | uint16_t(_ram[_pc + 1]);
         _pc += 2;
         return v;
-    }
-    
-    void store8(uint16_t ea, uint8_t v)
-    {
-        if (ea >= SystemAddrStart) {
-            readOnlyAddr(ea);
-        } else {
-            _ram[ea] = v;
-        }
-    }
-    
-    void store16(uint16_t ea, uint16_t v)
-    {
-        if (ea >= SystemAddrStart) {
-            readOnlyAddr(ea);
-        } else {
-            _ram[ea] = v >> 8;
-            _ram[ea + 1] = v;
-        }
     }
     
     // Update the HNZVC condition codes
