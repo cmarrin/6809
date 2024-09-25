@@ -640,10 +640,20 @@ bool Emulator::execute(RunState runState)
             case Op::JMP:
             case Op::JSR:
                 if (ea >= SystemAddrStart) {
-                    // This is possibly a system call
+                    // This is possibly a system call. Push a dummy self and 
+                    // retaddr then fixup U to keep the stack straight for args
+                    push16(_s, 0);
+                    push16(_s, 0);
+                    push16(_s, _u);
+                    _u = _s;
                     if (!_boss9->call(Func(ea))) {
+                        pop16(_s);
+                        pop16(_s);
                         return true;
                     }
+                    _u = pop16(_s);
+                    pop16(_s);
+                    pop16(_s);
                 } else {
                     if (op == Op::JSR) {
                         push16(_s, _pc);
