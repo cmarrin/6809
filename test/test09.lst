@@ -35,11 +35,25 @@
      FC14             (        BOSS9.inc):00032         ldLine  equ     $FC14   ; Load an s-record line
      FC16             (        BOSS9.inc):00033         ldEnd   equ     $FC16   ; End loading s-records
                       (        BOSS9.inc):00034         
-                      (        BOSS9.inc):00035         * Misc equates
-                      (        BOSS9.inc):00036         
-     000A             (        BOSS9.inc):00037         newline equ     $0a
-                      (        BOSS9.inc):00038                                 
-                      (        BOSS9.inc):00039         
+                      (        BOSS9.inc):00035         *
+                      (        BOSS9.inc):00036         * Core functions
+                      (        BOSS9.inc):00037         *
+     FC18             (        BOSS9.inc):00038         printf   equ    $FC18   ; Formatted print: TOS=fmt, (varargs)
+     FC1A             (        BOSS9.inc):00039         format   equ    $FC1a   ; Format string
+     FC1C             (        BOSS9.inc):00040         memset   equ    $FC1c   ; Set memory: TOS=
+     FC1E             (        BOSS9.inc):00041         irand    equ    $FC1e   ;
+     FC20             (        BOSS9.inc):00042         imin     equ    $FC20   ;
+     FC22             (        BOSS9.inc):00043         imax     equ    $FC22   ;
+     FC24             (        BOSS9.inc):00044         initargs equ    $FC24   ;
+     FC26             (        BOSS9.inc):00045         argint8  equ    $FC26   ;
+     FC28             (        BOSS9.inc):00046         argint16 equ    $FC28   ;
+                      (        BOSS9.inc):00047         
+                      (        BOSS9.inc):00048         
+                      (        BOSS9.inc):00049         * Misc equates
+                      (        BOSS9.inc):00050         
+     000A             (        BOSS9.inc):00051         newline equ     $0a
+                      (        BOSS9.inc):00052                                 
+                      (        BOSS9.inc):00053         
                       (       test09.asm):00004         
      0080             (       test09.asm):00005         testnr  equ 128
                       (       test09.asm):00006         
@@ -487,59 +501,83 @@
 088E BD0439           (       test09.asm):00448                 jsr good
                       (       test09.asm):00449         
                       (       test09.asm):00450                 
-0891 8E091C           (       test09.asm):00451                 ldx #testdat+4          ;test #12 Addessing modes.
+0891 8E0959           (       test09.asm):00451                 ldx #testdat+4          ;test #12 Addessing modes.
 0894 A684             (       test09.asm):00452                 lda ,x
 0896 8105             (       test09.asm):00453                 cmpa #5
 0898 1026FB67         (       test09.asm):00454                 lbne error
 089C A680             (       test09.asm):00455                 lda ,x+
 089E 8105             (       test09.asm):00456                 cmpa #5
 08A0 1026FB5F         (       test09.asm):00457                 lbne error
-08A4 8C091D           (       test09.asm):00458                 cmpx #testdat+5
+08A4 8C095A           (       test09.asm):00458                 cmpx #testdat+5
 08A7 1026FB58         (       test09.asm):00459                 lbne error
 08AB EC81             (       test09.asm):00460                 ldd ,x++
 08AD 10830607         (       test09.asm):00461                 cmpd #6*256+7
 08B1 1026FB4E         (       test09.asm):00462                 lbne error
-08B5 8C091F           (       test09.asm):00463                 cmpx #testdat+7
+08B5 8C095C           (       test09.asm):00463                 cmpx #testdat+7
 08B8 1026FB47         (       test09.asm):00464                 lbne error
-08BC 8E091C           (       test09.asm):00465                 ldx #testdat+4
+08BC 8E0959           (       test09.asm):00465                 ldx #testdat+4
 08BF A682             (       test09.asm):00466                 lda ,-x
 08C1 8104             (       test09.asm):00467                 cmpa #4
 08C3 1026FB3C         (       test09.asm):00468                 lbne error
-08C7 8C091B           (       test09.asm):00469                 cmpx #testdat+3
+08C7 8C0958           (       test09.asm):00469                 cmpx #testdat+3
 08CA 1026FB35         (       test09.asm):00470                 lbne error
 08CE EC83             (       test09.asm):00471                 ldd ,--x
 08D0 10830203         (       test09.asm):00472                 cmpd #2*256+3
 08D4 1026FB2B         (       test09.asm):00473                 lbne error
-08D8 8C0919           (       test09.asm):00474                 cmpx #testdat+1
+08D8 8C0956           (       test09.asm):00474                 cmpx #testdat+1
 08DB 1026FB24         (       test09.asm):00475                 lbne error
-08DF 8E091C           (       test09.asm):00476                 ldx #testdat+4
+08DF 8E0959           (       test09.asm):00476                 ldx #testdat+4
 08E2 A61E             (       test09.asm):00477                 lda -2,x
 08E4 8103             (       test09.asm):00478                 cmpa #3
 08E6 1026FB19         (       test09.asm):00479                 lbne error
 08EA A602             (       test09.asm):00480                 lda 2,x
 08EC 8107             (       test09.asm):00481                 cmpa #7
 08EE 1026FB11         (       test09.asm):00482                 lbne error
-08F2 8E0922           (       test09.asm):00483                 ldx #td1
+08F2 8E095F           (       test09.asm):00483                 ldx #td1
 08F5 EC94             (       test09.asm):00484                 ldd [,x]
 08F7 10830304         (       test09.asm):00485                 cmpd #3*256+4
 08FB 1026FB04         (       test09.asm):00486                 lbne error
-08FF 8C0922           (       test09.asm):00487                 cmpx #td1
+08FF 8C095F           (       test09.asm):00487                 cmpx #td1
 0902 1026FAFD         (       test09.asm):00488                 lbne error
 0906 BD0439           (       test09.asm):00489                 jsr good
                       (       test09.asm):00490                 
-0909 8E0924           (       test09.asm):00491                 ldx #allpass
-090C BDFC02           (       test09.asm):00492                 jsr puts
-090F 860A             (       test09.asm):00493                 lda #newline
-0911 BDFC00           (       test09.asm):00494                 jsr putc
-0914 4F               (       test09.asm):00495                 clra
-0915 7EFC0E           (       test09.asm):00496                 jmp exit
-                      (       test09.asm):00497         
-0918 0102030405060708 (       test09.asm):00498         testdat fcb 1,2,3,4,5,6,7,8,9,10
+                      (       test09.asm):00491                 ; Test LEA
+0909 1F40             (       test09.asm):00492                 tfr s,d
+090B 830004           (       test09.asm):00493                 subd #4
+090E 3406             (       test09.asm):00494                 pshs d
+0910 327E             (       test09.asm):00495                 leas -2,s
+0912 11AC62           (       test09.asm):00496                 cmps 2,s
+0915 1026FAEA         (       test09.asm):00497                 lbne error
+                      (       test09.asm):00498         
+0919 8E03E8           (       test09.asm):00499                 ldx #1000
+091C 3002             (       test09.asm):00500                 leax 2,x
+091E 311E             (       test09.asm):00501                 leay -2,x
+0920 8C03EA           (       test09.asm):00502                 cmpx #1002
+0923 1026FADC         (       test09.asm):00503                 lbne error
+0927 108C03E8         (       test09.asm):00504                 cmpy #1000
+092B 1026FAD4         (       test09.asm):00505                 lbne error
+                      (       test09.asm):00506                 
+092F CE07D0           (       test09.asm):00507                 ldu #2000
+0932 3342             (       test09.asm):00508                 leau 2,u
+0934 315E             (       test09.asm):00509                 leay -2,u
+0936 118307D2         (       test09.asm):00510                 cmpu #2002
+093A 1026FAC5         (       test09.asm):00511                 lbne error
+093E 108C07D0         (       test09.asm):00512                 cmpy #2000
+0942 1026FABD         (       test09.asm):00513                 lbne error
+                      (       test09.asm):00514                 
+0946 8E0961           (       test09.asm):00515                 ldx #allpass
+0949 BDFC02           (       test09.asm):00516                 jsr puts
+094C 860A             (       test09.asm):00517                 lda #newline
+094E BDFC00           (       test09.asm):00518                 jsr putc
+0951 4F               (       test09.asm):00519                 clra
+0952 7EFC0E           (       test09.asm):00520                 jmp exit
+                      (       test09.asm):00521         
+0955 0102030405060708 (       test09.asm):00522         testdat fcb 1,2,3,4,5,6,7,8,9,10
      090A
-0922 091A             (       test09.asm):00499         td1     fdb testdat+2
-                      (       test09.asm):00500         
-0924 416C6C2054657374 (       test09.asm):00501         allpass fcn "All Tests Passed"
+095F 0957             (       test09.asm):00523         td1     fdb testdat+2
+                      (       test09.asm):00524         
+0961 416C6C2054657374 (       test09.asm):00525         allpass fcn "All Tests Passed"
      7320506173736564
      00
-                      (       test09.asm):00502         
-                      (       test09.asm):00503                 end $400
+                      (       test09.asm):00526         
+                      (       test09.asm):00527                 end $400

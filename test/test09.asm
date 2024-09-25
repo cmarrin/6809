@@ -488,6 +488,30 @@ here    cmpx #here
         lbne error
         jsr good
         
+        ; Test LEA
+        tfr s,d
+        subd #4
+        pshs d
+        leas -2,s
+        cmps 2,s
+        lbne error
+
+        ldx #1000
+        leax 2,x
+        leay -2,x
+        cmpx #1002
+        lbne error
+        cmpy #1000
+        lbne error
+        
+        ldu #2000
+        leau 2,u
+        leay -2,u
+        cmpu #2002
+        lbne error
+        cmpy #2000
+        lbne error
+        
         ldx #allpass
         jsr puts
         lda #newline
