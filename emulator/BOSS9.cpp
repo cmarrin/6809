@@ -164,11 +164,11 @@ bool BOSS9Base::call(Func func)
     switch (func) {
         case Func::putc:
             putc(emulator().getReg(Reg::A));
-            return true;
+            break;
         case Func::puts: {
             const char* s = reinterpret_cast<const char*>(emulator().getAddr(emulator().getReg(Reg::X)));
             puts(s);
-            return true;
+            break;
         }
         case Func::getc: {
             emulator().setReg(Reg::A, getc());
@@ -178,10 +178,10 @@ bool BOSS9Base::call(Func func)
             printF("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
             enterMonitor();
             emulator().setReg(Reg::PC, _startAddr);
-            break;
+            return false;
         case Func::mon:
             enterMonitor();
-            break;
+            return false;
         case Func::ldStart:
             emulator().loadStart();
             break;
@@ -212,9 +212,9 @@ bool BOSS9Base::call(Func func)
             format(s, n, fmt, va);
             break;
         }
-        default: break;
+        default: return false;
     }
-    return false;
+    return true;
 }
 
 static Reg regsToPrint[ ] = { Reg::A, Reg::B, Reg::D, Reg::X, Reg::Y,
