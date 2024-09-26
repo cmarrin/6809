@@ -121,16 +121,61 @@ int main(int argc, char * const argv[])
         fileString = simpleTest;
         size = sizeof(simpleTest);
     } else {
-        const char* filename = argv[optind];
-        size = uint32_t(std::filesystem::file_size(filename));
+        std::string filename = argv[optind];
+
+        std::ifstream stream;
+        stream.open(filename.c_str(), std::fstream::in);
+        if (stream.fail()) {
+            std::cout << "Can't open '" << filename << "'\n";
+            return 0;
+        }
+
+        // Are we compiling?
+        std::string path = filename.substr(0, filename.find_last_of('.'));
+        std::string suffix = filename.substr(filename.find_last_of(".") + 1);
+        
+        if (suffix == "clvr") {
+            // Compile the clover file
+            std::string cmd = "/usr/local/bin/clvr -9 ";
+            cmd += filename;
+            int retval = std::system(cmd.c_str());
+            if (WIFEXITED(retval) == 0) {
+                std::cout << "Compile of '" << filename << "' abnormally terminated, exiting\n";
+                return 0;
+            }
+            if (WEXITSTATUS(retval) != 0) {
+                std::cout << "Compile of '" << filename << "' failed, exiting\n";
+            }
+            
+            // Successful compile the .asm file is in the same dir, assemble it
+            cmd = "/usr/local/bin/lwasm -I ../emulator -f srec -o";
+            cmd += path;
+            cmd += ".s19 -l";
+            cmd += path;
+            cmd += ".lst ";
+            cmd += path;
+            cmd += ".asm";
+            retval = std::system(cmd.c_str());
+            if (WIFEXITED(retval) == 0) {
+                std::cout << "Assembly of '" << path << ".asm' abnormally terminated, exiting\n";
+                return 0;
+            }
+            if (WEXITSTATUS(retval) != 0) {
+                std::cout << "Assembly of '" << path << ".asm' failed, exiting\n";
+            }
+            
+            filename = path + ".s19";
+        }
+
         std::ifstream f(filename);
         if (f.is_open()) {
+            size = uint32_t(std::filesystem::file_size(filename));
             fileString = new char[size + 1];
             f.read(fileString, size);
             fileString[size] = '\0';
             f.close();
         } else {
-            std::cout << "Unable to open file\n";
+            std::cout << "Unable to open '" << filename << "'\n";
             return -1;
         }
     }

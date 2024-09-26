@@ -57,6 +57,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-m simple.clvr"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-m exbasic.s19"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -66,7 +70,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-m simple.s19"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-m HelloWorld.s19"
@@ -74,7 +78,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-m test09.s19"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
