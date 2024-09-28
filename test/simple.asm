@@ -3,7 +3,6 @@
     include BOSS9.inc
     org $200
 
-    LEAS -0,S
     TFR S,Y
     LEAS -2,S
     JSR Simple_main
@@ -27,50 +26,54 @@ Simple_main
     ; function int16 main()
     ; {
     ;     int8 a = 5;
-    ;     int8 b = a + 1;
+    ;     int8 b = 6;
     LDA #$05
     STA -1,U
     ;     
-    LDA -1,U
-    PSHS A
-    LDA #$01
-    ADDA 0,S
-    LEAS 1,S
+    LDA #$06
     STA -2,U
-    ;     switch (b) {
-    ;         case 4: core.printf("Failed\n");
-    LDA -2,U
+    ;     if (a < 6 && b >= 6)
+    ;         core.printf("Passed\n");
+    LDA #$06
     PSHS A
-    LDD #L3
-    PSHS D
-    LDD #2
-    PSHS D
-    JSR switch1
-    LEAS 5,S
-    JMP 0,X
+    LDA -1,U
+    CMPA 0,S
+    BGE L1
+    LDA #1
+    BRA L2
+L1
+    CLRA
+L2
+    LEAS 1,S
+    BEQ L3
+    LDA #$06
+    PSHS A
+    LDA -2,U
+    CMPA 0,S
+    BLT L5
+    LDA #1
+    BRA L6
+L5
+    CLRA
+L6
+    LEAS 1,S
+    BRA L4
 L3
-    FCB 4
-    FDB L4
-    FCB 6
-    FDB L5
-    ;         case 6: core.printf("Passed\n");
-    ;         default: core.printf("Huh?\n");
-    ;     }
+    LDA #0
+L4
+    BEQ L7
+    ;     else
     LDD #String+$0
     PSHS D
     JSR printf
-    LBRA L6
-L4
-    LDD #String+$6
-    PSHS D
-    JSR printf
-    LBRA L6
-L5
-    LDD #String+$e
-    PSHS D
-    JSR printf
-L6
+    BRA L8
+L7
+    ;         core.printf("Failed\n");
     ;     
+    LDD #String+$8
+    PSHS D
+    JSR printf
+L8
     ;     return 0;
     ; }
     LDD #$0000
@@ -81,13 +84,10 @@ L6
 Constants
 
 String
-    FCC "Huh?"
+    FCC "Passed"
     FCB $0a
     FCB $00
     FCC "Failed"
-    FCB $0a
-    FCB $00
-    FCC "Passed"
     FCB $0a
     FCB $00
 

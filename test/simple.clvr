@@ -11,13 +11,12 @@ struct Simple
 function int16 main()
 {
     int8 a = 5;
-    int8 b = a + 1;
+    int8 b = 6;
     
-    switch (b) {
-        case 4: core.printf("Failed\n");
-        case 6: core.printf("Passed\n");
-        default: core.printf("Huh?\n");
-    }
+    if (a < 6 && b >= 6)
+        core.printf("Passed\n");
+    else
+        core.printf("Failed\n");
     
     return 0;
 }

@@ -29,36 +29,36 @@ class Emulator;
 
 // These must match BOSS9.inc
 enum class Func : uint16_t {
-    putc = 0xFC00,    // output char in A to console
-    puts = 0xFC02,    // output string pointed to by X (null terminated)
-    putsn = 0xFC04,   // Output string pointed to by X for length in Y
-    getc = 0xFC06,    // Get char from console, return it in A
-    peekc = 0xFC08,   // Return in A a 1 if a char is available and 0 otherwise
-    gets = 0xFC0A,    // Get a line terminated by \n, place in buffer
-                                            // pointed to by X, with max length in Y
-    peeks = 0xFC0C,   // Return in A a 1 if a line is available and 0 otherwise.
-                                            // If available return length of line in Y
-    exit = 0xFC0E,    // Exit program. A contains exit code
-    mon = 0xFC10,     // Enter monitor
-    ldStart = 0xFC12, // Start loading s-records
-    ldLine = 0xFC14,  // Load an s-record line
-    ldEnd = 0xFC16,   // End loading s-records
+    putc        = 0xFC00,   // output char in A to console
+    puts        = 0xFC02,   // output string pointed to by X (null terminated)
+    putsn       = 0xFC04,   // Output string pointed to by X for length in Y
+    getc        = 0xFC06,   // Get char from console, return it in A
+    peekc       = 0xFC08,   // Return in A a 1 if a char is available and 0 otherwise
+    gets        = 0xFC0A,   // Get a line terminated by \n, place in buffer
+                            // pointed to by X, with max length in Y
+    peeks       = 0xFC0C,   // Return in A a 1 if a line is available and 0 otherwise.
+                            // If available return length of line in Y
+    exit        = 0xFC0E,   // Exit program. A contains exit code
+    mon         = 0xFC10,   // Enter monitor
+    ldStart     = 0xFC12,   // Start loading s-records
+    ldLine      = 0xFC14,   // Load an s-record line
+    ldEnd       = 0xFC16,   // End loading s-records
 
-    printf   = 0xFC18, // Formatted print: TOS=fmt, (varargs)
-    format   = 0xFC1a, // Format string
-    memset   = 0xFC1c, // Set memory: TOS=
-    irand    = 0xFC1e, //
-    imin     = 0xFC20, //
-    imax     = 0xFC22, //
-    initargs = 0xFC24, //
-    argint8  = 0xFC26, //
-    argint16 = 0xFC28, //
+    printf      = 0xFC20,   // Formatted print: TOS=fmt, (varargs)
+    format      = 0xFC22,   // Format string
+    memset      = 0xFC24,   // Set memory: TOS=
+    irand       = 0xFC26,   //
+    imin        = 0xFC28,   //
+    imax        = 0xFC2a,   //
+    initargs    = 0xFC2c,   //
+    argint8     = 0xFC2e,   //
+    argint16    = 0xFC30,   //
 
-    switch1  = 0xFC40, // TOS -> N, Table, Value
-    switch2  = 0xFC42, // Table is a list of N value/addr pairs
-                       //Binary search table looking for value
-                       //when found return addr in X. if not
-                       //found return Table + N * (<1/2> + 2)
+    switch1     = 0xFC40,   // TOS -> N, Table, Value
+    switch2     = 0xFC42,   // Table is a list of N value/addr pairs
+                            //Binary search table looking for value
+                            //when found return addr in X. if not
+                            //found return Table + N * (<1/2> + 2)
 };
 
 class BOSS9Base
