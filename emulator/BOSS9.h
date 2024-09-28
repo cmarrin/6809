@@ -53,6 +53,12 @@ enum class Func : uint16_t {
     initargs = 0xFC24, //
     argint8  = 0xFC26, //
     argint16 = 0xFC28, //
+
+    switch1  = 0xFC40, // TOS -> N, Table, Value
+    switch2  = 0xFC42, // Table is a list of N value/addr pairs
+                       //Binary search table looking for value
+                       //when found return addr in X. if not
+                       //found return Table + N * (<1/2> + 2)
 };
 
 class BOSS9Base

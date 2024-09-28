@@ -212,6 +212,10 @@ bool BOSS9Base::call(Func func)
             format(s, n, fmt, va);
             break;
         }
+        case Func::switch1:
+        case Func::switch2:
+            emulator().setReg(Reg::X, 0xFC0E); // This is exit for now
+            break;
         default: return false;
     }
     return true;

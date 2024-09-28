@@ -35,15 +35,24 @@ ldEnd   equ     $FC16   ; End loading s-records
 *
 * Core functions
 *
-printf   equ    $FC18   ; Formatted print: TOS=fmt, (varargs)
-format   equ    $FC1a   ; Format string
-memset   equ    $FC1c   ; Set memory: TOS=
-irand    equ    $FC1e   ;
-imin     equ    $FC20   ;
-imax     equ    $FC22   ;
-initargs equ    $FC24   ;
-argint8  equ    $FC26   ;
-argint16 equ    $FC28   ;
+printf   equ    $FC20   ; Formatted print: TOS=fmt, (varargs)
+format   equ    $FC22   ; Format string
+memset   equ    $FC24   ; Set memory: TOS=
+irand    equ    $FC26   ;
+imin     equ    $FC28   ;
+imax     equ    $FC2A   ;
+initargs equ    $FC2C   ;
+argint8  equ    $FC2E   ;
+argint16 equ    $FC30   ;
+
+*
+* Helper functions
+*
+switch1  equ    $FC40   ; TOS -> N, Table, Value
+switch2  equ    $FC42   ; Table is a list of N value/addr pairs
+                        ; Binary search table looking for value
+                        ; when found return addr in X. if not
+                        ; found return Table + N * (<1/2> + 2)
 
 
 * Misc equates

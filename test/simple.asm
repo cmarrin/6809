@@ -3,11 +3,8 @@
     include BOSS9.inc
     org $200
 
-    LEAS -1,S
+    LEAS -0,S
     TFR S,Y
-    LEAS -2,S
-    JSR Simple_ctor
-    LEAS 2,S
     LEAS -2,S
     JSR Simple_main
     LEAS 2,S
@@ -16,7 +13,7 @@
 Simple_main
     PSHS U
     TFR S,U
-    LEAS -6,S
+    LEAS -2,S
     ; //
     ; //  simple.Clover
     ; //  Clover
@@ -27,119 +24,70 @@ Simple_main
     ; struct Simple
     ; {
     ; 
-    ; //struct A
-    ; //{
-    ; //    int8 b = 12;
-    ; //    int16 c = 24;
-    ; //};
-    ; //
-    ; //const A arr[ ] = { 8, 9, 10, 11, 12, 13 };
-    ; //
-    ; int8 xxx = 9;
-    ; //
-    ; 
-    ; const uint16 array[4] = { 2, 4, 6, 8 };
-    ; 
     ; function int16 main()
     ; {
-    ; //    uint16* p = &array[0];
-    ; //    for (uint8 i = 0; i < 4; i++) {
-    ; //        core.printf("array[%d] = %d\n", i, *p);
-    ; //        p++;
-    ; //    }
-    ; //
-    ;     int16 a = 5;
-    ;     uint16 b = 6;
-    LDD #$0005
-    PSHS D
-    PULS D
-    STD -2,U
-    ;     int8 c = 8;
-    LDD #$0006
-    PSHS D
-    PULS D
-    STD -4,U
-    ;     int8 d = 7;
-    LDA #$08
-    PSHS A
-    PULS A
-    STA -5,U
-    ;  
-    LDA #$07
-    PSHS A
-    PULS A
-    STA -6,U
-    ; //    bool x = a < b;
+    ;     int8 a = 5;
+    ;     int8 b = a + 1;
+    LDA #$05
+    STA -1,U
     ;     
-    ;     if (a < b && c > d) {
-    CLR ,-S
-    LDD -2,U
+    LDA -1,U
+    PSHS A
+    LDA #$01
+    ADDA 0,S
+    LEAS 1,S
+    STA -2,U
+    ;     switch (b) {
+    ;         case 4: core.printf("Failed\n");
+    LDA -2,U
+    PSHS A
+    LDD #L3
     PSHS D
-    LDD -4,U
+    LDD #2
     PSHS D
-    LDA 1,S
-    CMPA 0,S
-    LEAS 2,S
-    BGE L1
-    INC 0,S
-L1
-    PULS A
-    BEQ L2
-    CLR ,-S
-    LDA -5,U
-    PSHS A
-    LDA -6,U
-    PSHS A
-    LDA 1,S
-    CMPA 0,S
-    LEAS 2,S
-    BLE L4
-    INC 0,S
-L4
-    BRA L3
-L2
-    LDA #0
-    PSHS A
+    JSR switch1
+    LEAS 5,S
+    JMP 0,X
 L3
-    PULS A
-    BEQ L5
-    ;         core.printf("Hello\n\n");
+    FCB 4
+    FDB L4
+    FCB 6
+    FDB L5
+    ;         case 6: core.printf("Passed\n");
+    ;         default: core.printf("Huh?\n");
     ;     }
-    LDX #String+$0
-    PSHS X
+    LDD #String+$0
+    PSHS D
     JSR printf
+    LBRA L6
+L4
+    LDD #String+$6
+    PSHS D
+    JSR printf
+    LBRA L6
 L5
+    LDD #String+$e
+    PSHS D
+    JSR printf
+L6
     ;     
-    ; //    A a;
-    ; //    
-    ; //    core.printf(" v1=%d, v2=%d\n", arr[1].b, arr[2].c);
-    ; //    core.printf(" a.b=%d, a.c=%d\n", a.b, a.c);
-    ; //    core.printf(" xxx=%d\n", xxx);
     ;     return 0;
     ; }
     LDD #$0000
-    PSHS D
-    TFR U,S
-    PULS U
-    RTS
-
-Simple_ctor
-    PSHS U
-    TFR S,U
-    LDA #$09
-    PSHS A
-    PULS A
-    STA 0,Y
     TFR U,S
     PULS U
     RTS
 
 Constants
-    FCB $00,$02,$00,$04,$00,$06,$00,$08
 
 String
-    FCC "Hello"
+    FCC "Huh?"
     FCB $0a
+    FCB $00
+    FCC "Failed"
+    FCB $0a
+    FCB $00
+    FCC "Passed"
     FCB $0a
     FCB $00
 
