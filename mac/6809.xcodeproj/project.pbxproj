@@ -58,7 +58,7 @@
 		49065CFF2BD5DADA00E27819 /* HelloWorld.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = HelloWorld.asm; path = ../test/HelloWorld.asm; sourceTree = "<group>"; };
 		49065D012BD6C70400E27819 /* MC6809.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MC6809.h; path = ../emulator/MC6809.h; sourceTree = "<group>"; };
 		490F10FB2BE99A7C00AC1440 /* test09.lst */ = {isa = PBXFileReference; lastKnownFileType = text; name = test09.lst; path = ../test/test09.lst; sourceTree = "<group>"; };
-		491179542CA4D8B000B41587 /* simple.clvr */ = {isa = PBXFileReference; lastKnownFileType = text; name = simple.clvr; path = ../test/simple.clvr; sourceTree = SOURCE_ROOT; };
+		491179542CA4D8B000B41587 /* simple.clvr */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; name = simple.clvr; path = ../test/simple.clvr; sourceTree = SOURCE_ROOT; };
 		49279C002BFFFE5100294992 /* basic.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = basic.asm; path = ../test/basic.asm; sourceTree = "<group>"; };
 		49279C012C00057A00294992 /* exbasic.s19 */ = {isa = PBXFileReference; lastKnownFileType = text; name = exbasic.s19; path = ../test/exbasic.s19; sourceTree = "<group>"; };
 		49279C022C00066000294992 /* exbasic.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; name = exbasic.asm; path = ../test/exbasic.asm; sourceTree = "<group>"; };

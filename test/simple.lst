@@ -94,63 +94,48 @@
                       (       simple.asm):00032             ;     
 0216 8606             (       simple.asm):00033             LDA #$06
 0218 A75E             (       simple.asm):00034             STA -2,U
-                      (       simple.asm):00035             ;     if (a < 6 && b >= 6)
+                      (       simple.asm):00035             ;     if (!(a == 5) || !(b == 5))
                       (       simple.asm):00036             ;         core.printf("Passed\n");
-021A 8606             (       simple.asm):00037             LDA #$06
+021A 8605             (       simple.asm):00037             LDA #$05
 021C 3402             (       simple.asm):00038             PSHS A
 021E A65F             (       simple.asm):00039             LDA -1,U
 0220 A160             (       simple.asm):00040             CMPA 0,S
-0222 2C04             (       simple.asm):00041             BGE L1
-0224 8601             (       simple.asm):00042             LDA #1
-0226 2001             (       simple.asm):00043             BRA L2
-0228                  (       simple.asm):00044         L1
-0228 4F               (       simple.asm):00045             CLRA
-0229                  (       simple.asm):00046         L2
-0229 3261             (       simple.asm):00047             LEAS 1,S
-022B 2713             (       simple.asm):00048             BEQ L3
-022D 8606             (       simple.asm):00049             LDA #$06
-022F 3402             (       simple.asm):00050             PSHS A
-0231 A65E             (       simple.asm):00051             LDA -2,U
-0233 A160             (       simple.asm):00052             CMPA 0,S
-0235 2D04             (       simple.asm):00053             BLT L5
-0237 8601             (       simple.asm):00054             LDA #1
-0239 2001             (       simple.asm):00055             BRA L6
-023B                  (       simple.asm):00056         L5
-023B 4F               (       simple.asm):00057             CLRA
-023C                  (       simple.asm):00058         L6
-023C 3261             (       simple.asm):00059             LEAS 1,S
-023E 2002             (       simple.asm):00060             BRA L4
-0240                  (       simple.asm):00061         L3
-0240 8600             (       simple.asm):00062             LDA #0
-0242                  (       simple.asm):00063         L4
-0242 270A             (       simple.asm):00064             BEQ L7
-                      (       simple.asm):00065             ;     else
-0244 CC025E           (       simple.asm):00066             LDD #String+$0
-0247 3406             (       simple.asm):00067             PSHS D
-0249 BDFC20           (       simple.asm):00068             JSR printf
-024C 2008             (       simple.asm):00069             BRA L8
-024E                  (       simple.asm):00070         L7
-                      (       simple.asm):00071             ;         core.printf("Failed\n");
-                      (       simple.asm):00072             ;     
-024E CC0266           (       simple.asm):00073             LDD #String+$8
-0251 3406             (       simple.asm):00074             PSHS D
-0253 BDFC20           (       simple.asm):00075             JSR printf
-0256                  (       simple.asm):00076         L8
-                      (       simple.asm):00077             ;     return 0;
-                      (       simple.asm):00078             ; }
-0256 CC0000           (       simple.asm):00079             LDD #$0000
-0259 1F34             (       simple.asm):00080             TFR U,S
-025B 3540             (       simple.asm):00081             PULS U
-025D 39               (       simple.asm):00082             RTS
-                      (       simple.asm):00083         
-025E                  (       simple.asm):00084         Constants
-                      (       simple.asm):00085         
-025E                  (       simple.asm):00086         String
-025E 506173736564     (       simple.asm):00087             FCC "Passed"
-0264 0A               (       simple.asm):00088             FCB $0a
-0265 00               (       simple.asm):00089             FCB $00
-0266 4661696C6564     (       simple.asm):00090             FCC "Failed"
-026C 0A               (       simple.asm):00091             FCB $0a
-026D 00               (       simple.asm):00092             FCB $00
-                      (       simple.asm):00093         
-                      (       simple.asm):00094             end $200
+0222 3261             (       simple.asm):00041             LEAS 1,S
+0224 260C             (       simple.asm):00042             BNE L4
+0226 8605             (       simple.asm):00043             LDA #$05
+0228 3402             (       simple.asm):00044             PSHS A
+022A A65E             (       simple.asm):00045             LDA -2,U
+022C A160             (       simple.asm):00046             CMPA 0,S
+022E 3261             (       simple.asm):00047             LEAS 1,S
+0230 270A             (       simple.asm):00048             BEQ L1
+0232                  (       simple.asm):00049         L4
+                      (       simple.asm):00050             ;     else
+0232 CC024C           (       simple.asm):00051             LDD #String+$0
+0235 3406             (       simple.asm):00052             PSHS D
+0237 BDFC20           (       simple.asm):00053             JSR printf
+023A 2008             (       simple.asm):00054             BRA L5
+023C                  (       simple.asm):00055         L1
+                      (       simple.asm):00056             ;         core.printf("Failed\n");
+                      (       simple.asm):00057             ;     
+023C CC0254           (       simple.asm):00058             LDD #String+$8
+023F 3406             (       simple.asm):00059             PSHS D
+0241 BDFC20           (       simple.asm):00060             JSR printf
+0244                  (       simple.asm):00061         L5
+                      (       simple.asm):00062             ;     return 0;
+                      (       simple.asm):00063             ; }
+0244 CC0000           (       simple.asm):00064             LDD #$0000
+0247 1F34             (       simple.asm):00065             TFR U,S
+0249 3540             (       simple.asm):00066             PULS U
+024B 39               (       simple.asm):00067             RTS
+                      (       simple.asm):00068         
+024C                  (       simple.asm):00069         Constants
+                      (       simple.asm):00070         
+024C                  (       simple.asm):00071         String
+024C 506173736564     (       simple.asm):00072             FCC "Passed"
+0252 0A               (       simple.asm):00073             FCB $0a
+0253 00               (       simple.asm):00074             FCB $00
+0254 4661696C6564     (       simple.asm):00075             FCC "Failed"
+025A 0A               (       simple.asm):00076             FCB $0a
+025B 00               (       simple.asm):00077             FCB $00
+                      (       simple.asm):00078         
+                      (       simple.asm):00079             end $200

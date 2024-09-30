@@ -32,48 +32,33 @@ Simple_main
     ;     
     LDA #$06
     STA -2,U
-    ;     if (a < 6 && b >= 6)
+    ;     if (!(a == 5) || !(b == 5))
     ;         core.printf("Passed\n");
-    LDA #$06
+    LDA #$05
     PSHS A
     LDA -1,U
     CMPA 0,S
-    BGE L1
-    LDA #1
-    BRA L2
-L1
-    CLRA
-L2
     LEAS 1,S
-    BEQ L3
-    LDA #$06
+    BNE L4
+    LDA #$05
     PSHS A
     LDA -2,U
     CMPA 0,S
-    BLT L5
-    LDA #1
-    BRA L6
-L5
-    CLRA
-L6
     LEAS 1,S
-    BRA L4
-L3
-    LDA #0
+    BEQ L1
 L4
-    BEQ L7
     ;     else
     LDD #String+$0
     PSHS D
     JSR printf
-    BRA L8
-L7
+    BRA L5
+L1
     ;         core.printf("Failed\n");
     ;     
     LDD #String+$8
     PSHS D
     JSR printf
-L8
+L5
     ;     return 0;
     ; }
     LDD #$0000
