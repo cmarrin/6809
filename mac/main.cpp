@@ -148,7 +148,7 @@ int main(int argc, char * const argv[])
             }
             
             // Successful compile the .asm file is in the same dir, assemble it
-            cmd = "/usr/local/bin/lwasm -I ../emulator -f srec -o";
+            cmd = "/usr/local/bin/lwasm -I emulator -f srec -o";
             cmd += path;
             cmd += ".s19 -l";
             cmd += path;
