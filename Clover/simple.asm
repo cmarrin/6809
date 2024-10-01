@@ -23,28 +23,22 @@ Simple_main
     ; struct Simple
     ; {
     ; 
-    ; function int16 main()
+    ; function int16_t main()
     ; {
-    ;     int8 a = 5;
-    ;     int8 b = 6;
-    LDA #$05
+    ;     int8_t a = 5;
+    ;     int8_t b = 6;
+    LDA #5
     STA -1,U
     ;     
-    LDA #$06
+    LDA #6
     STA -2,U
     ;     if (!(a == 5) || !(b == 5))
     ;         core.printf("Passed\n");
-    LDA #$05
-    PSHS A
     LDA -1,U
-    CMPA 0,S
-    LEAS 1,S
+    CMPA #5
     BNE L4
-    LDA #$05
-    PSHS A
     LDA -2,U
-    CMPA 0,S
-    LEAS 1,S
+    CMPA #5
     BEQ L1
 L4
     ;     else
@@ -61,7 +55,7 @@ L1
 L5
     ;     return 0;
     ; }
-    LDD #$0000
+    LDD #0
     TFR U,S
     PULS U
     RTS
