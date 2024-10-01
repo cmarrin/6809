@@ -59,6 +59,10 @@ enum class Func : uint16_t {
                             //Binary search table looking for value
                             //when found return addr in X. if not
                             //found return Table + N * (<1/2> + 2)
+    idiv8       = 0xFC44,
+    idiv16      = 0xFC46,
+    udiv8       = 0xFC48,
+    udiv16      = 0xFC4a,
 };
 
 class BOSS9Base

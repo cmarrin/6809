@@ -216,6 +216,28 @@ bool BOSS9Base::call(Func func)
         case Func::switch2:
             emulator().setReg(Reg::X, 0xFC0E); // This is exit for now
             break;
+        case Func::idiv8 :
+        case Func::idiv16:
+        case Func::udiv8 :
+        case Func::udiv16: {
+            // TOS: dividend, divisor. Return quotient on A/D
+            bool is16Bit = func == Func::idiv16 || func == Func::udiv16;
+            uint8_t bytes = is16Bit ? 2 : 1;
+            
+            uint16_t dividend = emulator().getArg(0, bytes);
+            uint16_t divisor = emulator().getArg(bytes, bytes);
+            
+            uint16_t quotient = 0;
+            switch (func) {
+                default: break;
+                case Func::idiv8 : quotient = uint16_t(int8_t(dividend) / int8_t(divisor)); break;
+                case Func::idiv16: quotient = uint16_t(int16_t(dividend) / int16_t(divisor)); break;
+                case Func::udiv8 : quotient = uint16_t(uint8_t(dividend) / uint8_t(divisor)); break;
+                case Func::udiv16: quotient = uint16_t(uint16_t(dividend) / uint16_t(divisor)); break;
+            }
+            emulator().setReg(Reg::D, quotient);
+            break;
+        }
         default: return false;
     }
     return true;

@@ -53,7 +53,10 @@ switch2  equ    $FC42   ; Table is a list of N value/addr pairs
                         ; Binary search table looking for value
                         ; when found return addr in X. if not
                         ; found return Table + N * (<1/2> + 2)
-
+idiv8   equ     $FC44
+idiv16  equ     $FC46
+udiv8   equ     $FC48
+udiv16  equ     $FC4a
 
 * Misc equates
 
