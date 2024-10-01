@@ -1,0 +1,103 @@
+/*-------------------------------------------------------------------------
+    This source file is a part of Clover
+    For the latest info, see https://github.com/cmarrin/Clover
+    Copyright (c) 2021-2022, Chris Marrin
+    All rights reserved.
+    Use of this source code is governed by the MIT license that can be
+    found in the LICENSE file.
+-------------------------------------------------------------------------*/
+
+// Test constants, vars, operands and expressions
+
+struct Test
+{
+
+const uint8 TestSizeDef = 12;
+const int16 TestIntConst = 0xfc;
+const float TestFloatConst = 3.5;
+
+const int8 testIntTable[ ] = { 1, 2, 3, 7 };
+
+int16 testIntGlobal;
+
+uint8 errors;
+
+function showIntResults(uint8 testNo, int32 exp, int32 act)
+{
+    core.printf("%10s-> %2hhi: ", " ", testNo);
+    if (exp != act) {
+        core.printf("     FAIL: exp %i, got %i\n", exp, act);
+        errors++;
+    } else {
+        core.printf("     Pass\n");
+    }
+}
+
+float testFloatGlobal;
+
+function int32 main()
+{
+    errors = 0;
+    
+    testIntGlobal = 42;
+    testFloatGlobal = 6.5;
+
+    core.printf("\nTest Int Exprs\n");
+
+    core.printf("\n  Int vals\n");
+    showIntResults(1, 12, TestSizeDef);
+    showIntResults(2, 0xfc, TestIntConst);
+    showIntResults(3, 7, testIntTable[3]);
+    
+    core.printf("\n  Int ops\n");
+    showIntResults(4, 294, TestIntConst + testIntGlobal);
+    showIntResults(5, 210, TestIntConst - testIntGlobal);
+    showIntResults(6, 10584, TestIntConst * testIntGlobal);
+    showIntResults(7, 6, TestIntConst / testIntGlobal);
+    
+    showIntResults(8, -42, -testIntGlobal);
+    showIntResults(9, 0, !TestIntConst);
+    showIntResults(10, 0xffffff03, ~TestIntConst);
+    
+    showIntResults(11, 0, TestIntConst < testIntGlobal);
+    showIntResults(12, 0, TestIntConst <= testIntGlobal);
+    showIntResults(13, 0, TestIntConst == testIntGlobal);
+    showIntResults(14, 1, TestIntConst != testIntGlobal);
+    showIntResults(15, 1, TestIntConst >= testIntGlobal);
+    showIntResults(16, 1, TestIntConst > testIntGlobal);
+    
+    int8 i = 20;
+    int8 j = i++;
+    j = ++i;
+
+    showIntResults(17, 22, i);
+    j = i--;
+    j = --i;
+    showIntResults(18, 20, i);
+    showIntResults(19, 20, j);
+
+    core.printf("\n  op assign\n");
+    i += 1;
+    showIntResults(20, 21, i);
+    i -= 1;
+    showIntResults(21, 20, i);
+    i *= 5;
+    showIntResults(22, 100, i);
+    i /= 5;
+    showIntResults(23, 20, i);
+    
+    core.printf("\n  Int exprs\n");
+    showIntResults(24, 2984, int16(testIntTable[1]) + int16(TestSizeDef) * TestIntConst - testIntGlobal);
+    showIntResults(25, 2940, int16(testIntTable[1] + TestSizeDef) * (TestIntConst - testIntGlobal));
+
+    core.printf("\n  Int cast\n");
+    float a = -2.5;
+    showIntResults(26, -2, int32(a));
+    showIntResults(27, 3, uint8(TestFloatConst));
+    showIntResults(28, 6, uint16(testFloatGlobal));
+
+    core.printf("\nDone.%40s%s\n\n", " ", errors ? "FAILED" : "Passed");
+    return errors;
+}
+
+};
