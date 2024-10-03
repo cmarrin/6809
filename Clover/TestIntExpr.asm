@@ -1,5 +1,6 @@
 * 6809 assembly generated from Clover source
 
+    pragma autobranchlength
     include BOSS9.inc
     org $200
 
@@ -84,11 +85,18 @@ L2
 Test_main
     PSHS U
     TFR S,U
-    LEAS -2,S
+    LEAS -4,S
+    LDD #0
+    STD -2,U
     ; }
     ; 
     ; function int16_t main()
     ; {
+    ;     for (uint16_t count = 0; count < 1000; ++count) {
+L3
+    LDD -2,U
+    CMPD #1000
+    BHS L4
     ;     errors = 0;
     ;     
     LDA #0
@@ -178,19 +186,19 @@ Test_main
     PSHS D
     CLR ,-S
     TST 3,S
-    BPL L3
+    BPL L5
     NEG 0,S
     LDD #0
     SUBD 3,S
     STD 3,S
-L3
+L5
     TST 1,S
-    BPL L4
+    BPL L6
     NEG 0,S
     LDD #0
     SUBD 1,S
     STD 1,S
-L4
+L6
     LDA 4,S
     LDB 2,S
     MUL
@@ -206,10 +214,10 @@ L4
     ADDB 1,S
     STB 1,S
     TST 2,S
-    BPL L5
+    BPL L7
     LDD #0
     SUBD 0,S
-L5
+L7
     PULS D
     LEAS 5,S
     PSHS D
@@ -255,12 +263,12 @@ L5
     LEAS 7,S
     ;     showIntResults(10, 0xff03, ~TestIntConst);
     LDA #252
-    BNE L6
+    BNE L8
     LDA #1
-    BRA L7
-L6
+    BRA L9
+L8
     CLRA
-L7
+L9
     TFR A,B
     SEX
     PSHS D
@@ -287,12 +295,12 @@ L7
     ;     showIntResults(12, 0, TestIntConst <= testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BGE L8
+    BGE L10
     LDA #1
-    BRA L9
-L8
+    BRA L11
+L10
     CLRA
-L9
+L11
     TFR A,B
     SEX
     PSHS D
@@ -306,12 +314,12 @@ L9
     ;     showIntResults(13, 0, TestIntConst == testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BGT L10
+    BGT L12
     LDA #1
-    BRA L11
-L10
+    BRA L13
+L12
     CLRA
-L11
+L13
     TFR A,B
     SEX
     PSHS D
@@ -325,12 +333,12 @@ L11
     ;     showIntResults(14, 1, TestIntConst != testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BNE L12
+    BNE L14
     LDA #1
-    BRA L13
-L12
+    BRA L15
+L14
     CLRA
-L13
+L15
     TFR A,B
     SEX
     PSHS D
@@ -344,12 +352,12 @@ L13
     ;     showIntResults(15, 1, TestIntConst >= testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BEQ L14
+    BEQ L16
     LDA #1
-    BRA L15
-L14
+    BRA L17
+L16
     CLRA
-L15
+L17
     TFR A,B
     SEX
     PSHS D
@@ -363,12 +371,12 @@ L15
     ;     showIntResults(16, 1, TestIntConst > testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BLT L16
+    BLT L18
     LDA #1
-    BRA L17
-L16
+    BRA L19
+L18
     CLRA
-L17
+L19
     TFR A,B
     SEX
     PSHS D
@@ -382,12 +390,12 @@ L17
     ;     
     LDD #252
     CMPD 0,Y
-    BLE L18
+    BLE L20
     LDA #1
-    BRA L19
-L18
+    BRA L21
+L20
     CLRA
-L19
+L21
     TFR A,B
     SEX
     PSHS D
@@ -401,24 +409,24 @@ L19
     ;     int8_t i = 20;
     ;     int8_t j = i++;
     LDA #20
-    STA -1,U
+    STA -3,U
     ;     j = ++i;
-    LEAX -1,U
+    LEAX -3,U
     LDA 0,X
     PSHS A
     ADDA #1
     STA 0,X
     PULS A
-    STA -2,U
+    STA -4,U
     ; 
-    LEAX -1,U
+    LEAX -3,U
     LDA 0,X
     ADDA #1
     STA 0,X
-    STA -2,U
+    STA -4,U
     ;     showIntResults(17, 22, i);
     ;     j = i--;
-    LDA -1,U
+    LDA -3,U
     TFR A,B
     SEX
     PSHS D
@@ -430,21 +438,21 @@ L19
     JSR Test_showIntResults
     LEAS 7,S
     ;     j = --i;
-    LEAX -1,U
+    LEAX -3,U
     LDA 0,X
     PSHS A
     ADDA #-1
     STA 0,X
     PULS A
-    STA -2,U
+    STA -4,U
     ;     showIntResults(18, 20, i);
-    LEAX -1,U
+    LEAX -3,U
     LDA 0,X
     ADDA #-1
     STA 0,X
-    STA -2,U
+    STA -4,U
     ;     showIntResults(19, 20, j);
-    LDA -1,U
+    LDA -3,U
     TFR A,B
     SEX
     PSHS D
@@ -456,7 +464,7 @@ L19
     JSR Test_showIntResults
     LEAS 7,S
     ; 
-    LDA -2,U
+    LDA -4,U
     TFR A,B
     SEX
     PSHS D
@@ -473,11 +481,11 @@ L19
     PSHS D
     JSR printf
     ;     showIntResults(20, 21, i);
-    LDA -1,U
+    LDA -3,U
     ADDA #1
-    STA -1,U
+    STA -3,U
     ;     i -= 1;
-    LDA -1,U
+    LDA -3,U
     TFR A,B
     SEX
     PSHS D
@@ -489,11 +497,11 @@ L19
     JSR Test_showIntResults
     LEAS 7,S
     ;     showIntResults(21, 20, i);
-    LDA -1,U
+    LDA -3,U
     SUBA #1
-    STA -1,U
+    STA -3,U
     ;     i *= 5;
-    LDA -1,U
+    LDA -3,U
     TFR A,B
     SEX
     PSHS D
@@ -506,27 +514,27 @@ L19
     LEAS 7,S
     ;     showIntResults(22, 100, i);
     CLR ,-S
-    LDA -1,U
-    BPL L20
+    LDA -3,U
+    BPL L22
     NEG 0,S
     NEGA
-L20
+L22
     TFR A,B
     LDA #5
-    BPL L21
+    BPL L23
     NEG 0,S
     NEGA
-L21
+L23
     MUL
     TST 0,S
-    BPL L22
+    BPL L24
     NEGB
-L22
+L24
     LEAS 1,S
     TFR B,A
-    STA -1,U
+    STA -3,U
     ;     i /= 5;
-    LDA -1,U
+    LDA -3,U
     TFR A,B
     SEX
     PSHS D
@@ -540,13 +548,13 @@ L22
     ;     showIntResults(23, 20, i);
     LDA #5
     PSHS A
-    LDA -1,U
+    LDA -3,U
     PSHS A
     JSR idiv8
     LEAS 4,S
-    STA -1,U
+    STA -3,U
     ;     
-    LDA -1,U
+    LDA -3,U
     TFR A,B
     SEX
     PSHS D
@@ -573,19 +581,19 @@ L22
     PSHS D
     CLR ,-S
     TST 3,S
-    BPL L23
+    BPL L25
     NEG 0,S
     LDD #0
     SUBD 3,S
     STD 3,S
-L23
+L25
     TST 1,S
-    BPL L24
+    BPL L26
     NEG 0,S
     LDD #0
     SUBD 1,S
     STD 1,S
-L24
+L26
     LDA 4,S
     LDB 2,S
     MUL
@@ -601,10 +609,10 @@ L24
     ADDB 1,S
     STB 1,S
     TST 2,S
-    BPL L25
+    BPL L27
     LDD #0
     SUBD 0,S
-L25
+L27
     PULS D
     LEAS 5,S
     LDX #Constants+0
@@ -647,19 +655,19 @@ L25
     PSHS D
     CLR ,-S
     TST 3,S
-    BPL L26
+    BPL L28
     NEG 0,S
     LDD #0
     SUBD 3,S
     STD 3,S
-L26
+L28
     TST 1,S
-    BPL L27
+    BPL L29
     NEG 0,S
     LDD #0
     SUBD 1,S
     STD 1,S
-L27
+L29
     LDA 4,S
     LDB 2,S
     MUL
@@ -675,10 +683,10 @@ L27
     ADDB 1,S
     STB 1,S
     TST 2,S
-    BPL L28
+    BPL L30
     LDD #0
     SUBD 0,S
-L28
+L30
     PULS D
     LEAS 5,S
     PSHS D
@@ -690,21 +698,30 @@ L28
     JSR Test_showIntResults
     LEAS 7,S
     ;     core.printf("\nDone.%40s%s\n\n", " ", errors ? "FAILED" : "Passed");
-    ;     return errors;
+    ;     }
     LDA 2,Y
-    BEQ L29
+    BEQ L31
     LDD #String+$7d
-    BRA L30
-L29
+    BRA L32
+L31
     LDD #String+$84
-L30
+L32
     PSHS D
     LDD #String+$8b
     PSHS D
     LDD #String+$8d
     PSHS D
     JSR printf
+L33
+    LEAX -2,U
+    LDD 0,X
+    ADDD #1
+    STD 0,X
+    BRA L3
+L4
+    ;     return errors;
     ; }
+    PSHS D
     LDA 2,Y
     TFR A,B
     SEX

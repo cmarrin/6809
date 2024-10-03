@@ -58,11 +58,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-m Clover/simple.clvr"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-m Clover/TestIntExpr.clvr"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-m test/exbasic.s19"

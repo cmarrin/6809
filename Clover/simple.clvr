@@ -12,8 +12,20 @@ const int8_t testIntTable[ ] = { 1, 2, 3, 7 };
 
 function int16_t main()
 {
-    int8_t a = testIntTable[3];
-    core.printf("a=%d\n", a);
+    int16_t aa = 200;
+    int16_t bb = 40;
+    int16_t x;
+    
+    for (uint16_t i = 0; i < 200; ++i) {
+        for (uint16_t j = 0; j < 100; ++j) {
+            int8_t a = testIntTable[3];
+            if (a < 5 || a > 6) {
+                x = aa * bb;
+            } else {
+                x = bb * aa;
+            }
+        }
+    }
     return 0;
 }
 

@@ -1,6 +1,7 @@
                       (r/TestIntExpr.asm):00001         * 6809 assembly generated from Clover source
                       (r/TestIntExpr.asm):00002         
-                      (r/TestIntExpr.asm):00003             include BOSS9.inc
+                      (r/TestIntExpr.asm):00003             pragma autobranchlength
+                      (r/TestIntExpr.asm):00004             include BOSS9.inc
                       (        BOSS9.inc):00001         *-------------------------------------------------------------------------
                       (        BOSS9.inc):00002         *    This source file is a part of the MC6809 Simulator
                       (        BOSS9.inc):00003         *    For the latest info, see http:www.marrin.org/
@@ -66,773 +67,789 @@
      000A             (        BOSS9.inc):00063         newline equ     $0a
                       (        BOSS9.inc):00064                                 
                       (        BOSS9.inc):00065         
-                      (r/TestIntExpr.asm):00004             org $200
-                      (r/TestIntExpr.asm):00005         
-0200 327D             (r/TestIntExpr.asm):00006             LEAS -3,S
-0202 1F42             (r/TestIntExpr.asm):00007             TFR S,Y
-0204 327E             (r/TestIntExpr.asm):00008             LEAS -2,S
-0206 BD025B           (r/TestIntExpr.asm):00009             JSR Test_main
-0209 3262             (r/TestIntExpr.asm):00010             LEAS 2,S
-020B 7EFC0E           (r/TestIntExpr.asm):00011             JMP exit
-                      (r/TestIntExpr.asm):00012         
-020E                  (r/TestIntExpr.asm):00013         Test_showIntResults
-020E 3440             (r/TestIntExpr.asm):00014             PSHS U
-0210 1F43             (r/TestIntExpr.asm):00015             TFR S,U
-                      (r/TestIntExpr.asm):00016             ; /*-------------------------------------------------------------------------
-                      (r/TestIntExpr.asm):00017             ;     This source file is a part of Clover
-                      (r/TestIntExpr.asm):00018             ;     For the latest info, see https://github.com/cmarrin/Clover
-                      (r/TestIntExpr.asm):00019             ;     Copyright (c) 2021-2022, Chris Marrin
-                      (r/TestIntExpr.asm):00020             ;     All rights reserved.
-                      (r/TestIntExpr.asm):00021             ;     Use of this source code is governed by the MIT license that can be
-                      (r/TestIntExpr.asm):00022             ;     found in the LICENSE file.
-                      (r/TestIntExpr.asm):00023             ; -------------------------------------------------------------------------*/
-                      (r/TestIntExpr.asm):00024             ; 
-                      (r/TestIntExpr.asm):00025             ; // Test constants, vars, operands and expressions
-                      (r/TestIntExpr.asm):00026             ; 
-                      (r/TestIntExpr.asm):00027             ; struct Test
-                      (r/TestIntExpr.asm):00028             ; {
-                      (r/TestIntExpr.asm):00029             ; 
-                      (r/TestIntExpr.asm):00030             ; const uint8_t TestSizeDef = 12;
-                      (r/TestIntExpr.asm):00031             ; const int16_t TestIntConst = 0xfc;
-                      (r/TestIntExpr.asm):00032             ; 
-                      (r/TestIntExpr.asm):00033             ; const int8_t testIntTable[ ] = { 1, 2, 3, 7 };
-                      (r/TestIntExpr.asm):00034             ; 
-                      (r/TestIntExpr.asm):00035             ; int16_t testIntGlobal;
-                      (r/TestIntExpr.asm):00036             ; 
-                      (r/TestIntExpr.asm):00037             ; uint8_t errors;
-                      (r/TestIntExpr.asm):00038             ; 
-                      (r/TestIntExpr.asm):00039             ; function showIntResults(uint8_t testNo, int16_t exp, int16_t act)
-                      (r/TestIntExpr.asm):00040             ; {
-                      (r/TestIntExpr.asm):00041             ;     core.printf("%10s-> %2hhi: ", " ", testNo);
-                      (r/TestIntExpr.asm):00042             ;     if (exp != act) {
-0212 A646             (r/TestIntExpr.asm):00043             LDA 6,U
-0214 1F89             (r/TestIntExpr.asm):00044             TFR A,B
-0216 4F               (r/TestIntExpr.asm):00045             CLRA
-0217 C30000           (r/TestIntExpr.asm):00046             ADDD #0
-021A 3406             (r/TestIntExpr.asm):00047             PSHS D
-021C CC06D1           (r/TestIntExpr.asm):00048             LDD #String+$0
-021F 3406             (r/TestIntExpr.asm):00049             PSHS D
-0221 CC06D3           (r/TestIntExpr.asm):00050             LDD #String+$2
-0224 3406             (r/TestIntExpr.asm):00051             PSHS D
-0226 BDFC20           (r/TestIntExpr.asm):00052             JSR printf
-0229 EC47             (r/TestIntExpr.asm):00053             LDD 7,U
-022B 10A349           (r/TestIntExpr.asm):00054             CMPD 9,U
-022E 271C             (r/TestIntExpr.asm):00055             BEQ L1
-                      (r/TestIntExpr.asm):00056             ;         core.printf("     FAIL: exp %i, got %i\n", exp, act);
-                      (r/TestIntExpr.asm):00057             ;         errors++;
-0230 EC49             (r/TestIntExpr.asm):00058             LDD 9,U
-0232 3406             (r/TestIntExpr.asm):00059             PSHS D
-0234 EC47             (r/TestIntExpr.asm):00060             LDD 7,U
-0236 3406             (r/TestIntExpr.asm):00061             PSHS D
-0238 CC06E2           (r/TestIntExpr.asm):00062             LDD #String+$11
-023B 3406             (r/TestIntExpr.asm):00063             PSHS D
-023D BDFC20           (r/TestIntExpr.asm):00064             JSR printf
-                      (r/TestIntExpr.asm):00065             ;     } else {
-0240 3022             (r/TestIntExpr.asm):00066             LEAX 2,Y
-0242 A600             (r/TestIntExpr.asm):00067             LDA 0,X
-0244 3402             (r/TestIntExpr.asm):00068             PSHS A
-0246 8B01             (r/TestIntExpr.asm):00069             ADDA #1
-0248 A700             (r/TestIntExpr.asm):00070             STA 0,X
-024A 200A             (r/TestIntExpr.asm):00071             BRA L2
-024C                  (r/TestIntExpr.asm):00072         L1
-                      (r/TestIntExpr.asm):00073             ;         core.printf("     Pass\n");
-                      (r/TestIntExpr.asm):00074             ;     }
-024C 3410             (r/TestIntExpr.asm):00075             PSHS X
-024E CC06FD           (r/TestIntExpr.asm):00076             LDD #String+$2c
-0251 3406             (r/TestIntExpr.asm):00077             PSHS D
-0253 BDFC20           (r/TestIntExpr.asm):00078             JSR printf
-0256                  (r/TestIntExpr.asm):00079         L2
-0256 1F34             (r/TestIntExpr.asm):00080             TFR U,S
-0258 3540             (r/TestIntExpr.asm):00081             PULS U
-025A 39               (r/TestIntExpr.asm):00082             RTS
-                      (r/TestIntExpr.asm):00083         
-025B                  (r/TestIntExpr.asm):00084         Test_main
-025B 3440             (r/TestIntExpr.asm):00085             PSHS U
-025D 1F43             (r/TestIntExpr.asm):00086             TFR S,U
-025F 327E             (r/TestIntExpr.asm):00087             LEAS -2,S
-                      (r/TestIntExpr.asm):00088             ; }
-                      (r/TestIntExpr.asm):00089             ; 
-                      (r/TestIntExpr.asm):00090             ; function int16_t main()
-                      (r/TestIntExpr.asm):00091             ; {
-                      (r/TestIntExpr.asm):00092             ;     errors = 0;
-                      (r/TestIntExpr.asm):00093             ;     
-0261 8600             (r/TestIntExpr.asm):00094             LDA #0
-0263 A722             (r/TestIntExpr.asm):00095             STA 2,Y
-                      (r/TestIntExpr.asm):00096             ;     testIntGlobal = 42;
-                      (r/TestIntExpr.asm):00097             ; 
-0265 CC002A           (r/TestIntExpr.asm):00098             LDD #42
-0268 ED20             (r/TestIntExpr.asm):00099             STD 0,Y
-                      (r/TestIntExpr.asm):00100             ;     core.printf("\nTest Int Exprs\n");
-                      (r/TestIntExpr.asm):00101             ; 
-026A CC0708           (r/TestIntExpr.asm):00102             LDD #String+$37
-026D 3406             (r/TestIntExpr.asm):00103             PSHS D
-026F BDFC20           (r/TestIntExpr.asm):00104             JSR printf
-                      (r/TestIntExpr.asm):00105             ;     core.printf("\n  Int vals\n");
-                      (r/TestIntExpr.asm):00106             ;     showIntResults(1, 12, TestSizeDef);
-0272 CC0719           (r/TestIntExpr.asm):00107             LDD #String+$48
-0275 3406             (r/TestIntExpr.asm):00108             PSHS D
-0277 BDFC20           (r/TestIntExpr.asm):00109             JSR printf
-                      (r/TestIntExpr.asm):00110             ;     showIntResults(2, 0xfc, TestIntConst);
-027A CC000C           (r/TestIntExpr.asm):00111             LDD #12
-027D 3406             (r/TestIntExpr.asm):00112             PSHS D
-027F CC000C           (r/TestIntExpr.asm):00113             LDD #12
-0282 3406             (r/TestIntExpr.asm):00114             PSHS D
-0284 8601             (r/TestIntExpr.asm):00115             LDA #1
-0286 3402             (r/TestIntExpr.asm):00116             PSHS A
-0288 327E             (r/TestIntExpr.asm):00117             LEAS -2,S
-028A BD020E           (r/TestIntExpr.asm):00118             JSR Test_showIntResults
-028D 3267             (r/TestIntExpr.asm):00119             LEAS 7,S
-                      (r/TestIntExpr.asm):00120             ;     showIntResults(3, 7, testIntTable[3]);
-028F CC00FC           (r/TestIntExpr.asm):00121             LDD #252
-0292 3406             (r/TestIntExpr.asm):00122             PSHS D
-0294 CC00FC           (r/TestIntExpr.asm):00123             LDD #252
-0297 3406             (r/TestIntExpr.asm):00124             PSHS D
-0299 8602             (r/TestIntExpr.asm):00125             LDA #2
-029B 3402             (r/TestIntExpr.asm):00126             PSHS A
-029D 327E             (r/TestIntExpr.asm):00127             LEAS -2,S
-029F BD020E           (r/TestIntExpr.asm):00128             JSR Test_showIntResults
-02A2 3267             (r/TestIntExpr.asm):00129             LEAS 7,S
-                      (r/TestIntExpr.asm):00130             ;     
-02A4 8E06CD           (r/TestIntExpr.asm):00131             LDX #Constants+0
-02A7 8603             (r/TestIntExpr.asm):00132             LDA #3
-02A9 C601             (r/TestIntExpr.asm):00133             LDB #1
-02AB 3D               (r/TestIntExpr.asm):00134             MUL
-02AC 308B             (r/TestIntExpr.asm):00135             LEAX D,X
-02AE A600             (r/TestIntExpr.asm):00136             LDA 0,X
-02B0 1F89             (r/TestIntExpr.asm):00137             TFR A,B
-02B2 1D               (r/TestIntExpr.asm):00138             SEX
-02B3 3406             (r/TestIntExpr.asm):00139             PSHS D
-02B5 CC0007           (r/TestIntExpr.asm):00140             LDD #7
-02B8 3406             (r/TestIntExpr.asm):00141             PSHS D
-02BA 8603             (r/TestIntExpr.asm):00142             LDA #3
-02BC 3402             (r/TestIntExpr.asm):00143             PSHS A
-02BE 327E             (r/TestIntExpr.asm):00144             LEAS -2,S
-02C0 BD020E           (r/TestIntExpr.asm):00145             JSR Test_showIntResults
-02C3 3267             (r/TestIntExpr.asm):00146             LEAS 7,S
-                      (r/TestIntExpr.asm):00147             ;     core.printf("\n  Int ops\n");
-                      (r/TestIntExpr.asm):00148             ;     showIntResults(4, 294, TestIntConst + testIntGlobal);
-02C5 CC0726           (r/TestIntExpr.asm):00149             LDD #String+$55
-02C8 3406             (r/TestIntExpr.asm):00150             PSHS D
-02CA BDFC20           (r/TestIntExpr.asm):00151             JSR printf
-                      (r/TestIntExpr.asm):00152             ;     showIntResults(5, 210, TestIntConst - testIntGlobal);
-02CD CC00FC           (r/TestIntExpr.asm):00153             LDD #252
-02D0 E320             (r/TestIntExpr.asm):00154             ADDD 0,Y
-02D2 3406             (r/TestIntExpr.asm):00155             PSHS D
-02D4 CC0126           (r/TestIntExpr.asm):00156             LDD #294
-02D7 3406             (r/TestIntExpr.asm):00157             PSHS D
-02D9 8604             (r/TestIntExpr.asm):00158             LDA #4
-02DB 3402             (r/TestIntExpr.asm):00159             PSHS A
-02DD 327E             (r/TestIntExpr.asm):00160             LEAS -2,S
-02DF BD020E           (r/TestIntExpr.asm):00161             JSR Test_showIntResults
-02E2 3267             (r/TestIntExpr.asm):00162             LEAS 7,S
-                      (r/TestIntExpr.asm):00163             ;     showIntResults(6, 10584, TestIntConst * testIntGlobal);
-02E4 CC00FC           (r/TestIntExpr.asm):00164             LDD #252
-02E7 A320             (r/TestIntExpr.asm):00165             SUBD 0,Y
-02E9 3406             (r/TestIntExpr.asm):00166             PSHS D
-02EB CC00D2           (r/TestIntExpr.asm):00167             LDD #210
-02EE 3406             (r/TestIntExpr.asm):00168             PSHS D
-02F0 8605             (r/TestIntExpr.asm):00169             LDA #5
-02F2 3402             (r/TestIntExpr.asm):00170             PSHS A
-02F4 327E             (r/TestIntExpr.asm):00171             LEAS -2,S
-02F6 BD020E           (r/TestIntExpr.asm):00172             JSR Test_showIntResults
-02F9 3267             (r/TestIntExpr.asm):00173             LEAS 7,S
-                      (r/TestIntExpr.asm):00174             ;     showIntResults(7, 6, TestIntConst / testIntGlobal);
-02FB EC20             (r/TestIntExpr.asm):00175             LDD 0,Y
-02FD 3406             (r/TestIntExpr.asm):00176             PSHS D
-02FF CC00FC           (r/TestIntExpr.asm):00177             LDD #252
-0302 3406             (r/TestIntExpr.asm):00178             PSHS D
-0304 6FE2             (r/TestIntExpr.asm):00179             CLR ,-S
-0306 6D63             (r/TestIntExpr.asm):00180             TST 3,S
-0308 2A09             (r/TestIntExpr.asm):00181             BPL L3
-030A 6060             (r/TestIntExpr.asm):00182             NEG 0,S
-030C CC0000           (r/TestIntExpr.asm):00183             LDD #0
-030F A363             (r/TestIntExpr.asm):00184             SUBD 3,S
-0311 ED63             (r/TestIntExpr.asm):00185             STD 3,S
-0313                  (r/TestIntExpr.asm):00186         L3
-0313 6D61             (r/TestIntExpr.asm):00187             TST 1,S
-0315 2A09             (r/TestIntExpr.asm):00188             BPL L4
-0317 6060             (r/TestIntExpr.asm):00189             NEG 0,S
-0319 CC0000           (r/TestIntExpr.asm):00190             LDD #0
-031C A361             (r/TestIntExpr.asm):00191             SUBD 1,S
-031E ED61             (r/TestIntExpr.asm):00192             STD 1,S
-0320                  (r/TestIntExpr.asm):00193         L4
-0320 A664             (r/TestIntExpr.asm):00194             LDA 4,S
-0322 E662             (r/TestIntExpr.asm):00195             LDB 2,S
-0324 3D               (r/TestIntExpr.asm):00196             MUL
-0325 3406             (r/TestIntExpr.asm):00197             PSHS D
-0327 A665             (r/TestIntExpr.asm):00198             LDA 5,S
-0329 E664             (r/TestIntExpr.asm):00199             LDB 4,S
-032B 3D               (r/TestIntExpr.asm):00200             MUL
-032C EB61             (r/TestIntExpr.asm):00201             ADDB 1,S
-032E E761             (r/TestIntExpr.asm):00202             STB 1,S
-0330 A666             (r/TestIntExpr.asm):00203             LDA 6,S
-0332 E663             (r/TestIntExpr.asm):00204             LDB 3,S
-0334 3D               (r/TestIntExpr.asm):00205             MUL
-0335 EB61             (r/TestIntExpr.asm):00206             ADDB 1,S
-0337 E761             (r/TestIntExpr.asm):00207             STB 1,S
-0339 6D62             (r/TestIntExpr.asm):00208             TST 2,S
-033B 2A05             (r/TestIntExpr.asm):00209             BPL L5
-033D CC0000           (r/TestIntExpr.asm):00210             LDD #0
-0340 A360             (r/TestIntExpr.asm):00211             SUBD 0,S
-0342                  (r/TestIntExpr.asm):00212         L5
-0342 3506             (r/TestIntExpr.asm):00213             PULS D
-0344 3265             (r/TestIntExpr.asm):00214             LEAS 5,S
-0346 3406             (r/TestIntExpr.asm):00215             PSHS D
-0348 CC2958           (r/TestIntExpr.asm):00216             LDD #10584
-034B 3406             (r/TestIntExpr.asm):00217             PSHS D
-034D 8606             (r/TestIntExpr.asm):00218             LDA #6
-034F 3402             (r/TestIntExpr.asm):00219             PSHS A
-0351 327E             (r/TestIntExpr.asm):00220             LEAS -2,S
-0353 BD020E           (r/TestIntExpr.asm):00221             JSR Test_showIntResults
-0356 3267             (r/TestIntExpr.asm):00222             LEAS 7,S
-                      (r/TestIntExpr.asm):00223             ;     
-0358 EC20             (r/TestIntExpr.asm):00224             LDD 0,Y
-035A 3406             (r/TestIntExpr.asm):00225             PSHS D
-035C CC00FC           (r/TestIntExpr.asm):00226             LDD #252
-035F 3406             (r/TestIntExpr.asm):00227             PSHS D
-0361 BDFC46           (r/TestIntExpr.asm):00228             JSR idiv16
-0364 3264             (r/TestIntExpr.asm):00229             LEAS 4,S
-0366 3406             (r/TestIntExpr.asm):00230             PSHS D
-0368 CC0006           (r/TestIntExpr.asm):00231             LDD #6
-036B 3406             (r/TestIntExpr.asm):00232             PSHS D
-036D 8607             (r/TestIntExpr.asm):00233             LDA #7
-036F 3402             (r/TestIntExpr.asm):00234             PSHS A
-0371 327E             (r/TestIntExpr.asm):00235             LEAS -2,S
-0373 BD020E           (r/TestIntExpr.asm):00236             JSR Test_showIntResults
-0376 3267             (r/TestIntExpr.asm):00237             LEAS 7,S
-                      (r/TestIntExpr.asm):00238             ;     showIntResults(8, -42, -testIntGlobal);
-                      (r/TestIntExpr.asm):00239             ;     showIntResults(9, 0, !TestIntConst);
-0378 EC20             (r/TestIntExpr.asm):00240             LDD 0,Y
-037A 3406             (r/TestIntExpr.asm):00241             PSHS D
-037C CC0000           (r/TestIntExpr.asm):00242             LDD #0
-037F A360             (r/TestIntExpr.asm):00243             SUBD 0,S
-0381 3262             (r/TestIntExpr.asm):00244             LEAS 2,S
-0383 3406             (r/TestIntExpr.asm):00245             PSHS D
-0385 862A             (r/TestIntExpr.asm):00246             LDA #42
-0387 40               (r/TestIntExpr.asm):00247             NEGA
-0388 1F89             (r/TestIntExpr.asm):00248             TFR A,B
-038A 1D               (r/TestIntExpr.asm):00249             SEX
-038B 3406             (r/TestIntExpr.asm):00250             PSHS D
-038D 8608             (r/TestIntExpr.asm):00251             LDA #8
-038F 3402             (r/TestIntExpr.asm):00252             PSHS A
-0391 327E             (r/TestIntExpr.asm):00253             LEAS -2,S
-0393 BD020E           (r/TestIntExpr.asm):00254             JSR Test_showIntResults
-0396 3267             (r/TestIntExpr.asm):00255             LEAS 7,S
-                      (r/TestIntExpr.asm):00256             ;     showIntResults(10, 0xff03, ~TestIntConst);
-0398 86FC             (r/TestIntExpr.asm):00257             LDA #252
-039A 2604             (r/TestIntExpr.asm):00258             BNE L6
-039C 8601             (r/TestIntExpr.asm):00259             LDA #1
-039E 2001             (r/TestIntExpr.asm):00260             BRA L7
-03A0                  (r/TestIntExpr.asm):00261         L6
-03A0 4F               (r/TestIntExpr.asm):00262             CLRA
-03A1                  (r/TestIntExpr.asm):00263         L7
-03A1 1F89             (r/TestIntExpr.asm):00264             TFR A,B
-03A3 1D               (r/TestIntExpr.asm):00265             SEX
-03A4 3406             (r/TestIntExpr.asm):00266             PSHS D
-03A6 CC0000           (r/TestIntExpr.asm):00267             LDD #0
-03A9 3406             (r/TestIntExpr.asm):00268             PSHS D
-03AB 8609             (r/TestIntExpr.asm):00269             LDA #9
-03AD 3402             (r/TestIntExpr.asm):00270             PSHS A
-03AF 327E             (r/TestIntExpr.asm):00271             LEAS -2,S
-03B1 BD020E           (r/TestIntExpr.asm):00272             JSR Test_showIntResults
-03B4 3267             (r/TestIntExpr.asm):00273             LEAS 7,S
-                      (r/TestIntExpr.asm):00274             ;     
-03B6 CC00FC           (r/TestIntExpr.asm):00275             LDD #252
-03B9 43               (r/TestIntExpr.asm):00276             COMA
-03BA 53               (r/TestIntExpr.asm):00277             COMB
-03BB 3406             (r/TestIntExpr.asm):00278             PSHS D
-03BD CCFF03           (r/TestIntExpr.asm):00279             LDD #65283
-03C0 3406             (r/TestIntExpr.asm):00280             PSHS D
-03C2 860A             (r/TestIntExpr.asm):00281             LDA #10
-03C4 3402             (r/TestIntExpr.asm):00282             PSHS A
-03C6 327E             (r/TestIntExpr.asm):00283             LEAS -2,S
-03C8 BD020E           (r/TestIntExpr.asm):00284             JSR Test_showIntResults
-03CB 3267             (r/TestIntExpr.asm):00285             LEAS 7,S
-                      (r/TestIntExpr.asm):00286             ;     showIntResults(11, 0, TestIntConst < testIntGlobal);
-                      (r/TestIntExpr.asm):00287             ;     showIntResults(12, 0, TestIntConst <= testIntGlobal);
-03CD CC00FC           (r/TestIntExpr.asm):00288             LDD #252
-03D0 10A320           (r/TestIntExpr.asm):00289             CMPD 0,Y
-03D3 2C04             (r/TestIntExpr.asm):00290             BGE L8
-03D5 8601             (r/TestIntExpr.asm):00291             LDA #1
-03D7 2001             (r/TestIntExpr.asm):00292             BRA L9
-03D9                  (r/TestIntExpr.asm):00293         L8
-03D9 4F               (r/TestIntExpr.asm):00294             CLRA
-03DA                  (r/TestIntExpr.asm):00295         L9
-03DA 1F89             (r/TestIntExpr.asm):00296             TFR A,B
-03DC 1D               (r/TestIntExpr.asm):00297             SEX
-03DD 3406             (r/TestIntExpr.asm):00298             PSHS D
-03DF CC0000           (r/TestIntExpr.asm):00299             LDD #0
-03E2 3406             (r/TestIntExpr.asm):00300             PSHS D
-03E4 860B             (r/TestIntExpr.asm):00301             LDA #11
-03E6 3402             (r/TestIntExpr.asm):00302             PSHS A
-03E8 327E             (r/TestIntExpr.asm):00303             LEAS -2,S
-03EA BD020E           (r/TestIntExpr.asm):00304             JSR Test_showIntResults
-03ED 3267             (r/TestIntExpr.asm):00305             LEAS 7,S
-                      (r/TestIntExpr.asm):00306             ;     showIntResults(13, 0, TestIntConst == testIntGlobal);
-03EF CC00FC           (r/TestIntExpr.asm):00307             LDD #252
-03F2 10A320           (r/TestIntExpr.asm):00308             CMPD 0,Y
-03F5 2E04             (r/TestIntExpr.asm):00309             BGT L10
-03F7 8601             (r/TestIntExpr.asm):00310             LDA #1
-03F9 2001             (r/TestIntExpr.asm):00311             BRA L11
-03FB                  (r/TestIntExpr.asm):00312         L10
-03FB 4F               (r/TestIntExpr.asm):00313             CLRA
-03FC                  (r/TestIntExpr.asm):00314         L11
-03FC 1F89             (r/TestIntExpr.asm):00315             TFR A,B
-03FE 1D               (r/TestIntExpr.asm):00316             SEX
-03FF 3406             (r/TestIntExpr.asm):00317             PSHS D
-0401 CC0000           (r/TestIntExpr.asm):00318             LDD #0
-0404 3406             (r/TestIntExpr.asm):00319             PSHS D
-0406 860C             (r/TestIntExpr.asm):00320             LDA #12
-0408 3402             (r/TestIntExpr.asm):00321             PSHS A
-040A 327E             (r/TestIntExpr.asm):00322             LEAS -2,S
-040C BD020E           (r/TestIntExpr.asm):00323             JSR Test_showIntResults
-040F 3267             (r/TestIntExpr.asm):00324             LEAS 7,S
-                      (r/TestIntExpr.asm):00325             ;     showIntResults(14, 1, TestIntConst != testIntGlobal);
-0411 CC00FC           (r/TestIntExpr.asm):00326             LDD #252
-0414 10A320           (r/TestIntExpr.asm):00327             CMPD 0,Y
-0417 2604             (r/TestIntExpr.asm):00328             BNE L12
-0419 8601             (r/TestIntExpr.asm):00329             LDA #1
-041B 2001             (r/TestIntExpr.asm):00330             BRA L13
-041D                  (r/TestIntExpr.asm):00331         L12
-041D 4F               (r/TestIntExpr.asm):00332             CLRA
-041E                  (r/TestIntExpr.asm):00333         L13
-041E 1F89             (r/TestIntExpr.asm):00334             TFR A,B
-0420 1D               (r/TestIntExpr.asm):00335             SEX
-0421 3406             (r/TestIntExpr.asm):00336             PSHS D
-0423 CC0000           (r/TestIntExpr.asm):00337             LDD #0
-0426 3406             (r/TestIntExpr.asm):00338             PSHS D
-0428 860D             (r/TestIntExpr.asm):00339             LDA #13
-042A 3402             (r/TestIntExpr.asm):00340             PSHS A
-042C 327E             (r/TestIntExpr.asm):00341             LEAS -2,S
-042E BD020E           (r/TestIntExpr.asm):00342             JSR Test_showIntResults
-0431 3267             (r/TestIntExpr.asm):00343             LEAS 7,S
-                      (r/TestIntExpr.asm):00344             ;     showIntResults(15, 1, TestIntConst >= testIntGlobal);
-0433 CC00FC           (r/TestIntExpr.asm):00345             LDD #252
-0436 10A320           (r/TestIntExpr.asm):00346             CMPD 0,Y
-0439 2704             (r/TestIntExpr.asm):00347             BEQ L14
-043B 8601             (r/TestIntExpr.asm):00348             LDA #1
-043D 2001             (r/TestIntExpr.asm):00349             BRA L15
-043F                  (r/TestIntExpr.asm):00350         L14
-043F 4F               (r/TestIntExpr.asm):00351             CLRA
-0440                  (r/TestIntExpr.asm):00352         L15
-0440 1F89             (r/TestIntExpr.asm):00353             TFR A,B
-0442 1D               (r/TestIntExpr.asm):00354             SEX
-0443 3406             (r/TestIntExpr.asm):00355             PSHS D
-0445 CC0001           (r/TestIntExpr.asm):00356             LDD #1
-0448 3406             (r/TestIntExpr.asm):00357             PSHS D
-044A 860E             (r/TestIntExpr.asm):00358             LDA #14
-044C 3402             (r/TestIntExpr.asm):00359             PSHS A
-044E 327E             (r/TestIntExpr.asm):00360             LEAS -2,S
-0450 BD020E           (r/TestIntExpr.asm):00361             JSR Test_showIntResults
-0453 3267             (r/TestIntExpr.asm):00362             LEAS 7,S
-                      (r/TestIntExpr.asm):00363             ;     showIntResults(16, 1, TestIntConst > testIntGlobal);
-0455 CC00FC           (r/TestIntExpr.asm):00364             LDD #252
-0458 10A320           (r/TestIntExpr.asm):00365             CMPD 0,Y
-045B 2D04             (r/TestIntExpr.asm):00366             BLT L16
-045D 8601             (r/TestIntExpr.asm):00367             LDA #1
-045F 2001             (r/TestIntExpr.asm):00368             BRA L17
-0461                  (r/TestIntExpr.asm):00369         L16
-0461 4F               (r/TestIntExpr.asm):00370             CLRA
-0462                  (r/TestIntExpr.asm):00371         L17
-0462 1F89             (r/TestIntExpr.asm):00372             TFR A,B
-0464 1D               (r/TestIntExpr.asm):00373             SEX
-0465 3406             (r/TestIntExpr.asm):00374             PSHS D
-0467 CC0001           (r/TestIntExpr.asm):00375             LDD #1
-046A 3406             (r/TestIntExpr.asm):00376             PSHS D
-046C 860F             (r/TestIntExpr.asm):00377             LDA #15
-046E 3402             (r/TestIntExpr.asm):00378             PSHS A
-0470 327E             (r/TestIntExpr.asm):00379             LEAS -2,S
-0472 BD020E           (r/TestIntExpr.asm):00380             JSR Test_showIntResults
-0475 3267             (r/TestIntExpr.asm):00381             LEAS 7,S
-                      (r/TestIntExpr.asm):00382             ;     
-0477 CC00FC           (r/TestIntExpr.asm):00383             LDD #252
-047A 10A320           (r/TestIntExpr.asm):00384             CMPD 0,Y
-047D 2F04             (r/TestIntExpr.asm):00385             BLE L18
-047F 8601             (r/TestIntExpr.asm):00386             LDA #1
-0481 2001             (r/TestIntExpr.asm):00387             BRA L19
-0483                  (r/TestIntExpr.asm):00388         L18
-0483 4F               (r/TestIntExpr.asm):00389             CLRA
-0484                  (r/TestIntExpr.asm):00390         L19
-0484 1F89             (r/TestIntExpr.asm):00391             TFR A,B
-0486 1D               (r/TestIntExpr.asm):00392             SEX
-0487 3406             (r/TestIntExpr.asm):00393             PSHS D
-0489 CC0001           (r/TestIntExpr.asm):00394             LDD #1
-048C 3406             (r/TestIntExpr.asm):00395             PSHS D
-048E 8610             (r/TestIntExpr.asm):00396             LDA #16
-0490 3402             (r/TestIntExpr.asm):00397             PSHS A
-0492 327E             (r/TestIntExpr.asm):00398             LEAS -2,S
-0494 BD020E           (r/TestIntExpr.asm):00399             JSR Test_showIntResults
-0497 3267             (r/TestIntExpr.asm):00400             LEAS 7,S
-                      (r/TestIntExpr.asm):00401             ;     int8_t i = 20;
-                      (r/TestIntExpr.asm):00402             ;     int8_t j = i++;
-0499 8614             (r/TestIntExpr.asm):00403             LDA #20
-049B A75F             (r/TestIntExpr.asm):00404             STA -1,U
-                      (r/TestIntExpr.asm):00405             ;     j = ++i;
-049D 305F             (r/TestIntExpr.asm):00406             LEAX -1,U
-049F A600             (r/TestIntExpr.asm):00407             LDA 0,X
-04A1 3402             (r/TestIntExpr.asm):00408             PSHS A
-04A3 8B01             (r/TestIntExpr.asm):00409             ADDA #1
-04A5 A700             (r/TestIntExpr.asm):00410             STA 0,X
-04A7 3502             (r/TestIntExpr.asm):00411             PULS A
-04A9 A75E             (r/TestIntExpr.asm):00412             STA -2,U
-                      (r/TestIntExpr.asm):00413             ; 
-04AB 305F             (r/TestIntExpr.asm):00414             LEAX -1,U
-04AD A600             (r/TestIntExpr.asm):00415             LDA 0,X
-04AF 8B01             (r/TestIntExpr.asm):00416             ADDA #1
-04B1 A700             (r/TestIntExpr.asm):00417             STA 0,X
-04B3 A75E             (r/TestIntExpr.asm):00418             STA -2,U
-                      (r/TestIntExpr.asm):00419             ;     showIntResults(17, 22, i);
-                      (r/TestIntExpr.asm):00420             ;     j = i--;
-04B5 A65F             (r/TestIntExpr.asm):00421             LDA -1,U
-04B7 1F89             (r/TestIntExpr.asm):00422             TFR A,B
-04B9 1D               (r/TestIntExpr.asm):00423             SEX
-04BA 3406             (r/TestIntExpr.asm):00424             PSHS D
-04BC CC0016           (r/TestIntExpr.asm):00425             LDD #22
-04BF 3406             (r/TestIntExpr.asm):00426             PSHS D
-04C1 8611             (r/TestIntExpr.asm):00427             LDA #17
-04C3 3402             (r/TestIntExpr.asm):00428             PSHS A
-04C5 327E             (r/TestIntExpr.asm):00429             LEAS -2,S
-04C7 BD020E           (r/TestIntExpr.asm):00430             JSR Test_showIntResults
-04CA 3267             (r/TestIntExpr.asm):00431             LEAS 7,S
-                      (r/TestIntExpr.asm):00432             ;     j = --i;
-04CC 305F             (r/TestIntExpr.asm):00433             LEAX -1,U
-04CE A600             (r/TestIntExpr.asm):00434             LDA 0,X
-04D0 3402             (r/TestIntExpr.asm):00435             PSHS A
-04D2 8BFF             (r/TestIntExpr.asm):00436             ADDA #-1
-04D4 A700             (r/TestIntExpr.asm):00437             STA 0,X
-04D6 3502             (r/TestIntExpr.asm):00438             PULS A
-04D8 A75E             (r/TestIntExpr.asm):00439             STA -2,U
-                      (r/TestIntExpr.asm):00440             ;     showIntResults(18, 20, i);
-04DA 305F             (r/TestIntExpr.asm):00441             LEAX -1,U
-04DC A600             (r/TestIntExpr.asm):00442             LDA 0,X
-04DE 8BFF             (r/TestIntExpr.asm):00443             ADDA #-1
-04E0 A700             (r/TestIntExpr.asm):00444             STA 0,X
-04E2 A75E             (r/TestIntExpr.asm):00445             STA -2,U
-                      (r/TestIntExpr.asm):00446             ;     showIntResults(19, 20, j);
-04E4 A65F             (r/TestIntExpr.asm):00447             LDA -1,U
-04E6 1F89             (r/TestIntExpr.asm):00448             TFR A,B
-04E8 1D               (r/TestIntExpr.asm):00449             SEX
-04E9 3406             (r/TestIntExpr.asm):00450             PSHS D
-04EB CC0014           (r/TestIntExpr.asm):00451             LDD #20
-04EE 3406             (r/TestIntExpr.asm):00452             PSHS D
-04F0 8612             (r/TestIntExpr.asm):00453             LDA #18
-04F2 3402             (r/TestIntExpr.asm):00454             PSHS A
-04F4 327E             (r/TestIntExpr.asm):00455             LEAS -2,S
-04F6 BD020E           (r/TestIntExpr.asm):00456             JSR Test_showIntResults
-04F9 3267             (r/TestIntExpr.asm):00457             LEAS 7,S
-                      (r/TestIntExpr.asm):00458             ; 
-04FB A65E             (r/TestIntExpr.asm):00459             LDA -2,U
-04FD 1F89             (r/TestIntExpr.asm):00460             TFR A,B
-04FF 1D               (r/TestIntExpr.asm):00461             SEX
-0500 3406             (r/TestIntExpr.asm):00462             PSHS D
-0502 CC0014           (r/TestIntExpr.asm):00463             LDD #20
-0505 3406             (r/TestIntExpr.asm):00464             PSHS D
-0507 8613             (r/TestIntExpr.asm):00465             LDA #19
-0509 3402             (r/TestIntExpr.asm):00466             PSHS A
-050B 327E             (r/TestIntExpr.asm):00467             LEAS -2,S
-050D BD020E           (r/TestIntExpr.asm):00468             JSR Test_showIntResults
-0510 3267             (r/TestIntExpr.asm):00469             LEAS 7,S
-                      (r/TestIntExpr.asm):00470             ;     core.printf("\n  op assign\n");
-                      (r/TestIntExpr.asm):00471             ;     i += 1;
-0512 CC0732           (r/TestIntExpr.asm):00472             LDD #String+$61
-0515 3406             (r/TestIntExpr.asm):00473             PSHS D
-0517 BDFC20           (r/TestIntExpr.asm):00474             JSR printf
-                      (r/TestIntExpr.asm):00475             ;     showIntResults(20, 21, i);
-051A A65F             (r/TestIntExpr.asm):00476             LDA -1,U
-051C 8B01             (r/TestIntExpr.asm):00477             ADDA #1
-051E A75F             (r/TestIntExpr.asm):00478             STA -1,U
-                      (r/TestIntExpr.asm):00479             ;     i -= 1;
-0520 A65F             (r/TestIntExpr.asm):00480             LDA -1,U
-0522 1F89             (r/TestIntExpr.asm):00481             TFR A,B
-0524 1D               (r/TestIntExpr.asm):00482             SEX
-0525 3406             (r/TestIntExpr.asm):00483             PSHS D
-0527 CC0015           (r/TestIntExpr.asm):00484             LDD #21
-052A 3406             (r/TestIntExpr.asm):00485             PSHS D
-052C 8614             (r/TestIntExpr.asm):00486             LDA #20
-052E 3402             (r/TestIntExpr.asm):00487             PSHS A
-0530 327E             (r/TestIntExpr.asm):00488             LEAS -2,S
-0532 BD020E           (r/TestIntExpr.asm):00489             JSR Test_showIntResults
-0535 3267             (r/TestIntExpr.asm):00490             LEAS 7,S
-                      (r/TestIntExpr.asm):00491             ;     showIntResults(21, 20, i);
-0537 A65F             (r/TestIntExpr.asm):00492             LDA -1,U
-0539 8001             (r/TestIntExpr.asm):00493             SUBA #1
-053B A75F             (r/TestIntExpr.asm):00494             STA -1,U
-                      (r/TestIntExpr.asm):00495             ;     i *= 5;
-053D A65F             (r/TestIntExpr.asm):00496             LDA -1,U
-053F 1F89             (r/TestIntExpr.asm):00497             TFR A,B
-0541 1D               (r/TestIntExpr.asm):00498             SEX
-0542 3406             (r/TestIntExpr.asm):00499             PSHS D
-0544 CC0014           (r/TestIntExpr.asm):00500             LDD #20
-0547 3406             (r/TestIntExpr.asm):00501             PSHS D
-0549 8615             (r/TestIntExpr.asm):00502             LDA #21
-054B 3402             (r/TestIntExpr.asm):00503             PSHS A
-054D 327E             (r/TestIntExpr.asm):00504             LEAS -2,S
-054F BD020E           (r/TestIntExpr.asm):00505             JSR Test_showIntResults
-0552 3267             (r/TestIntExpr.asm):00506             LEAS 7,S
-                      (r/TestIntExpr.asm):00507             ;     showIntResults(22, 100, i);
-0554 6FE2             (r/TestIntExpr.asm):00508             CLR ,-S
-0556 A65F             (r/TestIntExpr.asm):00509             LDA -1,U
-0558 2A03             (r/TestIntExpr.asm):00510             BPL L20
-055A 6060             (r/TestIntExpr.asm):00511             NEG 0,S
-055C 40               (r/TestIntExpr.asm):00512             NEGA
-055D                  (r/TestIntExpr.asm):00513         L20
-055D 1F89             (r/TestIntExpr.asm):00514             TFR A,B
-055F 8605             (r/TestIntExpr.asm):00515             LDA #5
-0561 2A03             (r/TestIntExpr.asm):00516             BPL L21
-0563 6060             (r/TestIntExpr.asm):00517             NEG 0,S
-0565 40               (r/TestIntExpr.asm):00518             NEGA
-0566                  (r/TestIntExpr.asm):00519         L21
-0566 3D               (r/TestIntExpr.asm):00520             MUL
-0567 6D60             (r/TestIntExpr.asm):00521             TST 0,S
-0569 2A01             (r/TestIntExpr.asm):00522             BPL L22
-056B 50               (r/TestIntExpr.asm):00523             NEGB
-056C                  (r/TestIntExpr.asm):00524         L22
-056C 3261             (r/TestIntExpr.asm):00525             LEAS 1,S
-056E 1F98             (r/TestIntExpr.asm):00526             TFR B,A
-0570 A75F             (r/TestIntExpr.asm):00527             STA -1,U
-                      (r/TestIntExpr.asm):00528             ;     i /= 5;
-0572 A65F             (r/TestIntExpr.asm):00529             LDA -1,U
-0574 1F89             (r/TestIntExpr.asm):00530             TFR A,B
-0576 1D               (r/TestIntExpr.asm):00531             SEX
-0577 3406             (r/TestIntExpr.asm):00532             PSHS D
-0579 CC0064           (r/TestIntExpr.asm):00533             LDD #100
-057C 3406             (r/TestIntExpr.asm):00534             PSHS D
-057E 8616             (r/TestIntExpr.asm):00535             LDA #22
-0580 3402             (r/TestIntExpr.asm):00536             PSHS A
-0582 327E             (r/TestIntExpr.asm):00537             LEAS -2,S
-0584 BD020E           (r/TestIntExpr.asm):00538             JSR Test_showIntResults
-0587 3267             (r/TestIntExpr.asm):00539             LEAS 7,S
-                      (r/TestIntExpr.asm):00540             ;     showIntResults(23, 20, i);
-0589 8605             (r/TestIntExpr.asm):00541             LDA #5
-058B 3402             (r/TestIntExpr.asm):00542             PSHS A
-058D A65F             (r/TestIntExpr.asm):00543             LDA -1,U
-058F 3402             (r/TestIntExpr.asm):00544             PSHS A
-0591 BDFC44           (r/TestIntExpr.asm):00545             JSR idiv8
-0594 3264             (r/TestIntExpr.asm):00546             LEAS 4,S
-0596 A75F             (r/TestIntExpr.asm):00547             STA -1,U
-                      (r/TestIntExpr.asm):00548             ;     
-0598 A65F             (r/TestIntExpr.asm):00549             LDA -1,U
-059A 1F89             (r/TestIntExpr.asm):00550             TFR A,B
-059C 1D               (r/TestIntExpr.asm):00551             SEX
-059D 3406             (r/TestIntExpr.asm):00552             PSHS D
-059F CC0014           (r/TestIntExpr.asm):00553             LDD #20
-05A2 3406             (r/TestIntExpr.asm):00554             PSHS D
-05A4 8617             (r/TestIntExpr.asm):00555             LDA #23
-05A6 3402             (r/TestIntExpr.asm):00556             PSHS A
-05A8 327E             (r/TestIntExpr.asm):00557             LEAS -2,S
-05AA BD020E           (r/TestIntExpr.asm):00558             JSR Test_showIntResults
-05AD 3267             (r/TestIntExpr.asm):00559             LEAS 7,S
-                      (r/TestIntExpr.asm):00560             ;     core.printf("\n  Int exprs\n");
-                      (r/TestIntExpr.asm):00561             ;     showIntResults(24, 2984, int16_t(testIntTable[1]) + int16_t(TestSizeDef) * TestIntConst - testIntGlobal);
-05AF CC0740           (r/TestIntExpr.asm):00562             LDD #String+$6f
-05B2 3406             (r/TestIntExpr.asm):00563             PSHS D
-05B4 BDFC20           (r/TestIntExpr.asm):00564             JSR printf
-                      (r/TestIntExpr.asm):00565             ;     showIntResults(25, 2940, int16_t(testIntTable[1] + TestSizeDef) * (TestIntConst - testIntGlobal));
-05B7 EC20             (r/TestIntExpr.asm):00566             LDD 0,Y
-05B9 3406             (r/TestIntExpr.asm):00567             PSHS D
-05BB CC00FC           (r/TestIntExpr.asm):00568             LDD #252
-05BE 3406             (r/TestIntExpr.asm):00569             PSHS D
-05C0 860C             (r/TestIntExpr.asm):00570             LDA #12
-05C2 1F89             (r/TestIntExpr.asm):00571             TFR A,B
-05C4 1D               (r/TestIntExpr.asm):00572             SEX
-05C5 3406             (r/TestIntExpr.asm):00573             PSHS D
-05C7 6FE2             (r/TestIntExpr.asm):00574             CLR ,-S
-05C9 6D63             (r/TestIntExpr.asm):00575             TST 3,S
-05CB 2A09             (r/TestIntExpr.asm):00576             BPL L23
-05CD 6060             (r/TestIntExpr.asm):00577             NEG 0,S
-05CF CC0000           (r/TestIntExpr.asm):00578             LDD #0
-05D2 A363             (r/TestIntExpr.asm):00579             SUBD 3,S
-05D4 ED63             (r/TestIntExpr.asm):00580             STD 3,S
-05D6                  (r/TestIntExpr.asm):00581         L23
-05D6 6D61             (r/TestIntExpr.asm):00582             TST 1,S
-05D8 2A09             (r/TestIntExpr.asm):00583             BPL L24
-05DA 6060             (r/TestIntExpr.asm):00584             NEG 0,S
-05DC CC0000           (r/TestIntExpr.asm):00585             LDD #0
-05DF A361             (r/TestIntExpr.asm):00586             SUBD 1,S
-05E1 ED61             (r/TestIntExpr.asm):00587             STD 1,S
-05E3                  (r/TestIntExpr.asm):00588         L24
-05E3 A664             (r/TestIntExpr.asm):00589             LDA 4,S
-05E5 E662             (r/TestIntExpr.asm):00590             LDB 2,S
-05E7 3D               (r/TestIntExpr.asm):00591             MUL
-05E8 3406             (r/TestIntExpr.asm):00592             PSHS D
-05EA A665             (r/TestIntExpr.asm):00593             LDA 5,S
-05EC E664             (r/TestIntExpr.asm):00594             LDB 4,S
-05EE 3D               (r/TestIntExpr.asm):00595             MUL
-05EF EB61             (r/TestIntExpr.asm):00596             ADDB 1,S
-05F1 E761             (r/TestIntExpr.asm):00597             STB 1,S
-05F3 A666             (r/TestIntExpr.asm):00598             LDA 6,S
-05F5 E663             (r/TestIntExpr.asm):00599             LDB 3,S
-05F7 3D               (r/TestIntExpr.asm):00600             MUL
-05F8 EB61             (r/TestIntExpr.asm):00601             ADDB 1,S
-05FA E761             (r/TestIntExpr.asm):00602             STB 1,S
-05FC 6D62             (r/TestIntExpr.asm):00603             TST 2,S
-05FE 2A05             (r/TestIntExpr.asm):00604             BPL L25
-0600 CC0000           (r/TestIntExpr.asm):00605             LDD #0
-0603 A360             (r/TestIntExpr.asm):00606             SUBD 0,S
-0605                  (r/TestIntExpr.asm):00607         L25
-0605 3506             (r/TestIntExpr.asm):00608             PULS D
-0607 3265             (r/TestIntExpr.asm):00609             LEAS 5,S
-0609 8E06CD           (r/TestIntExpr.asm):00610             LDX #Constants+0
-060C 3406             (r/TestIntExpr.asm):00611             PSHS D
-060E 8601             (r/TestIntExpr.asm):00612             LDA #1
-0610 C601             (r/TestIntExpr.asm):00613             LDB #1
-0612 3D               (r/TestIntExpr.asm):00614             MUL
-0613 308B             (r/TestIntExpr.asm):00615             LEAX D,X
-0615 A600             (r/TestIntExpr.asm):00616             LDA 0,X
-0617 1F89             (r/TestIntExpr.asm):00617             TFR A,B
-0619 1D               (r/TestIntExpr.asm):00618             SEX
-061A E360             (r/TestIntExpr.asm):00619             ADDD 0,S
-061C 3262             (r/TestIntExpr.asm):00620             LEAS 2,S
-061E A360             (r/TestIntExpr.asm):00621             SUBD 0,S
-0620 3262             (r/TestIntExpr.asm):00622             LEAS 2,S
-0622 3406             (r/TestIntExpr.asm):00623             PSHS D
-0624 CC0BA8           (r/TestIntExpr.asm):00624             LDD #2984
-0627 3406             (r/TestIntExpr.asm):00625             PSHS D
-0629 8618             (r/TestIntExpr.asm):00626             LDA #24
-062B 3402             (r/TestIntExpr.asm):00627             PSHS A
-062D 327E             (r/TestIntExpr.asm):00628             LEAS -2,S
-062F BD020E           (r/TestIntExpr.asm):00629             JSR Test_showIntResults
-0632 3267             (r/TestIntExpr.asm):00630             LEAS 7,S
-                      (r/TestIntExpr.asm):00631             ; 
-0634 CC00FC           (r/TestIntExpr.asm):00632             LDD #252
-0637 A320             (r/TestIntExpr.asm):00633             SUBD 0,Y
-0639 3406             (r/TestIntExpr.asm):00634             PSHS D
-063B 860C             (r/TestIntExpr.asm):00635             LDA #12
-063D 8E06CD           (r/TestIntExpr.asm):00636             LDX #Constants+0
-0640 3402             (r/TestIntExpr.asm):00637             PSHS A
-0642 8601             (r/TestIntExpr.asm):00638             LDA #1
-0644 C601             (r/TestIntExpr.asm):00639             LDB #1
-0646 3D               (r/TestIntExpr.asm):00640             MUL
-0647 308B             (r/TestIntExpr.asm):00641             LEAX D,X
-0649 A600             (r/TestIntExpr.asm):00642             LDA 0,X
-064B AB60             (r/TestIntExpr.asm):00643             ADDA 0,S
-064D 3261             (r/TestIntExpr.asm):00644             LEAS 1,S
-064F 1F89             (r/TestIntExpr.asm):00645             TFR A,B
-0651 1D               (r/TestIntExpr.asm):00646             SEX
-0652 3406             (r/TestIntExpr.asm):00647             PSHS D
-0654 6FE2             (r/TestIntExpr.asm):00648             CLR ,-S
-0656 6D63             (r/TestIntExpr.asm):00649             TST 3,S
-0658 2A09             (r/TestIntExpr.asm):00650             BPL L26
-065A 6060             (r/TestIntExpr.asm):00651             NEG 0,S
-065C CC0000           (r/TestIntExpr.asm):00652             LDD #0
-065F A363             (r/TestIntExpr.asm):00653             SUBD 3,S
-0661 ED63             (r/TestIntExpr.asm):00654             STD 3,S
-0663                  (r/TestIntExpr.asm):00655         L26
-0663 6D61             (r/TestIntExpr.asm):00656             TST 1,S
-0665 2A09             (r/TestIntExpr.asm):00657             BPL L27
-0667 6060             (r/TestIntExpr.asm):00658             NEG 0,S
-0669 CC0000           (r/TestIntExpr.asm):00659             LDD #0
-066C A361             (r/TestIntExpr.asm):00660             SUBD 1,S
-066E ED61             (r/TestIntExpr.asm):00661             STD 1,S
-0670                  (r/TestIntExpr.asm):00662         L27
-0670 A664             (r/TestIntExpr.asm):00663             LDA 4,S
-0672 E662             (r/TestIntExpr.asm):00664             LDB 2,S
-0674 3D               (r/TestIntExpr.asm):00665             MUL
-0675 3406             (r/TestIntExpr.asm):00666             PSHS D
-0677 A665             (r/TestIntExpr.asm):00667             LDA 5,S
-0679 E664             (r/TestIntExpr.asm):00668             LDB 4,S
-067B 3D               (r/TestIntExpr.asm):00669             MUL
-067C EB61             (r/TestIntExpr.asm):00670             ADDB 1,S
-067E E761             (r/TestIntExpr.asm):00671             STB 1,S
-0680 A666             (r/TestIntExpr.asm):00672             LDA 6,S
-0682 E663             (r/TestIntExpr.asm):00673             LDB 3,S
-0684 3D               (r/TestIntExpr.asm):00674             MUL
-0685 EB61             (r/TestIntExpr.asm):00675             ADDB 1,S
-0687 E761             (r/TestIntExpr.asm):00676             STB 1,S
-0689 6D62             (r/TestIntExpr.asm):00677             TST 2,S
-068B 2A05             (r/TestIntExpr.asm):00678             BPL L28
-068D CC0000           (r/TestIntExpr.asm):00679             LDD #0
-0690 A360             (r/TestIntExpr.asm):00680             SUBD 0,S
-0692                  (r/TestIntExpr.asm):00681         L28
-0692 3506             (r/TestIntExpr.asm):00682             PULS D
-0694 3265             (r/TestIntExpr.asm):00683             LEAS 5,S
-0696 3406             (r/TestIntExpr.asm):00684             PSHS D
-0698 CC0B7C           (r/TestIntExpr.asm):00685             LDD #2940
-069B 3406             (r/TestIntExpr.asm):00686             PSHS D
-069D 8619             (r/TestIntExpr.asm):00687             LDA #25
-069F 3402             (r/TestIntExpr.asm):00688             PSHS A
-06A1 327E             (r/TestIntExpr.asm):00689             LEAS -2,S
-06A3 BD020E           (r/TestIntExpr.asm):00690             JSR Test_showIntResults
-06A6 3267             (r/TestIntExpr.asm):00691             LEAS 7,S
-                      (r/TestIntExpr.asm):00692             ;     core.printf("\nDone.%40s%s\n\n", " ", errors ? "FAILED" : "Passed");
-                      (r/TestIntExpr.asm):00693             ;     return errors;
-06A8 A622             (r/TestIntExpr.asm):00694             LDA 2,Y
-06AA 2705             (r/TestIntExpr.asm):00695             BEQ L29
-06AC CC074E           (r/TestIntExpr.asm):00696             LDD #String+$7d
-06AF 2003             (r/TestIntExpr.asm):00697             BRA L30
-06B1                  (r/TestIntExpr.asm):00698         L29
-06B1 CC0755           (r/TestIntExpr.asm):00699             LDD #String+$84
-06B4                  (r/TestIntExpr.asm):00700         L30
-06B4 3406             (r/TestIntExpr.asm):00701             PSHS D
-06B6 CC075C           (r/TestIntExpr.asm):00702             LDD #String+$8b
-06B9 3406             (r/TestIntExpr.asm):00703             PSHS D
-06BB CC075E           (r/TestIntExpr.asm):00704             LDD #String+$8d
-06BE 3406             (r/TestIntExpr.asm):00705             PSHS D
-06C0 BDFC20           (r/TestIntExpr.asm):00706             JSR printf
-                      (r/TestIntExpr.asm):00707             ; }
-06C3 A622             (r/TestIntExpr.asm):00708             LDA 2,Y
-06C5 1F89             (r/TestIntExpr.asm):00709             TFR A,B
-06C7 1D               (r/TestIntExpr.asm):00710             SEX
-06C8 1F34             (r/TestIntExpr.asm):00711             TFR U,S
-06CA 3540             (r/TestIntExpr.asm):00712             PULS U
-06CC 39               (r/TestIntExpr.asm):00713             RTS
-                      (r/TestIntExpr.asm):00714         
-06CD                  (r/TestIntExpr.asm):00715         Constants
-06CD 01020307         (r/TestIntExpr.asm):00716             FCB $01,$02,$03,$07
-                      (r/TestIntExpr.asm):00717         
-06D1                  (r/TestIntExpr.asm):00718         String
-06D1 20               (r/TestIntExpr.asm):00719             FCC " "
-06D2 00               (r/TestIntExpr.asm):00720             FCB $00
-06D3 253130732D3E2025 (r/TestIntExpr.asm):00721             FCC "%10s-> %2hhi: "
+                      (r/TestIntExpr.asm):00005             org $200
+                      (r/TestIntExpr.asm):00006         
+0200 327D             (r/TestIntExpr.asm):00007             LEAS -3,S
+0202 1F42             (r/TestIntExpr.asm):00008             TFR S,Y
+0204 327E             (r/TestIntExpr.asm):00009             LEAS -2,S
+0206 BD025E           (r/TestIntExpr.asm):00010             JSR Test_main
+0209 3262             (r/TestIntExpr.asm):00011             LEAS 2,S
+020B 7EFC0E           (r/TestIntExpr.asm):00012             JMP exit
+                      (r/TestIntExpr.asm):00013         
+020E                  (r/TestIntExpr.asm):00014         Test_showIntResults
+020E 3440             (r/TestIntExpr.asm):00015             PSHS U
+0210 1F43             (r/TestIntExpr.asm):00016             TFR S,U
+                      (r/TestIntExpr.asm):00017             ; /*-------------------------------------------------------------------------
+                      (r/TestIntExpr.asm):00018             ;     This source file is a part of Clover
+                      (r/TestIntExpr.asm):00019             ;     For the latest info, see https://github.com/cmarrin/Clover
+                      (r/TestIntExpr.asm):00020             ;     Copyright (c) 2021-2022, Chris Marrin
+                      (r/TestIntExpr.asm):00021             ;     All rights reserved.
+                      (r/TestIntExpr.asm):00022             ;     Use of this source code is governed by the MIT license that can be
+                      (r/TestIntExpr.asm):00023             ;     found in the LICENSE file.
+                      (r/TestIntExpr.asm):00024             ; -------------------------------------------------------------------------*/
+                      (r/TestIntExpr.asm):00025             ; 
+                      (r/TestIntExpr.asm):00026             ; // Test constants, vars, operands and expressions
+                      (r/TestIntExpr.asm):00027             ; 
+                      (r/TestIntExpr.asm):00028             ; struct Test
+                      (r/TestIntExpr.asm):00029             ; {
+                      (r/TestIntExpr.asm):00030             ; 
+                      (r/TestIntExpr.asm):00031             ; const uint8_t TestSizeDef = 12;
+                      (r/TestIntExpr.asm):00032             ; const int16_t TestIntConst = 0xfc;
+                      (r/TestIntExpr.asm):00033             ; 
+                      (r/TestIntExpr.asm):00034             ; const int8_t testIntTable[ ] = { 1, 2, 3, 7 };
+                      (r/TestIntExpr.asm):00035             ; 
+                      (r/TestIntExpr.asm):00036             ; int16_t testIntGlobal;
+                      (r/TestIntExpr.asm):00037             ; 
+                      (r/TestIntExpr.asm):00038             ; uint8_t errors;
+                      (r/TestIntExpr.asm):00039             ; 
+                      (r/TestIntExpr.asm):00040             ; function showIntResults(uint8_t testNo, int16_t exp, int16_t act)
+                      (r/TestIntExpr.asm):00041             ; {
+                      (r/TestIntExpr.asm):00042             ;     core.printf("%10s-> %2hhi: ", " ", testNo);
+                      (r/TestIntExpr.asm):00043             ;     if (exp != act) {
+0212 A646             (r/TestIntExpr.asm):00044             LDA 6,U
+0214 1F89             (r/TestIntExpr.asm):00045             TFR A,B
+0216 4F               (r/TestIntExpr.asm):00046             CLRA
+0217 C30000           (r/TestIntExpr.asm):00047             ADDD #0
+021A 3406             (r/TestIntExpr.asm):00048             PSHS D
+021C CC0721           (r/TestIntExpr.asm):00049             LDD #String+$0
+021F 3406             (r/TestIntExpr.asm):00050             PSHS D
+0221 CC0723           (r/TestIntExpr.asm):00051             LDD #String+$2
+0224 3406             (r/TestIntExpr.asm):00052             PSHS D
+0226 BDFC20           (r/TestIntExpr.asm):00053             JSR printf
+0229 EC47             (r/TestIntExpr.asm):00054             LDD 7,U
+022B 10A349           (r/TestIntExpr.asm):00055             CMPD 9,U
+022E 1027001D         (r/TestIntExpr.asm):00056             BEQ L1
+                      (r/TestIntExpr.asm):00057             ;         core.printf("     FAIL: exp %i, got %i\n", exp, act);
+                      (r/TestIntExpr.asm):00058             ;         errors++;
+0232 EC49             (r/TestIntExpr.asm):00059             LDD 9,U
+0234 3406             (r/TestIntExpr.asm):00060             PSHS D
+0236 EC47             (r/TestIntExpr.asm):00061             LDD 7,U
+0238 3406             (r/TestIntExpr.asm):00062             PSHS D
+023A CC0732           (r/TestIntExpr.asm):00063             LDD #String+$11
+023D 3406             (r/TestIntExpr.asm):00064             PSHS D
+023F BDFC20           (r/TestIntExpr.asm):00065             JSR printf
+                      (r/TestIntExpr.asm):00066             ;     } else {
+0242 3022             (r/TestIntExpr.asm):00067             LEAX 2,Y
+0244 A600             (r/TestIntExpr.asm):00068             LDA 0,X
+0246 3402             (r/TestIntExpr.asm):00069             PSHS A
+0248 8B01             (r/TestIntExpr.asm):00070             ADDA #1
+024A A700             (r/TestIntExpr.asm):00071             STA 0,X
+024C 16000A           (r/TestIntExpr.asm):00072             BRA L2
+024F                  (r/TestIntExpr.asm):00073         L1
+                      (r/TestIntExpr.asm):00074             ;         core.printf("     Pass\n");
+                      (r/TestIntExpr.asm):00075             ;     }
+024F 3410             (r/TestIntExpr.asm):00076             PSHS X
+0251 CC074D           (r/TestIntExpr.asm):00077             LDD #String+$2c
+0254 3406             (r/TestIntExpr.asm):00078             PSHS D
+0256 BDFC20           (r/TestIntExpr.asm):00079             JSR printf
+0259                  (r/TestIntExpr.asm):00080         L2
+0259 1F34             (r/TestIntExpr.asm):00081             TFR U,S
+025B 3540             (r/TestIntExpr.asm):00082             PULS U
+025D 39               (r/TestIntExpr.asm):00083             RTS
+                      (r/TestIntExpr.asm):00084         
+025E                  (r/TestIntExpr.asm):00085         Test_main
+025E 3440             (r/TestIntExpr.asm):00086             PSHS U
+0260 1F43             (r/TestIntExpr.asm):00087             TFR S,U
+0262 327C             (r/TestIntExpr.asm):00088             LEAS -4,S
+0264 CC0000           (r/TestIntExpr.asm):00089             LDD #0
+0267 ED5E             (r/TestIntExpr.asm):00090             STD -2,U
+                      (r/TestIntExpr.asm):00091             ; }
+                      (r/TestIntExpr.asm):00092             ; 
+                      (r/TestIntExpr.asm):00093             ; function int16_t main()
+                      (r/TestIntExpr.asm):00094             ; {
+                      (r/TestIntExpr.asm):00095             ;     for (uint16_t count = 0; count < 1000; ++count) {
+0269                  (r/TestIntExpr.asm):00096         L3
+0269 EC5E             (r/TestIntExpr.asm):00097             LDD -2,U
+026B 108303E8         (r/TestIntExpr.asm):00098             CMPD #1000
+026F 1024049E         (r/TestIntExpr.asm):00099             BHS L4
+                      (r/TestIntExpr.asm):00100             ;     errors = 0;
+                      (r/TestIntExpr.asm):00101             ;     
+0273 8600             (r/TestIntExpr.asm):00102             LDA #0
+0275 A722             (r/TestIntExpr.asm):00103             STA 2,Y
+                      (r/TestIntExpr.asm):00104             ;     testIntGlobal = 42;
+                      (r/TestIntExpr.asm):00105             ; 
+0277 CC002A           (r/TestIntExpr.asm):00106             LDD #42
+027A ED20             (r/TestIntExpr.asm):00107             STD 0,Y
+                      (r/TestIntExpr.asm):00108             ;     core.printf("\nTest Int Exprs\n");
+                      (r/TestIntExpr.asm):00109             ; 
+027C CC0758           (r/TestIntExpr.asm):00110             LDD #String+$37
+027F 3406             (r/TestIntExpr.asm):00111             PSHS D
+0281 BDFC20           (r/TestIntExpr.asm):00112             JSR printf
+                      (r/TestIntExpr.asm):00113             ;     core.printf("\n  Int vals\n");
+                      (r/TestIntExpr.asm):00114             ;     showIntResults(1, 12, TestSizeDef);
+0284 CC0769           (r/TestIntExpr.asm):00115             LDD #String+$48
+0287 3406             (r/TestIntExpr.asm):00116             PSHS D
+0289 BDFC20           (r/TestIntExpr.asm):00117             JSR printf
+                      (r/TestIntExpr.asm):00118             ;     showIntResults(2, 0xfc, TestIntConst);
+028C CC000C           (r/TestIntExpr.asm):00119             LDD #12
+028F 3406             (r/TestIntExpr.asm):00120             PSHS D
+0291 CC000C           (r/TestIntExpr.asm):00121             LDD #12
+0294 3406             (r/TestIntExpr.asm):00122             PSHS D
+0296 8601             (r/TestIntExpr.asm):00123             LDA #1
+0298 3402             (r/TestIntExpr.asm):00124             PSHS A
+029A 327E             (r/TestIntExpr.asm):00125             LEAS -2,S
+029C BD020E           (r/TestIntExpr.asm):00126             JSR Test_showIntResults
+029F 3267             (r/TestIntExpr.asm):00127             LEAS 7,S
+                      (r/TestIntExpr.asm):00128             ;     showIntResults(3, 7, testIntTable[3]);
+02A1 CC00FC           (r/TestIntExpr.asm):00129             LDD #252
+02A4 3406             (r/TestIntExpr.asm):00130             PSHS D
+02A6 CC00FC           (r/TestIntExpr.asm):00131             LDD #252
+02A9 3406             (r/TestIntExpr.asm):00132             PSHS D
+02AB 8602             (r/TestIntExpr.asm):00133             LDA #2
+02AD 3402             (r/TestIntExpr.asm):00134             PSHS A
+02AF 327E             (r/TestIntExpr.asm):00135             LEAS -2,S
+02B1 BD020E           (r/TestIntExpr.asm):00136             JSR Test_showIntResults
+02B4 3267             (r/TestIntExpr.asm):00137             LEAS 7,S
+                      (r/TestIntExpr.asm):00138             ;     
+02B6 8E071D           (r/TestIntExpr.asm):00139             LDX #Constants+0
+02B9 8603             (r/TestIntExpr.asm):00140             LDA #3
+02BB C601             (r/TestIntExpr.asm):00141             LDB #1
+02BD 3D               (r/TestIntExpr.asm):00142             MUL
+02BE 308B             (r/TestIntExpr.asm):00143             LEAX D,X
+02C0 A600             (r/TestIntExpr.asm):00144             LDA 0,X
+02C2 1F89             (r/TestIntExpr.asm):00145             TFR A,B
+02C4 1D               (r/TestIntExpr.asm):00146             SEX
+02C5 3406             (r/TestIntExpr.asm):00147             PSHS D
+02C7 CC0007           (r/TestIntExpr.asm):00148             LDD #7
+02CA 3406             (r/TestIntExpr.asm):00149             PSHS D
+02CC 8603             (r/TestIntExpr.asm):00150             LDA #3
+02CE 3402             (r/TestIntExpr.asm):00151             PSHS A
+02D0 327E             (r/TestIntExpr.asm):00152             LEAS -2,S
+02D2 BD020E           (r/TestIntExpr.asm):00153             JSR Test_showIntResults
+02D5 3267             (r/TestIntExpr.asm):00154             LEAS 7,S
+                      (r/TestIntExpr.asm):00155             ;     core.printf("\n  Int ops\n");
+                      (r/TestIntExpr.asm):00156             ;     showIntResults(4, 294, TestIntConst + testIntGlobal);
+02D7 CC0776           (r/TestIntExpr.asm):00157             LDD #String+$55
+02DA 3406             (r/TestIntExpr.asm):00158             PSHS D
+02DC BDFC20           (r/TestIntExpr.asm):00159             JSR printf
+                      (r/TestIntExpr.asm):00160             ;     showIntResults(5, 210, TestIntConst - testIntGlobal);
+02DF CC00FC           (r/TestIntExpr.asm):00161             LDD #252
+02E2 E320             (r/TestIntExpr.asm):00162             ADDD 0,Y
+02E4 3406             (r/TestIntExpr.asm):00163             PSHS D
+02E6 CC0126           (r/TestIntExpr.asm):00164             LDD #294
+02E9 3406             (r/TestIntExpr.asm):00165             PSHS D
+02EB 8604             (r/TestIntExpr.asm):00166             LDA #4
+02ED 3402             (r/TestIntExpr.asm):00167             PSHS A
+02EF 327E             (r/TestIntExpr.asm):00168             LEAS -2,S
+02F1 BD020E           (r/TestIntExpr.asm):00169             JSR Test_showIntResults
+02F4 3267             (r/TestIntExpr.asm):00170             LEAS 7,S
+                      (r/TestIntExpr.asm):00171             ;     showIntResults(6, 10584, TestIntConst * testIntGlobal);
+02F6 CC00FC           (r/TestIntExpr.asm):00172             LDD #252
+02F9 A320             (r/TestIntExpr.asm):00173             SUBD 0,Y
+02FB 3406             (r/TestIntExpr.asm):00174             PSHS D
+02FD CC00D2           (r/TestIntExpr.asm):00175             LDD #210
+0300 3406             (r/TestIntExpr.asm):00176             PSHS D
+0302 8605             (r/TestIntExpr.asm):00177             LDA #5
+0304 3402             (r/TestIntExpr.asm):00178             PSHS A
+0306 327E             (r/TestIntExpr.asm):00179             LEAS -2,S
+0308 BD020E           (r/TestIntExpr.asm):00180             JSR Test_showIntResults
+030B 3267             (r/TestIntExpr.asm):00181             LEAS 7,S
+                      (r/TestIntExpr.asm):00182             ;     showIntResults(7, 6, TestIntConst / testIntGlobal);
+030D EC20             (r/TestIntExpr.asm):00183             LDD 0,Y
+030F 3406             (r/TestIntExpr.asm):00184             PSHS D
+0311 CC00FC           (r/TestIntExpr.asm):00185             LDD #252
+0314 3406             (r/TestIntExpr.asm):00186             PSHS D
+0316 6FE2             (r/TestIntExpr.asm):00187             CLR ,-S
+0318 6D63             (r/TestIntExpr.asm):00188             TST 3,S
+031A 102A0009         (r/TestIntExpr.asm):00189             BPL L5
+031E 6060             (r/TestIntExpr.asm):00190             NEG 0,S
+0320 CC0000           (r/TestIntExpr.asm):00191             LDD #0
+0323 A363             (r/TestIntExpr.asm):00192             SUBD 3,S
+0325 ED63             (r/TestIntExpr.asm):00193             STD 3,S
+0327                  (r/TestIntExpr.asm):00194         L5
+0327 6D61             (r/TestIntExpr.asm):00195             TST 1,S
+0329 102A0009         (r/TestIntExpr.asm):00196             BPL L6
+032D 6060             (r/TestIntExpr.asm):00197             NEG 0,S
+032F CC0000           (r/TestIntExpr.asm):00198             LDD #0
+0332 A361             (r/TestIntExpr.asm):00199             SUBD 1,S
+0334 ED61             (r/TestIntExpr.asm):00200             STD 1,S
+0336                  (r/TestIntExpr.asm):00201         L6
+0336 A664             (r/TestIntExpr.asm):00202             LDA 4,S
+0338 E662             (r/TestIntExpr.asm):00203             LDB 2,S
+033A 3D               (r/TestIntExpr.asm):00204             MUL
+033B 3406             (r/TestIntExpr.asm):00205             PSHS D
+033D A665             (r/TestIntExpr.asm):00206             LDA 5,S
+033F E664             (r/TestIntExpr.asm):00207             LDB 4,S
+0341 3D               (r/TestIntExpr.asm):00208             MUL
+0342 EB61             (r/TestIntExpr.asm):00209             ADDB 1,S
+0344 E761             (r/TestIntExpr.asm):00210             STB 1,S
+0346 A666             (r/TestIntExpr.asm):00211             LDA 6,S
+0348 E663             (r/TestIntExpr.asm):00212             LDB 3,S
+034A 3D               (r/TestIntExpr.asm):00213             MUL
+034B EB61             (r/TestIntExpr.asm):00214             ADDB 1,S
+034D E761             (r/TestIntExpr.asm):00215             STB 1,S
+034F 6D62             (r/TestIntExpr.asm):00216             TST 2,S
+0351 102A0005         (r/TestIntExpr.asm):00217             BPL L7
+0355 CC0000           (r/TestIntExpr.asm):00218             LDD #0
+0358 A360             (r/TestIntExpr.asm):00219             SUBD 0,S
+035A                  (r/TestIntExpr.asm):00220         L7
+035A 3506             (r/TestIntExpr.asm):00221             PULS D
+035C 3265             (r/TestIntExpr.asm):00222             LEAS 5,S
+035E 3406             (r/TestIntExpr.asm):00223             PSHS D
+0360 CC2958           (r/TestIntExpr.asm):00224             LDD #10584
+0363 3406             (r/TestIntExpr.asm):00225             PSHS D
+0365 8606             (r/TestIntExpr.asm):00226             LDA #6
+0367 3402             (r/TestIntExpr.asm):00227             PSHS A
+0369 327E             (r/TestIntExpr.asm):00228             LEAS -2,S
+036B BD020E           (r/TestIntExpr.asm):00229             JSR Test_showIntResults
+036E 3267             (r/TestIntExpr.asm):00230             LEAS 7,S
+                      (r/TestIntExpr.asm):00231             ;     
+0370 EC20             (r/TestIntExpr.asm):00232             LDD 0,Y
+0372 3406             (r/TestIntExpr.asm):00233             PSHS D
+0374 CC00FC           (r/TestIntExpr.asm):00234             LDD #252
+0377 3406             (r/TestIntExpr.asm):00235             PSHS D
+0379 BDFC46           (r/TestIntExpr.asm):00236             JSR idiv16
+037C 3264             (r/TestIntExpr.asm):00237             LEAS 4,S
+037E 3406             (r/TestIntExpr.asm):00238             PSHS D
+0380 CC0006           (r/TestIntExpr.asm):00239             LDD #6
+0383 3406             (r/TestIntExpr.asm):00240             PSHS D
+0385 8607             (r/TestIntExpr.asm):00241             LDA #7
+0387 3402             (r/TestIntExpr.asm):00242             PSHS A
+0389 327E             (r/TestIntExpr.asm):00243             LEAS -2,S
+038B BD020E           (r/TestIntExpr.asm):00244             JSR Test_showIntResults
+038E 3267             (r/TestIntExpr.asm):00245             LEAS 7,S
+                      (r/TestIntExpr.asm):00246             ;     showIntResults(8, -42, -testIntGlobal);
+                      (r/TestIntExpr.asm):00247             ;     showIntResults(9, 0, !TestIntConst);
+0390 EC20             (r/TestIntExpr.asm):00248             LDD 0,Y
+0392 3406             (r/TestIntExpr.asm):00249             PSHS D
+0394 CC0000           (r/TestIntExpr.asm):00250             LDD #0
+0397 A360             (r/TestIntExpr.asm):00251             SUBD 0,S
+0399 3262             (r/TestIntExpr.asm):00252             LEAS 2,S
+039B 3406             (r/TestIntExpr.asm):00253             PSHS D
+039D 862A             (r/TestIntExpr.asm):00254             LDA #42
+039F 40               (r/TestIntExpr.asm):00255             NEGA
+03A0 1F89             (r/TestIntExpr.asm):00256             TFR A,B
+03A2 1D               (r/TestIntExpr.asm):00257             SEX
+03A3 3406             (r/TestIntExpr.asm):00258             PSHS D
+03A5 8608             (r/TestIntExpr.asm):00259             LDA #8
+03A7 3402             (r/TestIntExpr.asm):00260             PSHS A
+03A9 327E             (r/TestIntExpr.asm):00261             LEAS -2,S
+03AB BD020E           (r/TestIntExpr.asm):00262             JSR Test_showIntResults
+03AE 3267             (r/TestIntExpr.asm):00263             LEAS 7,S
+                      (r/TestIntExpr.asm):00264             ;     showIntResults(10, 0xff03, ~TestIntConst);
+03B0 86FC             (r/TestIntExpr.asm):00265             LDA #252
+03B2 10260005         (r/TestIntExpr.asm):00266             BNE L8
+03B6 8601             (r/TestIntExpr.asm):00267             LDA #1
+03B8 160001           (r/TestIntExpr.asm):00268             BRA L9
+03BB                  (r/TestIntExpr.asm):00269         L8
+03BB 4F               (r/TestIntExpr.asm):00270             CLRA
+03BC                  (r/TestIntExpr.asm):00271         L9
+03BC 1F89             (r/TestIntExpr.asm):00272             TFR A,B
+03BE 1D               (r/TestIntExpr.asm):00273             SEX
+03BF 3406             (r/TestIntExpr.asm):00274             PSHS D
+03C1 CC0000           (r/TestIntExpr.asm):00275             LDD #0
+03C4 3406             (r/TestIntExpr.asm):00276             PSHS D
+03C6 8609             (r/TestIntExpr.asm):00277             LDA #9
+03C8 3402             (r/TestIntExpr.asm):00278             PSHS A
+03CA 327E             (r/TestIntExpr.asm):00279             LEAS -2,S
+03CC BD020E           (r/TestIntExpr.asm):00280             JSR Test_showIntResults
+03CF 3267             (r/TestIntExpr.asm):00281             LEAS 7,S
+                      (r/TestIntExpr.asm):00282             ;     
+03D1 CC00FC           (r/TestIntExpr.asm):00283             LDD #252
+03D4 43               (r/TestIntExpr.asm):00284             COMA
+03D5 53               (r/TestIntExpr.asm):00285             COMB
+03D6 3406             (r/TestIntExpr.asm):00286             PSHS D
+03D8 CCFF03           (r/TestIntExpr.asm):00287             LDD #65283
+03DB 3406             (r/TestIntExpr.asm):00288             PSHS D
+03DD 860A             (r/TestIntExpr.asm):00289             LDA #10
+03DF 3402             (r/TestIntExpr.asm):00290             PSHS A
+03E1 327E             (r/TestIntExpr.asm):00291             LEAS -2,S
+03E3 BD020E           (r/TestIntExpr.asm):00292             JSR Test_showIntResults
+03E6 3267             (r/TestIntExpr.asm):00293             LEAS 7,S
+                      (r/TestIntExpr.asm):00294             ;     showIntResults(11, 0, TestIntConst < testIntGlobal);
+                      (r/TestIntExpr.asm):00295             ;     showIntResults(12, 0, TestIntConst <= testIntGlobal);
+03E8 CC00FC           (r/TestIntExpr.asm):00296             LDD #252
+03EB 10A320           (r/TestIntExpr.asm):00297             CMPD 0,Y
+03EE 102C0005         (r/TestIntExpr.asm):00298             BGE L10
+03F2 8601             (r/TestIntExpr.asm):00299             LDA #1
+03F4 160001           (r/TestIntExpr.asm):00300             BRA L11
+03F7                  (r/TestIntExpr.asm):00301         L10
+03F7 4F               (r/TestIntExpr.asm):00302             CLRA
+03F8                  (r/TestIntExpr.asm):00303         L11
+03F8 1F89             (r/TestIntExpr.asm):00304             TFR A,B
+03FA 1D               (r/TestIntExpr.asm):00305             SEX
+03FB 3406             (r/TestIntExpr.asm):00306             PSHS D
+03FD CC0000           (r/TestIntExpr.asm):00307             LDD #0
+0400 3406             (r/TestIntExpr.asm):00308             PSHS D
+0402 860B             (r/TestIntExpr.asm):00309             LDA #11
+0404 3402             (r/TestIntExpr.asm):00310             PSHS A
+0406 327E             (r/TestIntExpr.asm):00311             LEAS -2,S
+0408 BD020E           (r/TestIntExpr.asm):00312             JSR Test_showIntResults
+040B 3267             (r/TestIntExpr.asm):00313             LEAS 7,S
+                      (r/TestIntExpr.asm):00314             ;     showIntResults(13, 0, TestIntConst == testIntGlobal);
+040D CC00FC           (r/TestIntExpr.asm):00315             LDD #252
+0410 10A320           (r/TestIntExpr.asm):00316             CMPD 0,Y
+0413 102E0005         (r/TestIntExpr.asm):00317             BGT L12
+0417 8601             (r/TestIntExpr.asm):00318             LDA #1
+0419 160001           (r/TestIntExpr.asm):00319             BRA L13
+041C                  (r/TestIntExpr.asm):00320         L12
+041C 4F               (r/TestIntExpr.asm):00321             CLRA
+041D                  (r/TestIntExpr.asm):00322         L13
+041D 1F89             (r/TestIntExpr.asm):00323             TFR A,B
+041F 1D               (r/TestIntExpr.asm):00324             SEX
+0420 3406             (r/TestIntExpr.asm):00325             PSHS D
+0422 CC0000           (r/TestIntExpr.asm):00326             LDD #0
+0425 3406             (r/TestIntExpr.asm):00327             PSHS D
+0427 860C             (r/TestIntExpr.asm):00328             LDA #12
+0429 3402             (r/TestIntExpr.asm):00329             PSHS A
+042B 327E             (r/TestIntExpr.asm):00330             LEAS -2,S
+042D BD020E           (r/TestIntExpr.asm):00331             JSR Test_showIntResults
+0430 3267             (r/TestIntExpr.asm):00332             LEAS 7,S
+                      (r/TestIntExpr.asm):00333             ;     showIntResults(14, 1, TestIntConst != testIntGlobal);
+0432 CC00FC           (r/TestIntExpr.asm):00334             LDD #252
+0435 10A320           (r/TestIntExpr.asm):00335             CMPD 0,Y
+0438 10260005         (r/TestIntExpr.asm):00336             BNE L14
+043C 8601             (r/TestIntExpr.asm):00337             LDA #1
+043E 160001           (r/TestIntExpr.asm):00338             BRA L15
+0441                  (r/TestIntExpr.asm):00339         L14
+0441 4F               (r/TestIntExpr.asm):00340             CLRA
+0442                  (r/TestIntExpr.asm):00341         L15
+0442 1F89             (r/TestIntExpr.asm):00342             TFR A,B
+0444 1D               (r/TestIntExpr.asm):00343             SEX
+0445 3406             (r/TestIntExpr.asm):00344             PSHS D
+0447 CC0000           (r/TestIntExpr.asm):00345             LDD #0
+044A 3406             (r/TestIntExpr.asm):00346             PSHS D
+044C 860D             (r/TestIntExpr.asm):00347             LDA #13
+044E 3402             (r/TestIntExpr.asm):00348             PSHS A
+0450 327E             (r/TestIntExpr.asm):00349             LEAS -2,S
+0452 BD020E           (r/TestIntExpr.asm):00350             JSR Test_showIntResults
+0455 3267             (r/TestIntExpr.asm):00351             LEAS 7,S
+                      (r/TestIntExpr.asm):00352             ;     showIntResults(15, 1, TestIntConst >= testIntGlobal);
+0457 CC00FC           (r/TestIntExpr.asm):00353             LDD #252
+045A 10A320           (r/TestIntExpr.asm):00354             CMPD 0,Y
+045D 10270005         (r/TestIntExpr.asm):00355             BEQ L16
+0461 8601             (r/TestIntExpr.asm):00356             LDA #1
+0463 160001           (r/TestIntExpr.asm):00357             BRA L17
+0466                  (r/TestIntExpr.asm):00358         L16
+0466 4F               (r/TestIntExpr.asm):00359             CLRA
+0467                  (r/TestIntExpr.asm):00360         L17
+0467 1F89             (r/TestIntExpr.asm):00361             TFR A,B
+0469 1D               (r/TestIntExpr.asm):00362             SEX
+046A 3406             (r/TestIntExpr.asm):00363             PSHS D
+046C CC0001           (r/TestIntExpr.asm):00364             LDD #1
+046F 3406             (r/TestIntExpr.asm):00365             PSHS D
+0471 860E             (r/TestIntExpr.asm):00366             LDA #14
+0473 3402             (r/TestIntExpr.asm):00367             PSHS A
+0475 327E             (r/TestIntExpr.asm):00368             LEAS -2,S
+0477 BD020E           (r/TestIntExpr.asm):00369             JSR Test_showIntResults
+047A 3267             (r/TestIntExpr.asm):00370             LEAS 7,S
+                      (r/TestIntExpr.asm):00371             ;     showIntResults(16, 1, TestIntConst > testIntGlobal);
+047C CC00FC           (r/TestIntExpr.asm):00372             LDD #252
+047F 10A320           (r/TestIntExpr.asm):00373             CMPD 0,Y
+0482 102D0005         (r/TestIntExpr.asm):00374             BLT L18
+0486 8601             (r/TestIntExpr.asm):00375             LDA #1
+0488 160001           (r/TestIntExpr.asm):00376             BRA L19
+048B                  (r/TestIntExpr.asm):00377         L18
+048B 4F               (r/TestIntExpr.asm):00378             CLRA
+048C                  (r/TestIntExpr.asm):00379         L19
+048C 1F89             (r/TestIntExpr.asm):00380             TFR A,B
+048E 1D               (r/TestIntExpr.asm):00381             SEX
+048F 3406             (r/TestIntExpr.asm):00382             PSHS D
+0491 CC0001           (r/TestIntExpr.asm):00383             LDD #1
+0494 3406             (r/TestIntExpr.asm):00384             PSHS D
+0496 860F             (r/TestIntExpr.asm):00385             LDA #15
+0498 3402             (r/TestIntExpr.asm):00386             PSHS A
+049A 327E             (r/TestIntExpr.asm):00387             LEAS -2,S
+049C BD020E           (r/TestIntExpr.asm):00388             JSR Test_showIntResults
+049F 3267             (r/TestIntExpr.asm):00389             LEAS 7,S
+                      (r/TestIntExpr.asm):00390             ;     
+04A1 CC00FC           (r/TestIntExpr.asm):00391             LDD #252
+04A4 10A320           (r/TestIntExpr.asm):00392             CMPD 0,Y
+04A7 102F0005         (r/TestIntExpr.asm):00393             BLE L20
+04AB 8601             (r/TestIntExpr.asm):00394             LDA #1
+04AD 160001           (r/TestIntExpr.asm):00395             BRA L21
+04B0                  (r/TestIntExpr.asm):00396         L20
+04B0 4F               (r/TestIntExpr.asm):00397             CLRA
+04B1                  (r/TestIntExpr.asm):00398         L21
+04B1 1F89             (r/TestIntExpr.asm):00399             TFR A,B
+04B3 1D               (r/TestIntExpr.asm):00400             SEX
+04B4 3406             (r/TestIntExpr.asm):00401             PSHS D
+04B6 CC0001           (r/TestIntExpr.asm):00402             LDD #1
+04B9 3406             (r/TestIntExpr.asm):00403             PSHS D
+04BB 8610             (r/TestIntExpr.asm):00404             LDA #16
+04BD 3402             (r/TestIntExpr.asm):00405             PSHS A
+04BF 327E             (r/TestIntExpr.asm):00406             LEAS -2,S
+04C1 BD020E           (r/TestIntExpr.asm):00407             JSR Test_showIntResults
+04C4 3267             (r/TestIntExpr.asm):00408             LEAS 7,S
+                      (r/TestIntExpr.asm):00409             ;     int8_t i = 20;
+                      (r/TestIntExpr.asm):00410             ;     int8_t j = i++;
+04C6 8614             (r/TestIntExpr.asm):00411             LDA #20
+04C8 A75D             (r/TestIntExpr.asm):00412             STA -3,U
+                      (r/TestIntExpr.asm):00413             ;     j = ++i;
+04CA 305D             (r/TestIntExpr.asm):00414             LEAX -3,U
+04CC A600             (r/TestIntExpr.asm):00415             LDA 0,X
+04CE 3402             (r/TestIntExpr.asm):00416             PSHS A
+04D0 8B01             (r/TestIntExpr.asm):00417             ADDA #1
+04D2 A700             (r/TestIntExpr.asm):00418             STA 0,X
+04D4 3502             (r/TestIntExpr.asm):00419             PULS A
+04D6 A75C             (r/TestIntExpr.asm):00420             STA -4,U
+                      (r/TestIntExpr.asm):00421             ; 
+04D8 305D             (r/TestIntExpr.asm):00422             LEAX -3,U
+04DA A600             (r/TestIntExpr.asm):00423             LDA 0,X
+04DC 8B01             (r/TestIntExpr.asm):00424             ADDA #1
+04DE A700             (r/TestIntExpr.asm):00425             STA 0,X
+04E0 A75C             (r/TestIntExpr.asm):00426             STA -4,U
+                      (r/TestIntExpr.asm):00427             ;     showIntResults(17, 22, i);
+                      (r/TestIntExpr.asm):00428             ;     j = i--;
+04E2 A65D             (r/TestIntExpr.asm):00429             LDA -3,U
+04E4 1F89             (r/TestIntExpr.asm):00430             TFR A,B
+04E6 1D               (r/TestIntExpr.asm):00431             SEX
+04E7 3406             (r/TestIntExpr.asm):00432             PSHS D
+04E9 CC0016           (r/TestIntExpr.asm):00433             LDD #22
+04EC 3406             (r/TestIntExpr.asm):00434             PSHS D
+04EE 8611             (r/TestIntExpr.asm):00435             LDA #17
+04F0 3402             (r/TestIntExpr.asm):00436             PSHS A
+04F2 327E             (r/TestIntExpr.asm):00437             LEAS -2,S
+04F4 BD020E           (r/TestIntExpr.asm):00438             JSR Test_showIntResults
+04F7 3267             (r/TestIntExpr.asm):00439             LEAS 7,S
+                      (r/TestIntExpr.asm):00440             ;     j = --i;
+04F9 305D             (r/TestIntExpr.asm):00441             LEAX -3,U
+04FB A600             (r/TestIntExpr.asm):00442             LDA 0,X
+04FD 3402             (r/TestIntExpr.asm):00443             PSHS A
+04FF 8BFF             (r/TestIntExpr.asm):00444             ADDA #-1
+0501 A700             (r/TestIntExpr.asm):00445             STA 0,X
+0503 3502             (r/TestIntExpr.asm):00446             PULS A
+0505 A75C             (r/TestIntExpr.asm):00447             STA -4,U
+                      (r/TestIntExpr.asm):00448             ;     showIntResults(18, 20, i);
+0507 305D             (r/TestIntExpr.asm):00449             LEAX -3,U
+0509 A600             (r/TestIntExpr.asm):00450             LDA 0,X
+050B 8BFF             (r/TestIntExpr.asm):00451             ADDA #-1
+050D A700             (r/TestIntExpr.asm):00452             STA 0,X
+050F A75C             (r/TestIntExpr.asm):00453             STA -4,U
+                      (r/TestIntExpr.asm):00454             ;     showIntResults(19, 20, j);
+0511 A65D             (r/TestIntExpr.asm):00455             LDA -3,U
+0513 1F89             (r/TestIntExpr.asm):00456             TFR A,B
+0515 1D               (r/TestIntExpr.asm):00457             SEX
+0516 3406             (r/TestIntExpr.asm):00458             PSHS D
+0518 CC0014           (r/TestIntExpr.asm):00459             LDD #20
+051B 3406             (r/TestIntExpr.asm):00460             PSHS D
+051D 8612             (r/TestIntExpr.asm):00461             LDA #18
+051F 3402             (r/TestIntExpr.asm):00462             PSHS A
+0521 327E             (r/TestIntExpr.asm):00463             LEAS -2,S
+0523 BD020E           (r/TestIntExpr.asm):00464             JSR Test_showIntResults
+0526 3267             (r/TestIntExpr.asm):00465             LEAS 7,S
+                      (r/TestIntExpr.asm):00466             ; 
+0528 A65C             (r/TestIntExpr.asm):00467             LDA -4,U
+052A 1F89             (r/TestIntExpr.asm):00468             TFR A,B
+052C 1D               (r/TestIntExpr.asm):00469             SEX
+052D 3406             (r/TestIntExpr.asm):00470             PSHS D
+052F CC0014           (r/TestIntExpr.asm):00471             LDD #20
+0532 3406             (r/TestIntExpr.asm):00472             PSHS D
+0534 8613             (r/TestIntExpr.asm):00473             LDA #19
+0536 3402             (r/TestIntExpr.asm):00474             PSHS A
+0538 327E             (r/TestIntExpr.asm):00475             LEAS -2,S
+053A BD020E           (r/TestIntExpr.asm):00476             JSR Test_showIntResults
+053D 3267             (r/TestIntExpr.asm):00477             LEAS 7,S
+                      (r/TestIntExpr.asm):00478             ;     core.printf("\n  op assign\n");
+                      (r/TestIntExpr.asm):00479             ;     i += 1;
+053F CC0782           (r/TestIntExpr.asm):00480             LDD #String+$61
+0542 3406             (r/TestIntExpr.asm):00481             PSHS D
+0544 BDFC20           (r/TestIntExpr.asm):00482             JSR printf
+                      (r/TestIntExpr.asm):00483             ;     showIntResults(20, 21, i);
+0547 A65D             (r/TestIntExpr.asm):00484             LDA -3,U
+0549 8B01             (r/TestIntExpr.asm):00485             ADDA #1
+054B A75D             (r/TestIntExpr.asm):00486             STA -3,U
+                      (r/TestIntExpr.asm):00487             ;     i -= 1;
+054D A65D             (r/TestIntExpr.asm):00488             LDA -3,U
+054F 1F89             (r/TestIntExpr.asm):00489             TFR A,B
+0551 1D               (r/TestIntExpr.asm):00490             SEX
+0552 3406             (r/TestIntExpr.asm):00491             PSHS D
+0554 CC0015           (r/TestIntExpr.asm):00492             LDD #21
+0557 3406             (r/TestIntExpr.asm):00493             PSHS D
+0559 8614             (r/TestIntExpr.asm):00494             LDA #20
+055B 3402             (r/TestIntExpr.asm):00495             PSHS A
+055D 327E             (r/TestIntExpr.asm):00496             LEAS -2,S
+055F BD020E           (r/TestIntExpr.asm):00497             JSR Test_showIntResults
+0562 3267             (r/TestIntExpr.asm):00498             LEAS 7,S
+                      (r/TestIntExpr.asm):00499             ;     showIntResults(21, 20, i);
+0564 A65D             (r/TestIntExpr.asm):00500             LDA -3,U
+0566 8001             (r/TestIntExpr.asm):00501             SUBA #1
+0568 A75D             (r/TestIntExpr.asm):00502             STA -3,U
+                      (r/TestIntExpr.asm):00503             ;     i *= 5;
+056A A65D             (r/TestIntExpr.asm):00504             LDA -3,U
+056C 1F89             (r/TestIntExpr.asm):00505             TFR A,B
+056E 1D               (r/TestIntExpr.asm):00506             SEX
+056F 3406             (r/TestIntExpr.asm):00507             PSHS D
+0571 CC0014           (r/TestIntExpr.asm):00508             LDD #20
+0574 3406             (r/TestIntExpr.asm):00509             PSHS D
+0576 8615             (r/TestIntExpr.asm):00510             LDA #21
+0578 3402             (r/TestIntExpr.asm):00511             PSHS A
+057A 327E             (r/TestIntExpr.asm):00512             LEAS -2,S
+057C BD020E           (r/TestIntExpr.asm):00513             JSR Test_showIntResults
+057F 3267             (r/TestIntExpr.asm):00514             LEAS 7,S
+                      (r/TestIntExpr.asm):00515             ;     showIntResults(22, 100, i);
+0581 6FE2             (r/TestIntExpr.asm):00516             CLR ,-S
+0583 A65D             (r/TestIntExpr.asm):00517             LDA -3,U
+0585 102A0003         (r/TestIntExpr.asm):00518             BPL L22
+0589 6060             (r/TestIntExpr.asm):00519             NEG 0,S
+058B 40               (r/TestIntExpr.asm):00520             NEGA
+058C                  (r/TestIntExpr.asm):00521         L22
+058C 1F89             (r/TestIntExpr.asm):00522             TFR A,B
+058E 8605             (r/TestIntExpr.asm):00523             LDA #5
+0590 102A0003         (r/TestIntExpr.asm):00524             BPL L23
+0594 6060             (r/TestIntExpr.asm):00525             NEG 0,S
+0596 40               (r/TestIntExpr.asm):00526             NEGA
+0597                  (r/TestIntExpr.asm):00527         L23
+0597 3D               (r/TestIntExpr.asm):00528             MUL
+0598 6D60             (r/TestIntExpr.asm):00529             TST 0,S
+059A 102A0001         (r/TestIntExpr.asm):00530             BPL L24
+059E 50               (r/TestIntExpr.asm):00531             NEGB
+059F                  (r/TestIntExpr.asm):00532         L24
+059F 3261             (r/TestIntExpr.asm):00533             LEAS 1,S
+05A1 1F98             (r/TestIntExpr.asm):00534             TFR B,A
+05A3 A75D             (r/TestIntExpr.asm):00535             STA -3,U
+                      (r/TestIntExpr.asm):00536             ;     i /= 5;
+05A5 A65D             (r/TestIntExpr.asm):00537             LDA -3,U
+05A7 1F89             (r/TestIntExpr.asm):00538             TFR A,B
+05A9 1D               (r/TestIntExpr.asm):00539             SEX
+05AA 3406             (r/TestIntExpr.asm):00540             PSHS D
+05AC CC0064           (r/TestIntExpr.asm):00541             LDD #100
+05AF 3406             (r/TestIntExpr.asm):00542             PSHS D
+05B1 8616             (r/TestIntExpr.asm):00543             LDA #22
+05B3 3402             (r/TestIntExpr.asm):00544             PSHS A
+05B5 327E             (r/TestIntExpr.asm):00545             LEAS -2,S
+05B7 BD020E           (r/TestIntExpr.asm):00546             JSR Test_showIntResults
+05BA 3267             (r/TestIntExpr.asm):00547             LEAS 7,S
+                      (r/TestIntExpr.asm):00548             ;     showIntResults(23, 20, i);
+05BC 8605             (r/TestIntExpr.asm):00549             LDA #5
+05BE 3402             (r/TestIntExpr.asm):00550             PSHS A
+05C0 A65D             (r/TestIntExpr.asm):00551             LDA -3,U
+05C2 3402             (r/TestIntExpr.asm):00552             PSHS A
+05C4 BDFC44           (r/TestIntExpr.asm):00553             JSR idiv8
+05C7 3264             (r/TestIntExpr.asm):00554             LEAS 4,S
+05C9 A75D             (r/TestIntExpr.asm):00555             STA -3,U
+                      (r/TestIntExpr.asm):00556             ;     
+05CB A65D             (r/TestIntExpr.asm):00557             LDA -3,U
+05CD 1F89             (r/TestIntExpr.asm):00558             TFR A,B
+05CF 1D               (r/TestIntExpr.asm):00559             SEX
+05D0 3406             (r/TestIntExpr.asm):00560             PSHS D
+05D2 CC0014           (r/TestIntExpr.asm):00561             LDD #20
+05D5 3406             (r/TestIntExpr.asm):00562             PSHS D
+05D7 8617             (r/TestIntExpr.asm):00563             LDA #23
+05D9 3402             (r/TestIntExpr.asm):00564             PSHS A
+05DB 327E             (r/TestIntExpr.asm):00565             LEAS -2,S
+05DD BD020E           (r/TestIntExpr.asm):00566             JSR Test_showIntResults
+05E0 3267             (r/TestIntExpr.asm):00567             LEAS 7,S
+                      (r/TestIntExpr.asm):00568             ;     core.printf("\n  Int exprs\n");
+                      (r/TestIntExpr.asm):00569             ;     showIntResults(24, 2984, int16_t(testIntTable[1]) + int16_t(TestSizeDef) * TestIntConst - testIntGlobal);
+05E2 CC0790           (r/TestIntExpr.asm):00570             LDD #String+$6f
+05E5 3406             (r/TestIntExpr.asm):00571             PSHS D
+05E7 BDFC20           (r/TestIntExpr.asm):00572             JSR printf
+                      (r/TestIntExpr.asm):00573             ;     showIntResults(25, 2940, int16_t(testIntTable[1] + TestSizeDef) * (TestIntConst - testIntGlobal));
+05EA EC20             (r/TestIntExpr.asm):00574             LDD 0,Y
+05EC 3406             (r/TestIntExpr.asm):00575             PSHS D
+05EE CC00FC           (r/TestIntExpr.asm):00576             LDD #252
+05F1 3406             (r/TestIntExpr.asm):00577             PSHS D
+05F3 860C             (r/TestIntExpr.asm):00578             LDA #12
+05F5 1F89             (r/TestIntExpr.asm):00579             TFR A,B
+05F7 1D               (r/TestIntExpr.asm):00580             SEX
+05F8 3406             (r/TestIntExpr.asm):00581             PSHS D
+05FA 6FE2             (r/TestIntExpr.asm):00582             CLR ,-S
+05FC 6D63             (r/TestIntExpr.asm):00583             TST 3,S
+05FE 102A0009         (r/TestIntExpr.asm):00584             BPL L25
+0602 6060             (r/TestIntExpr.asm):00585             NEG 0,S
+0604 CC0000           (r/TestIntExpr.asm):00586             LDD #0
+0607 A363             (r/TestIntExpr.asm):00587             SUBD 3,S
+0609 ED63             (r/TestIntExpr.asm):00588             STD 3,S
+060B                  (r/TestIntExpr.asm):00589         L25
+060B 6D61             (r/TestIntExpr.asm):00590             TST 1,S
+060D 102A0009         (r/TestIntExpr.asm):00591             BPL L26
+0611 6060             (r/TestIntExpr.asm):00592             NEG 0,S
+0613 CC0000           (r/TestIntExpr.asm):00593             LDD #0
+0616 A361             (r/TestIntExpr.asm):00594             SUBD 1,S
+0618 ED61             (r/TestIntExpr.asm):00595             STD 1,S
+061A                  (r/TestIntExpr.asm):00596         L26
+061A A664             (r/TestIntExpr.asm):00597             LDA 4,S
+061C E662             (r/TestIntExpr.asm):00598             LDB 2,S
+061E 3D               (r/TestIntExpr.asm):00599             MUL
+061F 3406             (r/TestIntExpr.asm):00600             PSHS D
+0621 A665             (r/TestIntExpr.asm):00601             LDA 5,S
+0623 E664             (r/TestIntExpr.asm):00602             LDB 4,S
+0625 3D               (r/TestIntExpr.asm):00603             MUL
+0626 EB61             (r/TestIntExpr.asm):00604             ADDB 1,S
+0628 E761             (r/TestIntExpr.asm):00605             STB 1,S
+062A A666             (r/TestIntExpr.asm):00606             LDA 6,S
+062C E663             (r/TestIntExpr.asm):00607             LDB 3,S
+062E 3D               (r/TestIntExpr.asm):00608             MUL
+062F EB61             (r/TestIntExpr.asm):00609             ADDB 1,S
+0631 E761             (r/TestIntExpr.asm):00610             STB 1,S
+0633 6D62             (r/TestIntExpr.asm):00611             TST 2,S
+0635 102A0005         (r/TestIntExpr.asm):00612             BPL L27
+0639 CC0000           (r/TestIntExpr.asm):00613             LDD #0
+063C A360             (r/TestIntExpr.asm):00614             SUBD 0,S
+063E                  (r/TestIntExpr.asm):00615         L27
+063E 3506             (r/TestIntExpr.asm):00616             PULS D
+0640 3265             (r/TestIntExpr.asm):00617             LEAS 5,S
+0642 8E071D           (r/TestIntExpr.asm):00618             LDX #Constants+0
+0645 3406             (r/TestIntExpr.asm):00619             PSHS D
+0647 8601             (r/TestIntExpr.asm):00620             LDA #1
+0649 C601             (r/TestIntExpr.asm):00621             LDB #1
+064B 3D               (r/TestIntExpr.asm):00622             MUL
+064C 308B             (r/TestIntExpr.asm):00623             LEAX D,X
+064E A600             (r/TestIntExpr.asm):00624             LDA 0,X
+0650 1F89             (r/TestIntExpr.asm):00625             TFR A,B
+0652 1D               (r/TestIntExpr.asm):00626             SEX
+0653 E360             (r/TestIntExpr.asm):00627             ADDD 0,S
+0655 3262             (r/TestIntExpr.asm):00628             LEAS 2,S
+0657 A360             (r/TestIntExpr.asm):00629             SUBD 0,S
+0659 3262             (r/TestIntExpr.asm):00630             LEAS 2,S
+065B 3406             (r/TestIntExpr.asm):00631             PSHS D
+065D CC0BA8           (r/TestIntExpr.asm):00632             LDD #2984
+0660 3406             (r/TestIntExpr.asm):00633             PSHS D
+0662 8618             (r/TestIntExpr.asm):00634             LDA #24
+0664 3402             (r/TestIntExpr.asm):00635             PSHS A
+0666 327E             (r/TestIntExpr.asm):00636             LEAS -2,S
+0668 BD020E           (r/TestIntExpr.asm):00637             JSR Test_showIntResults
+066B 3267             (r/TestIntExpr.asm):00638             LEAS 7,S
+                      (r/TestIntExpr.asm):00639             ; 
+066D CC00FC           (r/TestIntExpr.asm):00640             LDD #252
+0670 A320             (r/TestIntExpr.asm):00641             SUBD 0,Y
+0672 3406             (r/TestIntExpr.asm):00642             PSHS D
+0674 860C             (r/TestIntExpr.asm):00643             LDA #12
+0676 8E071D           (r/TestIntExpr.asm):00644             LDX #Constants+0
+0679 3402             (r/TestIntExpr.asm):00645             PSHS A
+067B 8601             (r/TestIntExpr.asm):00646             LDA #1
+067D C601             (r/TestIntExpr.asm):00647             LDB #1
+067F 3D               (r/TestIntExpr.asm):00648             MUL
+0680 308B             (r/TestIntExpr.asm):00649             LEAX D,X
+0682 A600             (r/TestIntExpr.asm):00650             LDA 0,X
+0684 AB60             (r/TestIntExpr.asm):00651             ADDA 0,S
+0686 3261             (r/TestIntExpr.asm):00652             LEAS 1,S
+0688 1F89             (r/TestIntExpr.asm):00653             TFR A,B
+068A 1D               (r/TestIntExpr.asm):00654             SEX
+068B 3406             (r/TestIntExpr.asm):00655             PSHS D
+068D 6FE2             (r/TestIntExpr.asm):00656             CLR ,-S
+068F 6D63             (r/TestIntExpr.asm):00657             TST 3,S
+0691 102A0009         (r/TestIntExpr.asm):00658             BPL L28
+0695 6060             (r/TestIntExpr.asm):00659             NEG 0,S
+0697 CC0000           (r/TestIntExpr.asm):00660             LDD #0
+069A A363             (r/TestIntExpr.asm):00661             SUBD 3,S
+069C ED63             (r/TestIntExpr.asm):00662             STD 3,S
+069E                  (r/TestIntExpr.asm):00663         L28
+069E 6D61             (r/TestIntExpr.asm):00664             TST 1,S
+06A0 102A0009         (r/TestIntExpr.asm):00665             BPL L29
+06A4 6060             (r/TestIntExpr.asm):00666             NEG 0,S
+06A6 CC0000           (r/TestIntExpr.asm):00667             LDD #0
+06A9 A361             (r/TestIntExpr.asm):00668             SUBD 1,S
+06AB ED61             (r/TestIntExpr.asm):00669             STD 1,S
+06AD                  (r/TestIntExpr.asm):00670         L29
+06AD A664             (r/TestIntExpr.asm):00671             LDA 4,S
+06AF E662             (r/TestIntExpr.asm):00672             LDB 2,S
+06B1 3D               (r/TestIntExpr.asm):00673             MUL
+06B2 3406             (r/TestIntExpr.asm):00674             PSHS D
+06B4 A665             (r/TestIntExpr.asm):00675             LDA 5,S
+06B6 E664             (r/TestIntExpr.asm):00676             LDB 4,S
+06B8 3D               (r/TestIntExpr.asm):00677             MUL
+06B9 EB61             (r/TestIntExpr.asm):00678             ADDB 1,S
+06BB E761             (r/TestIntExpr.asm):00679             STB 1,S
+06BD A666             (r/TestIntExpr.asm):00680             LDA 6,S
+06BF E663             (r/TestIntExpr.asm):00681             LDB 3,S
+06C1 3D               (r/TestIntExpr.asm):00682             MUL
+06C2 EB61             (r/TestIntExpr.asm):00683             ADDB 1,S
+06C4 E761             (r/TestIntExpr.asm):00684             STB 1,S
+06C6 6D62             (r/TestIntExpr.asm):00685             TST 2,S
+06C8 102A0005         (r/TestIntExpr.asm):00686             BPL L30
+06CC CC0000           (r/TestIntExpr.asm):00687             LDD #0
+06CF A360             (r/TestIntExpr.asm):00688             SUBD 0,S
+06D1                  (r/TestIntExpr.asm):00689         L30
+06D1 3506             (r/TestIntExpr.asm):00690             PULS D
+06D3 3265             (r/TestIntExpr.asm):00691             LEAS 5,S
+06D5 3406             (r/TestIntExpr.asm):00692             PSHS D
+06D7 CC0B7C           (r/TestIntExpr.asm):00693             LDD #2940
+06DA 3406             (r/TestIntExpr.asm):00694             PSHS D
+06DC 8619             (r/TestIntExpr.asm):00695             LDA #25
+06DE 3402             (r/TestIntExpr.asm):00696             PSHS A
+06E0 327E             (r/TestIntExpr.asm):00697             LEAS -2,S
+06E2 BD020E           (r/TestIntExpr.asm):00698             JSR Test_showIntResults
+06E5 3267             (r/TestIntExpr.asm):00699             LEAS 7,S
+                      (r/TestIntExpr.asm):00700             ;     core.printf("\nDone.%40s%s\n\n", " ", errors ? "FAILED" : "Passed");
+                      (r/TestIntExpr.asm):00701             ;     }
+06E7 A622             (r/TestIntExpr.asm):00702             LDA 2,Y
+06E9 10270006         (r/TestIntExpr.asm):00703             BEQ L31
+06ED CC079E           (r/TestIntExpr.asm):00704             LDD #String+$7d
+06F0 160003           (r/TestIntExpr.asm):00705             BRA L32
+06F3                  (r/TestIntExpr.asm):00706         L31
+06F3 CC07A5           (r/TestIntExpr.asm):00707             LDD #String+$84
+06F6                  (r/TestIntExpr.asm):00708         L32
+06F6 3406             (r/TestIntExpr.asm):00709             PSHS D
+06F8 CC07AC           (r/TestIntExpr.asm):00710             LDD #String+$8b
+06FB 3406             (r/TestIntExpr.asm):00711             PSHS D
+06FD CC07AE           (r/TestIntExpr.asm):00712             LDD #String+$8d
+0700 3406             (r/TestIntExpr.asm):00713             PSHS D
+0702 BDFC20           (r/TestIntExpr.asm):00714             JSR printf
+0705                  (r/TestIntExpr.asm):00715         L33
+0705 305E             (r/TestIntExpr.asm):00716             LEAX -2,U
+0707 EC00             (r/TestIntExpr.asm):00717             LDD 0,X
+0709 C30001           (r/TestIntExpr.asm):00718             ADDD #1
+070C ED00             (r/TestIntExpr.asm):00719             STD 0,X
+070E 16FB58           (r/TestIntExpr.asm):00720             BRA L3
+0711                  (r/TestIntExpr.asm):00721         L4
+                      (r/TestIntExpr.asm):00722             ;     return errors;
+                      (r/TestIntExpr.asm):00723             ; }
+0711 3406             (r/TestIntExpr.asm):00724             PSHS D
+0713 A622             (r/TestIntExpr.asm):00725             LDA 2,Y
+0715 1F89             (r/TestIntExpr.asm):00726             TFR A,B
+0717 1D               (r/TestIntExpr.asm):00727             SEX
+0718 1F34             (r/TestIntExpr.asm):00728             TFR U,S
+071A 3540             (r/TestIntExpr.asm):00729             PULS U
+071C 39               (r/TestIntExpr.asm):00730             RTS
+                      (r/TestIntExpr.asm):00731         
+071D                  (r/TestIntExpr.asm):00732         Constants
+071D 01020307         (r/TestIntExpr.asm):00733             FCB $01,$02,$03,$07
+                      (r/TestIntExpr.asm):00734         
+0721                  (r/TestIntExpr.asm):00735         String
+0721 20               (r/TestIntExpr.asm):00736             FCC " "
+0722 00               (r/TestIntExpr.asm):00737             FCB $00
+0723 253130732D3E2025 (r/TestIntExpr.asm):00738             FCC "%10s-> %2hhi: "
      326868693A20
-06E1 00               (r/TestIntExpr.asm):00722             FCB $00
-06E2 2020202020464149 (r/TestIntExpr.asm):00723             FCC "     FAIL: exp %i, got %i"
+0731 00               (r/TestIntExpr.asm):00739             FCB $00
+0732 2020202020464149 (r/TestIntExpr.asm):00740             FCC "     FAIL: exp %i, got %i"
      4C3A206578702025
      692C20676F742025
      69
-06FB 0A               (r/TestIntExpr.asm):00724             FCB $0a
-06FC 00               (r/TestIntExpr.asm):00725             FCB $00
-06FD 2020202020506173 (r/TestIntExpr.asm):00726             FCC "     Pass"
+074B 0A               (r/TestIntExpr.asm):00741             FCB $0a
+074C 00               (r/TestIntExpr.asm):00742             FCB $00
+074D 2020202020506173 (r/TestIntExpr.asm):00743             FCC "     Pass"
      73
-0706 0A               (r/TestIntExpr.asm):00727             FCB $0a
-0707 00               (r/TestIntExpr.asm):00728             FCB $00
-0708 0A               (r/TestIntExpr.asm):00729             FCB $0a
-0709 5465737420496E74 (r/TestIntExpr.asm):00730             FCC "Test Int Exprs"
+0756 0A               (r/TestIntExpr.asm):00744             FCB $0a
+0757 00               (r/TestIntExpr.asm):00745             FCB $00
+0758 0A               (r/TestIntExpr.asm):00746             FCB $0a
+0759 5465737420496E74 (r/TestIntExpr.asm):00747             FCC "Test Int Exprs"
      204578707273
-0717 0A               (r/TestIntExpr.asm):00731             FCB $0a
-0718 00               (r/TestIntExpr.asm):00732             FCB $00
-0719 0A               (r/TestIntExpr.asm):00733             FCB $0a
-071A 2020496E74207661 (r/TestIntExpr.asm):00734             FCC "  Int vals"
+0767 0A               (r/TestIntExpr.asm):00748             FCB $0a
+0768 00               (r/TestIntExpr.asm):00749             FCB $00
+0769 0A               (r/TestIntExpr.asm):00750             FCB $0a
+076A 2020496E74207661 (r/TestIntExpr.asm):00751             FCC "  Int vals"
      6C73
-0724 0A               (r/TestIntExpr.asm):00735             FCB $0a
-0725 00               (r/TestIntExpr.asm):00736             FCB $00
-0726 0A               (r/TestIntExpr.asm):00737             FCB $0a
-0727 2020496E74206F70 (r/TestIntExpr.asm):00738             FCC "  Int ops"
+0774 0A               (r/TestIntExpr.asm):00752             FCB $0a
+0775 00               (r/TestIntExpr.asm):00753             FCB $00
+0776 0A               (r/TestIntExpr.asm):00754             FCB $0a
+0777 2020496E74206F70 (r/TestIntExpr.asm):00755             FCC "  Int ops"
      73
-0730 0A               (r/TestIntExpr.asm):00739             FCB $0a
-0731 00               (r/TestIntExpr.asm):00740             FCB $00
-0732 0A               (r/TestIntExpr.asm):00741             FCB $0a
-0733 20206F7020617373 (r/TestIntExpr.asm):00742             FCC "  op assign"
+0780 0A               (r/TestIntExpr.asm):00756             FCB $0a
+0781 00               (r/TestIntExpr.asm):00757             FCB $00
+0782 0A               (r/TestIntExpr.asm):00758             FCB $0a
+0783 20206F7020617373 (r/TestIntExpr.asm):00759             FCC "  op assign"
      69676E
-073E 0A               (r/TestIntExpr.asm):00743             FCB $0a
-073F 00               (r/TestIntExpr.asm):00744             FCB $00
-0740 0A               (r/TestIntExpr.asm):00745             FCB $0a
-0741 2020496E74206578 (r/TestIntExpr.asm):00746             FCC "  Int exprs"
+078E 0A               (r/TestIntExpr.asm):00760             FCB $0a
+078F 00               (r/TestIntExpr.asm):00761             FCB $00
+0790 0A               (r/TestIntExpr.asm):00762             FCB $0a
+0791 2020496E74206578 (r/TestIntExpr.asm):00763             FCC "  Int exprs"
      707273
-074C 0A               (r/TestIntExpr.asm):00747             FCB $0a
-074D 00               (r/TestIntExpr.asm):00748             FCB $00
-074E 4641494C4544     (r/TestIntExpr.asm):00749             FCC "FAILED"
-0754 00               (r/TestIntExpr.asm):00750             FCB $00
-0755 506173736564     (r/TestIntExpr.asm):00751             FCC "Passed"
-075B 00               (r/TestIntExpr.asm):00752             FCB $00
-075C 20               (r/TestIntExpr.asm):00753             FCC " "
-075D 00               (r/TestIntExpr.asm):00754             FCB $00
-075E 0A               (r/TestIntExpr.asm):00755             FCB $0a
-075F 446F6E652E253430 (r/TestIntExpr.asm):00756             FCC "Done.%40s%s"
+079C 0A               (r/TestIntExpr.asm):00764             FCB $0a
+079D 00               (r/TestIntExpr.asm):00765             FCB $00
+079E 4641494C4544     (r/TestIntExpr.asm):00766             FCC "FAILED"
+07A4 00               (r/TestIntExpr.asm):00767             FCB $00
+07A5 506173736564     (r/TestIntExpr.asm):00768             FCC "Passed"
+07AB 00               (r/TestIntExpr.asm):00769             FCB $00
+07AC 20               (r/TestIntExpr.asm):00770             FCC " "
+07AD 00               (r/TestIntExpr.asm):00771             FCB $00
+07AE 0A               (r/TestIntExpr.asm):00772             FCB $0a
+07AF 446F6E652E253430 (r/TestIntExpr.asm):00773             FCC "Done.%40s%s"
      732573
-076A 0A               (r/TestIntExpr.asm):00757             FCB $0a
-076B 0A               (r/TestIntExpr.asm):00758             FCB $0a
-076C 00               (r/TestIntExpr.asm):00759             FCB $00
-                      (r/TestIntExpr.asm):00760         
-                      (r/TestIntExpr.asm):00761         
-                      (r/TestIntExpr.asm):00762             end $200
+07BA 0A               (r/TestIntExpr.asm):00774             FCB $0a
+07BB 0A               (r/TestIntExpr.asm):00775             FCB $0a
+07BC 00               (r/TestIntExpr.asm):00776             FCB $00
+                      (r/TestIntExpr.asm):00777         
+                      (r/TestIntExpr.asm):00778         
+                      (r/TestIntExpr.asm):00779             end $200
