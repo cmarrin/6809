@@ -341,6 +341,17 @@ uint16_t Emulator::loadEnd()
     return sRecInfo.startAddr();
 }
 
+#ifdef COMPUTE_CYCLES
+static inline uint8_t countBits(uint8_t v)
+{
+    uint8_t b;
+    for (b = 0; v; b++) {
+        v &= v - 1;
+    }
+    return b;
+}
+#endif
+
 bool Emulator::execute(RunState runState)
 {
     uint32_t instructionsToExecute = InstructionsToExecutePerContinue;
@@ -495,6 +506,9 @@ bool Emulator::execute(RunState runState)
             case Op::Page3:
                 // We never want to leave execution after a Page2 or Page3.
                 // Do a continue to skip leave test.
+#ifdef COMPUTE_CYCLES
+                _cycles += 1;
+#endif
                 _prevOp = op;
                 continue;
 
@@ -703,6 +717,9 @@ bool Emulator::execute(RunState runState)
                 break;
             case Op::PSH:
             case Op::PUL: {
+#ifdef COMPUTE_CYCLES
+                _cycles += countBits(_right);
+#endif
                 // bit pattern to push or pull are in _right
                 uint16_t& stack = (opcode->reg == Reg::U) ? _u : _s;
                 if (opcode->op == Op::PSH) {
