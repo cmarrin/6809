@@ -20,7 +20,7 @@
 
 #include "srec.h"
 
-//#define COMPUTE_CYCLES
+#define COMPUTE_CYCLES
 #define TRACE
 
 #ifdef TRACE
@@ -144,7 +144,16 @@ struct Opcode
     Left left : 3;
     Right right : 3;
     Adr adr : 4;
+#ifdef COMPUTE_CYCLES
+    uint8_t cycles : 5;
+#endif
 };
+
+#ifdef COMPUTE_CYCLES
+#define CY(t) t
+#else
+#define CY(t)
+#endif
 
 struct CC
 {
@@ -287,6 +296,9 @@ public:
 
     Error error() const { return _error; }
     void resetError() { _error = Error::None; }
+
+    uint32_t cycles() const { return _cycles; }
+    void clearCycles() { _cycles = 0; }
     
     uint16_t getReg(Reg reg) const
     {
@@ -514,6 +526,8 @@ public:
     uint16_t _traceBuffer[TraceBufferSize];
     uint32_t _traceBufferIndex = 0;
     #endif
+    
+    uint32_t _cycles;
 };
 
 }

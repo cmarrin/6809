@@ -448,6 +448,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             printF("\tregs    - show all regs\n");
             printF("\treg r   - show reg r\n");
             printF("\treg r v - set reg r to v\n");
+            printF("\tcycles  - show cycles since start of run\n");
 
             return true;
         }
@@ -483,6 +484,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         }
         
         // run
+        emulator().clearCycles();
         leaveMonitor();
         printF("Running at address $%04x\n", _startAddr);
         emulator().setReg(Reg::PC, _startAddr);
@@ -758,6 +760,13 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return true;
     }
 
+    // show cycles
+    if(cmdElements[0] == "cycles") {
+        uint32_t cycles = emulator().cycles();
+        printF("%d cycles since start of run\n", cycles);
+        return true;
+    }
+    
     if (_runState != RunState::Cmd) {
         return cmdElements[1].empty() && cmdElements[2].empty();
     }
