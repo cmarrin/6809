@@ -235,7 +235,7 @@ bool BOSS9Base::call(Func func)
                 case Func::udiv8 : quotient = uint16_t(uint8_t(dividend) / uint8_t(divisor)); break;
                 case Func::udiv16: quotient = uint16_t(uint16_t(dividend) / uint16_t(divisor)); break;
             }
-            emulator().setReg(Reg::D, quotient);
+            emulator().setReg(is16Bit ? Reg::D : Reg::A, quotient);
             break;
         }
         default: return false;
