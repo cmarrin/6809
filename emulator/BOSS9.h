@@ -160,6 +160,8 @@ class BOSS9Base
     RunState _runState = RunState::Cmd;
     
     Emulator _emu;
+    
+    clock_t _startTime = 0;
 };
 
 template<uint32_t size> class BOSS9 : public BOSS9Base

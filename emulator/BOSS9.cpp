@@ -174,11 +174,18 @@ bool BOSS9Base::call(Func func)
             emulator().setReg(Reg::A, getc());
             break;
         }
-        case Func::exit:
-            printF("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
+        case Func::exit: {
+            // If we're running a timing test, show the time
+            if (_startTime > 0) {
+                printF("Finished timing test. Test took %dus to run\n", (clock() - _startTime) / (CLOCKS_PER_SEC / 1000000));
+                _startTime = 0;
+            } else {
+                printF("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
+            }
             enterMonitor();
             emulator().setReg(Reg::PC, _startAddr);
             return false;
+        }
         case Func::mon:
             enterMonitor();
             return false;
@@ -449,6 +456,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
             printF("\treg r   - show reg r\n");
             printF("\treg r v - set reg r to v\n");
             printF("\tcycles  - show cycles since start of run\n");
+            printF("\ttime    - run program and report time taken\n");
 
             return true;
         }
@@ -764,6 +772,16 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     if(cmdElements[0] == "cycles") {
         uint32_t cycles = emulator().cycles();
         printF("%d cycles since start of run\n", cycles);
+        return true;
+    }
+    
+    // run timing test
+    if(cmdElements[0] == "time") {
+        _startTime = clock();
+        emulator().clearCycles();
+        leaveMonitor();
+        printF("Timing test at address $%04x\n", _startAddr);
+        emulator().setReg(Reg::PC, _startAddr);
         return true;
     }
     
