@@ -21,7 +21,7 @@
 #include "srec.h"
 
 #define COMPUTE_CYCLES
-#define TRACE
+//#define TRACE
 
 #ifdef TRACE
 static constexpr uint32_t TraceBufferSize = 10;
