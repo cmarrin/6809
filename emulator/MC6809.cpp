@@ -720,9 +720,8 @@ bool Emulator::execute(RunState runState)
                 break;
             case Op::PSH:
             case Op::PUL: {
-#ifdef COMPUTE_CYCLES
-                _cycles += countBits(_right);
-#endif
+                AddCy(countBits(_right));
+
                 // bit pattern to push or pull are in _right
                 uint16_t& stack = (opcode->reg == Reg::U) ? _u : _s;
                 if (opcode->op == Op::PSH) {
