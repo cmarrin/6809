@@ -373,6 +373,14 @@ bool Emulator::execute(RunState runState)
         const Opcode* opcode = &(opcodeTable[opIndex]);
 
         AddCy(opcode->cycles);
+
+#ifdef COMPUTE_CYCLES
+        bool longBranch = false;
+        bool branchTaken = false;
+#define SBT branchTaken = true
+#else
+#define SBT
+#endif
                 
         // Handle address modes
         // If this is an addressing mode that produces a 16 bit effective address
@@ -404,6 +412,10 @@ bool Emulator::execute(RunState runState)
                 
             // All the relative addressing modes need to be sign extended to 32 bits
             case Adr::RelL:
+#ifdef COMPUTE_CYCLES
+                _cycles += 2;
+                longBranch = true;
+#endif
                 _right = int16_t(next16());
                 break;
             case Adr::Rel:
@@ -411,6 +423,10 @@ bool Emulator::execute(RunState runState)
                 break;
           case Adr::RelP:
                 if (_prevOp == Op::Page2) {
+#ifdef COMPUTE_CYCLES
+                    _cycles += 2;
+                    longBranch = true;
+#endif
                     _right = int16_t(next16());
                 } else {
                     _right = int8_t(next8());
@@ -495,30 +511,28 @@ bool Emulator::execute(RunState runState)
             case Op::Page3:
                 // We never want to leave execution after a Page2 or Page3.
                 // Do a continue to skip leave test.
-#ifdef COMPUTE_CYCLES
-                _cycles += 1;
-#endif
+                AddCy(1);
                 _prevOp = op;
                 continue;
 
             case Op::BHS:
-            case Op::BCC: if (!_cc.C) _pc += _right; break;
+            case Op::BCC: if (!_cc.C) _pc += _right;                SBT; break;
             case Op::BLO:
-            case Op::BCS: if (_cc.C) _pc += _right; break;
-            case Op::BEQ: if (_cc.Z) _pc += _right; break;
-            case Op::BGE: if (!NxorV()) _pc += _right; break;
-            case Op::BGT: if (!(NxorV() || _cc.Z)) _pc += _right; break;
-            case Op::BHI: if (!_cc.C && !_cc.Z) _pc += _right; break;
-            case Op::BLE: if (NxorV() || _cc.Z) _pc += _right; break;
-            case Op::BLS: if (_cc.C || _cc.Z) _pc += _right; break;
-            case Op::BLT: if (NxorV()) _pc += _right; break;
-            case Op::BMI: if (_cc.N) _pc += _right; break;
-            case Op::BNE: if (!_cc.Z) _pc += _right; break;
-            case Op::BPL: if (!_cc.N) _pc += _right; break;
-            case Op::BRA: _pc += _right; break;
+            case Op::BCS: if (_cc.C) _pc += _right;                 SBT; break;
+            case Op::BEQ: if (_cc.Z) _pc += _right;                 SBT; break;
+            case Op::BGE: if (!NxorV()) _pc += _right;              SBT; break;
+            case Op::BGT: if (!(NxorV() || _cc.Z)) _pc += _right;   SBT; break;
+            case Op::BHI: if (!_cc.C && !_cc.Z) _pc += _right;      SBT; break;
+            case Op::BLE: if (NxorV() || _cc.Z) _pc += _right;      SBT; break;
+            case Op::BLS: if (_cc.C || _cc.Z) _pc += _right;        SBT; break;
+            case Op::BLT: if (NxorV()) _pc += _right;               SBT; break;
+            case Op::BMI: if (_cc.N) _pc += _right;                 SBT; break;
+            case Op::BNE: if (!_cc.Z) _pc += _right;                SBT; break;
+            case Op::BPL: if (!_cc.N) _pc += _right;                SBT; break;
+            case Op::BRA: _pc += _right;                            SBT; break;
             case Op::BRN: break;
-            case Op::BVC: if (!_cc.V) _pc += _right; break;
-            case Op::BVS: if (_cc.V) _pc += _right; break;
+            case Op::BVC: if (!_cc.V) _pc += _right;                SBT; break;
+            case Op::BVS: if (_cc.V) _pc += _right;                 SBT; break;
             case Op::BSR:
                 push16(_s, _pc);
                 _pc += _right;
