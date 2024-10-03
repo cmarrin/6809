@@ -412,6 +412,7 @@ void BOSS9Base::processCommand()
             _runState = RunState::Cmd;
             printF("Load complete, start addr = 0x%04x\n", _startAddr);
         }
+        _needInstPrint = false;
     }
     _cursor = 0;
 }
@@ -491,6 +492,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         
         // Load s19 file
         printF("Ready to start loading. ESC to abort\n");
+        _needInstPrint = false;
         _runState = RunState::Loading;
         emulator().loadStart();
         return true;
