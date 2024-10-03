@@ -16,8 +16,8 @@ function int16_t main()
     int16_t bb = 40;
     int16_t x;
     
-    for (uint16_t i = 0; i < 200; ++i) {
-        for (uint16_t j = 0; j < 100; ++j) {
+    for (uint16_t i = 0; i < 2000; ++i) {
+        for (uint16_t j = 0; j < 2000; ++j) {
             int8_t a = testIntTable[3];
             if (a < 5 || a > 6) {
                 x = aa * bb;

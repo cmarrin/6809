@@ -103,17 +103,17 @@
 021C CC0000           (Clover/simple.asm):00038             LDD #0
 021F ED58             (Clover/simple.asm):00039             STD -8,U
                       (Clover/simple.asm):00040             ;     
-                      (Clover/simple.asm):00041             ;     for (uint16_t i = 0; i < 200; ++i) {
+                      (Clover/simple.asm):00041             ;     for (uint16_t i = 0; i < 2000; ++i) {
 0221                  (Clover/simple.asm):00042         L1
 0221 EC58             (Clover/simple.asm):00043             LDD -8,U
-0223 108300C8         (Clover/simple.asm):00044             CMPD #200
+0223 108307D0         (Clover/simple.asm):00044             CMPD #2000
 0227 102400EE         (Clover/simple.asm):00045             BHS L2
 022B CC0000           (Clover/simple.asm):00046             LDD #0
 022E ED56             (Clover/simple.asm):00047             STD -10,U
-                      (Clover/simple.asm):00048             ;         for (uint16_t j = 0; j < 100; ++j) {
+                      (Clover/simple.asm):00048             ;         for (uint16_t j = 0; j < 2000; ++j) {
 0230                  (Clover/simple.asm):00049         L3
 0230 EC56             (Clover/simple.asm):00050             LDD -10,U
-0232 10830064         (Clover/simple.asm):00051             CMPD #100
+0232 108307D0         (Clover/simple.asm):00051             CMPD #2000
 0236 102400D1         (Clover/simple.asm):00052             BHS L4
                       (Clover/simple.asm):00053             ;             int8_t a = testIntTable[3];
                       (Clover/simple.asm):00054             ;             if (a < 5 || a > 6) {

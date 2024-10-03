@@ -38,17 +38,17 @@ Simple_main
     LDD #0
     STD -8,U
     ;     
-    ;     for (uint16_t i = 0; i < 200; ++i) {
+    ;     for (uint16_t i = 0; i < 2000; ++i) {
 L1
     LDD -8,U
-    CMPD #200
+    CMPD #2000
     BHS L2
     LDD #0
     STD -10,U
-    ;         for (uint16_t j = 0; j < 100; ++j) {
+    ;         for (uint16_t j = 0; j < 2000; ++j) {
 L3
     LDD -10,U
-    CMPD #100
+    CMPD #2000
     BHS L4
     ;             int8_t a = testIntTable[3];
     ;             if (a < 5 || a > 6) {
