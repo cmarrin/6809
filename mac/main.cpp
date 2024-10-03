@@ -41,7 +41,7 @@ class MacBOSS9 : public mc6809::BOSS9<MemorySize>
     virtual void putc(char c) const override
     {
         // Throttle character output so console doesn't get swamped
-        usleep(1000);
+        usleep(100);
         fputc(c, stdout);
     }
     
