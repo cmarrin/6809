@@ -53,7 +53,7 @@ function int16_t main()
     
     showIntResults(8, -42, -testIntGlobal);
     showIntResults(9, 0, !TestIntConst);
-    showIntResults(10, 0xffffff03, ~TestIntConst);
+    showIntResults(10, 0xff03, ~TestIntConst);
     
     showIntResults(11, 0, TestIntConst < testIntGlobal);
     showIntResults(12, 0, TestIntConst <= testIntGlobal);

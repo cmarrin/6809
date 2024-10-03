@@ -12,7 +12,7 @@
 Simple_main
     PSHS U
     TFR S,U
-    LEAS -2,S
+    LEAS -1,S
     ; //
     ; //  simple.Clover
     ; //  Clover
@@ -23,37 +23,28 @@ Simple_main
     ; struct Simple
     ; {
     ; 
+    ; const int8_t testIntTable[ ] = { 1, 2, 3, 7 };
+    ; 
     ; function int16_t main()
     ; {
-    ;     int8_t a = 5;
-    ;     int8_t b = 6;
-    LDA #5
+    ;     int8_t a = testIntTable[3];
+    ;     core.printf("a=%d\n", a);
+    LDX #Constants+0
+    LDA #3
+    LDB #1
+    MUL
+    LEAX D,X
+    LDA 0,X
     STA -1,U
-    ;     
-    LDA #6
-    STA -2,U
-    ;     if (!(a == 5) || !(b == 5))
-    ;         core.printf("Passed\n");
+    ;     return 0;
     LDA -1,U
-    CMPA #5
-    BNE L4
-    LDA -2,U
-    CMPA #5
-    BEQ L1
-L4
-    ;     else
+    TFR A,B
+    CLRA
+    ADDD #0
+    PSHS D
     LDD #String+$0
     PSHS D
     JSR printf
-    BRA L5
-L1
-    ;         core.printf("Failed\n");
-    ;     
-    LDD #String+$8
-    PSHS D
-    JSR printf
-L5
-    ;     return 0;
     ; }
     LDD #0
     TFR U,S
@@ -61,13 +52,12 @@ L5
     RTS
 
 Constants
+    FCB $01,$02,$03,$07
 
 String
-    FCC "Passed"
+    FCC "a=%d"
     FCB $0a
     FCB $00
-    FCC "Failed"
-    FCB $0a
-    FCB $00
+
 
     end $200

@@ -56,13 +56,16 @@
                       (        BOSS9.inc):00053                                 ; Binary search table looking for value
                       (        BOSS9.inc):00054                                 ; when found return addr in X. if not
                       (        BOSS9.inc):00055                                 ; found return Table + N * (<1/2> + 2)
-                      (        BOSS9.inc):00056         
-                      (        BOSS9.inc):00057         
-                      (        BOSS9.inc):00058         * Misc equates
-                      (        BOSS9.inc):00059         
-     000A             (        BOSS9.inc):00060         newline equ     $0a
-                      (        BOSS9.inc):00061                                 
+     FC44             (        BOSS9.inc):00056         idiv8   equ     $FC44
+     FC46             (        BOSS9.inc):00057         idiv16  equ     $FC46
+     FC48             (        BOSS9.inc):00058         udiv8   equ     $FC48
+     FC4A             (        BOSS9.inc):00059         udiv16  equ     $FC4a
+                      (        BOSS9.inc):00060         
+                      (        BOSS9.inc):00061         * Misc equates
                       (        BOSS9.inc):00062         
+     000A             (        BOSS9.inc):00063         newline equ     $0a
+                      (        BOSS9.inc):00064                                 
+                      (        BOSS9.inc):00065         
                       (Clover/simple.asm):00004             org $200
                       (Clover/simple.asm):00005         
 0200 1F42             (Clover/simple.asm):00006             TFR S,Y
@@ -74,7 +77,7 @@
 020C                  (Clover/simple.asm):00012         Simple_main
 020C 3440             (Clover/simple.asm):00013             PSHS U
 020E 1F43             (Clover/simple.asm):00014             TFR S,U
-0210 327E             (Clover/simple.asm):00015             LEAS -2,S
+0210 327F             (Clover/simple.asm):00015             LEAS -1,S
                       (Clover/simple.asm):00016             ; //
                       (Clover/simple.asm):00017             ; //  simple.Clover
                       (Clover/simple.asm):00018             ; //  Clover
@@ -85,51 +88,41 @@
                       (Clover/simple.asm):00023             ; struct Simple
                       (Clover/simple.asm):00024             ; {
                       (Clover/simple.asm):00025             ; 
-                      (Clover/simple.asm):00026             ; function int16_t main()
-                      (Clover/simple.asm):00027             ; {
-                      (Clover/simple.asm):00028             ;     int8_t a = 5;
-                      (Clover/simple.asm):00029             ;     int8_t b = 6;
-0212 8605             (Clover/simple.asm):00030             LDA #5
-0214 A75F             (Clover/simple.asm):00031             STA -1,U
-                      (Clover/simple.asm):00032             ;     
-0216 8606             (Clover/simple.asm):00033             LDA #6
-0218 A75E             (Clover/simple.asm):00034             STA -2,U
-                      (Clover/simple.asm):00035             ;     if (!(a == 5) || !(b == 5))
-                      (Clover/simple.asm):00036             ;         core.printf("Passed\n");
-021A A65F             (Clover/simple.asm):00037             LDA -1,U
-021C 8105             (Clover/simple.asm):00038             CMPA #5
-021E 2606             (Clover/simple.asm):00039             BNE L4
-0220 A65E             (Clover/simple.asm):00040             LDA -2,U
-0222 8105             (Clover/simple.asm):00041             CMPA #5
-0224 270A             (Clover/simple.asm):00042             BEQ L1
-0226                  (Clover/simple.asm):00043         L4
-                      (Clover/simple.asm):00044             ;     else
-0226 CC0240           (Clover/simple.asm):00045             LDD #String+$0
-0229 3406             (Clover/simple.asm):00046             PSHS D
-022B BDFC20           (Clover/simple.asm):00047             JSR printf
-022E 2008             (Clover/simple.asm):00048             BRA L5
-0230                  (Clover/simple.asm):00049         L1
-                      (Clover/simple.asm):00050             ;         core.printf("Failed\n");
-                      (Clover/simple.asm):00051             ;     
-0230 CC0248           (Clover/simple.asm):00052             LDD #String+$8
-0233 3406             (Clover/simple.asm):00053             PSHS D
-0235 BDFC20           (Clover/simple.asm):00054             JSR printf
-0238                  (Clover/simple.asm):00055         L5
-                      (Clover/simple.asm):00056             ;     return 0;
-                      (Clover/simple.asm):00057             ; }
-0238 CC0000           (Clover/simple.asm):00058             LDD #0
-023B 1F34             (Clover/simple.asm):00059             TFR U,S
-023D 3540             (Clover/simple.asm):00060             PULS U
-023F 39               (Clover/simple.asm):00061             RTS
+                      (Clover/simple.asm):00026             ; const int8_t testIntTable[ ] = { 1, 2, 3, 7 };
+                      (Clover/simple.asm):00027             ; 
+                      (Clover/simple.asm):00028             ; function int16_t main()
+                      (Clover/simple.asm):00029             ; {
+                      (Clover/simple.asm):00030             ;     int8_t a = testIntTable[3];
+                      (Clover/simple.asm):00031             ;     core.printf("a=%d\n", a);
+0212 8E023A           (Clover/simple.asm):00032             LDX #Constants+0
+0215 8603             (Clover/simple.asm):00033             LDA #3
+0217 C601             (Clover/simple.asm):00034             LDB #1
+0219 3D               (Clover/simple.asm):00035             MUL
+021A 308B             (Clover/simple.asm):00036             LEAX D,X
+021C A600             (Clover/simple.asm):00037             LDA 0,X
+021E A75F             (Clover/simple.asm):00038             STA -1,U
+                      (Clover/simple.asm):00039             ;     return 0;
+0220 A65F             (Clover/simple.asm):00040             LDA -1,U
+0222 1F89             (Clover/simple.asm):00041             TFR A,B
+0224 4F               (Clover/simple.asm):00042             CLRA
+0225 C30000           (Clover/simple.asm):00043             ADDD #0
+0228 3406             (Clover/simple.asm):00044             PSHS D
+022A CC023E           (Clover/simple.asm):00045             LDD #String+$0
+022D 3406             (Clover/simple.asm):00046             PSHS D
+022F BDFC20           (Clover/simple.asm):00047             JSR printf
+                      (Clover/simple.asm):00048             ; }
+0232 CC0000           (Clover/simple.asm):00049             LDD #0
+0235 1F34             (Clover/simple.asm):00050             TFR U,S
+0237 3540             (Clover/simple.asm):00051             PULS U
+0239 39               (Clover/simple.asm):00052             RTS
+                      (Clover/simple.asm):00053         
+023A                  (Clover/simple.asm):00054         Constants
+023A 01020307         (Clover/simple.asm):00055             FCB $01,$02,$03,$07
+                      (Clover/simple.asm):00056         
+023E                  (Clover/simple.asm):00057         String
+023E 613D2564         (Clover/simple.asm):00058             FCC "a=%d"
+0242 0A               (Clover/simple.asm):00059             FCB $0a
+0243 00               (Clover/simple.asm):00060             FCB $00
+                      (Clover/simple.asm):00061         
                       (Clover/simple.asm):00062         
-0240                  (Clover/simple.asm):00063         Constants
-                      (Clover/simple.asm):00064         
-0240                  (Clover/simple.asm):00065         String
-0240 506173736564     (Clover/simple.asm):00066             FCC "Passed"
-0246 0A               (Clover/simple.asm):00067             FCB $0a
-0247 00               (Clover/simple.asm):00068             FCB $00
-0248 4661696C6564     (Clover/simple.asm):00069             FCC "Failed"
-024E 0A               (Clover/simple.asm):00070             FCB $0a
-024F 00               (Clover/simple.asm):00071             FCB $00
-                      (Clover/simple.asm):00072         
-                      (Clover/simple.asm):00073             end $200
+                      (Clover/simple.asm):00063             end $200

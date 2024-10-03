@@ -8,16 +8,12 @@
 struct Simple
 {
 
+const int8_t testIntTable[ ] = { 1, 2, 3, 7 };
+
 function int16_t main()
 {
-    int8_t a = 5;
-    int8_t b = 6;
-    
-    if (!(a == 5) || !(b == 5))
-        core.printf("Passed\n");
-    else
-        core.printf("Failed\n");
-    
+    int8_t a = testIntTable[3];
+    core.printf("a=%d\n", a);
     return 0;
 }
 
