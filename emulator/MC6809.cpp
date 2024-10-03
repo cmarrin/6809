@@ -582,7 +582,7 @@ bool Emulator::execute(RunState runState)
                 }
                 break;
             case Op::COM:
-                _result = ~_right;
+                _result = ~_left;
                 xNZ018();
                 break;
             case Op::CWAI:
