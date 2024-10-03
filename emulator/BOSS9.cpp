@@ -21,6 +21,13 @@
 #include "Format.h"
 #include "MC6809.h"
 
+#ifdef ARDUINO
+// Clock function for timing
+static inline float getClock() { return float(millis()) / 1000; }
+#else
+static inline float getClock() { return float(clock()) / CLOCKS_PER_SEC; }
+#endif
+
 using namespace mc6809;
 
 static inline uint8_t typeToBytes(fmt::Type t)
@@ -177,7 +184,19 @@ bool BOSS9Base::call(Func func)
         case Func::exit: {
             // If we're running a timing test, show the time
             if (_startTime > 0) {
-                printF("Finished timing test. Test took %dus to run\n", (clock() - _startTime) / (CLOCKS_PER_SEC / 1000000));
+                float t = getClock() - _startTime;
+                const char* units;
+                if (t >= 1) {
+                    units = "s";
+                } else if (t >= 0.001) {
+                    t *= 1000;
+                    units = "ms";
+                } else {
+                    t *= 1000000;
+                    units = "us";
+                }
+                    
+                printF("Finished timing test. Test took %.2f%s to run\n", t, units);
                 _startTime = 0;
             } else {
                 printF("Program exited with code %d\n", int32_t(emulator().getReg(Reg::A)));
@@ -777,7 +796,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     
     // run timing test
     if(cmdElements[0] == "time") {
-        _startTime = clock();
+        _startTime = getClock();
         emulator().clearCycles();
         leaveMonitor();
         printF("Timing test at address $%04x\n", _startAddr);
