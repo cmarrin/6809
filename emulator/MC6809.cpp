@@ -343,22 +343,26 @@ uint16_t Emulator::loadEnd()
 
 bool Emulator::execute(RunState runState)
 {
+    bool isStepping = runState != RunState::Running;
+    
     uint32_t instructionsToExecute = InstructionsToExecutePerContinue;
     bool firstTime = true;
     
     while(true) {
-        // if runState is not Running we need to ignore a breakpoint at the
-        // PC upon entry. Continuing and all the stepping states need to
-        // execute the first instruction they encounter
-        if (!firstTime || runState == RunState::Running) {
-            if (atBreakpoint(_pc)) {
-                _boss9->printF("\n*** hit breakpoint at addr $%04x\n\n", _pc);
-                _boss9->call(Func::mon);
-                return true;
+        if (_haveBreakpoints) {
+            // if runState is not Running we need to ignore a breakpoint at the
+            // PC upon entry. Continuing and all the stepping states need to
+            // execute the first instruction they encounter
+            if (!firstTime || runState == RunState::Running) {
+                if (atBreakpoint(_pc)) {
+                    _boss9->printF("\n*** hit breakpoint at addr $%04x\n\n", _pc);
+                    _boss9->call(Func::mon);
+                    return true;
+                }
             }
+            
+            firstTime = false;
         }
-        
-        firstTime = false;
         
 #ifdef TRACE
         _traceBuffer[_traceBufferIndex++] = _pc;
@@ -859,52 +863,54 @@ bool Emulator::execute(RunState runState)
         
         _prevOp = opcode->op;
         
-        // Step handling
-        //
-        //  Step In     - Go back to monitor after each instruction executed
-        //  Step Over   - Behave like Step In unless current instruction is
-        //                BSR or JSR in which case we run until that subroutine
-        //                returns.
-        //  Step Out    - Run until we return from current subroutine. If none
-        //                then we never enter monitor until program exits of ESC.
-        //
-        // When doing Step Over or Step Out we need to stop when we hit RTS. but
-        // there might be nested subroutines so we have to keep track of the
-        // depth using _subroutineDepth. When we execute BSR or JSR we increment
-        // and when we hit RTS we decrement. When it hits 0 we stop. For Step Over
-        // we start with _subroutineDepth = 0. Entering the current BSR or JSR
-        // increments to 0 and the matching RTS decrements back to 0 and we
-        // enter the monitor. If there are nested subroutines _subroutineDepth
-        // keeps track of them so we return on the correct RTS. For Step Out
-        // we set _subroutineDepth = 1 so the next RTS we see will stop.
-        //
-        if (runState != RunState::Running) {
-            _lastRunState = runState;
-        }
-        
-        bool handleStepOverLikeStepIn = false;
-        
-        if (runState == RunState::StepOver) {
-            if ((_prevOp != Op::BSR && _prevOp != Op::JSR) ||
-                    (_prevOp == Op::JSR && ea >= SystemAddrStart)) {
-                handleStepOverLikeStepIn = true;
-            } else {
+        if (isStepping) {
+            // Step handling
+            //
+            //  Step In     - Go back to monitor after each instruction executed
+            //  Step Over   - Behave like Step In unless current instruction is
+            //                BSR or JSR in which case we run until that subroutine
+            //                returns.
+            //  Step Out    - Run until we return from current subroutine. If none
+            //                then we never enter monitor until program exits of ESC.
+            //
+            // When doing Step Over or Step Out we need to stop when we hit RTS. but
+            // there might be nested subroutines so we have to keep track of the
+            // depth using _subroutineDepth. When we execute BSR or JSR we increment
+            // and when we hit RTS we decrement. When it hits 0 we stop. For Step Over
+            // we start with _subroutineDepth = 0. Entering the current BSR or JSR
+            // increments to 0 and the matching RTS decrements back to 0 and we
+            // enter the monitor. If there are nested subroutines _subroutineDepth
+            // keeps track of them so we return on the correct RTS. For Step Out
+            // we set _subroutineDepth = 1 so the next RTS we see will stop.
+            //
+            if (runState != RunState::Running) {
+                _lastRunState = runState;
+            }
+            
+            bool handleStepOverLikeStepIn = false;
+            
+            if (runState == RunState::StepOver) {
+                if ((_prevOp != Op::BSR && _prevOp != Op::JSR) ||
+                        (_prevOp == Op::JSR && ea >= SystemAddrStart)) {
+                    handleStepOverLikeStepIn = true;
+                } else {
+                    _subroutineDepth = 1;
+                }
+            }
+            
+            if (runState == RunState::StepIn || handleStepOverLikeStepIn) {
+                _boss9->printF("\n*** step %s, stopped at addr $%04x\n\n",
+                        (_lastRunState == RunState::StepIn) ? "in" : "over", _pc);
+                _boss9->call(Func::mon);
+                return true;
+            }
+            
+            if (runState == RunState::StepOut) {
                 _subroutineDepth = 1;
             }
-        }
-        
-        if (runState == RunState::StepIn || handleStepOverLikeStepIn) {
-            _boss9->printF("\n*** step %s, stopped at addr $%04x\n\n",
-                    (_lastRunState == RunState::StepIn) ? "in" : "over", _pc);
-            _boss9->call(Func::mon);
-            return true;
-        }
-        
-        if (runState == RunState::StepOut) {
-            _subroutineDepth = 1;
-        }
 
-        runState = RunState::Running;
+            runState = RunState::Running;
+        }
         
         if (--instructionsToExecute == 0) {
             return true;
