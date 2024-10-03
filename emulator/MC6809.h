@@ -30,7 +30,7 @@ static constexpr uint32_t TraceBufferSize = 10;
 namespace mc6809 {
 
 static constexpr uint16_t SystemAddrStart = 0xFC00;
-static constexpr uint32_t InstructionsToExecutePerContinue = 1000;
+static constexpr uint32_t InstructionsToExecutePerContinue = 100000;
 static constexpr uint8_t NumBreakpoints = 4;
 
 // Opcode table
