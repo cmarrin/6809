@@ -127,7 +127,7 @@ int main(int argc, char * const argv[])
         stream.open(filename.c_str(), std::fstream::in);
         if (stream.fail()) {
             std::cout << "Can't open '" << filename << "'\n";
-            return 0;
+            return -1;
         }
 
         // Are we compiling?
@@ -141,10 +141,11 @@ int main(int argc, char * const argv[])
             int retval = std::system(cmd.c_str());
             if (WIFEXITED(retval) == 0) {
                 std::cout << "Compile of '" << filename << "' abnormally terminated, exiting\n";
-                return 0;
+                return -1;
             }
             if (WEXITSTATUS(retval) != 0) {
                 std::cout << "Compile of '" << filename << "' failed, exiting\n";
+                return -1;
             }
             
             // Successful compile the .asm file is in the same dir, assemble it
@@ -158,7 +159,7 @@ int main(int argc, char * const argv[])
             retval = std::system(cmd.c_str());
             if (WIFEXITED(retval) == 0) {
                 std::cout << "Assembly of '" << path << ".asm' abnormally terminated, exiting\n";
-                return 0;
+                return -1;
             }
             if (WEXITSTATUS(retval) != 0) {
                 std::cout << "Assembly of '" << path << ".asm' failed, exiting\n";
