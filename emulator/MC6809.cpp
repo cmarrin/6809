@@ -341,17 +341,6 @@ uint16_t Emulator::loadEnd()
     return sRecInfo.startAddr();
 }
 
-#ifdef COMPUTE_CYCLES
-static inline uint8_t countBits(uint8_t v)
-{
-    uint8_t b;
-    for (b = 0; v; b++) {
-        v &= v - 1;
-    }
-    return b;
-}
-#endif
-
 bool Emulator::execute(RunState runState)
 {
     uint32_t instructionsToExecute = InstructionsToExecutePerContinue;
@@ -383,9 +372,7 @@ bool Emulator::execute(RunState runState)
         
         const Opcode* opcode = &(opcodeTable[opIndex]);
 
-#ifdef COMPUTE_CYCLES
-        _cycles += opcode->cycles;
-#endif
+        AddCy(opcode->cycles);
                 
         // Handle address modes
         // If this is an addressing mode that produces a 16 bit effective address
@@ -443,6 +430,8 @@ bool Emulator::execute(RunState runState)
                 
                 if ((postbyte & 0x80) == 0) {
                     // Constant offset direct (5 bit signed)
+                    AddCy(1);
+                
                     int8_t offset = postbyte & 0x1f;
                     if (offset & 0x10) {
                         offset |= 0xe0;
@@ -452,18 +441,18 @@ bool Emulator::execute(RunState runState)
                 } else {
                     switch(IdxMode(postbyte & IdxModeMask)) {
                         case IdxMode::ConstRegNoOff   : ea = *reg; break;
-                        case IdxMode::ConstReg8Off    : ea = *reg + int8_t(load8(_pc)); _pc += 1; break;
-                        case IdxMode::ConstReg16Off   : ea = *reg + int16_t(load16(_pc)); _pc += 2; break;
-                        case IdxMode::AccAOffReg      : ea = *reg + int8_t(_a); break;
-                        case IdxMode::AccBOffReg      : ea = *reg + int8_t(_b); break;
-                        case IdxMode::AccDOffReg      : ea = *reg + int16_t(_d); break;
-                        case IdxMode::Inc1Reg         : ea = *reg; (*reg) += 1; break;
-                        case IdxMode::Inc2Reg         : ea = *reg; (*reg) += 2; break;
-                        case IdxMode::Dec1Reg         : (*reg) -= 1; ea = *reg; break;
-                        case IdxMode::Dec2Reg         : (*reg) -= 2; ea = *reg; break;
-                        case IdxMode::ConstPC8Off     : ea = _pc + int8_t(load8(_pc)); _pc += 1; break;
-                        case IdxMode::ConstPC16Off    : ea = _pc + int16_t(load16(_pc)); _pc += 2; break;
-                        case IdxMode::Extended        : ea = next16();
+                        case IdxMode::ConstReg8Off    : ea = *reg + int8_t(load8(_pc)); _pc += 1; AddCy(1); break;
+                        case IdxMode::ConstReg16Off   : ea = *reg + int16_t(load16(_pc)); _pc += 2; AddCy(4); break;
+                        case IdxMode::AccAOffReg      : ea = *reg + int8_t(_a); AddCy(1); break;
+                        case IdxMode::AccBOffReg      : ea = *reg + int8_t(_b); AddCy(1); break;
+                        case IdxMode::AccDOffReg      : ea = *reg + int16_t(_d); AddCy(4); break;
+                        case IdxMode::Inc1Reg         : ea = *reg; (*reg) += 1; AddCy(2); break;
+                        case IdxMode::Inc2Reg         : ea = *reg; (*reg) += 2; AddCy(3); break;
+                        case IdxMode::Dec1Reg         : (*reg) -= 1; ea = *reg; AddCy(2); break;
+                        case IdxMode::Dec2Reg         : (*reg) -= 2; ea = *reg; AddCy(3); break;
+                        case IdxMode::ConstPC8Off     : ea = _pc + int8_t(load8(_pc)); _pc += 1; AddCy(1); break;
+                        case IdxMode::ConstPC16Off    : ea = _pc + int16_t(load16(_pc)); _pc += 2; AddCy(5); break;
+                        case IdxMode::Extended        : ea = next16(); AddCy(5); break;
                     }
                     
                     if (postbyte & IndexedIndMask) {

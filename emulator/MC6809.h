@@ -153,24 +153,39 @@ struct Opcode
 //
 // + PSH and PUL require 5 cycles plus 1 cycle for each byte pushed or pulled
 //
-// - Long branches take 5 cycles if the branch is not taken or 6 if it is. Short
+// + Long branches take 5 cycles if the branch is not taken or 6 if it is. Short
 //   branches take 3 cycles
 //
-// - Indexed operation require cycles shown here plus extra cycles depending on
+// + Indexed operation require cycles shown here plus extra cycles depending on
 //   the mode:
-//      - Consant offset of 5 or 8 bits takes 1 extra cycle. 16 bits takes 4.
-//      - A and B register offset takes 1 extra cycle, D takes 4.
-//      - Auto inc/dec take 2 extra cycles for inc/dec by 1 and 3 extra for inc/dec by 2.
-//      - Constant 8 bit offset from PCR takes 1 extra cycle and 16 bits takes 5.
-//      - Indirect takes an extra 3 cycles in all cases.
-//      - Extended Indirect (16 bit indirect pointer) takes 5 cycles total.
+//      + Constant offset of 5 or 8 bits takes 1 extra cycle. 16 bits takes 4.
+//      + A and B register offset takes 1 extra cycle, D takes 4.
+//      + Auto inc/dec take 2 extra cycles for inc/dec by 1 and 3 extra for inc/dec by 2.
+//      + Constant 8 bit offset from PCR takes 1 extra cycle and 16 bits takes 5.
+//      + Indirect takes an extra 3 cycles in all cases.
+//      + Extended Indirect (16 bit indirect pointer) takes 5 cycles total.
 //
 // + All Page2 and Page3 opcodes take 1 extra cycle
 //
 
 #ifdef COMPUTE_CYCLES
+// bit counter for PSH/PUL cycle counting
+static inline uint8_t countBits(uint8_t v)
+{
+    uint8_t b;
+    for (b = 0; v; b++) {
+        v &= v - 1;
+    }
+    return b;
+}
+
+// Adds cycles to total
+#define AddCy(cycles) _cycles += cycles
+
+// Used to add cycles to Opcode list
 #define CY(t) t
 #else
+#define AddCy(cycles)
 #define CY(t)
 #endif
 
