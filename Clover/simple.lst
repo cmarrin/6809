@@ -78,7 +78,7 @@
 020C                  (Clover/simple.asm):00013         Simple_main
 020C 3440             (Clover/simple.asm):00014             PSHS U
 020E 1F43             (Clover/simple.asm):00015             TFR S,U
-0210 3275             (Clover/simple.asm):00016             LEAS -11,S
+0210 327E             (Clover/simple.asm):00016             LEAS -2,S
                       (Clover/simple.asm):00017             ; //
                       (Clover/simple.asm):00018             ; //  simple.Clover
                       (Clover/simple.asm):00019             ; //  Clover
@@ -89,166 +89,55 @@
                       (Clover/simple.asm):00024             ; struct Simple
                       (Clover/simple.asm):00025             ; {
                       (Clover/simple.asm):00026             ; 
-                      (Clover/simple.asm):00027             ; const int8_t testIntTable[ ] = { 1, 2, 3, 7 };
-                      (Clover/simple.asm):00028             ; 
-                      (Clover/simple.asm):00029             ; function int16_t main()
-                      (Clover/simple.asm):00030             ; {
-                      (Clover/simple.asm):00031             ;     int16_t aa = 200;
-                      (Clover/simple.asm):00032             ;     int16_t bb = 40;
-0212 CC00C8           (Clover/simple.asm):00033             LDD #200
-0215 ED5E             (Clover/simple.asm):00034             STD -2,U
-                      (Clover/simple.asm):00035             ;     int16_t x;
-0217 CC0028           (Clover/simple.asm):00036             LDD #40
-021A ED5C             (Clover/simple.asm):00037             STD -4,U
-021C CC0000           (Clover/simple.asm):00038             LDD #0
-021F ED58             (Clover/simple.asm):00039             STD -8,U
-                      (Clover/simple.asm):00040             ;     
-                      (Clover/simple.asm):00041             ;     for (uint16_t i = 0; i < 2000; ++i) {
-0221                  (Clover/simple.asm):00042         L1
-0221 EC58             (Clover/simple.asm):00043             LDD -8,U
-0223 108307D0         (Clover/simple.asm):00044             CMPD #2000
-0227 102400EE         (Clover/simple.asm):00045             BHS L2
-022B CC0000           (Clover/simple.asm):00046             LDD #0
-022E ED56             (Clover/simple.asm):00047             STD -10,U
-                      (Clover/simple.asm):00048             ;         for (uint16_t j = 0; j < 2000; ++j) {
-0230                  (Clover/simple.asm):00049         L3
-0230 EC56             (Clover/simple.asm):00050             LDD -10,U
-0232 108307D0         (Clover/simple.asm):00051             CMPD #2000
-0236 102400D1         (Clover/simple.asm):00052             BHS L4
-                      (Clover/simple.asm):00053             ;             int8_t a = testIntTable[3];
-                      (Clover/simple.asm):00054             ;             if (a < 5 || a > 6) {
-023A 8E0323           (Clover/simple.asm):00055             LDX #Constants+0
-023D 8603             (Clover/simple.asm):00056             LDA #3
-023F C601             (Clover/simple.asm):00057             LDB #1
-0241 3D               (Clover/simple.asm):00058             MUL
-0242 308B             (Clover/simple.asm):00059             LEAX D,X
-0244 A600             (Clover/simple.asm):00060             LDA 0,X
-0246 A755             (Clover/simple.asm):00061             STA -11,U
-0248 A655             (Clover/simple.asm):00062             LDA -11,U
-024A 8105             (Clover/simple.asm):00063             CMPA #5
-024C 102D0008         (Clover/simple.asm):00064             BLT L8
-0250 A655             (Clover/simple.asm):00065             LDA -11,U
-0252 8106             (Clover/simple.asm):00066             CMPA #6
-0254 102F0055         (Clover/simple.asm):00067             BLE L5
-0258                  (Clover/simple.asm):00068         L8
-                      (Clover/simple.asm):00069             ;                 x = aa * bb;
-                      (Clover/simple.asm):00070             ;             } else {
-0258 EC5C             (Clover/simple.asm):00071             LDD -4,U
-025A 3406             (Clover/simple.asm):00072             PSHS D
-025C EC5E             (Clover/simple.asm):00073             LDD -2,U
-025E 3406             (Clover/simple.asm):00074             PSHS D
-0260 6FE2             (Clover/simple.asm):00075             CLR ,-S
-0262 6D63             (Clover/simple.asm):00076             TST 3,S
-0264 102A0009         (Clover/simple.asm):00077             BPL L9
-0268 6060             (Clover/simple.asm):00078             NEG 0,S
-026A CC0000           (Clover/simple.asm):00079             LDD #0
-026D A363             (Clover/simple.asm):00080             SUBD 3,S
-026F ED63             (Clover/simple.asm):00081             STD 3,S
-0271                  (Clover/simple.asm):00082         L9
-0271 6D61             (Clover/simple.asm):00083             TST 1,S
-0273 102A0009         (Clover/simple.asm):00084             BPL L10
-0277 6060             (Clover/simple.asm):00085             NEG 0,S
-0279 CC0000           (Clover/simple.asm):00086             LDD #0
-027C A361             (Clover/simple.asm):00087             SUBD 1,S
-027E ED61             (Clover/simple.asm):00088             STD 1,S
-0280                  (Clover/simple.asm):00089         L10
-0280 A664             (Clover/simple.asm):00090             LDA 4,S
-0282 E662             (Clover/simple.asm):00091             LDB 2,S
-0284 3D               (Clover/simple.asm):00092             MUL
-0285 3406             (Clover/simple.asm):00093             PSHS D
-0287 A665             (Clover/simple.asm):00094             LDA 5,S
-0289 E664             (Clover/simple.asm):00095             LDB 4,S
-028B 3D               (Clover/simple.asm):00096             MUL
-028C EB61             (Clover/simple.asm):00097             ADDB 1,S
-028E E761             (Clover/simple.asm):00098             STB 1,S
-0290 A666             (Clover/simple.asm):00099             LDA 6,S
-0292 E663             (Clover/simple.asm):00100             LDB 3,S
-0294 3D               (Clover/simple.asm):00101             MUL
-0295 EB61             (Clover/simple.asm):00102             ADDB 1,S
-0297 E761             (Clover/simple.asm):00103             STB 1,S
-0299 6D62             (Clover/simple.asm):00104             TST 2,S
-029B 102A0005         (Clover/simple.asm):00105             BPL L11
-029F CC0000           (Clover/simple.asm):00106             LDD #0
-02A2 A360             (Clover/simple.asm):00107             SUBD 0,S
-02A4                  (Clover/simple.asm):00108         L11
-02A4 3506             (Clover/simple.asm):00109             PULS D
-02A6 3265             (Clover/simple.asm):00110             LEAS 5,S
-02A8 ED5A             (Clover/simple.asm):00111             STD -6,U
-02AA 160052           (Clover/simple.asm):00112             BRA L12
-02AD                  (Clover/simple.asm):00113         L5
-                      (Clover/simple.asm):00114             ;                 x = bb * aa;
-                      (Clover/simple.asm):00115             ;             }
-02AD EC5E             (Clover/simple.asm):00116             LDD -2,U
-02AF 3406             (Clover/simple.asm):00117             PSHS D
-02B1 EC5C             (Clover/simple.asm):00118             LDD -4,U
-02B3 3406             (Clover/simple.asm):00119             PSHS D
-02B5 6FE2             (Clover/simple.asm):00120             CLR ,-S
-02B7 6D63             (Clover/simple.asm):00121             TST 3,S
-02B9 102A0009         (Clover/simple.asm):00122             BPL L13
-02BD 6060             (Clover/simple.asm):00123             NEG 0,S
-02BF CC0000           (Clover/simple.asm):00124             LDD #0
-02C2 A363             (Clover/simple.asm):00125             SUBD 3,S
-02C4 ED63             (Clover/simple.asm):00126             STD 3,S
-02C6                  (Clover/simple.asm):00127         L13
-02C6 6D61             (Clover/simple.asm):00128             TST 1,S
-02C8 102A0009         (Clover/simple.asm):00129             BPL L14
-02CC 6060             (Clover/simple.asm):00130             NEG 0,S
-02CE CC0000           (Clover/simple.asm):00131             LDD #0
-02D1 A361             (Clover/simple.asm):00132             SUBD 1,S
-02D3 ED61             (Clover/simple.asm):00133             STD 1,S
-02D5                  (Clover/simple.asm):00134         L14
-02D5 A664             (Clover/simple.asm):00135             LDA 4,S
-02D7 E662             (Clover/simple.asm):00136             LDB 2,S
-02D9 3D               (Clover/simple.asm):00137             MUL
-02DA 3406             (Clover/simple.asm):00138             PSHS D
-02DC A665             (Clover/simple.asm):00139             LDA 5,S
-02DE E664             (Clover/simple.asm):00140             LDB 4,S
-02E0 3D               (Clover/simple.asm):00141             MUL
-02E1 EB61             (Clover/simple.asm):00142             ADDB 1,S
-02E3 E761             (Clover/simple.asm):00143             STB 1,S
-02E5 A666             (Clover/simple.asm):00144             LDA 6,S
-02E7 E663             (Clover/simple.asm):00145             LDB 3,S
-02E9 3D               (Clover/simple.asm):00146             MUL
-02EA EB61             (Clover/simple.asm):00147             ADDB 1,S
-02EC E761             (Clover/simple.asm):00148             STB 1,S
-02EE 6D62             (Clover/simple.asm):00149             TST 2,S
-02F0 102A0005         (Clover/simple.asm):00150             BPL L15
-02F4 CC0000           (Clover/simple.asm):00151             LDD #0
-02F7 A360             (Clover/simple.asm):00152             SUBD 0,S
-02F9                  (Clover/simple.asm):00153         L15
-02F9 3506             (Clover/simple.asm):00154             PULS D
-02FB 3265             (Clover/simple.asm):00155             LEAS 5,S
-02FD ED5A             (Clover/simple.asm):00156             STD -6,U
-02FF                  (Clover/simple.asm):00157         L12
-02FF                  (Clover/simple.asm):00158         L16
-02FF 3056             (Clover/simple.asm):00159             LEAX -10,U
-0301 EC00             (Clover/simple.asm):00160             LDD 0,X
-0303 C30001           (Clover/simple.asm):00161             ADDD #1
-0306 ED00             (Clover/simple.asm):00162             STD 0,X
-0308 16FF25           (Clover/simple.asm):00163             BRA L3
-030B                  (Clover/simple.asm):00164         L4
-030B                  (Clover/simple.asm):00165         L17
-030B 3410             (Clover/simple.asm):00166             PSHS X
-030D 3058             (Clover/simple.asm):00167             LEAX -8,U
-030F EC00             (Clover/simple.asm):00168             LDD 0,X
-0311 C30001           (Clover/simple.asm):00169             ADDD #1
-0314 ED00             (Clover/simple.asm):00170             STD 0,X
-0316 16FF08           (Clover/simple.asm):00171             BRA L1
-0319                  (Clover/simple.asm):00172         L2
-                      (Clover/simple.asm):00173             ;         }
-                      (Clover/simple.asm):00174             ;     }
-                      (Clover/simple.asm):00175             ;     return 0;
-                      (Clover/simple.asm):00176             ; }
-0319 3406             (Clover/simple.asm):00177             PSHS D
-031B CC0000           (Clover/simple.asm):00178             LDD #0
-031E 1F34             (Clover/simple.asm):00179             TFR U,S
-0320 3540             (Clover/simple.asm):00180             PULS U
-0322 39               (Clover/simple.asm):00181             RTS
-                      (Clover/simple.asm):00182         
-0323                  (Clover/simple.asm):00183         Constants
-0323 01020307         (Clover/simple.asm):00184             FCB $01,$02,$03,$07
-                      (Clover/simple.asm):00185         
-0327                  (Clover/simple.asm):00186         String
-                      (Clover/simple.asm):00187         
-                      (Clover/simple.asm):00188         
-                      (Clover/simple.asm):00189             end $200
+                      (Clover/simple.asm):00027             ; function int16_t main()
+                      (Clover/simple.asm):00028             ; {
+                      (Clover/simple.asm):00029             ;     int8_t a = -80;
+                      (Clover/simple.asm):00030             ;     int8_t b = 4;
+0212 8650             (Clover/simple.asm):00031             LDA #80
+0214 40               (Clover/simple.asm):00032             NEGA
+0215 A75F             (Clover/simple.asm):00033             STA -1,U
+                      (Clover/simple.asm):00034             ;     a = a >> b;
+0217 8604             (Clover/simple.asm):00035             LDA #4
+0219 A75E             (Clover/simple.asm):00036             STA -2,U
+                      (Clover/simple.asm):00037             ;     a = a << b;
+021B A65F             (Clover/simple.asm):00038             LDA -1,U
+021D 3402             (Clover/simple.asm):00039             PSHS A
+021F A65E             (Clover/simple.asm):00040             LDA -2,U
+0221                  (Clover/simple.asm):00041         L1
+0221 6760             (Clover/simple.asm):00042             ASR 0,S
+0223 4A               (Clover/simple.asm):00043             DECA
+0224 26FB             (Clover/simple.asm):00044             BNE L1
+0226 3502             (Clover/simple.asm):00045             PULS A
+0228 A75F             (Clover/simple.asm):00046             STA -1,U
+                      (Clover/simple.asm):00047             ;     core.printf("a=%d\n", a);
+022A A65F             (Clover/simple.asm):00048             LDA -1,U
+022C 3402             (Clover/simple.asm):00049             PSHS A
+022E A65E             (Clover/simple.asm):00050             LDA -2,U
+0230                  (Clover/simple.asm):00051         L2
+0230 6860             (Clover/simple.asm):00052             LSL 0,S
+0232 4A               (Clover/simple.asm):00053             DECA
+0233 26FB             (Clover/simple.asm):00054             BNE L2
+0235 3502             (Clover/simple.asm):00055             PULS A
+0237 A75F             (Clover/simple.asm):00056             STA -1,U
+                      (Clover/simple.asm):00057             ;     return 0;
+0239 A65F             (Clover/simple.asm):00058             LDA -1,U
+023B 1F89             (Clover/simple.asm):00059             TFR A,B
+023D 1D               (Clover/simple.asm):00060             SEX
+023E 3406             (Clover/simple.asm):00061             PSHS D
+0240 CC0250           (Clover/simple.asm):00062             LDD #String+$0
+0243 3406             (Clover/simple.asm):00063             PSHS D
+0245 BDFC20           (Clover/simple.asm):00064             JSR printf
+                      (Clover/simple.asm):00065             ; }
+0248 CC0000           (Clover/simple.asm):00066             LDD #0
+024B 1F34             (Clover/simple.asm):00067             TFR U,S
+024D 3540             (Clover/simple.asm):00068             PULS U
+024F 39               (Clover/simple.asm):00069             RTS
+                      (Clover/simple.asm):00070         
+0250                  (Clover/simple.asm):00071         Constants
+                      (Clover/simple.asm):00072         
+0250                  (Clover/simple.asm):00073         String
+0250 613D2564         (Clover/simple.asm):00074             FCC "a=%d"
+0254 0A               (Clover/simple.asm):00075             FCB $0a
+0255 00               (Clover/simple.asm):00076             FCB $00
+                      (Clover/simple.asm):00077         
+                      (Clover/simple.asm):00078             end $200

@@ -85,18 +85,11 @@ L2
 Test_main
     PSHS U
     TFR S,U
-    LEAS -4,S
-    LDD #0
-    STD -2,U
+    LEAS -6,S
     ; }
     ; 
     ; function int16_t main()
     ; {
-    ;     for (uint16_t count = 0; count < 1000; ++count) {
-L3
-    LDD -2,U
-    CMPD #1000
-    BHS L4
     ;     errors = 0;
     ;     
     LDA #0
@@ -186,19 +179,19 @@ L3
     PSHS D
     CLR ,-S
     TST 3,S
-    BPL L5
+    BPL L3
     NEG 0,S
     LDD #0
     SUBD 3,S
     STD 3,S
-L5
+L3
     TST 1,S
-    BPL L6
+    BPL L4
     NEG 0,S
     LDD #0
     SUBD 1,S
     STD 1,S
-L6
+L4
     LDA 4,S
     LDB 2,S
     MUL
@@ -214,10 +207,10 @@ L6
     ADDB 1,S
     STB 1,S
     TST 2,S
-    BPL L7
+    BPL L5
     LDD #0
     SUBD 0,S
-L7
+L5
     PULS D
     LEAS 5,S
     PSHS D
@@ -263,14 +256,15 @@ L7
     LEAS 7,S
     ;     showIntResults(10, 0xff03, ~TestIntConst);
     LDA #252
-    BNE L8
+    BNE L6
     LDA #1
-    BRA L9
-L8
+    BRA L7
+L6
     CLRA
-L9
+L7
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     PSHS D
     LDD #0
     PSHS D
@@ -295,14 +289,15 @@ L9
     ;     showIntResults(12, 0, TestIntConst <= testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BGE L10
+    BGE L8
     LDA #1
-    BRA L11
-L10
+    BRA L9
+L8
     CLRA
-L11
+L9
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     PSHS D
     LDD #0
     PSHS D
@@ -314,14 +309,15 @@ L11
     ;     showIntResults(13, 0, TestIntConst == testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BGT L12
+    BGT L10
     LDA #1
-    BRA L13
-L12
+    BRA L11
+L10
     CLRA
-L13
+L11
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     PSHS D
     LDD #0
     PSHS D
@@ -333,14 +329,15 @@ L13
     ;     showIntResults(14, 1, TestIntConst != testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BNE L14
+    BNE L12
     LDA #1
-    BRA L15
-L14
+    BRA L13
+L12
     CLRA
-L15
+L13
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     PSHS D
     LDD #0
     PSHS D
@@ -352,14 +349,15 @@ L15
     ;     showIntResults(15, 1, TestIntConst >= testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BEQ L16
+    BEQ L14
     LDA #1
-    BRA L17
-L16
+    BRA L15
+L14
     CLRA
-L17
+L15
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     PSHS D
     LDD #1
     PSHS D
@@ -371,14 +369,15 @@ L17
     ;     showIntResults(16, 1, TestIntConst > testIntGlobal);
     LDD #252
     CMPD 0,Y
-    BLT L18
+    BLT L16
     LDA #1
-    BRA L19
-L18
+    BRA L17
+L16
     CLRA
-L19
+L17
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     PSHS D
     LDD #1
     PSHS D
@@ -387,17 +386,18 @@ L19
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ;     
+    ; 
     LDD #252
     CMPD 0,Y
-    BLE L20
+    BLE L18
     LDA #1
-    BRA L21
-L20
+    BRA L19
+L18
     CLRA
-L21
+L19
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     PSHS D
     LDD #1
     PSHS D
@@ -406,194 +406,409 @@ L21
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ;     int8_t i = 20;
-    ;     int8_t j = i++;
-    LDA #20
-    STA -3,U
-    ;     j = ++i;
-    LEAX -3,U
-    LDA 0,X
-    PSHS A
-    ADDA #1
-    STA 0,X
-    PULS A
-    STA -4,U
+    ;     core.printf("\n  Shift ops\n");
     ; 
-    LEAX -3,U
-    LDA 0,X
-    ADDA #1
-    STA 0,X
-    STA -4,U
-    ;     showIntResults(17, 22, i);
-    ;     j = i--;
-    LDA -3,U
+    LDD #String+$61
+    PSHS D
+    JSR printf
+    ;     int8_t a = -80;
+    ;     a = a >> 4;
+    LDA #80
+    NEGA
+    STA -1,U
+    ;     showIntResults(17, -5, a);
+    LDA -1,U
+    PSHS A
+    LDA #4
+L20
+    ASR 0,S
+    DECA
+    BNE L20
+    PULS A
+    STA -1,U
+    ;     a = a << 4;
+    LDA -1,U
     TFR A,B
     SEX
     PSHS D
-    LDD #22
+    LDA #5
+    NEGA
+    TFR A,B
+    SEX
     PSHS D
     LDA #17
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ;     j = --i;
-    LEAX -3,U
-    LDA 0,X
+    ;     showIntResults(18, -80, a);
+    LDA -1,U
     PSHS A
-    ADDA #-1
-    STA 0,X
+    LDA #4
+L21
+    LSL 0,S
+    DECA
+    BNE L21
     PULS A
-    STA -4,U
-    ;     showIntResults(18, 20, i);
-    LEAX -3,U
-    LDA 0,X
-    ADDA #-1
-    STA 0,X
-    STA -4,U
-    ;     showIntResults(19, 20, j);
-    LDA -3,U
+    STA -1,U
+    ;     
+    LDA -1,U
     TFR A,B
     SEX
     PSHS D
-    LDD #20
+    LDA #80
+    NEGA
+    TFR A,B
+    SEX
     PSHS D
     LDA #18
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ; 
-    LDA -4,U
+    ;     int8_t b = 4;
+    ;     a = a >> b;
+    LDA #4
+    STA -2,U
+    ;     showIntResults(19, -5, a);
+    LDA -1,U
+    PSHS A
+    LDA -2,U
+L22
+    ASR 0,S
+    DECA
+    BNE L22
+    PULS A
+    STA -1,U
+    ;     a = a << b;
+    LDA -1,U
     TFR A,B
     SEX
     PSHS D
-    LDD #20
+    LDA #5
+    NEGA
+    TFR A,B
+    SEX
     PSHS D
     LDA #19
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ;     core.printf("\n  op assign\n");
-    ;     i += 1;
-    LDD #String+$61
-    PSHS D
-    JSR printf
-    ;     showIntResults(20, 21, i);
-    LDA -3,U
-    ADDA #1
-    STA -3,U
-    ;     i -= 1;
-    LDA -3,U
+    ;     showIntResults(20, -80, a);
+    LDA -1,U
+    PSHS A
+    LDA -2,U
+L23
+    LSL 0,S
+    DECA
+    BNE L23
+    PULS A
+    STA -1,U
+    ;     
+    LDA -1,U
     TFR A,B
     SEX
     PSHS D
-    LDD #21
+    LDA #80
+    NEGA
+    TFR A,B
+    SEX
     PSHS D
     LDA #20
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ;     showIntResults(21, 20, i);
-    LDA -3,U
-    SUBA #1
-    STA -3,U
-    ;     i *= 5;
-    LDA -3,U
+    ;     a = 5;
+    ;     a = a << b;
+    LDA #5
+    STA -1,U
+    ;     showIntResults(21, 80, a);
+    LDA -1,U
+    PSHS A
+    LDA -2,U
+L24
+    LSL 0,S
+    DECA
+    BNE L24
+    PULS A
+    STA -1,U
+    ;     a = a >> b;
+    LDA -1,U
     TFR A,B
     SEX
     PSHS D
-    LDD #20
+    LDD #80
     PSHS D
     LDA #21
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ;     showIntResults(22, 100, i);
-    CLR ,-S
-    LDA -3,U
-    BPL L22
-    NEG 0,S
-    NEGA
-L22
-    TFR A,B
-    LDA #5
-    BPL L23
-    NEG 0,S
-    NEGA
-L23
-    MUL
-    TST 0,S
-    BPL L24
-    NEGB
-L24
-    LEAS 1,S
-    TFR B,A
-    STA -3,U
-    ;     i /= 5;
-    LDA -3,U
+    ;     showIntResults(22, 5, a);
+    LDA -1,U
+    PSHS A
+    LDA -2,U
+L25
+    ASR 0,S
+    DECA
+    BNE L25
+    PULS A
+    STA -1,U
+    ;     
+    LDA -1,U
     TFR A,B
     SEX
     PSHS D
-    LDD #100
+    LDD #5
     PSHS D
     LDA #22
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ;     showIntResults(23, 20, i);
-    LDA #5
-    PSHS A
-    LDA -3,U
-    PSHS A
-    JSR idiv8
-    LEAS 4,S
-    STA -3,U
-    ;     
-    LDA -3,U
+    ;     int16_t c = 0x1234;
+    ;     c = c >> b;
+    LDD #4660
+    STD -4,U
+    ;     showIntResults(23, 291 , c);
+    LDD -4,U
+    PSHS D
+    LDA -2,U
     TFR A,B
     SEX
+    TFR B,A
+L26
+    ASR 0,S
+    ROR 1,S
+    DECA
+    BNE L26
+    PULS D
+    STD -4,U
+    ;     c = c << b;
+    LDD -4,U
     PSHS D
-    LDD #20
+    LDD #291
     PSHS D
     LDA #23
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
-    ;     core.printf("\n  Int exprs\n");
-    ;     showIntResults(24, 2984, int16_t(testIntTable[1]) + int16_t(TestSizeDef) * TestIntConst - testIntGlobal);
+    ;     showIntResults(24, 4656, c);
+    LDD -4,U
+    PSHS D
+    LDA -2,U
+    TFR A,B
+    SEX
+    TFR B,A
+L27
+    LSL 1,S
+    ROL 0,S
+    DECA
+    BNE L27
+    PULS D
+    STD -4,U
+    ; 
+    LDD -4,U
+    PSHS D
+    LDD #4656
+    PSHS D
+    LDA #24
+    PSHS A
+    LEAS -2,S
+    JSR Test_showIntResults
+    LEAS 7,S
+    ;     int8_t i = 20;
+    ;     int8_t j = i++;
+    LDA #20
+    STA -5,U
+    ;     j = ++i;
+    LEAX -5,U
+    LDA 0,X
+    PSHS A
+    ADDA #1
+    STA 0,X
+    PULS A
+    STA -6,U
+    ; 
+    LEAX -5,U
+    LDA 0,X
+    ADDA #1
+    STA 0,X
+    STA -6,U
+    ;     showIntResults(25, 22, i);
+    ;     j = i--;
+    LDA -5,U
+    TFR A,B
+    SEX
+    PSHS D
+    LDD #22
+    PSHS D
+    LDA #25
+    PSHS A
+    LEAS -2,S
+    JSR Test_showIntResults
+    LEAS 7,S
+    ;     j = --i;
+    LEAX -5,U
+    LDA 0,X
+    PSHS A
+    ADDA #-1
+    STA 0,X
+    PULS A
+    STA -6,U
+    ;     showIntResults(26, 20, i);
+    LEAX -5,U
+    LDA 0,X
+    ADDA #-1
+    STA 0,X
+    STA -6,U
+    ;     showIntResults(27, 20, j);
+    LDA -5,U
+    TFR A,B
+    SEX
+    PSHS D
+    LDD #20
+    PSHS D
+    LDA #26
+    PSHS A
+    LEAS -2,S
+    JSR Test_showIntResults
+    LEAS 7,S
+    ; 
+    LDA -6,U
+    TFR A,B
+    SEX
+    PSHS D
+    LDD #20
+    PSHS D
+    LDA #27
+    PSHS A
+    LEAS -2,S
+    JSR Test_showIntResults
+    LEAS 7,S
+    ;     core.printf("\n  op assign\n");
+    ;     i += 1;
     LDD #String+$6f
     PSHS D
     JSR printf
-    ;     showIntResults(25, 2940, int16_t(testIntTable[1] + TestSizeDef) * (TestIntConst - testIntGlobal));
+    ;     showIntResults(28, 21, i);
+    LDA -5,U
+    ADDA #1
+    STA -5,U
+    ;     i -= 1;
+    LDA -5,U
+    TFR A,B
+    SEX
+    PSHS D
+    LDD #21
+    PSHS D
+    LDA #28
+    PSHS A
+    LEAS -2,S
+    JSR Test_showIntResults
+    LEAS 7,S
+    ;     showIntResults(29, 20, i);
+    LDA -5,U
+    SUBA #1
+    STA -5,U
+    ;     i *= 5;
+    LDA -5,U
+    TFR A,B
+    SEX
+    PSHS D
+    LDD #20
+    PSHS D
+    LDA #29
+    PSHS A
+    LEAS -2,S
+    JSR Test_showIntResults
+    LEAS 7,S
+    ;     showIntResults(30, 100, i);
+    CLR ,-S
+    LDA -5,U
+    BPL L28
+    NEG 0,S
+    NEGA
+L28
+    TFR A,B
+    LDA #5
+    BPL L29
+    NEG 0,S
+    NEGA
+L29
+    MUL
+    TST 0,S
+    BPL L30
+    NEGB
+L30
+    LEAS 1,S
+    TFR B,A
+    STA -5,U
+    ;     i /= 5;
+    LDA -5,U
+    TFR A,B
+    SEX
+    PSHS D
+    LDD #100
+    PSHS D
+    LDA #30
+    PSHS A
+    LEAS -2,S
+    JSR Test_showIntResults
+    LEAS 7,S
+    ;     showIntResults(31, 20, i);
+    LDA #5
+    PSHS A
+    LDA -5,U
+    PSHS A
+    JSR idiv8
+    LEAS 4,S
+    STA -5,U
+    ;     
+    LDA -5,U
+    TFR A,B
+    SEX
+    PSHS D
+    LDD #20
+    PSHS D
+    LDA #31
+    PSHS A
+    LEAS -2,S
+    JSR Test_showIntResults
+    LEAS 7,S
+    ;     core.printf("\n  Int exprs\n");
+    ;     showIntResults(32, 2984, int16_t(testIntTable[1]) + int16_t(TestSizeDef) * TestIntConst - testIntGlobal);
+    LDD #String+$7d
+    PSHS D
+    JSR printf
+    ;     showIntResults(33, 2940, int16_t(testIntTable[1] + TestSizeDef) * (TestIntConst - testIntGlobal));
     LDD 0,Y
     PSHS D
     LDD #252
     PSHS D
     LDA #12
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     PSHS D
     CLR ,-S
     TST 3,S
-    BPL L25
+    BPL L31
     NEG 0,S
     LDD #0
     SUBD 3,S
     STD 3,S
-L25
+L31
     TST 1,S
-    BPL L26
+    BPL L32
     NEG 0,S
     LDD #0
     SUBD 1,S
     STD 1,S
-L26
+L32
     LDA 4,S
     LDB 2,S
     MUL
@@ -609,10 +824,10 @@ L26
     ADDB 1,S
     STB 1,S
     TST 2,S
-    BPL L27
+    BPL L33
     LDD #0
     SUBD 0,S
-L27
+L33
     PULS D
     LEAS 5,S
     LDX #Constants+0
@@ -631,7 +846,7 @@ L27
     PSHS D
     LDD #2984
     PSHS D
-    LDA #24
+    LDA #32
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
@@ -655,19 +870,19 @@ L27
     PSHS D
     CLR ,-S
     TST 3,S
-    BPL L28
+    BPL L34
     NEG 0,S
     LDD #0
     SUBD 3,S
     STD 3,S
-L28
+L34
     TST 1,S
-    BPL L29
+    BPL L35
     NEG 0,S
     LDD #0
     SUBD 1,S
     STD 1,S
-L29
+L35
     LDA 4,S
     LDB 2,S
     MUL
@@ -683,48 +898,40 @@ L29
     ADDB 1,S
     STB 1,S
     TST 2,S
-    BPL L30
+    BPL L36
     LDD #0
     SUBD 0,S
-L30
+L36
     PULS D
     LEAS 5,S
     PSHS D
     LDD #2940
     PSHS D
-    LDA #25
+    LDA #33
     PSHS A
     LEAS -2,S
     JSR Test_showIntResults
     LEAS 7,S
     ;     core.printf("\nDone.%40s%s\n\n", " ", errors ? "FAILED" : "Passed");
-    ;     }
+    ;     return errors;
     LDA 2,Y
-    BEQ L31
-    LDD #String+$7d
-    BRA L32
-L31
-    LDD #String+$84
-L32
-    PSHS D
+    BEQ L37
     LDD #String+$8b
+    BRA L38
+L37
+    LDD #String+$92
+L38
     PSHS D
-    LDD #String+$8d
+    LDD #String+$99
+    PSHS D
+    LDD #String+$9b
     PSHS D
     JSR printf
-L33
-    LEAX -2,U
-    LDD 0,X
-    ADDD #1
-    STD 0,X
-    BRA L3
-L4
-    ;     return errors;
     ; }
-    PSHS D
     LDA 2,Y
     TFR A,B
-    SEX
+    CLRA
+    ADDD #0
     TFR U,S
     PULS U
     RTS
@@ -753,6 +960,10 @@ String
     FCB $00
     FCB $0a
     FCC "  Int ops"
+    FCB $0a
+    FCB $00
+    FCB $0a
+    FCC "  Shift ops"
     FCB $0a
     FCB $00
     FCB $0a

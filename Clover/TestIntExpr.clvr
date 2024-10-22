@@ -61,30 +61,56 @@ function int16_t main()
     showIntResults(14, 1, TestIntConst != testIntGlobal);
     showIntResults(15, 1, TestIntConst >= testIntGlobal);
     showIntResults(16, 1, TestIntConst > testIntGlobal);
+
+    core.printf("\n  Shift ops\n");
+
+    int8_t a = -80;
+    a = a >> 4;
+    showIntResults(17, -5, a);
+    a = a << 4;
+    showIntResults(18, -80, a);
     
+    int8_t b = 4;
+    a = a >> b;
+    showIntResults(19, -5, a);
+    a = a << b;
+    showIntResults(20, -80, a);
+    
+    a = 5;
+    a = a << b;
+    showIntResults(21, 80, a);
+    a = a >> b;
+    showIntResults(22, 5, a);
+    
+    int16_t c = 0x1234;
+    c = c >> b;
+    showIntResults(23, 291 , c);
+    c = c << b;
+    showIntResults(24, 4656, c);
+
     int8_t i = 20;
     int8_t j = i++;
     j = ++i;
 
-    showIntResults(17, 22, i);
+    showIntResults(25, 22, i);
     j = i--;
     j = --i;
-    showIntResults(18, 20, i);
-    showIntResults(19, 20, j);
+    showIntResults(26, 20, i);
+    showIntResults(27, 20, j);
 
     core.printf("\n  op assign\n");
     i += 1;
-    showIntResults(20, 21, i);
+    showIntResults(28, 21, i);
     i -= 1;
-    showIntResults(21, 20, i);
+    showIntResults(29, 20, i);
     i *= 5;
-    showIntResults(22, 100, i);
+    showIntResults(30, 100, i);
     i /= 5;
-    showIntResults(23, 20, i);
+    showIntResults(31, 20, i);
     
     core.printf("\n  Int exprs\n");
-    showIntResults(24, 2984, int16_t(testIntTable[1]) + int16_t(TestSizeDef) * TestIntConst - testIntGlobal);
-    showIntResults(25, 2940, int16_t(testIntTable[1] + TestSizeDef) * (TestIntConst - testIntGlobal));
+    showIntResults(32, 2984, int16_t(testIntTable[1]) + int16_t(TestSizeDef) * TestIntConst - testIntGlobal);
+    showIntResults(33, 2940, int16_t(testIntTable[1] + TestSizeDef) * (TestIntConst - testIntGlobal));
 
     core.printf("\nDone.%40s%s\n\n", " ", errors ? "FAILED" : "Passed");
     return errors;
