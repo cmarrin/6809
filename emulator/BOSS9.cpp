@@ -30,15 +30,6 @@ static inline float getClock() { return float(clock()) / CLOCKS_PER_SEC; }
 
 using namespace mc6809;
 
-static inline uint8_t typeToBytes(fmt::Type t)
-{
-    // flt and i32 are not supported on 6809. Return 1 for them
-    if (t == fmt::Type::i8 || t == fmt::Type::i32 || t == fmt::Type::flt) {
-        return 1;
-    }
-    return 2;
-}
-
 // Args start at U+6 (3 pointers:self, retaddr, prevU)
 // _nextAddr and _initialAddr are relative to arg start
 class VarArg
@@ -72,7 +63,8 @@ class VarArg
 
     void initialize(uint16_t lastArgOffset, fmt::Type lastArgType)
     {
-        _nextAddr = lastArgOffset + typeToBytes(lastArgType);
+        // All vararg params are 2 bytes
+        _nextAddr = lastArgOffset + 2;
         _initialAddr = _nextAddr;
     }
     
@@ -106,10 +98,11 @@ class InterpPrintArgs : public fmt::FormatterArgs
     virtual ~InterpPrintArgs() { }
     virtual uint8_t getChar(uint32_t i) const override { return getStringChar(uintptr_t(_fmt + i)); }
     virtual void putChar(uint8_t c) override { _args->boss9()->putc(c); }
-    virtual uintptr_t getArg(fmt::Type type) override
+    virtual intptr_t getArg(fmt::Type type) override
     {
         // varargs are always the same size
-        return _args->arg(2);
+        uint16_t v = _args->arg(2);
+        return (type == fmt::Type::i) ? int16_t(v) : v;
     }
 
     // The interpreter keeps strings in ROM. The p pointer is actually an offset in the rom
