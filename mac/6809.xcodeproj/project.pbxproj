@@ -118,7 +118,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4993A6ED2CAB6A4F0060CCD4 /* Clover */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {TestIntExpr.clvr = sourcecode.cpp.cpp; simple.asm = sourcecode.asm; simple.clvr = sourcecode.cpp.cpp; simple.lst = sourcecode.asm; }; explicitFolders = (); name = Clover; path = ../Clover; sourceTree = "<group>"; };
+		4993A6ED2CAB6A4F0060CCD4 /* Clover */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {TestIntExpr.clvr = sourcecode.cpp.cpp; perf.clvr = sourcecode.cpp.cpp; simple.asm = sourcecode.asm; simple.clvr = sourcecode.cpp.cpp; simple.lst = sourcecode.asm; }; explicitFolders = (); name = Clover; path = ../Clover; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
