@@ -467,6 +467,7 @@ public:
     void xNZVC16() { updateNZ16(); updateV16(); updateC16(); }
     void xNZ018()  { updateNZ8(); _cc.V = false; _cc.C = true; }
     void x0ZxC8()  { updateNZ8(); _cc.N = false; updateC8(); }
+    void x0Zxx8()  { updateNZ8(); _cc.N = false; }
     void xNZVx8()  { updateNZ8(); updateV8(); }
     void xNZ0x8()  { updateNZ8(); _cc.V = false; }
     void xNZ0x16() { updateNZ16(); _cc.V = false; }

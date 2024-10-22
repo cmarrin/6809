@@ -567,15 +567,17 @@ bool Emulator::execute(RunState runState)
                 break;
             case Op::ASL:
                 _result = _left << 1;
-                xNZxC8();
+                xNZxx8();
                 _cc.V = (((_left & 0x40) >> 6) ^ ((_left & 0x80) >> 7)) != 0;
+                _cc.C = _left & 0x80;
                 break;
             case Op::ASR:
-                _result = int16_t(_left) >> 1;
+                _result = _left >> 1;
                 if (_left & 0x80) {
                     _result |= 0x80;
                 }
-                xNZxC8();
+                xNZxx8();
+                _cc.C = _left & 0x01;
                 break;
             case Op::BIT:
                 _result = _left ^ _right;
@@ -701,7 +703,8 @@ bool Emulator::execute(RunState runState)
                 break;
             case Op::LSR:
                 _result = _left >> 1;
-                x0ZxC8();
+                x0Zxx8();
+                _cc.C = _left & 0x01;
                 break;
             case Op::MUL:
                 _d = _a * _b;
@@ -760,19 +763,18 @@ bool Emulator::execute(RunState runState)
                 if (_cc.C) {
                     _result |= 0x01;
                 }
-                xNZxC8();
-                _cc.V = (((_left & 0x40) >> 6) ^ ((_left & 0x80) >> 7)) != 0;
-                break;
-            case Op::ROR: {
-                bool tmpC = _left & 0x01;
-                _result = _left >> 1;
                 xNZxx8();
+                _cc.V = (((_left & 0x40) >> 6) ^ ((_left & 0x80) >> 7)) != 0;
+                _cc.C = _left & 0x80;
+                break;
+            case Op::ROR:
+                _result = _left >> 1;
                 if (_cc.C) {
                     _result |= 0x80;
                 }
-                _cc.C = tmpC;
+                xNZxx8();
+                _cc.C = _left & 0x01;
                 break;
-            }
             case Op::RTI:
                 if (_cc.E) {
                     _a = pop8(_s);
