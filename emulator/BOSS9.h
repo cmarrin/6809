@@ -23,7 +23,7 @@ namespace mc6809 {
 
 static constexpr const char* MainPromptString = "BOSS9> ";
 static constexpr const char* LoadingPromptString = "Loading> ";
-static constexpr uint16_t CmdBufSize = 80;
+static constexpr uint16_t CmdBufSize = 100;
 
 class Emulator;
 
