@@ -34,9 +34,9 @@ enum class Func : uint16_t {
     putsn       = 0xFC04,   // Output string pointed to by X for length in Y
     getc        = 0xFC06,   // Get char from console, return it in A
     peekc       = 0xFC08,   // Return in A a 1 if a char is available and 0 otherwise
-    gets        = 0xFC0A,   // Get a line terminated by \n, place in buffer
+    getsn       = 0xFC0A,   // Get a line terminated by \n, place in buffer
                             // pointed to by X, with max length in Y
-    peeks       = 0xFC0C,   // Return in A a 1 if a line is available and 0 otherwise.
+    peeksn      = 0xFC0C,   // Return in A a 1 if a line is available and 0 otherwise.
                             // If available return length of line in Y
     exit        = 0xFC0E,   // Exit program. A contains exit code
     mon         = 0xFC10,   // Enter monitor
