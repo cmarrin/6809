@@ -1,3 +1,6 @@
+    include BOSS9.inc
+
+
 UART      EQU  $A000
 RECEV     EQU  UART+1
 TRANS     EQU  UART+1
@@ -199,10 +202,13 @@ LA171     BSR  KEYIN          ; GET A CHARACTER FROM CONSOLE IN
 *
 *
 LA1C1
-KEYIN     LDA  USTAT
-          BITA #1
+KEYIN
+          JSR getc           ; CFM - Added
+;          LDA  USTAT
+;          BITA #1
+          TSTA               ; CFM - Added
           BEQ  NOCHAR
-          LDA  RECEV
+;          LDA  RECEV
           ANDA #$7F
           RTS
 NOCHAR    CLRA
@@ -211,22 +217,26 @@ NOCHAR    CLRA
 
 
 * CONSOLE OUT
-PUTCHR    BSR  WAITACIA
+PUTCHR
+;          BSR  WAITACIA
           PSHS A              ;
           CMPA #CR            ; IS IT CARRIAGE RETURN?
           BEQ  NEWLINE        ; YES
-          STA  TRANS
+;          STA  TRANS
+          JSR putc            ; CFM - New Code
           INC  LPTPOS         ; INCREMENT CHARACTER COUNTER
           LDA  LPTPOS         ; CHECK FOR END OF LINE PRINTER LINE
           CMPA LPTWID         ; AT END OF LINE PRINTER LINE?
           BLO  PUTEND         ; NO
 NEWLINE   CLR  LPTPOS         ; RESET CHARACTER COUNTER
-          BSR  WAITACIA
+;          BSR  WAITACIA
           LDA  #13
-          STA  TRANS
+;          STA  TRANS
+          JSR putc            ; CFM - New Code
           BSR  WAITACIA
           LDA  #10            ; DO LINEFEED AFTER CR
-          STA  TRANS
+;          STA  TRANS
+          JSR putc            ; CFM - New Code
 PUTEND    PULS A              ;
           RTS
 
@@ -407,7 +417,8 @@ LA3D9     CMPA #$20           ; IS IT CONTROL CHAR?
           BCC  LA39A          ; YES, IGNORE ANY MORE
           STA  ,X+            ; PUT IT IN INPUT BUFFER
           INCB                ; INCREMENT CHARACTER COUNTER
-LA3E8     JSR  PUTCHR         ; ECHO IT TO SCREEN
+LA3E8
+;          JSR  PUTCHR         ; ECHO IT TO SCREEN
           BRA  LA39A          ; GO SET SOME MORE
 
 

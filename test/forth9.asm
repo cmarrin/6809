@@ -1,3 +1,5 @@
+    include BOSS9.inc
+
 **************************************************
 *                                                *
 *               FORTH for the 6809               *
@@ -136,9 +138,9 @@ ACIAD   EQU   $9801          ; ACIA Data
 **************************************************
         ORG   $E000
 ORIG    LDA   #$03           ; Configure the ACIA
-        STA   ACIAC
+;        STA   ACIAC
         LDA   #$16
-        STA   ACIAC
+;        STA   ACIAC
         LDY   #ENTRY
         LDS   #$DFA0         ; Initial stack pointers
         LDU   #$DF20
@@ -2585,20 +2587,33 @@ MESS1   FDB   PDOTQ
 MESS3   FDB   SEMIS
 
 PKEY    FDB   *+2
-PKEY1   LDA   ACIAC          ; Get control status of the ACIA
-        ASRA                 ; Check if buffer is empty
-        BCC   PKEY1          ; If so, wait
-        LDB   ACIAD          ; Get data
+PKEY1
+;        LDA   ACIAC          ; Get control status of the ACIA
+;        ASRA                 ; Check if buffer is empty
+;        BCC   PKEY1          ; If so, wait
+;        LDB   ACIAD          ; Get data
+
+        JSR getc
+        TSTA
+        BEQ PKEY1
+        TFR A,B
+
         CLRA
         PSHU  D              ; Push character to the stack
         LDX   ,Y++           ; NEXT
         JMP   [,X++]
 
 PQTER   FDB   *+2
-        LDA   ACIAC          ; Get control status of the ACIA
-        ASRA                 ; Check if buffer is empty
-        BCC   PQTER1         ; If so push ZERO flag
-        LDB   ACIAD          ; If not, get key
+;        LDA   ACIAC          ; Get control status of the ACIA
+;        ASRA                 ; Check if buffer is empty
+;        BCC   PQTER1         ; If so push ZERO flag
+;        LDB   ACIAD          ; If not, get key
+
+        JSR getc
+        TSTA
+        BEQ PQTER1
+        TFR A,B
+
         CLRA
         PSHU  D
         BRA   PQTER2         ; Go do NEXT
@@ -2610,11 +2625,16 @@ PQTER2  LDX   ,Y++           ; NEXT
 PEMIT   FDB   *+2
         PULU  D              ; Character in B register
         ANDB  #$7F           ; Mask off the highest bit
-PEMIT1  LDA   ACIAC          ; Get ACIA status
-        ASRA                 ; Check if ready to transmit
-        ASRA
-        BCC   PEMIT1         ; Loop if not ready
-        STB   ACIAD          ; Transmit character
+PEMIT1
+;        LDA   ACIAC          ; Get ACIA status
+;        ASRA                 ; Check if ready to transmit
+;        ASRA
+;        BCC   PEMIT1         ; Loop if not ready
+;        STB   ACIAD          ; Transmit character
+
+        TFR B,A
+        JSR putc
+
         LDX   ,Y++           ; NEXT
         JMP   [,X++]
 
