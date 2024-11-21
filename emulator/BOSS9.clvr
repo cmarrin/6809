@@ -13,31 +13,173 @@
 //  Created by Chris Marrin on 5/4/24.
 //
 
-// This Clover program contains most of the BOSS9 commands.
-// The BOSS9.cpp contains just the 'ld' command and the interface
-// to the interpreter
+// This Clover program contains the BOSS9 monitor.
+struct BOSS9
+{
+const uint8_t* MainPromptString = "BOSS9> ";
+const uint8_t* LoadingPromptString = "Loading> ";
+const uint16_t CmdBufSize = 100;
 
-#include <cerrno>
-#include <cstdlib>
-#include <cctype>
+bool _needPrompt = false;
+bool _needInstPrint = false;
 
-#include "BOSS9.h"
-#include "MC6809.h"
+uint8_t _cmdBuf[CmdBufSize];
+uint16_t _cursor = 0;
 
-using namespace mc6809;
+uint16_t _startAddr = 0;
 
-void BOSS9Base::getCommand()
+RunState _runState = RunState::Cmd;
+
+uint16_t _startTime = 0;
+
+enum RunState {
+    Loading,
+    Cmd,
+    Running,
+    Continuing,
+    StepIn,
+    StepOut,
+    StepOver,
+};
+
+// These must match BOSS9.inc
+enum Func {
+    putc        = 0xFC00,   // output char in A to console
+    puts        = 0xFC02,   // output string pointed to by X (null terminated)
+    putsn       = 0xFC04,   // Output string pointed to by X for length in Y
+    getc        = 0xFC06,   // Get char from console, return it in A
+    peekc       = 0xFC08,   // Return in A a 1 if a char is available and 0 otherwise
+    getsn       = 0xFC0A,   // Get a line terminated by \n, place in buffer
+                            // pointed to by X, with max length in Y
+    peeksn      = 0xFC0C,   // Return in A a 1 if a line is available and 0 otherwise.
+                            // If available return length of line in Y
+    exit        = 0xFC0E,   // Exit program. A contains exit code
+    mon         = 0xFC10,   // Enter monitor
+    ldStart     = 0xFC12,   // Start loading s-records
+    ldLine      = 0xFC14,   // Load an s-record line
+    ldEnd       = 0xFC16,   // End loading s-records
+
+    printf      = 0xFC20,   // Formatted print: TOS=fmt, (varargs)
+    format      = 0xFC22,   // Format string
+    memset      = 0xFC24,   // Set memory: TOS=
+    irand       = 0xFC26,   //
+    imin        = 0xFC28,   //
+    imax        = 0xFC2a,   //
+    initargs    = 0xFC2c,   //
+    argint8     = 0xFC2e,   //
+    argint16    = 0xFC30,   //
+
+    switch1     = 0xFC40,   // TOS -> N, Table, Value
+    switch2     = 0xFC42,   // Table is a list of N value/addr pairs
+                            //Binary search table looking for value
+                            //when found return addr in X. if not
+                            //found return Table + N * (<1/2> + 2)
+    idiv8       = 0xFC44,
+    idiv16      = 0xFC46,
+    udiv8       = 0xFC48,
+    udiv16      = 0xFC4a,
+};
+
+function uint8_t tolower(uint8_t c)
+{
+    return (c >= 'A' && c <= 'Z') ? (c + 0x20) ? c;
+}
+
+function bool casestrncmp(uint8_t* a, uint8_t* b, uint16_t n)
+{
+    while (*a && *b) {
+        if (tolower(*a++) != tolower(*b++)) {
+            return false;
+        }
+    }
+    return *a == '\0' && *b == '\0';
+}
+
+function int16_t stringToNum(uint8_t* s, uint16_t size)
+{
+    bool ishex = false;
+    uint16_t i = 0;
+    if (s[0] == '$') {
+        ishex = true;
+        i = 1;
+    }
+    
+    uint16_t num = 0;
+    
+    while (i < size) {
+        uint8_t n = s[i++];
+        if (n >= '0' && n <= '9') {
+            n -= '0';
+        } else if (ishex) {
+            n = tolower(n);
+            if (n >= 'a' && n <= 'f') {
+                n -= 'a' - 10;
+            }
+        } else {
+            return -1;
+        }
+        
+        num = num * (ishex ? 16 : 10) + n;
+    }
+    return num;
+}
+
+function enterMonitor()
+{
+    _runState = RunState::Cmd;
+    _needPrompt = true;
+    _needInstPrint = true;
+}
+
+function bool checkEscape(uint8_t c)
+{
+    if (c == 0x1b) {
+        // Escape - go back  to command mode
+        _runState = RunState::Cmd;
+        enterMonitor();
+        core.printf("...ABORT...\n");
+        return true;
+    }
+    return false;
+}
+
+function bool call(uint16_t ea)
+{
+    switch (Func(ea)) {
+        case Func::putc:
+            putc(engine->getA());
+            return true;
+        case Func::puts: {
+            const char* s = reinterpret_cast<const char*>(engine->getAddr(engine->getX()));
+            puts(s);
+            return true;
+        }
+        case Func::getc: {
+            engine->setA(getc());
+            break;
+        }
+        case Func::exit:
+            printf("Program exited with code %d\n", int32_t(engine->getA()));
+            enterMonitor();
+            _emu.setPC(_startAddr);
+            return false;
+        default: return false;
+    }
+    return false;
+}
+
+function getCommand()
 {
     bool haveCmd = false;
     promptIfNeeded();
-    
+
     while (true) {
-        int c = getc();
+        uint8_t c = core.getc();
         if (c <= 0) {
             break;
         }
         if (_cursor >= CmdBufSize - 1) {
-            printf("*** too many chars in cmdbuf\n");
+            core.printf("*** cmdbuf ovfl\n");
             _cursor = 0;
             haveCmd = true;
             break;
@@ -67,7 +209,7 @@ void BOSS9Base::getCommand()
         
         if (c < 0x20 || c > 0x7f) {
             // Some other control character, for now error
-            printf("*** unrecognized control char '0x%02x'\n", uint8_t(c));
+            core.printf("*** bad chr '0x%02x'\n", c);
             _cursor = 0;
             haveCmd = true;
             break;
@@ -84,66 +226,58 @@ void BOSS9Base::getCommand()
     }
 }
 
-bool BOSS9Base::checkEscape(int c)
-{
-    if (c == 0x1b) {
-        // Escape - go back  to command mode
-        _runState = RunState::Cmd;
-        enterMonitor();
-        printf("...ABORT...\n");
-        return true;
-    }
-    return false;
-}
-
 // Parse cmd buffer, splitting words by space. Space before first non-space char is ignored.
-// All characters are lowercased. If there are more than 3 words, return false.
-bool parseCmd(const char* cmdbuf, m8r::string cmdElements[3])
+// Place index and length of up to 3 elements in elements array and return the number of 
+// elements. If more than 3 words, return 0.
+function uint8_t parseCmd(uint16_t* elements)
 {
-    int elementIndex = 0;
-    int i = 0;
+    uint16_t elementIndex = 0;
+    uint16_t i = 0;
+    uint16_t wordStart = 0;
     
-    while (cmdbuf[i] != '\0') {
+    
+    while (_cmdbuf[i] != '\0') {
         // Get past spaces
         while (true) {
-            if (!isspace(cmdbuf[i])) {
+            if (_cmdbuf[i] != ' ') {
                 break;
             }
             i += 1;
         }
         
         // Get the next word
+        wordStart = i;
+        elements[elementIndex++] = wordStart;
+        
         while (true) {
-            char c = tolower(cmdbuf[i]);
+            char c = _cmdbuf[i];
             
             if (c == '\0') {
                 break;
             }
             
-            if (isspace(c)) {
+            if (c == ' ') {
                 // Finished a word
-                elementIndex += 1;
+                elements[elementIndex++] = i - wordStart;
                 if (elementIndex > 2) {
-                    return false;
+                    return 0;
                 }
                 break;
             }
-        
-            cmdElements[elementIndex] += c;
             i += 1;
         }
     }
     
-    return true;
+    return elementIndex / 2;
 }
 
-void BOSS9Base::processCommand()
+function processCommand()
 {
     if (_runState == RunState::Cmd) {
         // Parse Command
-        m8r::string cmdElements[3];
-        if (parseCmd(_cmdBuf, cmdElements)) {
-            executeCommand(cmdElements);
+        uint16_t elements[6];
+        if (parseCmd(elements)) {
+            executeCommand(elements);
         }
         return;
     }
@@ -152,74 +286,58 @@ void BOSS9Base::processCommand()
         bool finished;
         if (!loadLine(_cmdBuf, finished)) {
             _runState = RunState::Cmd;
-            printf("Error loading\n");
+            core.printf("load err\n");
         }
         if (finished) {
             _startAddr = loadEnd();
             _runState = RunState::Cmd;
-            printf("Load complete, start addr = 0x%04x\n", _startAddr);
+            core.printf("Load cmpl, addr=0x%04x\n", _startAddr);
         }
     }
     _cursor = 0;
 }
 
-bool BOSS9Base::toNum(m8r::string& s, uint32_t& num)
-{
-    bool ishex = false;
-    int i = 0;
-    if (s[0] == '$') {
-        ishex = true;
-        i = 1;
-    }
-    char* strend = nullptr;
-    num = uint32_t(strtol(s.c_str() + i, &strend, ishex ? 16 : 10));
-    if ((strend == s.c_str() + i) || (errno == ERANGE)) {
-        printf("%s is not a valid number\n", s.c_str());
-        return false;
-    }
-    return true;
-}
-
-void BOSS9Base::showBreakpoint(uint8_t i) const
+function showBreakpoint(uint8_t i) const
 {
     BreakpointEntry entry;
     if (_emu.breakpoint(i, entry)) {
-        printf("    Breakpoint[%d] -> $%04x (%sabled)\n", i, entry.addr, (entry.status == BPStatus::Enabled) ? "en" : "dis");
+        core.printf("    Breakpoint[%d] -> $%04x (%sabled)\n", i, entry.addr, (entry.status == BPStatus::Enabled) ? "en" : "dis");
     }
 }
 
-bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
+function bool executeCommand(uint16_t* elements)
 {
-    assert(_runState == RunState::Cmd);
+    uint8_t* cmd = _cmdBuf[elements[0]];
+    uint16_t cmdSize = elements[1];
     
-    if (cmdElements[0] == "help" || cmdElements[0] == "h" || cmdElements[0] == "?") {
-        if (cmdElements[1].empty()) {
-            printf("BOSS9 Monitor Commands:\n");
-            printf("\n");
-            printf("    ld            - Load SRecord file from serial port\n");
-            printf("    r             - run at start addr\n");
-            printf("    r (<addr>)    - run at <addr>, set start addr to <addr>\n");
-            printf("    c (<addr>)    - continue running at current addr\n");
-            printf("    b             - show current breakpoints\n");
-            printf("    b <addr>      - set breakpoint at <addr>\n");
-            printf("    bc            - clear all breakpoints\n");
-            printf("    bc <n>        - clear breakpoint <n>\n");
-            printf("    be            - enable all breakpoints\n");
-            printf("    be <n>        - enable breakpoint <n>\n");
-            printf("    bd            - disable all breakpoints\n");
-            printf("    bd <n>        - disable breakpoint <n>\n");
-            printf("    n             - step over, execute next instruction, step over if at function\n");
-            printf("    s             - step into, if at function (same as 'n' if not at function\n");
-            printf("    o             - step out, continue until current function returns\n");
-            printf("    l             - list next 5 instructions from current addr\n");
-            printf("    l <n>         - list next <n> instructions from current addr\n");
-            printf("    la <addr>     - list next 5 instructions starting at <addr>\n");
-            printf("    la <addr> <n> - list next <n> instructions starting at <addr>\n");
-            printf("    a             - show instruction at current addr\n");
-            printf("    a <addr>      - set current addr to <addr> and show instruction\n");
-            printf("    regs          - show all regs\n");
-            printf("    reg <reg>     - show reg <reg> (<reg> = A|B|D|X|Y|U|S|CC|PC|DP)\n");
-            printf("    reg <reg> <v> - set reg <reg> to <v>\n");
+    if (casestrncmp(cmd, "help", size) || casestrncmp(cmd, "h", size) || casestrncmp(cmd, "?", size)) {
+        if (elements[3] == 0) {
+            core.printf("BOSS9 Monitor Commands:\n");
+            core.printf("\n");
+            core.printf("    ld          - Load SRecords\n");
+            core.printf("    r           - run at cur addr\n");
+            core.printf("    r (<a>)     - run at <a>\n");
+            core.printf("    c (<a>)     - continue\n");
+            core.printf("    b           - show brpts\n");
+            core.printf("    b <a>       - set bkpt at <a>\n");
+            core.printf("    bc          - clear all bkpts\n");
+            core.printf("    bc <n>      - clear bkpt <n>\n");
+            core.printf("    be          - enable all bkpts\n");
+            core.printf("    be <n>      - enable bkpt <n>\n");
+            core.printf("    bd          - disable all bkpts\n");
+            core.printf("    bd <n>      - disable bkpt <n>\n");
+            core.printf("    n           - step over\n");
+            core.printf("    s           - step into\n");
+            core.printf("    o           - step out\n");
+            core.printf("    l           - list 5 insts\n");
+            core.printf("    l <n>       - list <n> insts\n");
+            core.printf("    la <a>      - list 5 insts at <a>\n");
+            core.printf("    la <a> <n>  - list <n> insts at <a>\n");
+            core.printf("    a           - show cur inst\n");
+            core.printf("    a <a>       - set cur addr to <a>\n");
+            core.printf("    regs        - show all regs\n");
+            core.printf("    reg <r>     - show reg <r>\n");
+            core.printf("    reg <r> <v> - set reg <r> to <v>\n");
 
             return true;
         }
@@ -228,20 +346,20 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
     
     // Load file
-    if (cmdElements[0] == "ld") {
-        if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
+    if (casestrncmp(cmd, "ld", size)) {
+        if (elements[3] != 0 || elements[5] != 0) {
             return false;
         }
         
         // Load s19 file
-        printf("Ready to start loading. ESC to abort\n");
+        core.printf("Ready to start loading. ESC to abort\n");
         _runState = RunState::Loading;
         loadStart();
         return true;
     }
 
     // Run at <addr> or at current addr
-    if (cmdElements[0] == "r") {
+    if (casestrncmp(cmd, "r", size)) {
         if (!cmdElements[2].empty()) {
             return false;
         }
@@ -262,7 +380,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
     
     // Continue running at PC
-    if (cmdElements[0] == "c") {
+    if (casestrncmp(cmd, "c", size)) {
         if (!cmdElements[1].empty() || !cmdElements[2].empty()) {
             return false;
         }
@@ -275,7 +393,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
     
     // Show or set breakpoint
-    if (cmdElements[0] == "b") {
+    if (casestrncmp(cmd, "b", size)) {
         if (!cmdElements[2].empty()) {
             return false;
         }
@@ -314,7 +432,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
     
     // Clear all or one breakpoint
-    if(cmdElements[0] == "bc") {
+    if(casestrncmp(cmd, "bc", size)) {
         if (!cmdElements[2].empty()) {
             return false;
         }
@@ -337,7 +455,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
 
     // Enable all or one breakpoint
-    if(cmdElements[0] == "be") {
+    if(casestrncmp(cmd, "be", size)) {
         if (!cmdElements[2].empty()) {
             return false;
         }
@@ -360,7 +478,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
 
     // Disable all or one breakpoint
-    if(cmdElements[0] == "bd") {
+    if(casestrncmp(cmd, "bd", size)) {
         if (!cmdElements[2].empty()) {
             return false;
         }
@@ -383,16 +501,16 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
 
     // Step
-    if (cmdElements[0] == "s") {
+    if (casestrncmp(cmd, "s", size)) {
         _runState = RunState::StepIn;
-    } else if (cmdElements[0] == "n") {
+    } else if (casestrncmp(cmd, "n", size)) {
         _runState = RunState::StepOver;
-    } else if (cmdElements[0] == "o") {
+    } else if (casestrncmp(cmd, "o", size)) {
         _runState = RunState::StepOut;
     }
     
     // list next 5 or <n> instructions from current addr
-    if(cmdElements[0] == "l") {
+    if(casestrncmp(cmd, "l", size)) {
         if (!cmdElements[2].empty()) {
             return false;
         }
@@ -408,7 +526,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
 
     // list next 5 or <n> instructions at <addr>
-    if(cmdElements[0] == "la") {
+    if(casestrncmp(cmd, "la", size)) {
         if (cmdElements[1].empty()) {
             return false;
         }
@@ -433,7 +551,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
 
     // show current addr or set it to <addr>
-    if(cmdElements[0] == "a") {
+    if(casestrncmp(cmd, "a", size)) {
         if (cmdElements[1].empty()) {
             _emu.printInstructions(_emu.getPC(), 1);
             return true;
@@ -453,7 +571,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
 
     // show all regs
-    if(cmdElements[0] == "regs") {
+    if(casestrncmp(cmd, "regs", size)) {
         if (!cmdElements[1].empty()) {
             return true;
         }
@@ -466,7 +584,7 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
     }
 
     // show or set reg
-    if(cmdElements[0] == "reg") {
+    if(casestrncmp(cmd, "reg", size)) {
         if (cmdElements[1].empty()) {
             return false;
         }
@@ -549,36 +667,11 @@ bool BOSS9Base::executeCommand(m8r::string cmdElements[3])
         return cmdElements[1].empty() && cmdElements[2].empty();
     }
     
-    printf("Invalid command\n");
+    core.printf("Invalid command\n");
     return false;
 }
 
-bool BOSS9Base::call(Emulator* engine, uint16_t ea)
-{
-    switch (Func(ea)) {
-        case Func::putc:
-            putc(engine->getA());
-            return true;
-        case Func::puts: {
-            const char* s = reinterpret_cast<const char*>(engine->getAddr(engine->getX()));
-            puts(s);
-            return true;
-        }
-        case Func::getc: {
-            engine->setA(getc());
-            break;
-        }
-        case Func::exit:
-            printf("Program exited with code %d\n", int32_t(engine->getA()));
-            enterMonitor();
-            _emu.setPC(_startAddr);
-            return false;
-        default: return false;
-    }
-    return false;
-}
-
-bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
+function bool startExecution(uint16_t addr, bool startInMonitor)
 {
     if (startInMonitor) {
         enterMonitor();
@@ -592,7 +685,7 @@ bool BOSS9Base::startExecution(uint16_t addr, bool startInMonitor)
     return true;
 }
 
-bool BOSS9Base::continueExecution()
+function bool continueExecution()
 {
     if (_runState == RunState::Cmd || _runState == RunState::Loading) {
         getCommand();
@@ -621,3 +714,5 @@ bool BOSS9Base::continueExecution()
     }
     return retval;
 }
+
+};
