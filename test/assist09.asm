@@ -15,11 +15,11 @@
 * GLOBAL MODULE EQUATES
 ********************************************
 ROMBEG  EQU     $F800           ; ROM START ASSEMBLY ADDRESS
-RAMOFS  EQU     -$9800          ; ROM OFFSET TO RAM WORK PAGE
+RAMOFS  EQU     -$1900          ; ROM OFFSET TO RAM WORK PAGE
 ROMSIZ  EQU     2048            ; ROM SIZE
 ROM2OF  EQU     ROMBEG-ROMSIZ   ; START OF EXTENSION ROM
-ACIA    EQU     $A000           ; DEFAULT ACIA ADDRESS
-PTM     EQU     $0000           ; DEFAULT PTM ADDRESS
+ACIA    EQU     $E008           ; DEFAULT ACIA ADDRESS
+PTM     EQU     $E000           ; DEFAULT PTM ADDRESS
 DFTCHP  EQU     0               ; DEFAULT CHARACTER PAD COUNT
 DFTNLP  EQU     5               ; DEFAULT NEW LINE PAD COUNT
 PROMPT  EQU     '>              ; PROMPT CHARACTER
@@ -108,7 +108,7 @@ HIVTR   EQU     52              ; HIGHEST VECTOR OFFSET
 * DEFINED HEREIN.
 ******************************************
 WORKPG  EQU     ROMBEG+RAMOFS   ; SETUP DIRECT PAGE ADDRESS
-        SETDP   WORKPG          ; NOTIFY ASSEMBLER
+*       SETDP   =WORKPG         ; NOTIFY ASSEMBLER
         ORG     WORKPG+256      ; READY PAGE DEFINITIONS
 
 * THE FOLLOWING THRU BKPTOP MUST RESIDE IN THIS ORDER
@@ -156,12 +156,6 @@ ROM2WK  EQU     *               ; EXTENSION ROM RESERVED AREA
         ORG     *-21
 TSTACK  EQU     *               ; TEMPORARY STACK HOLD
 STACK   EQU     *               ; START OF INITIAL STACK
-
-* Fill from start of ROM ($C000) to starting location of ROM code
-*  ($F800) with all ones.
-
-        ORG     $C000
-        FILL    $FF,ROMBEG-*   ; Fill ROM with FFs until $DB00
 
 ******************************************
 * DEFAULT THE ROM BEGINNING ADDRESS TO 'ROMBEG'
@@ -838,10 +832,10 @@ CIRTN   RTS                     ; RETURN TO CALLER
 * COON - OUTPUT CONSOLE INITIALIZATION
 * A,X VOLATILE
 CION   EQU      *
-COON   LDA      #$13            ; RESET ACIA CODE
+COON   LDA      #3              ; RESET ACIA CODE
        LDX      <VECTAB+.ACIA   ; LOAD ACIA ADDRESS
        STA      ,X              ; STORE INTO STATUS REGISTER
-       LDA      #$15            ; SET CONTROL
+       LDA      #$51            ; SET CONTROL
        STA      ,X              ; REGISTER UP
 RTS    RTS                      ; RETURN TO CALLER
 
@@ -872,10 +866,10 @@ CODTLP  BSR     CODTAO          ; SEND NULL
 CODTRT  PULS    PC,U,D,CC       ; RESTORE REGISTERS AND RETURN
 
 CODTAD  LBSR    XQPAUS          ; TEMPORARY GIVE UP CONTROL
-CODTAO  LDB     ,U              ; LOAD ACIA CONTROL REGISTER
+CODTAO  LDB     1,U             ; LOAD ACIA CONTROL REGISTER
         BITB    #$02            ; ? TX REGISTER CLEAR >LSAB FIXME
-        BEQ     CODTAD          ; RELEASE CONTROL IF NOT
-        STA     1,U             ; STORE INTO DATA REGISTER
+        BNE     CODTAD          ; RELEASE CONTROL IF NOT
+        STA     ,U              ; STORE INTO DATA REGISTER
         RTS                     ; RETURN TO CALLER
 *E
 
@@ -1036,8 +1030,8 @@ BSPMRE BSR      BSPUN2          ; SEND OUT NEXT BYTE
 BSPUN2 ADDB     ,X              ; ADD TO CHECKSUM
 BSPUNC LBRA     ZOUT2H          ; SEND OUT AS HEX AND RETURN
 
-BSPSTR FCB      'S,'1,EOT       ; CR,LF,NULLS,S,1
-BSPEOF FCC      /S9030000FC/    ; EOF STRING
+BSPSTR FCB      'S,1,EOT        ; CR,LF,NULLS,S,1
+BSPEOF FCC      /S9030000FC/         ; EOF STRING
        FCB      CR,LF,EOT
 
 * HSDTA - HIGH SPEED PRINT MEMORY
@@ -1090,7 +1084,7 @@ HSHCOK  SWI                     ; SEND CHARACTER
         FCB     OUTCH           ; FUNCTION
         DECB                    ; ? DONE
         BNE     HSHCHR          ; BRANCH NO
-        CMPX     2,S            ; ? PAST LAST ADDRESS [opcode was 'CPX']
+        CMPX    2,S             ; ? PAST LAST ADDRESS
         BHS     HSDRTN          ; QUIT IF SO
         STX     4,S             ; UPDATE FROM ADDRESS
         LDA     5,S             ; LOAD LOW BYTE ADDRESS
@@ -1741,5 +1735,3 @@ NMI     JMP     [VECTAB+.NMI,PCR]       ; NMI VECTOR
         FDB     SWI             ; SOFTWARE INTERRUPT
         FDB     NMI             ; NON-MASKABLE INTERRUPT
         FDB     RESET           ; RESTART
-
-    END ROMBEG
